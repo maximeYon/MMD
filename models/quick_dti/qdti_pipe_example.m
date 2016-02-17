@@ -1,4 +1,4 @@
-function qdti_pipe_example(s, o_path, opt)
+function fn = qdti_pipe_example(s, o_path, opt)
 % function qdti_pipe_example(nii_filename, o)
 %
 % s      - input structure
@@ -14,7 +14,7 @@ mfs_fn = qdti_4d_data2fit(s, out_fn, opt);
 % Save parameter maps
 fn = qdti_4d_fit2param(mfs_fn, o_path);
 
-% Mask maps?
+
 
 
 

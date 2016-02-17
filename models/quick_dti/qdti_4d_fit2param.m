@@ -5,7 +5,7 @@ if (nargin < 3), opt.present = 1; end
 
 % Load data & setup option structure
 mfs = mdm_mfs_load(mfs_fn);
-h   = mdm_nii_read_header(mfs.s.nii_fn);
+h   = mfs.nii_h; 
 opt = mdm_opt(opt);
 
 m2v = @(x)   reshape(x, size(x,1) * size(x,2) * size(x,3), size(x,4));
@@ -13,7 +13,7 @@ v2m = @(x,r) reshape(x, r(1), r(2), r(3), numel(x) / prod(r(1:3)));
 
 % create parameter maps and save them
 n_map = 3;
-fn = cell(1,n_map)
+fn = cell(1,n_map);
 for c = 1:n_map
     
     min_max = [-inf inf];
@@ -51,7 +51,7 @@ for c = 1:n_map
     
     % make sure the min_max field is there
     opt.qdti.(param).present = 1;
-    opt.qdti.(param) = ensure_field(opt.qdti.(param), 'min_max', min_max);
+    opt.qdti.(param) = msf_ensure_field(opt.qdti.(param), 'min_max', min_max);
     
     % cut values above/below min/max limits
     x = mio_min_max_cut(x, opt.qdti.(param).min_max);
