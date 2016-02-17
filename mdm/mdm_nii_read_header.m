@@ -2,7 +2,7 @@ function h = mdm_nii_read_header(nii_fn)
 % function h = mdm_nii_read_header(nii_fn)
 
 % Possibly unzip the file
-[nii_fn, tmp_path, tmp_nii_fn] = nifti_gunzip(nii_fn, 1);
+[nii_fn, tmp_path, tmp_nii_fn] = mdm_nii_gunzip(nii_fn, 1);
 if (~exist(nii_fn, 'file')), error(['File does not exist: ' nii_fn]); end
 
 % read the nifti header

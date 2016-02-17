@@ -39,7 +39,7 @@ if (h.bitpix == 24)
     I = reshape(I, 3, dim_x, dim_y, dim_z);
 else
     I = fread(fid, dim_x*dim_y*dim_z*n_dyn, ...
-        ['*' nifti_datatype(h.datatype)]);
+        ['*' mdm_nii_datatype(h.datatype)]);
     I = reshape(I, dim_x, dim_y, dim_z, n_dyn);
 end
 fclose(fid);

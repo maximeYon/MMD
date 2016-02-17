@@ -28,7 +28,7 @@ switch (lower(ext))
 end
 
     function [tmp_path, tmp_fn] = do_gunzip(in_fn, h_only)
-        tmp_path = mdm_tmp_path(1);
+        tmp_path = msf_tmp_path(1);
         
         if (h_only && isunix)
             [~,name] = fileparts(in_fn);

@@ -91,7 +91,7 @@ catch me
     
     % Clear up and rethrow error
     fclose(fid);
-    delete(filename);
+    delete(nii_fn);
     rmdir(tmp_path,'s');
     rethrow(me);
 end
@@ -174,7 +174,7 @@ end
         ext = nii_fn(max(1,end-3):end);
         switch ext
             case 'i.gz'
-                tmp_path = mdm_tmp_path(1);
+                tmp_path = msf_tmp_path(1);
                 
                 % Write the file to the system tempdir
                 % (faster if using an external HD)
