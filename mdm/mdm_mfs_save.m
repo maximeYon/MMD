@@ -9,7 +9,7 @@ if (isempty(o)), o = fullfile(mdm_tmp_path, 'mfs.mat'); end
 mfs.s = s;
 
 % Save data
-mdm_mkdir(fileparts(o));
+msf_mkdir(fileparts(o));
 save(o, 'mfs');
 
 
