@@ -1,5 +1,5 @@
 function fn = dti_nls_pipe_example(s, o_path, opt)
-% function dti_nls_pipe_example(s, o_path, opt)
+% function fn = dti_nls_pipe_example(s, o_path, opt)
 %
 % s      - input structure
 % o_path - output path
@@ -14,7 +14,12 @@ s = mio_mask_simple(s, o_path);
 % Run the analysis
 out_fn = fullfile(o_path, 'dti_nls.mat');
 
-opt.k_range = 30;
+% limit the analysis to a square in one slice
+if (1)
+    opt.i_range = 30:50;
+    opt.j_range = 30:50;
+    opt.k_range = 30;
+end
 
 mfs_fn = dti_nls_4d_data2fit(s, out_fn, opt);
 

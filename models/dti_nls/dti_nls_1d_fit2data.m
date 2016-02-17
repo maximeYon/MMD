@@ -1,5 +1,8 @@
 function s = dti_nls_1d_fit2data(m, xps)
 % function s = dti_nls_1d_fit2data(m, xps)
+%
+% Predict the signal 's' as a 1 x xps.n vector from the model parameters
+% in 'm'. 
 
 C = [...
     m(2) m(5) m(7);

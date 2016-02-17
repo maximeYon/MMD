@@ -1,5 +1,7 @@
 function status = ut_dti_nls(c_ut)
-% function ut_qdti(c_ut)
+% function status = ut_dti_nls(c_ut)
+%
+% if c_ut is not supplied, the function returns the number of unit tests
 
 % n_ut = number of unit tests
 n_ut = 1;

@@ -1,5 +1,9 @@
 function m = dti_nls_1d_data2fit(signal, xps, opt)
 % function m = dti_nls_1d_data2fit(signal, xps, opt)
+%
+% Yields a 1x7 vector 'm' with the fit parameters
+% m(1)   - s0
+% m(2:7) - cholesky decomposition of the diffusion tensor
 
 signal = double(signal);
 

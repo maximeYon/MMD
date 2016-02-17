@@ -1,5 +1,7 @@
 function opt = dti_nls_opt(opt)
 % function opt = dti_nls_opt(opt)
+%
+% Makes sure that all needed fields in the options structure are present
 
 opt.dti_nls.present = 1;
 
