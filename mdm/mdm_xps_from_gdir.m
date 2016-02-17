@@ -1,4 +1,4 @@
-function xps = mdm_gdir2xps(gdir_fn, delimeter)
+function xps = mdm_xps_from_gdir(gdir_fn, delimeter)
 % function xps = mdm_gdir2xps(gdir_fn)
 %
 % read a gradient textfile in the Lund format, which is defined as follows
