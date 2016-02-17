@@ -1,37 +1,62 @@
-function mfs = mio_volume_loop(fun, I, M, mfs)
-% function mfs = mio_fit_model(s, fun, opt)
+function p = mio_volume_loop(fun, I, M, opt)
+% function p = mio_volume_loop(fun, I, M, opt)
 
 if (nargin < 3), error('all inputs required'); end
-if (nargin < 4), mfs = []; end % fill in an existing mfs on own risk
+if (nargin < 4), opt.present = 1; end
 
-% Create the model fit structure
-m = fun([], 0);
+opt = mio_opt(opt);
 
-for f = fieldnames(m)'
-    mfs.(f{1}) = zeros([size(I,1) size(I,2) size(I,3) numel(m.(f{1}))]);
+% Init the output structure (but permute before outputting)
+p = zeros(numel(fun([], 0)), size(I,1), size(I,2), size(I,3));
+
+
+% Run parallel?
+do_delete_parpool = 0;
+if (opt.mio.n_core > 1)
+    if (isempty(gcp('nocreate')))
+        parpool(opt.mio.n_core);
+        do_delete_parpool = 1;
+    end    
+end
+
+tmp = gcp('nocreate');
+if (isempty(tmp))
+    n_workers = 1;
+else
+    n_workers = tmp.NumWorkers;
 end
 
 % Loop over the data
-disp('Starting the loop');
+fprintf('Starting the loop. Workers = %i\n', n_workers); 
 for k = 1:size(I,3)
-    fprintf('k=%i', k);
+    fprintf('k=%3.0i', k);
     for j = 1:size(I,2)
         
-        marker = '.';
-        for i = 1:size(I,1)
-            
-            if (M(i,j,k) == 0), continue; end
-            marker = 'o';
-            
-            m = fun(squeeze(I(i,j,k,:)), 1);
-            
-            for f = fieldnames(m)'
-                mfs.(f{1})(i,j,k,:) = m.(f{1});
+        if (any(M(:,j,k)))            
+            if (n_workers == 1) % single core
+                for i = 1:size(I,1)
+                    if (M(i,j,k) == 0), continue; end
+                    p(:,i,j,k) = fun(squeeze(I(i,j,k,:)), 1);
+                end
+                
+            else % do parallel
+                parfor i = 1:size(I,1)
+                    if (M(i,j,k) == 0), continue; end
+                    p(:,i,j,k) = fun(squeeze(I(i,j,k,:)), 1);
+                end
             end
-        end        
+        end
+
+        % print a status report
+        if (any(M(:,j,k))), marker = 'o'; else marker = '.'; end
         if (mod(j,4) == 0), fprintf(marker); end
     end
     disp(';');
 end
 
-mfs.M = M;
+% close parpool if it was created
+if (do_delete_parpool)
+    delete(gcp('nocreate'));
+end
+
+p = permute(p, [2 3 4 1]);
