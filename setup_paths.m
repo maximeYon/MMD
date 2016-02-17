@@ -13,10 +13,11 @@ packages_dir = {...
     'models/quick_dti',...
     };
 
-addpath(pwd, '-end');
+
+t = fileparts(mfilename('fullpath'));
 
 for c_package = 1:numel(packages_dir)
-    addpath(fullfile(pwd, packages_dir{c_package}));
+    addpath(fullfile(t, packages_dir{c_package}), '-end');
 end
 
 disp (char(10))
