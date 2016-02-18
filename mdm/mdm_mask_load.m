@@ -14,7 +14,7 @@ if (~isfield(s, 'mask_fn'))
 else
     M = mdm_nii_read(s.mask_fn);
     
-    if (~all(size(M) == sz))
+    if (size(M,1) ~= sz(1)) || (size(M,2) ~= sz(2)) || (size(M,3) ~= sz(3))
         error(['Size of mask different from data (' num2str(size(M)) ' vs ' num2str(sz)]);
     end
 end
