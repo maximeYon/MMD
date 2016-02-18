@@ -19,7 +19,12 @@ if (opt.mio.n_core > 1)
     end    
 end
 
-tmp = gcp('nocreate');
+try
+    tmp = gcp('nocreate');
+catch 
+    tmp = [];
+end
+
 if (isempty(tmp))
     n_workers = 1;
 else
