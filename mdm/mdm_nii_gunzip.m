@@ -37,7 +37,7 @@ end
             cmd = sprintf('gzip -cd %s | dd ibs=1024 count=1 > %s', ...
                 in_fn, tmp_fn);
             
-            system(cmd);
+            [status,result] = system(cmd);
         else
             if (h_only), warning('quick header extraction not implemented'); end
             tmp_fn = gunzip(in_fn, tmp_path);

@@ -36,13 +36,13 @@ for k = 1:size(I,3)
             if (n_workers == 1) % single core
                 for i = 1:size(I,1)
                     if (M(i,j,k) == 0), continue; end
-                    p(:,i,j,k) = fun(squeeze(I(i,j,k,:)), 1);
+                    p(:,i,j,k) = fun(double(squeeze(I(i,j,k,:))), 1);
                 end
                 
             else % do parallel
                 parfor i = 1:size(I,1)
                     if (M(i,j,k) == 0), continue; end
-                    p(:,i,j,k) = fun(squeeze(I(i,j,k,:)), 1);
+                    p(:,i,j,k) = fun(double(squeeze(I(i,j,k,:))), 1);
                 end
             end
         end

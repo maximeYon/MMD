@@ -7,6 +7,10 @@ if (nargin < 3), error('all inputs required'); end
 [I,h]  = mdm_nii_read(s.nii_fn);
 M      = mdm_mask_load(s, opt);
 
+h.scl_slope = 1;
+h.scl_inter = 0;
+
+
 % Analyze and store output
 mfs.m       = mio_volume_loop(fun, I, M);
 mfs.mask    = M;

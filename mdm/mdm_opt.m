@@ -12,3 +12,4 @@ function opt = mdm_opt(opt)
 if (nargin < 1), opt.present = 1; end
 
 opt = msf_ensure_field(opt, 'nii_ext', '.nii.gz');
+opt = msf_ensure_field(opt, 'do_overwrite', 0);
