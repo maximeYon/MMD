@@ -1,7 +1,9 @@
-function t = ts_1x6_to_1x21(n2)
-% function t = ts_make_4th_from_2nd(n2)
+function t = dtd_1x6_to_1x21(n2)
+% function t = dtd_1x6_to_1x21(n2)
 %
-% n2 = n x 6
+% Convert a second-order tensor on Voigt notation (1x6) to a 
+% fourth-order tensor in Voight-like notation (1x21). This correspons
+% to taking the outer product of 'n2'
 
 xx = n2(:,1);
 yy = n2(:,2);

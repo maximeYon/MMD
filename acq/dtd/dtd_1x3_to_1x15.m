@@ -1,5 +1,7 @@
-function t = ts_1x3_to_1x15(N)
-% function DT_dist = ts_make_tensors_from_directions(ad, rd, n)
+function t = dtd_1x3_to_1x15(N)
+% function t = dtd_1x3_to_1x15(N)
+%
+% Convert a vector in 1x3 format to a fourth-order tensor in 1x15 format
 
 t = [...
     N(:,1) .* N(:,1) .* N(:,1) .* N(:,1) * sqrt(1) ...

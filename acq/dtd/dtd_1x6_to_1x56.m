@@ -1,4 +1,8 @@
-function t = ts_1x6_to_1x56(B2)
+function t = dtd_1x6_to_1x56(B2)
+% function t = dtd_1x6_to_1x56(B2)
+%
+% Take the third outer product of B2, making the outcome a sixth order
+% tensor
 
 t = [
     B2(:,1) .* B2(:,1) .* B2(:,1) .*  sqrt( 1 ) ...

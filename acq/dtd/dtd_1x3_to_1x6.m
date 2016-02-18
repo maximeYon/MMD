@@ -1,5 +1,9 @@
-function t = ts_make_tensors_from_directions(ad, rd, n)
-% function DT_dist = ts_make_tensors_from_directions(ad, rd, n)
+function t = dtd_1x3_to_1x6(ad, rd, n)
+% function t = dtd_1x3_to_1x6(ad, rd, n)
+%
+% Convert a vector (1x3) to a tensor (1x6), but enable some shaping of the
+% tensor, so that its longest eigenvalue is 'ad' and its shortest to 
+% eigenvalues are 'rd'
 
 x = n(:,1);
 y = n(:,2);

@@ -1,6 +1,7 @@
-function t = ts_1x15_to_6x6(N)
+function t = dtd_1x15_to_6x6(N)
 % function t = ts_1x15_to_6x6(N)
-
+% 
+% Converts a fourth-order tensor on the 1x15 format to the 6x6 format
 
 % % t = [...
 % 1%     N(:,1) .* N(:,1) .* N(:,1) .* N(:,1) * sqrt(1) ...
