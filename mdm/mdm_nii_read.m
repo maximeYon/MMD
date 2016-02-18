@@ -38,9 +38,32 @@ if (h.bitpix == 24)
     I = fread(fid, 3*dim_x*dim_y*dim_z, '*uint8');
     I = reshape(I, 3, dim_x, dim_y, dim_z);
 else
-    I = fread(fid, dim_x*dim_y*dim_z*n_dyn, ...
-        ['*' mdm_nii_datatype(h.datatype)]);
-    I = reshape(I, dim_x, dim_y, dim_z, n_dyn);
+    
+    data_type_str = mdm_nii_datatype(h.datatype);
+    
+    is_complex = strcmp(data_type_str(1:min(end, 7)), 'complex');
+    
+    if (is_complex)
+        
+        switch (h.bitpix/2)
+            case 64
+                data_type_str = 'float64';
+            case 32
+                data_type_str = 'float32';
+            otherwise
+                error('not supported');
+        end
+    end
+    
+    I = fread(fid, dim_x*dim_y*dim_z*n_dyn*(is_complex+1), ...
+        ['*' data_type_str]);
+    
+    if (is_complex)
+        I = reshape(I, 2, dim_x, dim_y, dim_z, n_dyn);
+        I = squeeze(I(1,:,:,:,:)) + 1i * squeeze(I(2,:,:,:,:));
+    else
+        I = reshape(I, dim_x, dim_y, dim_z, n_dyn);
+    end
 end
 fclose(fid);
 

@@ -11,7 +11,6 @@ switch (value)
         error('datatype not supported');
     case 1792
         datatype = 'complex128';
-        error('datatype not supported');
     case 1536
         datatype = 'float128';
         error('datatype not supported');
@@ -32,7 +31,7 @@ switch (value)
             datatype = 'float64';
         end
     case 32
-        error('datatype complex, not handled');
+        datatype = 'complex64';
     case 16
         if (t)
             datatype = 'single';

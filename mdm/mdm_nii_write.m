@@ -69,12 +69,27 @@ try
         fwrite(fid, uint8(I), 'uint8');
     else
         switch (h.datatype)
+            case 1792
+                I = double(I);
+                J = zeros(size(I,1), size(I,2), size(I,3), size(I,4), 2);
+                J(:,:,:,:,1) = real(I);
+                J(:,:,:,:,2) = imag(I);
+                J = permute(J, [5 1 2 3 4]);     
+                fwrite(fid, J, 'float64');
             case 512
                 fwrite(fid, uint16(I), 'uint16');
             case 256
                 fwrite(fid, int8(I), 'int8');
             case 64
                 fwrite(fid, double(I), 'float64');
+            case 32
+                I = single(I);
+                J = zeros(size(I,1), size(I,2), size(I,3), size(I,4), 2);
+                J(:,:,:,:,1) = real(I);
+                J(:,:,:,:,2) = imag(I);
+                J = permute(J, [5 1 2 3 4]);
+                
+                fwrite(fid, J, 'float32');
             case 16
                 fwrite(fid, single(I), 'float32');
             case 4
@@ -121,7 +136,14 @@ end
         % Determine the datatype
         tmp = whos('I');
         
-        switch (tmp.class)
+        is_complex = ~(isreal(I(:)));
+        
+        class_str = tmp.class;
+        
+        if (is_complex), class_str = ['complex_' class_str]; end
+        
+        
+        switch (class_str)
             case 'uint8'
                 h.datatype = 2;
                 h.bitpix = 8;
@@ -140,6 +162,12 @@ end
             case 'double'
                 h.datatype = 64;
                 h.bitpix = 64;
+            case 'complex_single'
+                h.datatype = 32;
+                h.bitpix = 64;
+            case 'complex_double';
+                h.datatype = 1792;
+                h.bitpix = 128;
             otherwise
                 error(['datatype ' tmp.class ' is not supported by this function']);
         end
