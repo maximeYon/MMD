@@ -60,7 +60,8 @@ else
     
     if (is_complex)
         I = reshape(I, 2, dim_x, dim_y, dim_z, n_dyn);
-        I = squeeze(I(1,:,:,:,:)) + 1i * squeeze(I(2,:,:,:,:));
+        I = reshape(I(1,:,:,:,:) + 1i * I(2,:,:,:,:), ...
+            dim_x, dim_y, dim_z, n_dyn);
     else
         I = reshape(I, dim_x, dim_y, dim_z, n_dyn);
     end
