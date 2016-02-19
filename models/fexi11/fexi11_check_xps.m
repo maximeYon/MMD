@@ -3,6 +3,7 @@ function fexi11_check_xps(xps)
 % 
 % checks that all required fields are found in the xps
 
+mdm_xps_check(xps);
 
 required_fields = {...
     'mde_b1', 'mde_b2', 'mde_tm12', 's_ind', 'mde_b2_ind'};

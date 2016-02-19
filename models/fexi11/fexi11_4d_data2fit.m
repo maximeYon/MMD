@@ -31,7 +31,7 @@ ind = s.xps.mde_b2_ind >= opt.fexi11.mde_b2_ind_start;
             m = zeros(1,3+max(s.xps.s_ind));
         end
         
-        if (opt.fexi11.do_plot)
+        if (opt.fexi11.do_plot) && (do_fit)
             signal_fit = fexi11_1d_fit2data(m, s.xps);
             x = (1:numel(signal))';
             plot(x,signal,'.',x,signal_fit,'o');

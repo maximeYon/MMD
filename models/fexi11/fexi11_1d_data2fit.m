@@ -30,41 +30,6 @@ t = lsqcurvefit(@fun, t_guess, [], signal(ind), ...
 
 m = t .* unit_to_SI;
 
-
-
-% exp fit - pre-fit
-% tmp_guess = [signal(1) 1e-9];
-% tmp_lb = [.9*signal(1) 1e-11];
-% tmp_ub = [1.1*signal 3e-9];
-% index = find(xps.mde_b1 == 0);
-% Xin = xps.mde_b1(index);
-% Xin = Xin(opt.nbstart:end);
-% Yin = signal(index);
-% Yin = Yin(opt.nbstart:end);
-
-%Xin = xps.mde_b2;
-
-%Xin = Xin(opt.nbstart:end);
-% Yin = signal(index);
-% Yin = Yin(opt.nbstart:end);
-
-%%%%%%%%%%% for pre-fitting
-% function Y = fexp(Pin,Xin,Pnorm,Xnorm,Ynorm);
-%
-% if nargin == 2
-%     Pnorm = ones(size(Pin));
-%     Xnorm = 1;
-%     Ynorm = 1;
-% end
-%
-% Pin = Pin.*Pnorm;
-% Xin = Xin*Xnorm;
-%
-% Y0 = Pin(1);
-% D = Pin(2);
-%
-% Y = Y0.*exp( - D.*Xin);
-% Y = Y/Ynorm;
 end
 
 
