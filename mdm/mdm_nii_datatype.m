@@ -1,6 +1,9 @@
 function datatype = mdm_nii_datatype( value, t )
 % function datatype = nifti_datatype( value, t )
 %
+% Returns the datatype of a nifti based on the header info in a 
+% matlab-friendly format
+%
 % set t = 1 to change float64 --> double and float32 --> single
 
 if (nargin < 2), t = 0; end 

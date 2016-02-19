@@ -40,6 +40,7 @@ end
             [status,result] = system(cmd);
         else
             if (h_only), warning('quick header extraction not implemented'); end
+            assert(exist(in_fn,'file') > 0, ['file not found: ' in_fn]);
             tmp_fn = gunzip(in_fn, tmp_path);
             tmp_fn = tmp_fn{1};
         end
