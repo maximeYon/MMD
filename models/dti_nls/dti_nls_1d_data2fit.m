@@ -7,15 +7,33 @@ function m = dti_nls_1d_data2fit(signal, xps, opt)
 
 signal = double(signal);
 
-unit_to_SI = [max(signal) [1 1 1 1 1 1] * 10^-(9/2)];
+unit_to_SI = [max(signal) [1 1 1 1 1 1] * 1e-9];
 
-fun = @(m,e) dti_nls_1d_fit2data(m .* unit_to_SI, xps);
+    function m = t2m(t)
+        
+        m(1) = t(1); % s0
+        
+        C = [...
+            t(2) t(3) t(4);
+            0    t(5) t(6);
+            0      0  t(7)];
+        
+        m(2:7) = dtd_3x3_to_1x6(C' * C);
 
-m_guess = [1 1 1 1  0  0  0];
-m_lb    = [0 0 0 0 -9 -9 -9];
-m_ub    = [2 9 9 9 +9 +9 +9];
+        m = m .* unit_to_SI;
+    end
+        
+    function s = my_1d_fit2data(t,varargin)
+        m = t2m(t);
+        s = dti_nls_1d_fit2data(m, xps);
+    end
 
-m = lsqcurvefit(fun, m_guess, [], signal, ...
-    m_lb, m_ub, opt.dti_nls.lsq_opts);
+t_guess = [1 1 1 1  0  0  0];
+t_lb    = [0 0 0 0 -9 -9 -9];
+t_ub    = [2 9 9 9 +9 +9 +9];
 
-m = m .* unit_to_SI;
+t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal, ...
+    t_lb, t_ub, opt.dti_nls.lsq_opts);
+
+m = t2m(t);
+end
