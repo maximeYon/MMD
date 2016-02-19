@@ -1,4 +1,7 @@
-function t = ts_2d_1x6_to_3x3(t)
+function t = dtd_2d_1x6_to_3x3(t)
+% function t = dtd_2d_1x6_to_3x3(t)
+%
+% Two-dimensional version of dtd_1x21_to_6x6
 
 t = t([...
     1 3 4;

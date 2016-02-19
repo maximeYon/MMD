@@ -1,3 +1,6 @@
-function md = ts_md(d2)
+function md = dtd_md(d2)
+% function md = dtd_md(d2)
+% 
+% Calculate the mean diffusivity of the second-order tensor 'd2'
 
-md = ts_inner(d2, ts_3x3_to_1x6(ts_3x3_iso()));
+md = dtd_inner(d2, dtd_3x3_to_1x6(dtd_3x3_iso()));

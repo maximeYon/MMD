@@ -1,12 +1,9 @@
-function t = ts_6x6_to_1x21(t)
+function t = dtd_6x6_to_1x21(t)
+% function t = dtd_6x6_to_1x21(t)
+%
+% Convert a fourth-order tensor on the 6x6 format to a Voigt-like format
 
 
-% xxxx xxyy xxzz c1*xxxy c1*xxxz c1*xxyz
-% xxyy xxxx yyzz c1*yyyx c1*yyxz c1*yyyz
-% xxzz yyzz zzzz c1*zzxy c1*zzzx c1*zzzy
-%  -    -    -   c2*xyxy c2*xyxz c2*xyyz
-%  -    -    -   c2*xyxz c2*xzxz c2*xzyz
-%  -    -    -   c2*xyyz c2*xzyz c2*yzyz
 
 
 t = [...
@@ -17,6 +14,15 @@ t = [...
     [t(2,6) t(3,5) t(3,6)] * sqrt(2) ...
     [t(4,4) t(5,5) t(6,6)] * sqrt(1) ...
     [t(4,5) t(4,6) t(5,6)] * sqrt(2)];
+
+% xxxx xxyy xxzz c1*xxxy c1*xxxz c1*xxyz
+% xxyy xxxx yyzz c1*yyyx c1*yyxz c1*yyyz
+% xxzz yyzz zzzz c1*zzxy c1*zzzx c1*zzzy
+%  -    -    -   c2*xyxy c2*xyxz c2*xyyz
+%  -    -    -   c2*xyxz c2*xzxz c2*xzyz
+%  -    -    -   c2*xyyz c2*xzyz c2*yzyz
+
+
 
 % 
 % xxxx = t(1); % all same

@@ -1,5 +1,8 @@
-function x = ts_inner(x,y)
-% rewrite required
+function x = dtd_inner(x,y)
+% function x = dtd_inner(x,y)
+%
+% Take the inner product of 'x' and 'y'.
+% However, rewrite required
 
 if (size(x,2) == 1), x = x'; end
 if (size(y,2) == 1), y = y'; end
