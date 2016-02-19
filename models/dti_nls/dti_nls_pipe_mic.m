@@ -1,4 +1,4 @@
-function fn = dti_nls_pipe_example(s, o_path, opt)
+function fn = dti_nls_pipe_mic(s, o_path, opt)
 % function fn = dti_nls_pipe_example(s, o_path, opt)
 %
 % s      - input structure
@@ -9,7 +9,7 @@ opt = mdm_opt(opt);
 
 
 % Prepare: mask et c
-s = mio_mask_simple(s, o_path);
+s = mio_mask_mic(s, o_path, opt);
 
 % Run the analysis
 out_fn = fullfile(o_path, 'dti_nls.mat');

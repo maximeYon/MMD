@@ -59,7 +59,7 @@ step 3 and 4.
    *_4d_fit2param. 
 
 5. Analyze the data by drawing ROIs or using other analysis packages of 
-   your choise.
+   your choice.
 
 
 We suggest you start analysing the model found in models/dti_nls to get
