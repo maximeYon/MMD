@@ -1,5 +1,12 @@
 function s = mio_smooth_4d(s, o_path, sigma, opt)
-% function mio_smooth_4d(s, o_path, sigma, opt)
+% function s = mio_smooth_4d(s, o_path, sigma, opt)
+%
+% Smoothes every volume in s.nii_fn and saves this as a new nifti file in
+% the folder 'o_path'
+%
+% The 's' structure is updated with a reference to the new file in s.nii_fn
+%
+% The smoothing width is controll by 'sigma'
 
 % init 
 if (nargin < 4), opt.present = 1; end
@@ -8,7 +15,6 @@ opt = mdm_opt(opt);
 [~,name] = msf_fileparts(s.nii_fn);
 out_nii_fn = fullfile(o_path, [name '_s' opt.nii_ext]);
 
-opt.do_overwrite = 0;
 if (exist(out_nii_fn, 'file') && (~opt.do_overwrite))
     disp('found output, returning');
     s.nii_fn = out_nii_fn;
@@ -17,7 +23,6 @@ end
 
 % Load data
 [I,h] = mdm_nii_read(s.nii_fn);
-
 
 % Create filter
 filter_sigma = sigma .* (mean(h.pixdim(2:4)) ./ h.pixdim(2:4));
@@ -36,7 +41,7 @@ for c = 1:size(I,4)
 end
 
 % save output
-s.nii_fn = out_nii_fn
+s.nii_fn = out_nii_fn;
 mdm_nii_write(I, s.nii_fn, h);
 
 end

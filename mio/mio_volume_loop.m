@@ -7,7 +7,8 @@ if (nargin < 4), opt.present = 1; end
 opt = mio_opt(opt);
 
 % Init the output structure (but permute before outputting)
-p = zeros(numel(fun([], 0)), size(I,1), size(I,2), size(I,3));
+n_param = numel(fun([], 0));
+p = zeros(n_param, size(I,1), size(I,2), size(I,3));
 
 
 % Run parallel?

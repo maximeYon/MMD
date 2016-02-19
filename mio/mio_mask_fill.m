@@ -1,7 +1,8 @@
-function M = mio_mask_fill(M,d)
+function M = mio_mask_fill(M)
 % function M = mio_mask_fill(M)
 %
-% fill the mask on a slice-by-slice basis in dimension d
+% fill holes in a mask on a slice-by-slice basis
+
 if (nargin < 2), d = 3; end
 
 for k = 1:size(M,d)

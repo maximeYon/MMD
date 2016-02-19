@@ -1,7 +1,13 @@
-function s = mio_mask_simple(s,o)
-% function s = mio_mask_simple(s,o)
+function s = mio_mask_simple(s, o, opt)
+% function s = mio_mask_simple(s, o, opt)
+%
+% creates a mask in a very simple way by looking a signal variation along
+% the fourth dimension
+%
+% save the mask in 'o' folder, and update 's' with a reference to the 
+% mask as s.mask_fn
 
-opt = mdm_opt();
+opt = mdm_opt(opt);
 
 % construct the filename
 [~,name] = msf_fileparts(s.nii_fn);
@@ -20,11 +26,11 @@ end
 
 % define the mask from the variation of the signal
 I_mean = nanmean(single(abs(I)), 4);
-I_mean = imfilter(I_mean, ones(5,5,5) / 5^3);
+I_mean = imfilter(I_mean, ones(5,5,1) / 5^2);
 
 I_V = zeros(size(I_mean));
 for c = 1:size(I,4)
-    I_V = I_V + (single(abs(I(:,:,:,c))) - imfilter(single(abs(I(:,:,:,c))), ones(3,3,3) / 3^3)).^2;
+    I_V = I_V + (single(abs(I(:,:,:,c))) - imfilter(single(abs(I(:,:,:,c))), ones(5,5,1) / 5^2)).^2;
 end
 I_V = I_V / size(I,4);
 

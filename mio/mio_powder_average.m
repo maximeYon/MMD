@@ -40,7 +40,11 @@ s.xps = rmfield(s.xps, 'n');
 f = fieldnames(s.xps);
 for i = 1:numel(f)
     for c = 1:n
-        xps.(f{i})(c,:) = mean(s.xps.(f{i})(s.xps.a_ind == c, :), 1);
+        try
+            xps.(f{i})(c,:) = mean(s.xps.(f{i})(s.xps.a_ind == c, :), 1);
+        catch
+            error('failed powder averaging field %s', f{i});
+        end
     end
 end
 s.xps = xps;
