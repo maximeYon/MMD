@@ -5,7 +5,7 @@ function m = fexi11_1d_data2fit(signal, xps, opt, ind)
 % m(1)   - ADC0
 % m(2)   - sigma
 % m(3)   - AXR
-% m(4:end) - vector of S0, length(m) = 3+max(xps.mde_t12_ind)
+% m(4:end) - vector of S0, length(m) = 3+max(s.xps.s_ind)
 
 if (nargin < 4), ind = ~isnan(signal); end
 
