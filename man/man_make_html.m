@@ -8,12 +8,16 @@ packages = {...
     '.', ...
     'acq/dtd', ...
     'acq/qmas', ...
+    'acq/uvec', ...
     'mdm', ...
     'mio', ...
+    'mio/elastix', ...
+    'models/fexi11', ...
+    'models/vasco16', ...
     'models/dti_nls', ...
     'models/quick_dti'};
 
-fid = fopen(fullfile(cwd, 'html/index.html'),'w');
+fid = fopen(fullfile(cwd, '../index.html'),'w');
 fwrite(fid, '<html><head><title>MDM manual</title></head></body><pre>');
 
 fprintf(fid, '<h1 style="background-color:black;color:white">Packages</h1><br>');
@@ -24,7 +28,7 @@ end
 
 for c = 1:numel(packages)
     
-    fprintf(fid, '<h1 id="p%i" style="background-color:black;color:white">%s</h1><br>', c, packages{c});
+    fprintf(fid, '<h1 id="p%i" style="background-color:black;color:white">&nbsp;Package: %s</h1>', c, packages{c});
     
     
     % Pull in the readme file
@@ -36,17 +40,18 @@ for c = 1:numel(packages)
         tmp = strrep(tmp,char(10),'<br>');
         warning on;
         fprintf(fid, tmp);
-        fprintf(fid, '<br>\n');
         fclose(fid2);
     end
     
+    fprintf(fid, '<h2 style="background-color:#dddddd">Functions</h2>');
     
     % get file headers
     d = dir(fullfile(rd, packages{c}, '*.m'));
     
     for c_file = 1:numel(d)
         
-        fid2 = fopen(fullfile(rd, packages{c}, d(c_file).name));
+        fn2 = fullfile(rd, packages{c}, d(c_file).name);
+        fid2 = fopen(fn2);
         
         % loop the m-file
         for c_line = 1:1000
@@ -68,6 +73,7 @@ for c = 1:numel(packages)
                     if (~strcmp(tmp, ['% ' f_str])), col = 'red'; end
 
                     fprintf(fid, '<b style="color:%s">%s</b><br>', col, tline);
+                    
                     
                 otherwise
                     
