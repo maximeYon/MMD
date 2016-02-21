@@ -1,35 +1,28 @@
 function p = mio_volume_loop(fun, I, M, opt)
 % function p = mio_volume_loop(fun, I, M, opt)
+%
+% Applies the function fun to all voxels where M is positive
+%
+% In order to execute the loop in parallel, initiate parpool before
+% executing this function. If number of workers > 1, volume loop will be
+% executed in parallel
 
 if (nargin < 3), error('all inputs required'); end
 if (nargin < 4), opt.present = 1; end
 
 opt = mio_opt(opt);
 
-% Init the output structure (but permute before outputting)
-n_param = numel(fun([], 0));
+% Init the output structure by fitting once to a voxel in the middle
+%  (note that the output will be permuted before returning)
+n_param = numel(fun(double(squeeze(...
+    I(round(end/2), round(end/2), round(end/2), :)))));
 p = zeros(n_param, size(I,1), size(I,2), size(I,3));
 
-
-% Run parallel?
-do_delete_parpool = 0;
-if (opt.mio.n_core > 1)
-    if (isempty(gcp('nocreate')))
-        parpool(opt.mio.n_core);
-        do_delete_parpool = 1;
-    end    
-end
-
-try
+try % start parpool outside this function to have it run in parfor mode
     tmp = gcp('nocreate');
-catch 
-    tmp = [];
-end
-
-if (isempty(tmp))
-    n_workers = 1;
-else
     n_workers = tmp.NumWorkers;
+catch
+    n_workers = 1;
 end
 
 % Loop over the data
@@ -60,9 +53,6 @@ for k = 1:size(I,3)
     disp(';');
 end
 
-% close parpool if it was created
-if (do_delete_parpool)
-    delete(gcp('nocreate'));
 end
 
 p = permute(p, [2 3 4 1]);
