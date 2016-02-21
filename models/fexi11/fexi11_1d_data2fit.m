@@ -30,6 +30,14 @@ t = lsqcurvefit(@fun, t_guess, [], signal(ind), ...
 
 m = t .* unit_to_SI;
 
+
+if (opt.fexi11.do_plot)
+    signal_fit = fexi11_1d_fit2data(m, xps);
+    x = (1:numel(signal))';
+    plot(x,signal,'.',x,signal_fit,'o');
+    pause(0.05);
+end
+
 end
 
 

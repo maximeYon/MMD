@@ -36,4 +36,13 @@ t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal, ...
     t_lb, t_ub, opt.dti_nls.lsq_opts);
 
 m = t2m(t);
+
+
+if (opt.dti_nls.do_plot)
+    signal_fit = dti_nls_1d_fit2data(m, xps);
+    x = (1:numel(signal))';
+    plot(x,signal,'.',x,signal_fit,'o');
+    pause(0.05);
+end
+
 end

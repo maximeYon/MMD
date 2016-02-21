@@ -51,4 +51,28 @@ t = lsqcurvefit(@my_1d_fit2data_with_penalty, t_guess, [], [signal(ind);0], ...
 
 m = t2m(t);
 
+
+
+% potentially plot the result
+if (opt.vasco16.do_plot)
+    signal_fit = vasco16_1d_fit2data(m, xps);
+    
+    ind_i{1} = (xps.alpha2 == 0) & ind_signal;
+    ind_i{2} = (xps.alpha2 >  0) & ind_signal;
+    t = {'FC', 'NC'};
+    
+    clf; set(gcf,'color','white');
+    
+    for c = 1:2
+        subplot(1,2,c);
+        semilogy(...
+            xps.b(ind_i{c}) * 1e-6, signal(ind_i{c}),'x',...
+            xps.b(ind_i{c}) * 1e-6, signal_fit(ind_i{c}),'o-');
+        ylim( [0.7 1] * max(signal));
+        title(t{c});
+    end
+    pause(0.05);
+end
+
+
 end

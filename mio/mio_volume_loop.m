@@ -35,13 +35,15 @@ for k = 1:size(I,3)
             if (n_workers == 1) % single core
                 for i = 1:size(I,1)
                     if (M(i,j,k) == 0), continue; end
-                    p(:,i,j,k) = fun(double(squeeze(I(i,j,k,:))), 1);
+                    p(:,i,j,k) = fun(double(squeeze(I(i,j,k,:))));
                 end
                 
-            else % do parallel
+            else % multicore 
+                % tried to put the parfor in another loop structure, 
+                % but it did not improve performance much
                 parfor i = 1:size(I,1)
                     if (M(i,j,k) == 0), continue; end
-                    p(:,i,j,k) = fun(double(squeeze(I(i,j,k,:))), 1);
+                    p(:,i,j,k) = fun(double(squeeze(I(i,j,k,:))));
                 end
             end
         end
@@ -51,8 +53,6 @@ for k = 1:size(I,3)
         if (mod(j,4) == 0), fprintf(marker); end
     end
     disp(';');
-end
-
 end
 
 p = permute(p, [2 3 4 1]);

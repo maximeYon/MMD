@@ -2,7 +2,7 @@ function status = ut_qdti(c_ut)
 % function ut_qdti(c_ut)
 
 % n_ut = number of unit tests
-n_ut = 1;
+n_ut = 0;
 
 if (nargin == 0)
     status = n_ut;
@@ -12,5 +12,6 @@ end
 
 switch (c_ut)
     case 1 % make synthetic phantom, check fa and md
+        
         
 end
