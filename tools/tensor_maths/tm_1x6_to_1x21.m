@@ -1,5 +1,5 @@
-function t = dtd_1x6_to_1x21(n2)
-% function t = dtd_1x6_to_1x21(n2)
+function t = tm_1x6_to_1x21(n2)
+% function t = tm_1x6_to_1x21(n2)
 %
 % Convert a second-order tensor on Voigt notation (1x6) to a 
 % fourth-order tensor in Voight-like notation (1x21). This correspons

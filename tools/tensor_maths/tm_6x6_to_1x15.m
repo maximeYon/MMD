@@ -1,5 +1,5 @@
-function t = dtd_6x6_to_1x15(N)
-% function t = dtd_6x6_to_1x15(N)
+function t = tm_6x6_to_1x15(N)
+% function t = tm_6x6_to_1x15(N)
 %
 % Convert a 6x6 tensor to a Voigt-like 1x15 representation
 % Warning: degrees of freedom are lost in this conversion.

@@ -1,5 +1,5 @@
-function t = dtd_1x21_to_6x6(t)
-% function t = dtd_1x21_to_6x6(t)
+function t = tm_1x21_to_6x6(t)
+% function t = tm_1x21_to_6x6(t)
 % 
 % Convert fourth-order tensor in 1x21 format to 6x6 format
 

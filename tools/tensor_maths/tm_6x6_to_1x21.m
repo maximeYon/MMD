@@ -1,5 +1,5 @@
-function t = dtd_6x6_to_1x21(t)
-% function t = dtd_6x6_to_1x21(t)
+function t = tm_6x6_to_1x21(t)
+% function t = tm_6x6_to_1x21(t)
 %
 % Convert a fourth-order tensor on the 6x6 format to a Voigt-like format
 

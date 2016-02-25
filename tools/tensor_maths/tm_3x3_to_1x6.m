@@ -1,5 +1,5 @@
-function t = dtd_3x3_to_1x6(t)
-% function t = dtd_3x3_to_1x6(t)
+function t = tm_3x3_to_1x6(t)
+% function t = tm_3x3_to_1x6(t)
 %
 % Convert a second-order 3x3 tensor to  Voigtm-format 1x6
 

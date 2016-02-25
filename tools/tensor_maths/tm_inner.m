@@ -1,5 +1,5 @@
-function x = dtd_inner(x,y)
-% function x = dtd_inner(x,y)
+function x = tm_inner(x,y)
+% function x = tm_inner(x,y)
 %
 % Take the inner product of 'x' and 'y'.
 % However, rewrite required

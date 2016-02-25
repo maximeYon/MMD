@@ -3,7 +3,7 @@ function t = t2tpars(t3x3)
 %
 % calculate derived tensor parameters
 
-t.t1x6 = dtd_3x3_to_1x6(t3x3);
+t.t1x6 = tm_3x3_to_1x6(t3x3);
 [V,D] = eig(t3x3);
 lambdas = diag(D);
 t.trace = sum(lambdas);

@@ -1,5 +1,5 @@
-function fa = dtd_fa(a,b)
-% function fa = dtd_fa(a,b)
+function fa = tm_fa(a,b)
+% function fa = tm_fa(a,b)
 %
 % With one input argumnet: calculate the FA of the second order tensor 'a'
 % With two arguments: assume 'a' to be MD and 'b' to be the variance in
