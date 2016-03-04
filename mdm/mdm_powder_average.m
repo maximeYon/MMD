@@ -1,5 +1,5 @@
-function s = mio_powder_average(s, o_path, opt)
-% function s = mio_powder_average(s, o_path, opt)
+function s = mdm_powder_average(s, o_path, opt)
+% function s = mdm_powder_average(s, o_path, opt)
 %
 % Average over rotations. Image volumes with identical rotations is defined
 % from s.xps.a_ind
@@ -7,6 +7,7 @@ function s = mio_powder_average(s, o_path, opt)
 % To do: find a way of keeping track of number of averages per step
 
 % Init
+if (nargin < 2), o_path = fileparts(s.nii_fn); end
 if (nargin < 3), opt.present = 1; end
 opt = mdm_opt(opt);
 
@@ -28,20 +29,37 @@ end
 I = double(I);
 
 % Average image
-n = max(s.xps.a_ind);
+id = s.xps.a_ind;
+if (isfield(s.xps,'s_ind'))
+    id = [id s.xps.s_ind];
+end
+[~,~,id_ind] = unique(id, 'rows');
+
+% get rid of NaNs
+tmp = sum(isnan(id),2) > 0;
+c_list = unique(id_ind(~tmp)); 
+n = numel(c_list);
+
 A = zeros(size(I,1), size(I,2), size(I,3), n);
 
-for c = 1:n
-    A(:,:,:,c) = nanmean(I(:,:,:,s.xps.a_ind == c),4);
+for c = c_list'
+    A(:,:,:,c == c_list) = nanmean(I(:,:,:,id_ind == c),4);
 end
 
 % Average fields in xps
 s.xps = rmfield(s.xps, 'n');
 f = fieldnames(s.xps);
 for i = 1:numel(f)
-    for c = 1:n
+    for c = c_list'
+        
+        % allow text fields to be just copied
+        if (all(ischar(s.xps.(f{i}))))
+            xps.(f{i}) = s.xps.(f{i});
+            continue; 
+        end
+        
         try
-            xps.(f{i})(c,:) = mean(s.xps.(f{i})(s.xps.a_ind == c, :), 1);
+            xps.(f{i})(c == c_list,:) = mean(s.xps.(f{i})(id_ind == c, :), 1);
         catch
             error('failed powder averaging field %s', f{i});
         end

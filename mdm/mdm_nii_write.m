@@ -2,7 +2,7 @@ function mdm_nii_write(I, nii_fn, h, is_colour)
 % function mdm_nii_write(I, nii_fn, h, is_colour)
 
 if (nargin < 4), is_colour = 0; end
-if (nargin < 3) || (numel(h) == 0), h = mdm_nii_empty_h; end
+if (nargin < 3) || (numel(h) == 0), h = mdm_nii_h_empty; end
 
 % Make header consistent using an internal function
 h = nii_make_header(h);

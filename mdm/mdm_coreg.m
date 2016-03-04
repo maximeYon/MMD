@@ -1,8 +1,15 @@
-function [o_fn, tpm_fn] = mio_coreg(i_fn, r_fn, p_fn, o_path, opt)
+function [o_fn, tpm_fn] = mdm_coreg(i_fn, r_fn, p_fn, o_path, opt)
 % function [o_fn, tpm_fn] = mio_coreg(i_fn, r_fn, p_fn, o_path, opt)
 %
 % Coregisters input file 'i_fn' to reference 'r_fn' using elastix parameters
 % 'p_fn'. Saves the files to 'o_path' as 'o_fn'
+%
+% For details on motion correction, see
+% 
+% Nilsson M, Szczepankiewicz F, van Westen D, Hansson O (2015) 
+% Extrapolation-Based References Improve Motion and Eddy-Current 
+% Correction of High B-Value DWI Data: Application in Parkinson's 
+% Disease Dementia. PLoS One 10(11):e0141825.
 
 if (nargin < 5), opt.present = 1; end
 opt = mio_opt(opt);
@@ -41,32 +48,13 @@ P = zeros(12, size(I_mov,4));
 for c = 1:size(I_mov, 4)
     fprintf('mio_coreg, registering vol %i of %i\n', c, size(I_mov,4));
     
-    % Build filenames
-    ref_fn = fullfile(o_path, ['f_' num2str(c) '.nii']);
-    mov_fn = fullfile(o_path, ['m_' num2str(c) '.nii']);
-    
-    % Write outputs
-    I_tmp = mio_pad(I_ref(:,:,:,min(size(I_ref, 4), c)), opt.mio.coreg.pad_xyz);
-    mdm_nii_write(I_tmp, ref_fn, h_ref);
-    
-    I_tmp = mio_pad(I_mov(:,:,:,c), opt.mio.coreg.pad_xyz);
-    mdm_nii_write(I_tmp, mov_fn, h_mov);
-    
-    % Run ElastiX, Read image volume and transform parameters
-    [res_fn, tp_fn] = elastix_perform(mov_fn, ref_fn, p_fn, o_path);
-    I_tmp = mdm_nii_read(res_fn);
-    tp = elastix_tp_read(tp_fn);
-    msf_delete({res_fn, tp_fn, ref_fn, mov_fn});
-    
-    % Adjust before storing
-    I_tmp = mio_pad(cast(I_tmp, datatype), -opt.mio.coreg.pad_xyz);
-    
-    if (opt.mio.coreg.adjust_intensity)
-        I_tmp = I_tm / tp(2,3); % Intensity scaling by y-scale
-    end
-    
+    [I_tmp, tp] = mio_coreg(...
+        mio_pad(I_mov(:,:,:,c), opt.mio.coreg.pad_xyz),...
+        mio_pad(I_ref(:,:,:,min(size(I_ref, 4), c)), opt.mio.coreg.pad_xyz), ...
+        p_fn, opt, h_mov, h_ref);
+        
     % Store
-    I(:,:,:,c) = I_tmp;
+    I(:,:,:,c) = mio_pad(I_tmp, -opt.mio.coreg.pad_xyz);
     P(:,c)     = tp(:);
 end
 
