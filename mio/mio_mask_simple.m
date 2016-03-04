@@ -1,28 +1,8 @@
-function s = mio_mask_simple(s, o, opt)
-% function s = mio_mask_simple(s, o, opt)
+function M = mio_mask_simple(I, opt)
+% function M = mio_mask_simple(I, opt)
 %
 % creates a mask in a very simple way by looking a signal variation along
 % the fourth dimension
-%
-% save the mask in 'o' folder, and update 's' with a reference to the 
-% mask as s.mask_fn
-
-opt = mdm_opt(opt);
-
-% construct the filename
-[~,name] = msf_fileparts(s.nii_fn);
-s.mask_fn = fullfile(o, [name '_fit_mask' opt.nii_ext]);
-
-if (exist(s.mask_fn, 'file') && (~opt.do_overwrite))
-    return; 
-end
-
-[I,h] = mdm_nii_read(s.nii_fn);
-
-% I_max = nanstd(single(abs(I)), [], 4);
-% I_max = imfilter(I_max, ones(3,3,3) / 3^3);
-% 
-% I_std = nanstd(single(I),[],4)
 
 % define the mask from the variation of the signal
 I_mean = nanmean(single(abs(I)), 4);
@@ -45,6 +25,3 @@ M = mio_mask_fill(M,1);
 M = mio_mask_fill(M,2);
 M = mio_mask_fill(M,3);
 M = mio_mask_keep_largest(M);
-
-% write the mask, don't care if we overwrite anything
-mdm_nii_write(uint8(M), s.mask_fn, h);
