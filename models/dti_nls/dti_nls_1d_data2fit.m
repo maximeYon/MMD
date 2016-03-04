@@ -3,7 +3,15 @@ function m = dti_nls_1d_data2fit(signal, xps, opt)
 %
 % Yields a 1x7 vector 'm' with the fit parameters
 % m(1)   - s0
-% m(2:7) - cholesky decomposition of the diffusion tensor
+% m(2:7) - diffusion tensor
+%
+% This file features a number of functions important for this framework. 
+% As input to the lsqcurvefit, we use a local vector t. Locally and during
+% the fit, we represent the diffusion tensor by its cholesky factorization
+% to ensure that all eigenvalues are positive. We also make sure the units
+% of 't' are in the same range as 's0' in order to improve the fitting's
+% stop constrains. Conversion between local 't' and true model variables
+% 'm' are done by the function 't2m'. 
 
 signal = double(signal);
 
