@@ -1,4 +1,5 @@
 function [path, name, ext] = msf_fileparts(fn)
+% function [path, name, ext] = msf_fileparts(fn)
 
 [path, name, ext] = fileparts(fn);
 
