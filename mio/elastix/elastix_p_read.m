@@ -41,7 +41,7 @@ for c_loop = 1:1e4 % make sure to terminate the loop even if something goes wron
     pos = strfind(val, str_marker);
     
     if (isempty(pos))
-        val = my_str2double(val, fv_sep); 
+        val = msf_str2double(val, fv_sep); 
     end
     
     % Store value

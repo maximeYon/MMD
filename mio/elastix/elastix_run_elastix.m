@@ -2,12 +2,6 @@ function [res_fn, tp_fn] = elastix_perform(i_fn, ref_fn, p_fn, o_path)
 % function [res_fn, tp_fn] = elastix_perform(i_fn, ref_fn, p_fn, o_path)
 %
 % Runs elastix. Only for Mac/*nix at the moment
-% 
-% To run, you need to be able to start elastix from your terminal by 
-% typing 'elastix'. Do this by adjusting the path in ~/.bashrc according to
-%
-% export PATH=/usr/local/elastix/bin:/usr/local/elastix/parameters:$PATH
-% export DYLD_LIBRARY_PATH=/usr/local/elastix/lib:$DYLD_LIBRARY_PATH
 
 cmd = 'elastix';
 cmd = [cmd ' -f "'   ref_fn  '"']; %#ok<AGROW>

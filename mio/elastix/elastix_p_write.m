@@ -1,4 +1,4 @@
-function elastix_param_write(p, fn)
+function fn = elastix_param_write(p, fn)
 %function elastix_param_write(p, fn)
 
 if (~isstruct(p))
@@ -26,6 +26,7 @@ for c = 1:numel(f)
     str = [str sprintf(['(' f{c} ' ' value ')\n'])]; %#ok<AGROW>
 end
 
+msf_mkdir(fileparts(fn));
 fid = fopen(fn, 'w');
 fwrite(fid, char(str), 'char');
 fclose(fid);

@@ -41,22 +41,19 @@ p.NumberOfResolutions                   = 1;
 p.MaximumNumberOfIterations             = n_iter; 
 p.NumberOfHistogramBins                 = [32];
 p.ImagePyramicSchedule                  = [1 1 1];
-p.ImageSampler                          = 'Random';
+p.ImageSampler                          = 'RandomCoordinate';
 p.NewSamplesEveryIteration              = 'true';
-p.NumberOfSpatialSamples                = 8192;
+p.NumberOfSpatialSamples                = 8192*2;
 
 % Order of B-Spline interpolation used in each resolution level, final et c
 p.BSplineInterpolationOrder             = 1;
 p.FinalBSplineInterpolationOrder        = 3;
 
-p.SP_alpha = 1;
-p.SP_A = 20;
-
 %  * This transform applies an affine transformation, but is parameterized by
 %  * angles, shear factors, scales, and translation, instead of by the affine matrix.
 %  * It is meant for registration of MR diffusion weighted images, but could be
 %  * used for other images as well of course.
-p.Scales = power(10, [6 6 1  4 4 6  5 5 6  0 0 6 ]);
+p.Scales = power(10, [6 6 2  4 4 6  5 5 6  0 0 6 ]);
 
   
 
