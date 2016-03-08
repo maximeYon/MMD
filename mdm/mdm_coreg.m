@@ -22,7 +22,7 @@ o_fn   = fullfile(o_path, [name '_mc' opt.nii_ext]);
 tpm_fn = fullfile(o_path, [name '_tp.txt']);
 
 if (exist(o_fn, 'file') && ~opt.do_overwrite)
-    disp(['Output file already exists, skipping: ' o_fn]); return;
+    disp(['Skipping, output file already exists: ' o_fn]); return;
 end
 
 % Read images and headers, check headers
@@ -36,6 +36,8 @@ if (size(I_ref,4) ~= size(I_mov,4)) && (size(I_ref,4) ~= 1)
 end
 
 datatype = mdm_nii_datatype(h_mov.datatype, 1);
+
+p = elastix_p_read(p_fn);
 
 if (opt.mio.coreg.clear_header) % needed to get interpretable tps
     h_ref = clear_ref_header(h_ref);
@@ -51,7 +53,7 @@ for c = 1:size(I_mov, 4)
     [I_tmp, tp] = mio_coreg(...
         mio_pad(I_mov(:,:,:,c), opt.mio.coreg.pad_xyz),...
         mio_pad(I_ref(:,:,:,min(size(I_ref, 4), c)), opt.mio.coreg.pad_xyz), ...
-        p_fn, opt, h_mov, h_ref);
+        p, opt, h_mov, h_ref);
         
     % Store
     I(:,:,:,c) = mio_pad(I_tmp, -opt.mio.coreg.pad_xyz);
@@ -60,7 +62,7 @@ end
 
 % Write output
 mdm_nii_write(I, o_fn, h_ref);
-elastix_tpm_write(P, tp_fn);
+elastix_tpm_write(P, tpm_fn);
 
 
 

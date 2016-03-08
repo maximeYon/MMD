@@ -5,6 +5,9 @@ function M = mdm_mask_load(s, opt)
 %
 % Optionally, mask using i_range, j_range and k_range in opt
 
+if (nargin < 2), opt.present = 1; end
+opt = mdm_opt(opt);
+
 h = mdm_nii_read_header(s.nii_fn);
 
 sz = h.dim(2:4)';

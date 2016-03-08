@@ -10,14 +10,15 @@ function s = mdm_powder_average(s, o_path, opt)
 if (nargin < 2), o_path = fileparts(s.nii_fn); end
 if (nargin < 3), opt.present = 1; end
 opt = mdm_opt(opt);
+msf_log(['Starting ' mfilename], opt);
 
+% Build filenames
 [~,name] = msf_fileparts(s.nii_fn);
 out_nii_fn = fullfile(o_path, [name '_pa' opt.nii_ext]);
-
 out_xps_fn = fullfile(o_path, [name '_pa_xps.mat']);
 
 if (exist(out_nii_fn, 'file') && (~opt.do_overwrite))
-    disp('found output file, returning');
+    disp(['Skipping, output file already exists: ' out_nii_fn]); 
     load(out_xps_fn);
     s.xps = xps;
     s.nii_fn = out_nii_fn;

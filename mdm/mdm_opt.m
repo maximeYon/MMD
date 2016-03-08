@@ -13,3 +13,8 @@ if (nargin < 1), opt.present = 1; end
 
 opt = msf_ensure_field(opt, 'nii_ext', '.nii.gz');
 opt = msf_ensure_field(opt, 'do_overwrite', 0);
+opt = msf_ensure_field(opt, 'verbose', 1);
+
+
+opt.mdm.present = 1;
+opt.mdm = msf_ensure_field(opt.mdm, 'mask_suffix', 'mask');

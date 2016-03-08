@@ -176,7 +176,7 @@ xps.s_ind   = [s.info.c_dynamic]';
 xps.b_ind   = [s.info.b_value_number]';
 xps.br_ind  = [s.info.gradient_orientation]';
 xps.te      = [s.info.echo_time]' * 1e-3;
-xps.bt      = dtd_1x3_to_1x6(xps.b, zeros(size(xps.b)), xps.u);
+xps.bt      = tm_1x3_to_1x6(xps.b, zeros(size(xps.b)), xps.u);
 
 
 
