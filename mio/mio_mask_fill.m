@@ -1,5 +1,5 @@
-function M = mio_mask_fill(M)
-% function M = mio_mask_fill(M)
+function M = mio_mask_fill(M,d)
+% function M = mio_mask_fill(M,d)
 %
 % fill holes in a mask on a slice-by-slice basis
 

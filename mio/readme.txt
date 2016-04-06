@@ -1,10 +1,6 @@
 Multidimensional Image Operations
 
-Functions for manipulating image volumes.
+Functions for manipulating image volumes. These functions should take an 
+image volume (3D or 4D) as first input and yield another image volume as
+the first output
 
-For details on the motion correction, see
-
-Nilsson M, Szczepankiewicz F, van Westen D, Hansson O (2015) 
-Extrapolation-Based References Improve Motion and Eddy-Current 
-Correction of High B-Value DWI Data: Application in Parkinson?s 
-Disease Dementia. PLoS One 10(11):e0141825.

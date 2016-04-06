@@ -21,7 +21,11 @@ if (nargin < 3), opt = []; end
 
 opt = fexi11_opt(opt);
 
-ind = s.xps.mde_b2_ind >= opt.fexi11.mde_b2_ind_start;
+if (isfield(s.xps,'mde_b2_ind'))
+    ind = s.xps.mde_b2_ind >= opt.fexi11.mde_b2_ind_start;
+else
+    ind = ~isnan(s.xps.b);
+end
 
 % Verify the xps
 fexi11_check_xps(s.xps);

@@ -1,8 +1,10 @@
 function fn = dti_nls_pipe_mic(s, o_path, opt)
-% function fn = dti_nls_pipe_example(s, o_path, opt)
+% function fn = dti_nls_pipe_mic(s, o_path, opt)
 %
 % s      - input structure
 % o_path - output path
+%
+% Pipeline for running dti_nls in a microimaging setting
 
 if (nargin < 3), opt.present = 1; end
 opt = mdm_opt(opt);
