@@ -12,9 +12,9 @@ euler_beta  = m(6);
 euler_gamma = m(7);
 
 % from euler angles to rotation matrices
-[rotmat,rotmatinv] = euler_angles2rotmat(euler_alpha,euler_beta,euler_gamma);
+[rotmat,rotmatinv] = tm_euler_angles2rotmat(euler_alpha,euler_beta,euler_gamma);
 
-% dt in principla axis system (PAS)
+% dt in principal axis system (PAS)
 dt_pas = [
     lambda_x 0 0
     0 lambda_y 0
@@ -24,7 +24,7 @@ dt_pas = [
 dt = rotmat*dt_pas*rotmatinv;
 
 % convert dt to voigt
-dt = dtd_3x3_to_1x6(dt);
+dt = tm_3x3_to_1x6(dt);
 
 % signal for all b-tensors
 s = m(1) * exp(-(dt * xps.bt'))';
