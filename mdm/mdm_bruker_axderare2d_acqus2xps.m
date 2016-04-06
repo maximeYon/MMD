@@ -1,0 +1,111 @@
+function res = mdm_bruker_axderare2d_acqus2xps(paths)
+% function res = mdm_bruker_axderare2d_acqus2xps(paths)
+%
+% Calculation of b-tensors for the Bruker pulse program DT_axderare2d
+% as used in Topgaard, Phys. Chem. Chem. Phys., 2016.
+% http://dx.doi.org/10.1039/c5cp07251d
+%
+% paths.data: directory for gradient text files
+% paths.out: directory for experimental parameter structure xps.mat
+%
+
+% Load Bruker acquisition parameters
+load(fullfile(paths.data,'NMRacqus'))
+
+% xps calculation assumes that the pulse program is DT_qVASrare2d
+if any(strcmp(NMRacqus.pulprog,{'DT_axderare2d'})) ~= 1
+    error('Wrong pulse program')
+end
+
+% Load gyromagnetic ratio gamma
+gamma = mdm_bruker_gamma(NMRacqus);
+
+% Load max gradient Gmax
+Gmax = mdm_bruker_maxgradient(NMRacqus);
+
+% Load number of images in indirect dimension td1
+load(fullfile(paths.data,'NMRacqu2s'))
+td1 = NMRacqu2s.td;
+
+% Index for powder averaging xps.a_ind
+load(fullfile(paths.data,'/g_xps'))
+
+% Read gradient time-modulations (a,b,c)
+% Normalized from -1 to +1
+gnams = {'a','b','c'};
+for ngnam = 1:numel(gnams)
+    gnam = gnams{ngnam};
+    fn = fullfile(paths.data,['g' gnam]);
+    g = mdm_bruker_readgrad(fn);
+    eval(['G.' gnam ' = g;'])
+end
+Ndt = length(G.c); % Ndt: number of time steps
+tau = NMRacqus.d3; % tau: duration of one full gradient modulation
+dt = tau/Ndt; % dt: time step
+%figure(1), clf, plot((1:Ndt)',[G.c G.b G.a],'-'), return
+
+% Read gradient ramps
+% ramp.xa etc maps gradient modulations (a,b,c) to channels (x,y,z)
+% Normalized from -1 to +1
+gnams = {'xa','xb','xc','ya','yb','yc','za','zb','zc'};
+for ngnam = 1:numel(gnams)
+    gnam = gnams{ngnam};
+    fn = fullfile(paths.data,['g' gnam]);
+    g = mdm_bruker_readgrad(fn);
+    eval(['ramp.' gnam ' = g;'])
+end
+
+% Convert normlized ramps r.ax to G.xa in SI 
+G.xa = ramp.xa*Gmax.*NMRacqus.cnst1/100; % NMRacqus.cnst1: scaling factor for x-gradient. Max 100%. 
+G.xb = ramp.xb*Gmax.*NMRacqus.cnst1/100;
+G.xc = ramp.xc*Gmax.*NMRacqus.cnst1/100;
+G.ya = ramp.ya*Gmax.*NMRacqus.cnst2/100; % NMRacqus.cnst2: scaling factor for y-gradient. Max 100%. 
+G.yb = ramp.yb*Gmax.*NMRacqus.cnst2/100;
+G.yc = ramp.yc*Gmax.*NMRacqus.cnst2/100;
+G.za = ramp.za*Gmax.*NMRacqus.cnst3/100; % NMRacqus.cnst3: scaling factor for z-gradient. Max 100%. 
+G.zb = ramp.zb*Gmax.*NMRacqus.cnst3/100;
+G.zc = ramp.zc*Gmax.*NMRacqus.cnst3/100;
+
+% Transformation from gradients (a,b,c) to (x,y,z)
+% G.x: Ndt x td1 array in SI
+G.x = repmat(G.a,[1, td1]).*repmat(G.xa',[Ndt, 1]) + ...
+    repmat(G.b,[1, td1]).*repmat(G.xb',[Ndt, 1]) + ...
+    repmat(G.c,[1, td1]).*repmat(G.xc',[Ndt, 1]);
+G.y = repmat(G.a,[1, td1]).*repmat(G.ya',[Ndt, 1]) + ...
+    repmat(G.b,[1, td1]).*repmat(G.yb',[Ndt, 1]) + ...
+    repmat(G.c,[1, td1]).*repmat(G.yc',[Ndt, 1]);
+G.z = repmat(G.a,[1, td1]).*repmat(G.za',[Ndt, 1]) + ...
+    repmat(G.b,[1, td1]).*repmat(G.zb',[Ndt, 1]) + ...
+    repmat(G.c,[1, td1]).*repmat(G.zc',[Ndt, 1]);
+
+% Dephasing vector F.x in SI
+F.x = cumsum(G.x*dt,1);
+F.y = cumsum(G.y*dt,1);
+F.z = cumsum(G.z*dt,1);
+F.r = sqrt(F.x.^2 + F.y.^2 + F.z.^2); % Magnitude
+
+% Diffusion weighting matrix b
+% Factor 2 from the double DW blocks in DT_qVASrare2d
+bt.xx = 2*gamma^2*sum(F.x.*F.x*dt,1)';
+bt.xy = 2*gamma^2*sum(F.x.*F.y*dt,1)';
+bt.xz = 2*gamma^2*sum(F.x.*F.z*dt,1)';
+bt.yy = 2*gamma^2*sum(F.y.*F.y*dt,1)';
+bt.yz = 2*gamma^2*sum(F.y.*F.z*dt,1)';
+bt.zz = 2*gamma^2*sum(F.z.*F.z*dt,1)';
+
+b = (bt.xx + bt.yy + bt.zz); % trace
+
+% Save as xps
+xps.b = b;
+xps.n = td1;
+xps.bt = [bt.xx bt.yy bt.zz sqrt(2)*[bt.xy bt.xz bt.yz]];
+% xps.gmx = G.x'; % Maybe save full gradient modulations in the future
+% xps.gmy = G.y';
+% xps.gmz = G.z';
+
+xps_old = xps;
+xps = mdm_xps_bt2btpars(xps_old);
+
+save(paths.xps_fn,'xps')
+
+res = 1;
