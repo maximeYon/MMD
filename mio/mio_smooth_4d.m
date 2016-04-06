@@ -1,12 +1,7 @@
 function I = mio_smooth_4d(I, filter_sigma, opt)
-% function s = mio_smooth_4d(I, sigma, opt)
+% function I = mio_smooth_4d(I, filter_sigma, opt)
 %
-% Smoothes every volume in s.nii_fn and saves this as a new nifti file in
-% the folder 'o_path'
-%
-% The 's' structure is updated with a reference to the new file in s.nii_fn
-%
-% The smoothing width is controll by 'sigma'
+% Gaussian smoothing with a width controlled by 'filter_sigma'
 
 % init 
 if (nargin < 4), opt.present = 1; end
