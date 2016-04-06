@@ -43,7 +43,7 @@ p.NumberOfHistogramBins                 = [32];
 p.ImagePyramicSchedule                  = [1 1 1];
 p.ImageSampler                          = 'RandomCoordinate';
 p.NewSamplesEveryIteration              = 'true';
-p.NumberOfSpatialSamples                = 8192*2;
+p.NumberOfSpatialSamples                = 8192;
 
 % Order of B-Spline interpolation used in each resolution level, final et c
 p.BSplineInterpolationOrder             = 1;
