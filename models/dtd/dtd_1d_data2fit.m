@@ -1,5 +1,9 @@
 function m = dtd_1d_data2fit(signal, xps, opt, ind)
 % function m = dtd_1d_data2fit(signal, xps, opt, ind)
+%
+% Size-shape-orientation diffusion tensor distribution
+% Work in progress
+
 
 if (nargin < 4), ind = ones(size(signal)); end
 
