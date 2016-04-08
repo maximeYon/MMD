@@ -1,18 +1,19 @@
-function res = mdm_bruker_axderare2d_acqus2xps(paths)
-% function res = mdm_bruker_axderare2d_acqus2xps(paths)
+function xps = mdm_bruker_dt_axderare2d_acqus2xps(data_path, xps_fn)
+% function xps = mdm_bruker_dt_axderare2d_acqus2xps(data_path, xps_fn)
 %
 % Calculation of b-tensors for the Bruker pulse program DT_axderare2d
 % as used in Topgaard, Phys. Chem. Chem. Phys., 2016.
 % http://dx.doi.org/10.1039/c5cp07251d
 %
-% paths.data: directory for gradient text files
-% paths.out: directory for experimental parameter structure xps.mat
-%
+% data_path: directory for gradient text files
+% xps_fn (optional) filename of xps
+
+if (nargin < 2), xps_fn = []; end
 
 % Load Bruker acquisition parameters
-load(fullfile(paths.data,'NMRacqus'))
+load(fullfile(data_path,'NMRacqus'))
 
-% xps calculation assumes that the pulse program is DT_qVASrare2d
+% xps calculation assumes that the pulse program is DT_axderare2d
 if any(strcmp(NMRacqus.pulprog,{'DT_axderare2d'})) ~= 1
     error('Wrong pulse program')
 end
@@ -24,19 +25,19 @@ gamma = mdm_bruker_gamma(NMRacqus);
 Gmax = mdm_bruker_maxgradient(NMRacqus);
 
 % Load number of images in indirect dimension td1
-load(fullfile(paths.data,'NMRacqu2s'))
+load(fullfile(data_path,'NMRacqu2s'))
 td1 = NMRacqu2s.td;
 
 % Index for powder averaging xps.a_ind
-load(fullfile(paths.data,'/g_xps'))
+load(fullfile(data_path,'/g_xps'))
 
 % Read gradient time-modulations (a,b,c)
 % Normalized from -1 to +1
 gnams = {'a','b','c'};
 for ngnam = 1:numel(gnams)
     gnam = gnams{ngnam};
-    fn = fullfile(paths.data,['g' gnam]);
-    g = mdm_bruker_readgrad(fn);
+    fn = fullfile(data_path,['g' gnam]);
+    g = mdm_bruker_grad_read(fn);
     eval(['G.' gnam ' = g;'])
 end
 Ndt = length(G.c); % Ndt: number of time steps
@@ -50,8 +51,8 @@ dt = tau/Ndt; % dt: time step
 gnams = {'xa','xb','xc','ya','yb','yc','za','zb','zc'};
 for ngnam = 1:numel(gnams)
     gnam = gnams{ngnam};
-    fn = fullfile(paths.data,['g' gnam]);
-    g = mdm_bruker_readgrad(fn);
+    fn = fullfile(data_path,['g' gnam]);
+    g = mdm_bruker_grad_read(fn);
     eval(['ramp.' gnam ' = g;'])
 end
 
@@ -99,13 +100,13 @@ b = (bt.xx + bt.yy + bt.zz); % trace
 xps.b = b;
 xps.n = td1;
 xps.bt = [bt.xx bt.yy bt.zz sqrt(2)*[bt.xy bt.xz bt.yz]];
+
 % xps.gmx = G.x'; % Maybe save full gradient modulations in the future
 % xps.gmy = G.y';
 % xps.gmz = G.z';
 
 xps_old = xps;
-xps = mdm_xps_bt2btpars(xps_old);
+xps = mdm_xps_calc_btpars(xps_old);
 
-save(paths.xps_fn,'xps')
+if (~isempty(xps_fn)), save(xps_fn,'xps'); end
 
-res = 1;

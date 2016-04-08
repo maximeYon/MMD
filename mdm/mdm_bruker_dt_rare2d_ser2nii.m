@@ -1,8 +1,22 @@
-function res = mdm_nii_from_bruker_rare2d(proc,path)
-%%read time domain data and pick out relevant signal points
+function mdm_bruker_dt_rare2d_ser2nii(data_path, nii_fn, rps)
+% function mdm_bruker_dt_rare2d_ser2nii(data_path, nii_fn, rps)
+%
+% image reconstruction from Bruker DT_**rare2d pulse programs
+% saves complex image as nifti file
+% image resolution in field n.pixdim in nifti header
+%
+% data_path: folder where the Bruker ser file is located
+% nii_fn: nifti file name (including complete path and extension)
+% rps: image recon parameters structure
+% rps.smooth : Gaussian smooting [m]
+% rps.npix.read : image size in read dimension
+% rps.npix.phase : image size in phase dimension
 
-eval(['load ' path '/NMRacqu2s' ])
-eval(['load ' path '/NMRacqus' ])
+if nargin == 1, rps = []; end
+
+% read acquistion parameters
+load(fullfile(data_path,'NMRacqu2s'))
+load(fullfile(data_path,'NMRacqus'))
 
 td = 256*ceil(NMRacqus.td/256);
 td1 = NMRacqu2s.td;
@@ -11,16 +25,17 @@ t = 2*dw*(0:(td/2-1))';
 
 tdim.tot = td/2*td1;
 
-fid = fopen([path '/ser'],'r','ieee-le');
+%%read time domain data and pick out relevant signal points
+fid = fopen([data_path '/ser'],'r','ieee-le');
 Std1 = fread(fid,[2,tdim.tot],'long')';
-Std1 = Std1(:,1) + i*Std1(:,2);
+Std1 = Std1(:,1) + 1i*Std1(:,2);
 fclose(fid);
 
 Std1 = reshape(Std1,td/2,td1);
 S = Std1(:,1);
 
 grpdlycount = (1:(td/2))'/(td/2) - floor(td/2/2);
-zeroshiftfun = exp(-i*(NMRacqus.grpdly*2*pi*grpdlycount));
+zeroshiftfun = exp(-1i*(NMRacqus.grpdly*2*pi*grpdlycount));
 zeroshiftfun = flipdim(zeroshiftfun,1);
 zeroshiftfun = fftshift(zeroshiftfun,1);
 S = fft(S,td/2,1);
@@ -48,20 +63,13 @@ S = reshape(S(index.S),tdim.i,tdim.j);
 %figure(1), clf, plot(1:tdim.i,real(S(:,(tdim.j/2+1))),1:tdim.i,imag(S(:,(tdim.j/2+1)))), return
 
 
+% Load gyromagnetic ratio gamma
+gamma = mdm_bruker_gamma(NMRacqus);
+
+% Load max gradient Gmax
+Gmax = mdm_bruker_maxgradient(NMRacqus);
+
 %%calculate k-space
-gamma = 26.75e7;
-if strcmp(NMRacqus.nuc1,'2H') == 1
-    gamma = 4.1065e7;
-elseif strcmp(NMRacqus.nuc1,'23Na') == 1
-    gamma = 7.0761e7;
-end
-
-Gmax = 3;
-if any(strcmp(NMRacqus.probhd,{'5 mm BBO BB-1H/D XYZ-GRD Z107255/0001',...
-        '5 mm TXI 1H/D-13C/15N XYZ-GRD Z8588/0006'})) == 1
-    Gmax = 0.5;
-end
-
 %%read i
 g.i = sqrt(NMRacqus.cnst11^2+NMRacqus.cnst12^2+NMRacqus.cnst13^2)*Gmax/100;
 t_read = 2*dw*(0:(tdim.i-1))'; t_read = t_read-t_read(tdim.i/2+1);
@@ -74,8 +82,13 @@ t_phasenc = 0*NMRacqus.d33 + NMRacqus.d32;
 k.j = gamma*g.j*t_phasenc/2/pi;
 
 %%smoothing
-lbfun.i = exp(-(proc.lb*pi*k.i).^2);
-lbfun.j = exp(-(proc.lb*pi*k.j).^2);
+if isfield(rps,'smooth')
+    lb = rps.smooth;
+else
+    lb = 0;
+end
+lbfun.i = exp(-(lb*pi*k.i).^2);
+lbfun.j = exp(-(lb*pi*k.j).^2);
 %figure(1), clf, plot(k.i,lbfun.i,'o',k.j,lbfun.j,'s'), return
 
 S = S - mean(mean(S([1:round(.1*tdim.i) round(.9*tdim.i):tdim.i],:)));
@@ -85,16 +98,12 @@ Stemp = S(:,tdim.j/2+1);
 Stemp = lbfun.i.*Stemp;
 %figure(1), clf, plot(k.i,real(Stemp),k.i,lbfun.i*max(real(Stemp))), return
 
-
-if isfield(proc,'si') == 0
+if isfield(rps,'npix')
+    nudim.i = rps.npix.read;
+    nudim.j = rps.npix.phase;
+else
     nudim.i = tdim.i;
-else
-    nudim.i = proc.si;
-end
-if isfield(proc,'si1') == 0
     nudim.j = tdim.j;
-else
-    nudim.j = proc.si1;
 end
 
 index.tdim.i = 1:tdim.i;
@@ -116,11 +125,19 @@ Itemp = fftshift(fft(Stemp,nudim.i));
 %figure(1), clf, plot(abs(Itemp)), return
 
 [k.array.i,k.array.j] = ndgrid(k.i,k.j);
-lbfun.array = exp(-proc.lb.^2*pi.^2*(k.array.i.^2 + k.array.j.^2));
+
+if isfield(rps,'shift_read')
+    shift_read = rps.shift_read;
+else
+    shift_read = -.25e-3;
+end
+
+lbfun.array = exp(-rps.smooth.^2*pi.^2*(k.array.i.^2 + k.array.j.^2));
+phcorrfun.i = exp(shift_read*1i*2*pi*k.array.i);
 
 S = S(index.tdim.i,index.tdim.j);
 
-S = S.*lbfun.array;
+S = S.*lbfun.array.*phcorrfun.i;
 %figure(1), clf, plot(real(squeeze(S(:,17)))), return
 
 %%Fourier transform
@@ -140,8 +157,8 @@ if isfield(NMRacqus,'fq1')
     if Nrep>1, fq1list = repmat(NMRacqus.fq1,[Nrep 1]);
     else fq1list = NMRacqus.fq1(1:td1);
     end
-    phcorrfun = repmat(exp(i*2*pi*fq1list(1)/fqcycle*((1:tdim.j)-tdim.j/2)),[nudim.i 1]);
-    I = phcorrfun.*I;
+    phcorrfun.j = repmat(exp(1i*2*pi*fq1list(1)/fqcycle*((1:tdim.j)-tdim.j/2-1)),[nudim.i 1]);
+    I = phcorrfun.j.*I;
 end
 
 if nudim.j > tdim.j
@@ -149,7 +166,7 @@ if nudim.j > tdim.j
     I = [zeros(nudim.i,Nzeros.j/2) I zeros(nudim.i,Nzeros.j/2)];
 end
 I = fftshift(fft(ifftshift(I,2),[],2),2);
-%figure(1), clf, imagesc(abs(I)'), set(gca,'YDir','normal'), return
+%figure(1), clf, imagesc(abs(I)'), set(gca,'YDir','normal'), axis square, error('asdf')
 r.i = .5/(k.i(2)-k.i(1))*linspace(-1,1,nudim.i+1)'; r.i = r.i(1:nudim.i);
 r.j = .5/(k.j(2)-k.j(1))*linspace(-1,1,nudim.j+1)'; r.j = r.j(1:nudim.j);
 
@@ -164,14 +181,14 @@ for ntd1 = 1:td1
     S = ifft(S,td/2,1);
     S = reshape(S(index.S),tdim.i,tdim.j);
     S = S(index.tdim.i,index.tdim.j);
-    S = S.*lbfun.array;
+    S = S.*lbfun.array.*phcorrfun.i;
     if nudim.i > tdim.i
         S = [zeros(Nzeros.i/2,tdim.j); S; zeros(Nzeros.i/2,tdim.j)];
     end
     I = fftshift(fft(ifftshift(S,1),[],1),1);
     if isfield(NMRacqus,'fq1')
-        phcorrfun = repmat(exp(i*2*pi*fq1list(ntd1)/fqcycle*((1:tdim.j)-tdim.j/2)),[nudim.i 1]);
-        I = phcorrfun.*I;
+        phcorrfun.j = repmat(exp(i*2*pi*fq1list(ntd1)/fqcycle*((1:tdim.j)-tdim.j/2-1)),[nudim.i 1]);
+        I = phcorrfun.j.*I;
     end
     if nudim.j > tdim.j
         I = [zeros(nudim.i,Nzeros.j/2) I zeros(nudim.i,Nzeros.j/2)];
@@ -180,9 +197,14 @@ for ntd1 = 1:td1
     Itd1(:,:,1,ntd1) = I;
 end
 
-%figure(1), clf, imagesc(abs(squeeze(Itd1(:,:,1,1)))), return
-mdm_mat2nii(Itd1,[path '/in.nii'],[resolution.i resolution.j 1 1])
+% make nifti headear
+h = mdm_nii_h_empty;
+sdim = size(Itd1);
+h.pixdim(1+(1:length(sdim))) = sdim;
+h.pixdim(2:3) = [resolution.i resolution.j];
+h.xyzt_units = 'SI';
 
-res = 1;
+% write nifti image and header
+mdm_nii_write(Itd1, nii_fn, h, 0)
 
 
