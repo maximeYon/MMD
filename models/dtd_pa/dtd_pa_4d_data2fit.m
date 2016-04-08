@@ -7,9 +7,6 @@ res = -1;
 
 ind = 1:s.xps.n;
 
-%Verify the xps
-%dti_euler_mic_check_xps(s.xps);
-
 % Loop over the volume and fit the model
 xps = s.xps; % this appears to improve parallel performance
 f = @(signal) dtd_pa_1d_data2fit(signal, xps, opt, ind);

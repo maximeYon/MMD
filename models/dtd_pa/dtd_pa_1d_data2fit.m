@@ -1,5 +1,12 @@
 function m = dtd_pa_1d_data2fit(signal, xps, opt, ind)
 % function m = dtd_pa_1d_data2fit(signal, xps, opt, ind)
+%
+% Size-shape diffusion tensor distribution
+% Assumes powder averaging
+% de Almeida Martins and Topgaard, Phys. Rev. Lett. 116, 087601 (2016).
+% http://dx.doi.org/10.1103/PhysRevLett.116.087601
+% Modified for general b-tensor shapes
+
 
 if (nargin < 4), ind = ones(size(signal)); end
 

@@ -1,27 +1,24 @@
-function res = dtd_pa_4d_fit2param(mfs_fn, o_fn, opt)
-% function fn = dtd_4d_fit2param(mfs_fn, o_path, opt)
+function dps = dtd_pa_4d_fit2param(mfs_fn, dps_fn, opt)
+% function dps = dtd_pa_4d_fit2param(mfs_fn, dps_fn, opt)
 
+if (nargin < 2), dps_fn = []; end
 if (nargin < 3), opt = []; end
 
-res = -1;
-    
 opt = mdm_opt(opt);
-mfs = mdm_mfs_load(mfs_fn);
-h   = mfs.nii_h; 
+dps = mdm_mfs_load(mfs_fn);
 
 % create parameter maps and save them
-
-sz = size(mfs.m);
+sz = size(dps.m);
 param = {'s0','miso','viso','maniso','vaniso','mvlambda','vvlambda'};
 for nparam = 1:numel(param)
-    eval(['mfs.' param{nparam} ' = zeros([sz(1) sz(2) sz(3)]);']);
+    eval(['dps.' param{nparam} ' = zeros([sz(1) sz(2) sz(3)]);']);
 end
+
 for nk = 1:sz(3)
     for nj = 1:sz(2)
         for ni = 1:sz(1)
-            %ni = 11; nj = 9; nk = 1;
-            if mfs.mask(ni,nj,nk)
-                m = squeeze(mfs.m(ni,nj,nk,:))';
+            if dps.mask(ni,nj,nk)
+                m = squeeze(dps.m(ni,nj,nk,:))';
                 dtd = dtd_pa_m2dtd(m);
                 [n,par,perp,w] = dtd_pa_dist2par(dtd);
                                 
@@ -37,48 +34,48 @@ for nk = 1:sz(3)
                     mvlambda = vlambda_v'*w/s0;
                     vvlambda = (vlambda_v-mvlambda)'.^2*w/s0;
 
-                    mfs.s0(ni,nj,nk) = s0;
-                    mfs.miso(ni,nj,nk) = miso;
-                    mfs.viso(ni,nj,nk) = viso;
-                    mfs.maniso(ni,nj,nk) = maniso;
-                    mfs.vaniso(ni,nj,nk) = vaniso;
-                    mfs.mvlambda(ni,nj,nk) = mvlambda;
-                    mfs.vvlambda(ni,nj,nk) = vvlambda;
+                    dps.s0(ni,nj,nk) = s0;
+                    dps.miso(ni,nj,nk) = miso;
+                    dps.viso(ni,nj,nk) = viso;
+                    dps.maniso(ni,nj,nk) = maniso;
+                    dps.vaniso(ni,nj,nk) = vaniso;
+                    dps.mvlambda(ni,nj,nk) = mvlambda;
+                    dps.vvlambda(ni,nj,nk) = vvlambda;
                 end                
             end
         end
     end
 end
 
-mfs.mu2iso = mfs.viso;
-mfs.mu2aniso = 2/5*mfs.mvlambda;
-mfs.mu2aniso(isnan(mfs.mu2aniso)) = 0;
-mfs.mu2tot = mfs.mu2iso + mfs.mu2aniso;
+dps.mu2iso = dps.viso;
+dps.mu2aniso = 2/5*dps.mvlambda;
+dps.mu2aniso(isnan(dps.mu2aniso)) = 0;
+dps.mu2tot = dps.mu2iso + dps.mu2aniso;
 
-mfs.kiso = mfs.mu2iso./mfs.miso.^2;
-mfs.kiso(isnan(mfs.kiso)) = 0;
-mfs.kaniso = mfs.mu2aniso./mfs.miso.^2;
-mfs.kaniso(isnan(mfs.kaniso)) = 0;
-mfs.ktot = mfs.mu2tot./mfs.miso.^2;
-mfs.ktot(isnan(mfs.ktot)) = 0;
+dps.kiso = dps.mu2iso./dps.miso.^2;
+dps.kiso(isnan(dps.kiso)) = 0;
+dps.kaniso = dps.mu2aniso./dps.miso.^2;
+dps.kaniso(isnan(dps.kaniso)) = 0;
+dps.ktot = dps.mu2tot./dps.miso.^2;
+dps.ktot(isnan(dps.ktot)) = 0;
 
-mfs.ciso = mfs.viso./mfs.miso.^2;
-mfs.ciso(isnan(mfs.ciso)) = 0;
-mfs.mdelta = mfs.maniso./(3*mfs.miso);
-mfs.mdelta(isnan(mfs.mdelta)) = 0;
-mfs.vdelta = mfs.vaniso./(3*mfs.miso).^2;
-mfs.vdelta(isnan(mfs.vdelta)) = 0;
+dps.ciso = dps.viso./dps.miso.^2;
+dps.ciso(isnan(dps.ciso)) = 0;
+dps.mdelta = dps.maniso./(3*dps.miso);
+dps.mdelta(isnan(dps.mdelta)) = 0;
+dps.vdelta = dps.vaniso./(3*dps.miso).^2;
+dps.vdelta(isnan(dps.vdelta)) = 0;
 
-mfs.cmvlambda = mfs.mvlambda./mfs.miso.^2;
-mfs.cmvlambda(isnan(mfs.cmvlambda)) = 0;
-mfs.ufa = sqrt(3/2)*sqrt(1./(1./mfs.cmvlambda+1));
-mfs.ufa(isnan(mfs.ufa)) = 0;
-mfs.cmu = mfs.ufa.^2;
+dps.cmvlambda = dps.mvlambda./dps.miso.^2;
+dps.cmvlambda(isnan(dps.cmvlambda)) = 0;
+dps.ufa = sqrt(3/2)*sqrt(1./(1./dps.cmvlambda+1));
+dps.ufa(isnan(dps.ufa)) = 0;
+dps.cmu = dps.ufa.^2;
 
-mfs.cvvlambda = mfs.vvlambda./mfs.miso.^4;
-mfs.cvvlambda(isnan(mfs.cvvlambda)) = 0;
+dps.cvvlambda = dps.vvlambda./dps.miso.^4;
+dps.cvvlambda(isnan(dps.cvvlambda)) = 0;
 
-mfs_fn = mdm_mfs_save(mfs, mfs.s, o_fn, opt);
+if (~isempty(dps_fn)), mdm_dps_save(dps, dps.s, dps_fn, opt); end
 
-res = 1;
+
 

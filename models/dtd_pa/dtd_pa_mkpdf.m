@@ -1,11 +1,10 @@
-function res = dtd_pa_mkpdf(paths,opt)
-% function res = dtd_mkpdf(paths,opt)
+function dtd_pa_mkpdf(dps_fn, pdf_path, opt)
+% function dtd_pa_mkpdf(dps_fn, pdf_path, opt)
  
-res = -1;
+dps = mdm_dps_load(dps_fn);
 
-mfs = mdm_mfs_load(paths.mfs.dtd_pa_primary_fn);
-sz = size(mfs.m);
-mfs_derived = mdm_mfs_load(paths.mfs.dtd_pa_derived_fn);
+sz = size(dps.m);
+
 
 figsize = 3.3*[1.618 1];
 figaspect = figsize(1)/figsize(2);
@@ -25,7 +24,7 @@ nk = 1;
 left = .65;
 bottom = .25;
 axes('position',[left bottom width height])
-z = squeeze(mfs_derived.miso(:,:,nk))'/2e-9;
+z = squeeze(dps.miso(:,:,nk))'/2e-9;
 clim = [0 1];
 imagesc(z)
 set(gca,'YDir','normal','CLim',clim,'XTick',[],'YTick',[])
@@ -34,7 +33,7 @@ title('M(D_{iso})','FontSize',fs)
 axis off
 
 axes('position',[left+1*width bottom width height])
-z = squeeze(mfs_derived.mdelta(:,:,nk))';
+z = squeeze(dps.mdelta(:,:,nk))';
 clim = [-.5 1];
 imagesc(z)
 set(gca,'YDir','normal','CLim',clim,'XTick',[],'YTick',[])
@@ -43,7 +42,7 @@ title('M(D_{aniso})','FontSize',fs)
 axis off
 
 axes('position',[left 0 width height])
-z = squeeze(mfs_derived.ciso(:,:,nk))';
+z = squeeze(dps.ciso(:,:,nk))';
 clim = [0 1];
 imagesc(z)
 set(gca,'YDir','normal','CLim',clim,'XTick',[],'YTick',[])
@@ -52,7 +51,7 @@ title('V(D_{iso})','FontSize',fs)
 axis off
 
 axes('position',[left+width 0 width height])
-z = squeeze(mfs_derived.vdelta(:,:,nk))';
+z = squeeze(dps.vdelta(:,:,nk))';
 clim = [0 1];
 imagesc(z)
 set(gca,'YDir','normal','CLim',clim,'XTick',[],'YTick',[])
@@ -61,7 +60,7 @@ title('V(D_{aniso})','FontSize',fs)
 axis off
 
 axes('position',[left+2*width 0 width height])
-z = squeeze(mfs_derived.ufa(:,:,nk))';
+z = squeeze(dps.ufa(:,:,nk))';
 clim = [0 1];
 imagesc(z)
 set(gca,'YDir','normal','CLim',clim,'XTick',[],'YTick',[])
@@ -79,7 +78,7 @@ left = 0;
 bottom = 0;
 axes('position',[left bottom width height])
 
-z = squeeze(mfs_derived.s0(:,:,nk))';
+z = squeeze(dps.s0(:,:,nk))';
 clim = max(z(:))*[0 1];
 imagesc(z)
 set(gca,'YDir','normal','CLim',clim)
@@ -111,8 +110,8 @@ p = zeros(sz(1), sz(2), sz(3), np);
 for nk = 1:sz(3)
     for nj = 1:sz(2)
         for ni = 1:sz(1)
-            if mfs.mask(ni,nj,nk)
-                m = squeeze(mfs.m(ni,nj,nk,:))';
+            if dps.mask(ni,nj,nk)
+                m = squeeze(dps.m(ni,nj,nk,:))';
                 dtd = dtd_pa_m2dtd(m);
                 [n,par,perp,w] = dtd_pa_dist2par(dtd);
                 if n>0
@@ -180,7 +179,7 @@ clevels = clevels(2:(nclevels+1));
 for nk = 1:sz(3)
     for nj = 1:sz(2)
         for ni = 1:sz(1)
-            if mfs.mask(ni,nj,nk)                
+            if dps.mask(ni,nj,nk)                
                 z = reshape(p(ni,nj,nk,:),[nx ny]);                
                 if sum(z)~=0                
                     sub_left = (ni-1)*sub_width;
@@ -198,7 +197,6 @@ end
 
 
 set(gcf, 'PaperPosition', 1*[0 0 figsize],'PaperSize', figsize);
-eval(['print ' paths.maps '/dtd_pa -loose -dpdf'])
+eval(['print ' pdf_path '/dtd_pa -loose -dpdf'])
 
-res = 1;
 
