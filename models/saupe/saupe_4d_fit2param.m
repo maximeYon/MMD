@@ -1,52 +1,55 @@
-function res = saupe_4d_fit2param(paths, o_fn, opt)
+function dps_fn = saupe_4d_fit2param(mfs_fns, dps_fn, opt)
 % function fn = saupe_4d_fit2param(mfs_fn, o_path, opt)
+%
+% Saupe order tensor imaging
+% Combination of DTI, gamma, and erf
+% Topgaard, Phys. Chem. Chem. Phys. (2016).
+% http://dx.doi.org/10.1039/c5cp07251d
 
+if (nargin < 2), dos_fn = []; end
 if (nargin < 3), opt = []; end
-
-res = -1;
 
 opt = mdm_opt(opt);
 
+dps_dti   = dti_euler_4d_fit2param(mfs_fns{1});
+dps_gamma = gamma_4d_fit2param(mfs_fns{2});
+dps_erf   = erf_4d_fit2param(mfs_fns{3});
+dps       = dps_dti;
+
+sz = size(dps.m);
+
 % create parameter maps and save them
-
-mfs_dti = mdm_mfs_load(paths.mfs.dti_derived_fn);
-mfs_gamma = mdm_mfs_load(paths.mfs.gamma_derived_fn);
-mfs_erf = mdm_mfs_load(paths.mfs.erf_derived_fn);
-
-mfs = mdm_mfs_load(paths.mfs.dti_primary_fn);
-sz = size(mfs.m);
-
 kronecker = permute(repmat([1 1 1 0 0 0]',[1 sz(3) sz(2) sz(1)]),[4 3 2 1]);
-mfs.t1x6 = (mfs_dti.t1x6./repmat(mfs_dti.iso,[1 1 1 6]) - kronecker)./repmat(mfs_erf.delta,[1 1 1 6])/2;
-mfs.t1x6prim = (2*mfs.t1x6 + kronecker)/3;
-mfs.t1x6(isnan(mfs.t1x6)) = 0;
-mfs.t1x6prim(isnan(mfs.t1x6prim)) = 0;
+dps.t1x6 = (dps_dti.t1x6./repmat(dps_dti.iso,[1 1 1 6]) - kronecker)./repmat(dps_erf.delta,[1 1 1 6])/2;
+dps.t1x6prim = (2*dps.t1x6 + kronecker)/3;
+dps.t1x6(isnan(dps.t1x6)) = 0;
+dps.t1x6prim(isnan(dps.t1x6prim)) = 0;
 
-mfs.slambdaxx = (mfs_dti.lambdaxx./mfs_dti.iso - 1)./mfs_erf.delta/2;
-mfs.slambdaxx(isnan(mfs.slambdaxx)) = 0;
-mfs.slambdayy = (mfs_dti.lambdayy./mfs_dti.iso - 1)./mfs_erf.delta/2;
-mfs.slambdayy(isnan(mfs.slambdayy)) = 0;
-mfs.slambdazz = (mfs_dti.lambdazz./mfs_dti.iso - 1)./mfs_erf.delta/2;
-mfs.slambdazz(isnan(mfs.slambdazz)) = 0;
+dps.slambdaxx = (dps_dti.lambdaxx./dps_dti.iso - 1)./dps_erf.delta/2;
+dps.slambdaxx(isnan(dps.slambdaxx)) = 0;
+dps.slambdayy = (dps_dti.lambdayy./dps_dti.iso - 1)./dps_erf.delta/2;
+dps.slambdayy(isnan(dps.slambdayy)) = 0;
+dps.slambdazz = (dps_dti.lambdazz./dps_dti.iso - 1)./dps_erf.delta/2;
+dps.slambdazz(isnan(dps.slambdazz)) = 0;
 
-mfs.slambdaxxprim = (2*mfs.slambdaxx + 1)/3;
-mfs.slambdayyprim = (2*mfs.slambdayy + 1)/3;
-mfs.slambdazzprim = (2*mfs.slambdazz + 1)/3;
+dps.slambdaxxprim = (2*dps.slambdaxx + 1)/3;
+dps.slambdayyprim = (2*dps.slambdayy + 1)/3;
+dps.slambdazzprim = (2*dps.slambdazz + 1)/3;
 
-mfs.slambdas = zeros([sz(1) sz(2) sz(3) 3]);
-mfs.slambdas(:,:,:,1) = mfs.slambdaxxprim;
-mfs.slambdas(:,:,:,2) = mfs.slambdayyprim;
-mfs.slambdas(:,:,:,3) = mfs.slambdazzprim;
-mfs.slambda11prim = min(mfs.slambdas,[],4);
-mfs.slambda33prim = max(mfs.slambdas,[],4);
-mfs = rmfield(mfs,'slambdas');
+dps.slambdas = zeros([sz(1) sz(2) sz(3) 3]);
+dps.slambdas(:,:,:,1) = dps.slambdaxxprim;
+dps.slambdas(:,:,:,2) = dps.slambdayyprim;
+dps.slambdas(:,:,:,3) = dps.slambdazzprim;
+dps.slambda11prim = min(dps.slambdas,[],4);
+dps.slambda33prim = max(dps.slambdas,[],4);
+dps = rmfield(dps,'slambdas');
 
-mfs.cc = mfs_dti.cm./mfs_gamma.cmu;
-mfs.cc(isnan(mfs.cc)) = 0;
-mfs.cc(mfs.cc>1) = 1;
-mfs.op = sqrt(mfs.cc);
+dps.cc = dps_dti.cm./dps_gamma.cmu;
+dps.cc(isnan(dps.cc)) = 0;
+dps.cc(dps.cc>1) = 1;
+dps.op = sqrt(dps.cc);
 
-mfs_fn = mdm_mfs_save(mfs, mfs.s, o_fn, opt);
+if (~isempty(dps_fn)) mdm_dps_save(dps, dps.s, dps_fn, opt); end
 
-res = 1;
+
 
