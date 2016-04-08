@@ -1,5 +1,5 @@
-function fn = fexi_nls_4d_fit2param(mfs_fn, o_path, opt)
-% function fn = fexi_nls_4d_fit2param(mfs_fn, o_path, opt)
+function fn = fexi11_nls_4d_fit2param(mfs_fn, o_path, opt)
+% function fn = fexi11_nls_4d_fit2param(mfs_fn, o_path, opt)
 %
 % Creates meaningful parameters from the model fit structure
 %
@@ -15,6 +15,9 @@ function fn = fexi_nls_4d_fit2param(mfs_fn, o_path, opt)
 % Output:
 %
 % fn     - A cell array with paths to parameter maps that were written
+%
+% 2do: Update this function to agree with structure of dti_euler
+
 
 if (nargin < 3), opt = []; end
     
@@ -46,8 +49,6 @@ for c = 1:n_map
             param = 'AXR';
             min_max = [0 20];
             x = mfs.m(:,:,:,c);
-            
-
     end
     
     fn{c} = fullfile(o_path, ['fexi16_p_' param opt.nii_ext]);
