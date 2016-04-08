@@ -1,9 +1,10 @@
 function m = erf_1d_data2fit(signal, xps, opt, ind)
 % function m = erf_1d_data2fit(signal, xps, opt, ind)
 
-if (nargin < 4), ind = ones(size(signal)); end
+if (nargin < 3), opt = erf_opt(); end
+if (nargin < 4), ind = ones(size(signal)) > 0; end
 
-unit_to_SI = [max(signal) 1e-9 .5];
+unit_to_SI = [max(signal) 1e-9 1];
 
     function m = t2m(t) % convert local params to outside format
         
@@ -27,16 +28,15 @@ unit_to_SI = [max(signal) 1e-9 .5];
 
 % first fit constrained to oblates -0.5<d_delta<0
 % guesses and bounds
-m_guess   = [max(signal)   1e-9  -.25];
-m_lb      = [0             1e-11 -.5];
-m_ub      = [2*max(signal) 3e-9  0];
-                
+m_guess   = [max(signal)   1e-9  -0.25];
+m_lb      = [0             1e-11 -0.49];
+m_ub      = [2*max(signal) 3e-9  -0.001];
+
 t_guess   = m_guess./unit_to_SI;
 t_lb      = m_lb./unit_to_SI;
 t_ub      = m_ub./unit_to_SI;
 
-t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind), t_lb, t_ub,...
-    opt.erf.lsq_opts);
+t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind), t_lb, t_ub, opt.erf.lsq_opts);
 
 m_oblate = t2m(t);
 
@@ -45,7 +45,7 @@ chisq_oblate = var(signal(ind) - signal_fit(ind));
 
 % second fit constrained to prolates 0<d_delta<1
 % guesses and bounds
-m_guess   = m_oblate.*[1 1 -1];
+m_guess   = m_oblate.* [1 1 -1];
 m_lb      = [0             1e-11 0];
 m_ub      = [2*max(signal) 3e-9  1];
                 

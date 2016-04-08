@@ -12,5 +12,6 @@ s = s0.*exp(-xps.b.*d_iso).*exp(a/3).*...
     sqrt(pi)/2.*real(gammainc(a,1/2)./sqrt(a));
 
 indx = a == 0;
-s(indx) = exp(-xps.b(indx).*d_iso);
+s(indx) = s0 * exp(-xps.b(indx).*d_iso);
 s(xps.b == 0) = 1;
+
