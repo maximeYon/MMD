@@ -1,7 +1,7 @@
 function m = gamma_1d_data2fit(signal, xps, opt, ind)
 % function m = gamma_1d_data2fit(signal, xps, opt, ind)
 
-if (nargin < 4), ind = ones(size(signal)); end
+if (nargin < 4), ind = ones(size(signal)) > 0; end
 
 unit_to_SI = [max(signal) 1e-9 (1e-9)^2*[1 1]];
 
