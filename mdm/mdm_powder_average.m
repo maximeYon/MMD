@@ -19,8 +19,7 @@ out_xps_fn = fullfile(o_path, [name '_pa_xps.mat']);
 
 if (exist(out_nii_fn, 'file') && (~opt.do_overwrite))
     disp(['Skipping, output file already exists: ' out_nii_fn]); 
-    load(out_xps_fn);
-    s.xps = xps;
+    s.xps = mdm_xps_load(out_xps_fn); 
     s.nii_fn = out_nii_fn;
     return;
 end
@@ -46,6 +45,8 @@ A = zeros(size(I,1), size(I,2), size(I,3), n);
 for c = c_list'
     A(:,:,:,c == c_list) = nanmean(I(:,:,:,id_ind == c),4);
 end
+
+if (opt.do_pa_abs), A = abs(A); end
 
 % Average fields in xps
 s.xps = rmfield(s.xps, 'n');
