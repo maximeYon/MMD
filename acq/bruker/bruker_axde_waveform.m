@@ -1,13 +1,17 @@
+function bruker_axde_waveform(run_fn)
+% function bruker_axde_waveform(run_fn)
+%
+% run_fn - where to put the data
+%
 % Gradient waveforms for axisymmetric b-tensors.
 %
 % Calculated according to the recipe in fig 1 of
 % Topgaard, Phys. Chem. Chem. Phys. 18, 8545 (2016).
 % http://dx.doi.org/10.1039/c5cp07251d
 
-clear all
+1;
 
 % Define path for output folders
-run_fn = mfilename('fullpath');
 [run_path,run_name,run_ext] = fileparts(run_fn);
 out_path = fullfile(run_path,'protocol');
 
