@@ -1,5 +1,5 @@
 function [o_fn, tpm_fn] = mdm_coreg(i_fn, r_fn, p_fn, o_path, opt)
-% function [o_fn, tpm_fn] = mio_coreg(i_fn, r_fn, p_fn, o_path, opt)
+% function [o_fn, tpm_fn] = mdm_coreg(i_fn, r_fn, p_fn, o_path, opt)
 %
 % Coregisters input file 'i_fn' to reference 'r_fn' using elastix parameters
 % 'p_fn'. Saves the files to 'o_path' as 'o_fn'

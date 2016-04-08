@@ -7,7 +7,7 @@ function s = mdm_mask(s, mask_fun, path, opt)
 % not exist already
 
 % init
-if (nargin < 3), path = fileparts(s.nii_fn); end
+if (nargin < 3) || (isempty(path)), path = fileparts(s.nii_fn); end
 if (nargin < 4), opt.present = 1; end
 
 opt = mdm_opt(opt);
@@ -23,10 +23,12 @@ end
 
 if (exist(s.mask_fn, 'file') && (~opt.do_overwrite))
     disp(['Skipping, output file already exists: ' s.mask_fn]); return;
-    return; 
 end
 
 % write the mask, don't care if we overwrite anything
-[I,h] = mdm_nii_read(s.nii_fn);
-M = mask_fun(I, opt);
-mdm_nii_write(uint8(M), s.mask_fn, h);
+if (opt.do_mask)
+    [I,h] = mdm_nii_read(s.nii_fn);
+    if (any(imag(I(:)) ~= 0)), I = abs(I); end
+    M = mask_fun(I, opt);
+    mdm_nii_write(uint8(M), s.mask_fn, h);
+end

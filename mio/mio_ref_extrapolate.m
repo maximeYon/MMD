@@ -1,7 +1,8 @@
 function I_ref = mio_ref_extrapolate(I, xps_source, xps_target, M, ind)
-% function I_ref = mio_ref_extrapolate(I, xps_source, xps_target, ind)
+% function I_ref = mio_ref_extrapolate(I, xps_source, xps_target, M, ind)
 %
-% Extrapolate references according to Nilsson et al, 2015, PlosO One
+% Extrapolate references according to Nilsson et al, 2015, Plos One 
+% doi:10.1371/journal.pone.0141825
 
 if (nargin < 3), xps_target = xps_source; end
 if (nargin < 4), M = []; end

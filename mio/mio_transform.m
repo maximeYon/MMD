@@ -1,5 +1,5 @@
 function I_out = mio_transform(I_in, t, h, opt)
-% function I = mio_transform(I, t, h)
+% function I_out = mio_transform(I_in, t, h, opt)
 % 
 % I: Image volume (x,y,z,c) to be transformed (looping over 4th dim)
 % t: Elastix Transform structure
