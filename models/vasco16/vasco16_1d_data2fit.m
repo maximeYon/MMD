@@ -1,7 +1,7 @@
 function m = vasco16_1d_data2fit(signal, xps, opt, ind)
 % function m = vasco16_1d_data2fit(signal, xps, opt, ind)
 
-if (nargin < 4), ind = ones(size(signal)); end
+if (nargin < 4), ind = ones(size(signal)) > 0; end
 
 unit_to_SI = [max(signal) 1e-6 1 1e-9 1e-9 1];
 

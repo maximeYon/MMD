@@ -1,4 +1,8 @@
-function t_nx6 = tm_taxs2nx6(par,perp,theta,phi)
+function t_nx6 = tm_ax2nx6(par,perp,theta,phi)
+% function t_nx6 = tm_ax2nx6(par,perp,theta,phi)
+%
+% Produce a set of 1x6 tensors from parallel and perpendicular 
+% eigenvalues, plus theta and phi angles of the parallel part
 
 xcos = cos(phi).*sin(theta);
 ycos = sin(phi).*sin(theta);

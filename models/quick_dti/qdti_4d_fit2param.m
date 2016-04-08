@@ -1,5 +1,7 @@
 function fn = qdti_4d_fit2param(mfs_fn, o_path, opt)
-% function dti_4d_fit2param(mfs, s, o_path, opt)
+% function fn = qdti_4d_fit2param(mfs_fn, o_path, opt)
+%
+% 2do: Update this function to agree with structure of dti_euler
 
 if (nargin < 3), opt.present = 1; end
 

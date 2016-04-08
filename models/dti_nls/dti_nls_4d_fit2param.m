@@ -29,4 +29,3 @@ mfs.dt(:,:,:,2:7) = mfs.m(:,:,:,2:7);
 fn = qdti_4d_fit2param(mfs, o_path, opt);
 
 
-end

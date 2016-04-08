@@ -1,5 +1,7 @@
 function fn = vasco16_4d_fit2param(mfs_fn, o_path, opt)
 % function fn = vasco16_4d_fit2param(mfs_fn, o_path, opt)
+%
+% 2do: Update this function to agree with structure of dti_euler
 
 if (nargin < 3), opt = []; end
     

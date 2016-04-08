@@ -1,5 +1,6 @@
 function [rotmat,rotmatinv] = tm_euler_angles2rotmat(alpha,beta,gamma)
-% [rotmat,rotmatinv] = tm_euler_angles2rotmat(alpha,beta,gamma)
+% function [rotmat,rotmatinv] = tm_euler_angles2rotmat(alpha,beta,gamma)
+%
 % Active right-handed rotation
 % First gamma around z, then beta around y, and finally alpha around z
 % Input must be scalars.
