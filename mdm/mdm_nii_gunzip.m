@@ -1,5 +1,5 @@
 function [nii_fn, tmp_path, tmp_fn] = mdm_nii_gunzip(nii_fn, h_only)
-%function [nii_fn, tmp_path, tmp_fn] = mdm_nii_gunzip(nii_fn, h_only)
+% function [nii_fn, tmp_path, tmp_fn] = mdm_nii_gunzip(nii_fn, h_only)
 %
 % Extract the file to the system tempdir (faster if using an external HD)
 

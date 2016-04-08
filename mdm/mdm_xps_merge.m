@@ -1,5 +1,5 @@
 function xps = mdm_xps_merge(xps_cell, opt)
-% function xps = mdm_xps_merge(xps_cell)
+% function xps = mdm_xps_merge(xps_cell, opt)
 
 if (nargin < 2), opt.present = 1; end
 opt = mdm_opt(opt);

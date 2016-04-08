@@ -1,8 +1,20 @@
 function mdm_nii2pdf(nii_fn, pdf_fn, opt)
 % function mdm_nii2pdf(nii_fn, pdf_fn, opt)
+% 
+% Converts one or several nii files in nii_fn to pdf files
 
 if (nargin < 3), opt = []; end
- 
+
+% loop over cell array, if given
+if (iscell(nii_fn))
+    for c = 1:numel(nii_fn)
+        [tmp_path, tmp_name] = msf_fileparts(nii_fn{c});
+        if (~isempty(pdf_fn)), tmp_path = fileparts(pdf_fn); end
+        tmp_pdf_fn = fullfile(tmp_path, [tmp_name '.pdf']);
+        mdm_nii2pdf(nii_fn{c}, tmp_pdf_fn, opt);
+    end
+    return;
+end
 
 Iplot = mdm_nii_read(nii_fn);
 

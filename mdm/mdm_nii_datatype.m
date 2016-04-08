@@ -1,5 +1,5 @@
-function datatype = mdm_nii_datatype( value, t )
-% function datatype = nifti_datatype( value, t )
+function datatype = mdm_nii_datatype(value, t)
+% function datatype = mdm_nii_datatype(value, t)
 %
 % Returns the datatype of a nifti based on the header info in a 
 % matlab-friendly format

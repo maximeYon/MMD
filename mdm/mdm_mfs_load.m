@@ -1,5 +1,7 @@
 function mfs = mdm_mfs_load(mfs_fn)
 % function mfs = mdm_mfs_load(mfs_fn)
+%
+% Load model fit structure
 
 if (isstruct(mfs_fn)) % assume it is a mfn struct already, error check below
     mfs = mfs_fn;

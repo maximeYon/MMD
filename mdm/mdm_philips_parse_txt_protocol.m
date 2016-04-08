@@ -1,5 +1,7 @@
-function s_protocol = mdm_philips_parse_protocol(prot_fn)
-% function s_protocol = mdm_philips_parse_protocol(prot_fn)
+function s_protocol = mdm_philips_parse_txt_protocol(prot_fn)
+% function s_protocol = mdm_philips_parse_txt_protocol(prot_fn)
+
+1;
 
 % Read the file contents
 if (~exist(prot_fn,'file')), error('file not found (%s)', prot_fn); end
