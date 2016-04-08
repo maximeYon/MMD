@@ -1,5 +1,7 @@
 function u = uvec_dodeca()
 % function u = uvec_dodeca()
+%
+% Optimal dodeca direction set
 
 u = [...
     0.5773502692 0.5773502692 0.5773502692

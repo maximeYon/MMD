@@ -1,4 +1,7 @@
 function u = uvec_tricosa()
+% function u = uvec_tricosa()
+%
+% Truncated icosa direction set
 
 u = [...
 0.0000000000 0.2017741062 0.9794320855 
