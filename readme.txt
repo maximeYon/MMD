@@ -9,11 +9,9 @@ Andre Ahlgren
 Filip Szczepankiewicz
 Carl-Fredrik Westin
 
-This package contains MATLAB files to help users analyze multidimensional
-diffusion MRI data. The character of such data can vary. For example, it 
-can be a regular DTI scan. However, we rather target data acquired with
-e.g. b-tensors of varying shape, or FEXI where the mixing time adds an
-acquisition dimension as compared to regular DWI.
+This package contains MATLAB files to help researchers analyze multi-
+dimensional diffusion MRI data, for example, data acquired with
+e.g. b-tensors of varying shape.
 
 We envision the following usage scenario. The functions herein support 
 step 3 and 4.
