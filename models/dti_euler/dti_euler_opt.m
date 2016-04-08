@@ -13,10 +13,13 @@ opt.dti_euler = msf_ensure_field(opt.dti_euler, 'ind_start', 1);
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'do_weight', 1);
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'weight_sthresh', .2);
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'weight_wthresh', 2);
+
+% control which maps that are generated as nifti files
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_maps', ...
     {'s0','iso','fa','cl','cp','cm'});
-opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_prefix', 'dti');
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_cmaps',{'fa','cl','cp'});
+
+opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_prefix', 'dti');
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccol',{'t1x6','lambda33vec','lambda11vec'});
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccolnorm',{'lambda33','mask','mask'});
 

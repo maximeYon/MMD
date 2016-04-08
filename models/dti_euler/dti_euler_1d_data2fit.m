@@ -1,7 +1,7 @@
 function m = dti_euler_1d_data2fit(signal, xps, opt, ind)
 % function m = dti_euler_1d_data2fit(signal, xps, opt, ind)
 
-if (nargin < 4), ind = ones(size(signal)); end
+if (nargin < 4), ind = ones(size(signal)) > 0; end
 
 unit_to_SI = [max(signal) 1e-9*[1 1 1] 2*pi*[1 1 1]];
 
