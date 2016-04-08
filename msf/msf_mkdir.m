@@ -1,5 +1,7 @@
 function msf_mkdir(folder_path)
 % function msf_mkdir(folder_path)
+%
+% Recursively makes folder_path
 
 if (isempty(folder_path)), return; end
 

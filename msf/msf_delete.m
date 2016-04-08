@@ -1,4 +1,7 @@
 function msf_delete(fn)
+% function msf_delete(fn)
+%
+% Deletes the file fn, or multiple files if fn is a cell array
 
 if (iscell(fn))
     for c = 1:numel(fn)

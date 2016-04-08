@@ -1,8 +1,11 @@
 function msf_imagesc(I,d,k,c)
-% function my_imagesc(I,d,k,c)
+% function msf_imagesc(I,d,k,c)
+%
+% Displays a 2D slice through a 3D or 4D image volume I
 %
 % d - dimension
 % k - slice
+% c - volume
 
 if (nargin < 2), d = 3; end
 if (nargin < 3) || (isempty(k)), k = round(size(I,d)/2); end

@@ -1,5 +1,7 @@
 function tmp_path = msf_tmp_path(do_mkdir)
 % function tmp_path = msf_tmp_path(do_mkdir)
+%
+% Obtains a temporary path with a random name
 
 if (nargin < 1), do_mkdir = 1; end
 

@@ -1,5 +1,7 @@
 function o = msf_str2double(str, delim)
 % function o = msf_str2double(str, delim)
+%
+% Splits 'str' according to 'delim' and converts to double
 
 if (nargin < 2), delim = ' '; end
 
