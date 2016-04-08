@@ -1,5 +1,7 @@
-function fn = elastix_param_write(p, fn)
-%function elastix_param_write(p, fn)
+function fn = elastix_p_write(p, fn)
+% function fn = elastix_p_write(p, fn)
+%
+% Writes the elastix parameter structure to a file
 
 if (~isstruct(p))
     error('expected first argument to be a structure');

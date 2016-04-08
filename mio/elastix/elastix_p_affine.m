@@ -1,5 +1,5 @@
 function p = elastix_p_affine(n_iter)
-% function elastix_p_affine(fn)
+% function p = elastix_p_affine(n_iter)
 
 if (nargin < 1), n_iter = 300; end
 

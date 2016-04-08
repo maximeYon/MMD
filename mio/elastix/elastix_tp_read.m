@@ -1,5 +1,7 @@
 function [p,tmat,str] = elastix_tp_read(fn)
-% function [p,tmat] = elastix_tp_read(fn)
+% function [p,tmat,str] = elastix_tp_read(fn)
+%
+% Reads a transform parameter file
 
 % Read the whole file
 fid = fopen(fn);

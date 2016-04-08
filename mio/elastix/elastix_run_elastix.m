@@ -1,7 +1,8 @@
-function [res_fn, tp_fn] = elastix_perform(i_fn, ref_fn, p_fn, o_path)
-% function [res_fn, tp_fn] = elastix_perform(i_fn, ref_fn, p_fn, o_path)
+function [res_fn, tp_fn] = elastix_run_elastix(i_fn, ref_fn, p_fn, o_path)
+% function [res_fn, tp_fn] = elastix_run_elastix(i_fn, ref_fn, p_fn, o_path)
 %
-% Runs elastix. Only for Mac/*nix at the moment
+% Runs elastix. Only for Mac/*nix at the moment. For help, see readme.txt
+% in the elastix folder.
 
 cmd = 'elastix';
 cmd = [cmd ' -f "'   ref_fn  '"']; %#ok<AGROW>

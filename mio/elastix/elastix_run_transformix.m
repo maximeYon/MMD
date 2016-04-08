@@ -1,14 +1,8 @@
 function res_fn = elastix_run_transformix(i_fn, t_fn, o_path)
 % function res_fn = elastix_run_transformix(i_fn, t_fn, o_path)
 %
-% Run transformix. Only for Mac/*nix at the moment
-% 
-% To run, you need to be able to start elastix from your terminal by 
-% typing 'transformix'. Do this by adjusting the path in 
-% ~/.bashrc according to
-%
-% export PATH=/usr/local/elastix/bin:/usr/local/elastix/parameters:$PATH
-% export DYLD_LIBRARY_PATH=/usr/local/elastix/lib:$DYLD_LIBRARY_PATH
+% Run transformix. Only for Mac/*nix at the moment. For help, see readme.txt
+% in the elastix folder.
 
 cmd = 'transformix';
 cmd = [cmd ' -in "'    i_fn    '"']; 

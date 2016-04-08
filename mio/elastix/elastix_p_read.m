@@ -1,5 +1,7 @@
 function p = elastix_p_read(fn)
 % function p = elastix_p_read(fn)
+%
+% Reads an elastix parameter structure from file
 
 assert(exist(fn, 'file') > 0, 'Parameter file does not exist');
 

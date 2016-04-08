@@ -1,5 +1,5 @@
 function p = elastix_p_3dof(n_iter)
-% function fn = elastix_p_3dof(fn, n_iter)
+% function p = elastix_p_3dof(n_iter)
 %
 % Use an affine transform, but with all parameters except 
 % translation x, y and rotation around z set to zero
