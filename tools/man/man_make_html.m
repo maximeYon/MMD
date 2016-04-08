@@ -5,15 +5,23 @@ cwd = fileparts(mfilename('fullpath'));
 rd  = fullfile(cwd,'..','..');
 
 packages = {...
-    '.', ...
+    '.', ... %    'acq', ...
+    'acq/bruker', ...
     'mdm', ...
     'mio', ...
     'mio/elastix', ...
+    'msf', ...
     'models', ...
-    'models/fexi11', ...
-    'models/vasco16', ...
-    'models/dti_nls', ...
-    'models/quick_dti', ...
+    'models/dtd',...
+    'models/dtd_pa',...
+    'models/dti_euler',...
+    'models/dti_nls',...
+    'models/erf',...
+    'models/fexi11',...
+    'models/gamma',...
+    'models/quick_dti',...
+    'models/saupe',...
+    'models/vasco16',...
     'tools', ...
     'tools/tensor_maths', ...
     'tools/uvec', ...
@@ -22,10 +30,13 @@ packages = {...
 fid = fopen(fullfile(cwd, '../../index.html'),'w');
 fwrite(fid, '<html><head><title>MDM manual</title></head></body><pre>');
 
-fprintf(fid, '<h1 style="background-color:black;color:white">Packages</h1><br>');
+fprintf(fid, '<h1 style="background-color:black;color:white">Overview</h1><br>');
 for c = 1:numel(packages)
-    if (packages{c} == '.'), continue; end
-    fprintf(fid, '<a href="#p%i">%s</a><br>\n', c, packages{c});
+    if (packages{c}(1) == '.')
+        fprintf(fid, '<a href="#p%i">Introduction</a>\n', c); 
+    else
+        fprintf(fid, '<a href="#p%i">%s</a>\n', c, packages{c});
+    end
 end
 
 for c = 1:numel(packages)
@@ -41,16 +52,18 @@ for c = 1:numel(packages)
         warning off;
         tmp = strrep(tmp,char(10),'<br>');
         warning on;
-        fprintf(fid, tmp);
+        fprintf(fid, char(tmp(:)'));
         fclose(fid2);
     end
-    
-    fprintf(fid, '<h2 style="background-color:#dddddd">Functions</h2>');
     
     % get file headers
     d = dir(fullfile(rd, packages{c}, '*.m'));
     
     for c_file = 1:numel(d)
+        
+        if (c_file == 1)
+            fprintf(fid, '<h2 style="background-color:#dddddd">Functions</h2>');
+        end
         
         fn2 = fullfile(rd, packages{c}, d(c_file).name);
         fid2 = fopen(fn2);
@@ -66,6 +79,16 @@ for c = 1:numel(packages)
                     col = 'black';
                     if (~strcmpi(tline(1:min(end,8)), 'function'))
                         col = 'red';
+                        err_msg = '1';
+                    end
+                    
+                    % check that the name is proper
+                    tmp = strtrim(tline(1:(find(tline == '(',1,'first')-1)));
+                    tmp = tmp((1+max([find(tmp == '=', 1, 'last') find(tmp == ' ', 1, 'last')])):end);
+                    
+                    if (~strcmp(d(c_file).name, [tmp '.m']))
+                        col = 'red';
+                        err_msg = '2';
                     end
                     
                     f_str = strtrim(tline);
@@ -73,8 +96,14 @@ for c = 1:numel(packages)
                     if (~ischar(tmp)), break; end
                     
                     if (~strcmp(tmp, ['% ' f_str])), col = 'red'; end
+                    
+                    if (strcmp(col, 'red'))
+                        err_msg = [' (' d(c_file).name ')'];
+                    else
+                        err_msg = [];
+                    end
 
-                    fprintf(fid, '<b style="color:%s">%s</b><br>', col, tline);
+                    fprintf(fid, '<b style="color:%s">%s</b>%s<br>', col, tline, err_msg);
                     
                     
                 otherwise
