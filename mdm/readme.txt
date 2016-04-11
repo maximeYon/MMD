@@ -62,7 +62,7 @@ Potentially but not necessarily automatically calculated:
 B) Parameters describing the total diffusion encoding effects
 
 - b:          total b-value
-- bt:         b-matrix, n x 6 (see dtd_* for format)
+- bt:         b-matrix, n x 6 (see tm_* for format)
 - alpha:      flow compensation factor (see Ahlgren 16)
 - alpha2:     flow attenuation factor (see Ahlgren 16)
 

@@ -24,10 +24,10 @@ for c = 1:n_map
         case 1 % fractional anisotropy
             param = 'fa';
             
-            [~,E_shear] = dtd_6x6_iso();
+            [~,E_shear] = tm_6x6_iso();
             
-            md = dtd_inner(m2v(mfs.dt), dtd_3x3_to_1x6(dtd_3x3_iso()));
-            vl = dtd_inner(dtd_1x6_to_1x21(m2v(mfs.dt)), dtd_6x6_to_1x21(E_shear));
+            md = dtd_inner(m2v(mfs.dt), tm_3x3_to_1x6(tm_3x3_iso()));
+            vl = dtd_inner(tm_1x6_to_1x21(m2v(mfs.dt)), tm_6x6_to_1x21(E_shear));
             
             x = v2m(sqrt( (3/2) * (1 + md.^2 ./ vl ).^(-1)), size(mfs.dt));
             clear md vl;
@@ -37,7 +37,7 @@ for c = 1:n_map
         case 2 % mean diffusivity
             param = 'md';
             
-            x = v2m(dtd_inner(m2v(mfs.dt), dtd_3x3_to_1x6(dtd_3x3_iso())), size(mfs.dt));
+            x = v2m(tm_inner(m2v(mfs.dt), tm_3x3_to_1x6(dtd_3x3_iso())), size(mfs.dt));
             x = x * 1e9;
             
             min_max = [0 4];
