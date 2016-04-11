@@ -26,7 +26,7 @@ unit_to_SI = [max(signal) [1 1 1 1 1 1] * 1e-9];
             0    t(5) t(6);
             0      0  t(7)];
         
-        m(2:7) = dtd_3x3_to_1x6(C' * C);
+        m(2:7) = tm_3x3_to_1x6(C' * C);
 
         m = m .* unit_to_SI;
     end
