@@ -17,7 +17,7 @@ mdiff = @(a,b,c) ~ ((a < (b + c)) && (a > (b - c)));
 opt = dti_nls_opt;
 
 xps.n = 13;
-xps.bt = dtd_1x3_to_1x6(...
+xps.bt = tm_1x3_to_1x6(...
     [0 ones(1,12) * 1e9]', zeros(1,13)', [1 0 0; uvec_elstat_12dir]);
 
 
@@ -27,7 +27,7 @@ switch (c_ut)
         fn = 'dti_nls_1d_data2fit.m';
         
         dt_3x3 = [2 0 0; 0 1 0; 0 0 0.3] * 1e-9;
-        dt_1x6 = dtd_3x3_to_1x6(dt_3x3);
+        dt_1x6 = tm_3x3_to_1x6(dt_3x3);
         
         m_exp = [1 dt_1x6];
         
@@ -49,7 +49,7 @@ switch (c_ut)
         
         dt_3x3 = [2 0 0; 0 1 0; 0 0 0.3] * 1e-9;
         
-        dt_1x6 = dtd_3x3_to_1x6(dt_3x3);
+        dt_1x6 = tm_3x3_to_1x6(dt_3x3);
         
         m = [1 dt_1x6];
         s = dti_nls_1d_fit2data(m, xps);

@@ -4,6 +4,9 @@ function I_ref = mio_ref_extrapolate(I, xps_source, xps_target, M, ind)
 % Extrapolate references according to Nilsson et al, 2015, Plos One 
 % doi:10.1371/journal.pone.0141825
 
+assert(isfield(xps_source, 'n'), 'xps_source.n required field');
+assert(isfield(xps_source, 'bt'), 'xps_source.bt of size n x 6 required');
+
 if (nargin < 3), xps_target = xps_source; end
 if (nargin < 4), M = []; end
 if (nargin < 5), ind = (1:xps_source.n) > 0; end
