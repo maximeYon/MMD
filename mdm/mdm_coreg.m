@@ -15,7 +15,7 @@ if (nargin < 5), opt.present = 1; end
 opt = mio_opt(opt);
 
 % General preparation
-assert(exist(o_path, 'dir')>0, ['output path does not exist: ' o_path]);
+assert(exist(o_path, 'dir') >0, ['output path does not exist: ' o_path]);
 
 [~,name] = msf_fileparts(i_fn);
 o_fn   = fullfile(o_path, [name '_mc' opt.nii_ext]);

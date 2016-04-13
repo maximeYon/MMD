@@ -35,11 +35,15 @@ for c = 1:numel(packages)
     if (packages{c}(1) == '.')
         fprintf(fid, '<a href="#p%i">Introduction</a>\n', c); 
     else
+        if (~exist(fullfile(rd, packages{c}), 'dir')), continue; end
+        
         fprintf(fid, '<a href="#p%i">%s</a>\n', c, packages{c});
     end
 end
 
 for c = 1:numel(packages)
+    
+    if (~exist(fullfile(rd, packages{c}), 'dir')), continue; end
     
     fprintf(fid, '<h1 id="p%i" style="background-color:black;color:white">&nbsp;Package: %s</h1>', c, packages{c});
     
