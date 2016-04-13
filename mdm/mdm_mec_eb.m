@@ -15,7 +15,8 @@ function s = mdm_mec_eb(s_target, s_source, p_fn, o_path, opt)
 
 
 % init
-if (nargin < 4), opt.present = 1; end
+if (nargin < 4), o_path = fileparts(s_target.nii_fn); end
+if (nargin < 5), opt.present = 1; end
 opt = mdm_opt(opt);
 msf_log(['Starting ' mfilename], opt);
 
