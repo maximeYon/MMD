@@ -10,7 +10,7 @@ Works in progress.
 
 Run setup_paths in the root folder to put files on the Matlab path. 
 
-Check various models by looking into functions named *_pipe.m under models/*
+Check various models by looking into functions named \*_pipe.m under models/\*
 
 Get acquainted with by xps structure by reading mdm/readme.txt.
 
