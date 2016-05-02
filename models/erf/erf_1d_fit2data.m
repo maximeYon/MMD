@@ -1,5 +1,7 @@
 function s = erf_1d_fit2data(m, xps)
 % function s = erf_1d_fit2data(m, xps)
+%
+% m = [s0 d_iso d_delta]
 
 % convert to readable parameters
 s0        = m(1);

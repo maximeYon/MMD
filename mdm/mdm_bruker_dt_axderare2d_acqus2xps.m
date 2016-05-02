@@ -29,7 +29,7 @@ load(fullfile(data_path,'NMRacqu2s'))
 td1 = NMRacqu2s.td;
 
 % Index for powder averaging xps.a_ind
-load(fullfile(data_path,'/g_xps'))
+xps = mdm_xps_load(fullfile(data_path, 'g_xps.mat'));
 
 % Read gradient time-modulations (a,b,c)
 % Normalized from -1 to +1
@@ -38,12 +38,12 @@ for ngnam = 1:numel(gnams)
     gnam = gnams{ngnam};
     fn = fullfile(data_path,['g' gnam]);
     g = mdm_bruker_grad_read(fn);
-    eval(['G.' gnam ' = g;'])
+    G.(gnam) = g;
 end
 Ndt = length(G.c); % Ndt: number of time steps
 tau = NMRacqus.d3; % tau: duration of one full gradient modulation
 dt = tau/Ndt; % dt: time step
-%figure(1), clf, plot((1:Ndt)',[G.c G.b G.a],'-'), return
+
 
 % Read gradient ramps
 % ramp.xa etc maps gradient modulations (a,b,c) to channels (x,y,z)
@@ -53,7 +53,7 @@ for ngnam = 1:numel(gnams)
     gnam = gnams{ngnam};
     fn = fullfile(data_path,['g' gnam]);
     g = mdm_bruker_grad_read(fn);
-    eval(['ramp.' gnam ' = g;'])
+    ramp.(gnam) = g;
 end
 
 % Convert normlized ramps r.ax to G.xa in SI 
