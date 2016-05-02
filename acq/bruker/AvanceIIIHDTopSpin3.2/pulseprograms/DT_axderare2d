@@ -1,7 +1,8 @@
 ; DT_axderare2d
-; Bruker AVII-500
-; Topspin 2.0
-; 20160323
+;
+; Bruker Avance III HD
+; TopSpin 3.2
+; Written by Daniel Topgaard 20160422
 ;
 ; 2D single-shot imaging with axisymmetric diffusion encoding.
 ; See fig 1 in Topgaard, Phys. Chem. Chem. Phys. 18, 8545 (2016),
@@ -36,7 +37,12 @@
 ; 6) Size-shape-orientation diffusion tensor distributions.
 ;    Work in progress
 ;
-;
+; Matlab files for protocol setup and analysis are located in
+; mdm_framework/acq/bruker/
+; Make gradient waveforms with bruker_axde_waveform.m
+; Make acquisition protocol with bruker_axde_protocol.m
+; Reconstruct images with step1_recon_data.m
+; Analyze data with step2_run_analysis.m
 ;
 ; Parameters:
 ; Suggested values for Bruker MIC-5 probe with 10 mm 1H RF insert.
@@ -59,25 +65,23 @@
 ;d1: recycle delay [5 s]
 ;d3 : diff gradient duration [10 ms]
 ;d4 : diff gradient delay [5 ms]
-;d6 : diff gradient delay [5 ms]
+;d6 : diff gradient delay [0.1 ms]
 ;d32 : gradient ramp time [200 us]
 ;d40 : read plateau [640 us]
 ;l1: number of phase encode increments [16]
 ;p11 : soft excitation pulse at pl11 [500 us]
-;pl11 : power level soft pulses [18 dB]
+;plw11 : power level soft pulses [1 W]
 ;spnam11 : soft pulse shape [Sinc2.1000]
 ;p12 : soft refocusing pulse at pl12 [500 us]
-;pl12 : power level soft pulses [12 dB]
+;plw12 : power level soft pulses [4 W]
 ;spnam12 : soft pulse shape [Sinc2.1000]
 ;o1: resonance offset [calibrate with zg]
 ;aq: acquisition time for entire echo train [70 ms >aqeff]
 ;td: number of time domain points [from aq]
-;td1 : number of steps in acquisition protocol [250]
+;td1 : number of steps in acquisition protocol [250, given by bruker_axde_protocol.m]
 ;
 ; All delays during image read-out should be multiples of 2dw
-; Make gradient waveforms with bruker_axde_waveform.m
-; Make acquisition protocol with bruker_axde_protocol.m
-; Process with axde_driver_batch.m
+;
 
 ;----------------------------------------
 ;d35: excitation compensation delay
@@ -120,9 +124,9 @@ define delay dwcomp
 "d22 = 1u" ;switch delay
 
 define delay FOVread ; field-of-view read
-"FOVread = 100*pi/(26.75e7*dw*1e-6*sqrt(pow(cnst11,2)+pow(cnst12,2)+pow(cnst13,2))*3)"
+"FOVread = 100*PI/(26.75e7*dw*1e-6*sqrt(pow(cnst11,2)+pow(cnst12,2)+pow(cnst13,2))*3)"
 define delay FOVphase ; field-of-view phase
-"FOVphase = 100*pi*l1/(26.75e7*d32*sqrt(pow(cnst21,2)+pow(cnst22,2)+pow(cnst23,2))*3)"
+"FOVphase = 100*PI*l1/(26.75e7*d32*sqrt(pow(cnst21,2)+pow(cnst22,2)+pow(cnst23,2))*3)"
 define delay RESread ; resolution read
 "RESread = FOVread*2*dw/d40"
 define delay RESphase ; resolution phase
@@ -131,12 +135,12 @@ define delay RESphase ; resolution phase
 define delay ShowInASED
 "ShowInASED=d35+cnst1+d3+d4+cnst37+aqrest+cnst14+cnst15+cnst16+cnst21+cnst22+cnst23+cnst31+cnst32+cnst33+cnst34+cnst35+cnst36+FOVread+FOVphase+RESread+RESphase"
 
-define list <gradient> ru=<rampUp.50> ; Make gradient ramps with Topspin shapetool
-define list <gradient> rd=<rampDown.50>
-define list <gradient> ga=<ga> ; Make with bruker_axde_waveform.m and put in expno folder
+define list <gradient> ru=<ru.25> ; Make gradient ramps with Topspin shapetool
+define list <gradient> rd=<rd.25>
+define list <gradient> ga=<ga> ; Make with bruker_axde_waveform.m and put in ../gp/user and expno folders
 define list <gradient> gb=<gb>
 define list <gradient> gc=<gc>
-define list <gradient> gxa=<gxa> ; Make with bruker_axde_protocol.m and put in expno folder
+define list <gradient> gxa=<gxa> ; Make with bruker_axde_protocol.m and put in ../gp/user and expno folders
 define list <gradient> gxb=<gxb>
 define list <gradient> gxc=<gxc>
 define list <gradient> gya=<gya>
@@ -156,18 +160,18 @@ lgrad r2d = l1
   d22 UNBLKGRAMP
   STARTADC
   RESETPHASE
-  d22 REC_BLK
-  d22 SGU1_pulse
+  d22 RG_OFF
+  d22 ;SGU1_pulse
   d22 pl11:f1 ;fqlist:f1
 
   ;slice-selective excitation
-  d32 grad{ ru(cnst31,50) | ru(cnst32,50) | ru(cnst33,50)  }	
+  d32 grad{ ru(cnst31,25) | ru(cnst32,25) | ru(cnst33,25)  }	
   (p11:spf11 pl11 ph1):f1
-  d32 grad{ rd(cnst31,50) | rd(cnst32,50) | rd(cnst33,50)  }
+  d32 grad{ rd(cnst31,25) | rd(cnst32,25) | rd(cnst33,25)  }
   ;slice rephase
-  d32 grad{ ru(-cnst37*cnst31,50) | ru(-cnst37*cnst32,50) | ru(-cnst37*cnst33,50)  }	
+  d32 grad{ ru(-cnst37*cnst31,25) | ru(-cnst37*cnst32,25) | ru(-cnst37*cnst33,25)  }	
   d34 grad{ (-cnst37*cnst31) | (-cnst37*cnst32) | (-cnst37*cnst33)  }	
-  d32 grad{ rd(-cnst37*cnst31,50) | rd(-cnst37*cnst32,50) | rd(-cnst37*cnst33,50)  }	
+  d32 grad{ rd(-cnst37*cnst31,25) | rd(-cnst37*cnst32,25) | rd(-cnst37*cnst33,25)  }	
 
   ;diffusion and T2 encoding--------------------------------------
 if (1) {
@@ -178,11 +182,11 @@ if (1) {
   d4
 
   ;slice-selective refocusing
-  d32 pl12:f1 grad{ ru(cnst34,50) | ru(cnst35,50) | ru(cnst36,50)  }	
-  d32 grad{ rd(cnst34,50)+ru(cnst31,50) | rd(cnst35,50)+ru(cnst32,50) | rd(cnst36,50)+ru(cnst33,50)  }	
+  d32 pl12:f1 grad{ ru(cnst34,25) | ru(cnst35,25) | ru(cnst36,25)  }	
+  d32 grad{ rd(cnst34,25)+ru(cnst31,25) | rd(cnst35,25)+ru(cnst32,25) | rd(cnst36,25)+ru(cnst33,25)  }	
   (p12:spf12 pl12 ph2):f1
-  d32 grad{ rd(cnst31,50)+ru(cnst34,50) | rd(cnst32,50)+ru(cnst35,50) | rd(cnst33,50)+ru(cnst36,50)  }	
-  d32 grad{ rd(cnst34,50) | rd(cnst35,50)  | rd(cnst36,50)  }
+  d32 grad{ rd(cnst31,25)+ru(cnst34,25) | rd(cnst32,25)+ru(cnst35,25) | rd(cnst33,25)+ru(cnst36,25)  }	
+  d32 grad{ rd(cnst34,25) | rd(cnst35,25)  | rd(cnst36,25)  }
 
   d3 grad{ ga(cnst1,1000)*gxa + gb(cnst1,1000)*gxb + gc(cnst1,1000)*gxc | ga(cnst2,1000)*gya + gb(cnst2,1000)*gyb + gc(cnst2,1000)*gyc | ga(cnst3,1000)*gza + gb(cnst3,1000)*gzb + gc(cnst3,1000)*gzc }
   d4
@@ -196,43 +200,43 @@ if (1) {
 
 ;RARE read-out with continuous detection-----------------------------
   dw DWL_CLK_ON
-  dw SGU1_observe
-  dw*2 REC_UNBLK
+  dw ;SGU1_observe
+  dw*2 RG_ON; REC_UNBLK
   
   ;read dephase
-  d32 grad{ ru(cnst14,50) | ru(cnst15,50) | ru(cnst16,50) }	
+  d32 grad{ ru(cnst14,25) | ru(cnst15,25) | ru(cnst16,25) }	
   d41 grad{ (cnst14) | (cnst15) | (cnst16) }	
   ;slice dephase
-  d32 grad{ (cnst14)+ru(cnst34,50) | (cnst15)+ru(cnst35,50) | (cnst16)+ru(cnst36,50)  }	
-  d32 grad{ rd(cnst14,50)+rd(cnst34,50)+ru(cnst31,50) | rd(cnst15,50)+rd(cnst35,50)+ru(cnst32,50) | rd(cnst16,50)+rd(cnst36,50)+ru(cnst33,50)  }	
+  d32 grad{ (cnst14)+ru(cnst34,25) | (cnst15)+ru(cnst35,25) | (cnst16)+ru(cnst36,25)  }	
+  d32 grad{ rd(cnst14,25)+rd(cnst34,25)+ru(cnst31,25) | rd(cnst15,25)+rd(cnst35,25)+ru(cnst32,25) | rd(cnst16,25)+rd(cnst36,25)+ru(cnst33,25)  }	
 
 3 ;slice selective RF w/ receiver blanking
-  dw*2 REC_BLK
-  dw SGU1_pulse
+  dw*2 RG_OFF ;REC_BLK
+  dw ;SGU1_pulse
   dwcomp
   (p12:spf12 pl12 ph2):f1
   dwcomp 
-  dw SGU1_observe
-  dw*2 REC_UNBLK 
+  dw ;SGU1_observe
+  dw*2 RG_ON ;REC_UNBLK 
 
   ;slice rephase + phase encode
-  d32 grad{ rd(cnst31,50)+ru(cnst34,50)+ru(cnst21,50)*r2d | rd(cnst32,50)+ru(cnst35,50)+ru(cnst22,50)*r2d | rd(cnst33,50)+ru(cnst36,50)+ru(cnst23,50)*r2d  }	
-  d32 grad{ rd(cnst34,50)+rd(cnst21,50)*r2d+ru(cnst11,50) | rd(cnst35,50)+rd(cnst22,50)*r2d+ru(cnst12,50)  | rd(cnst36,50)+rd(cnst23,50)*r2d+ru(cnst13,50)  }	
+  d32 grad{ rd(cnst31,25)+ru(cnst34,25)+ru(cnst21,25)*r2d | rd(cnst32,25)+ru(cnst35,25)+ru(cnst22,25)*r2d | rd(cnst33,25)+ru(cnst36,25)+ru(cnst23,25)*r2d  }	
+  d32 grad{ rd(cnst34,25)+rd(cnst21,25)*r2d+ru(cnst11,25) | rd(cnst35,25)+rd(cnst22,25)*r2d+ru(cnst12,25)  | rd(cnst36,25)+rd(cnst23,25)*r2d+ru(cnst13,25)  }	
 
   ;read
   d40 grad{ (cnst11) | (cnst12) | (cnst13) }
 
   ;slice dephase + phase rewind
-  d32 grad{ rd(cnst11,50)+ru(cnst34,50)-ru(cnst21,50)*r2d | ru(cnst35,50)-ru(cnst22,50)*r2d+rd(cnst12,50) | rd(cnst13,50)+ru(cnst36,50)-ru(cnst23,50)*r2d  }	
-  d32 grad{ rd(cnst34,50)-rd(cnst21,50)*r2d+ru(cnst31,50) | rd(cnst35,50)-rd(cnst22,50)*r2d+ru(cnst32,50)  | rd(cnst36,50)-rd(cnst23,50)*r2d+ru(cnst33,50)  }	
+  d32 grad{ rd(cnst11,25)+ru(cnst34,25)-ru(cnst21,25)*r2d | ru(cnst35,25)-ru(cnst22,25)*r2d+rd(cnst12,25) | rd(cnst13,25)+ru(cnst36,25)-ru(cnst23,25)*r2d  }	
+  d32 grad{ rd(cnst34,25)-rd(cnst21,25)*r2d+ru(cnst31,25) | rd(cnst35,25)-rd(cnst22,25)*r2d+ru(cnst32,25)  | rd(cnst36,25)-rd(cnst23,25)*r2d+ru(cnst33,25)  }	
 
   igrad r2d
   lo to 3 times l1
 
-  d32 grad{ rd(cnst31,50) | rd(cnst32,50) | rd(cnst33,50)  }	
+  d32 grad{ rd(cnst31,25) | rd(cnst32,25) | rd(cnst33,25)  }	
   aqrest groff
   d22 DWL_CLK_OFF 
-  d22 REC_BLK
+  d22 RG_OFF ;REC_BLK
   d22 BLKGRAMP
 ;-------------------------------------------------------------------
   

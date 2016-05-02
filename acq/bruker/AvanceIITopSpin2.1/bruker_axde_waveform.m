@@ -1,19 +1,20 @@
-function bruker_axde_waveform(run_fn)
-% function bruker_axde_waveform(run_fn)
-%
-% run_fn - where to put the data
-%
 % Gradient waveforms for axisymmetric b-tensors.
 %
 % Calculated according to the recipe in fig 1 of
 % Topgaard, Phys. Chem. Chem. Phys. 18, 8545 (2016).
 % http://dx.doi.org/10.1039/c5cp07251d
+%
+% Transfer all files from the protocol folder to
+% /opt/topspin<version>/exp/stan/nmr/lists/gp/user
+% and <dataset>/<expno>
 
-1;
 
 % Define path for output folders
-[run_path,run_name,run_ext] = fileparts(run_fn);
+%[run_path,run_name,run_ext] = fileparts(run_fn);
+run_path = cd;
 out_path = fullfile(run_path,'protocol');
+%out_path = '/opt/topspin3.5pl4/exp/stan/nmr/lists/gp/user';
+%out_path = '/opt/topspin3.2/exp/stan/nmr/lists/gp/user';
 
 % Define timing parameters relative to a total echo time = 1
 np = 1000; % Number of time intervals in waveform [1000]
@@ -22,8 +23,8 @@ plateau = 0; % Plateau [0]
 epsilon_down = .15; % Half-sine ramp down [0.1]
 
 % Parameters for calculating b-values
-gmax = 50/100*3; % Max gradient [3 T/m]
-tau = 15e-3; % Waveform duration [10 ms]
+gmax = 100/100*3; % Max gradient [3 T/m]
+tau = 10e-3; % Waveform duration [10 ms]
 
 
 %------------------------
@@ -136,6 +137,9 @@ subplot(2,1,2)
 plot(t,dre_grdt,'r-',t,dim_grdt,'g-',t,dgadt,'b-',t,dgrdt,'k--')
 xlabel('t / s'), ylabel('(dg/dt) / Tm^-^1s^-^1')
 
-res = bruker_mkshapefile(fullfile(out_path,'ga'),im_gr,'radial a');
-res = bruker_mkshapefile(fullfile(out_path,'gb'),re_gr,'radial b');
+res = bruker_mkshapefile(fullfile(out_path,'ga'),re_gr,'radial a');
+res = bruker_mkshapefile(fullfile(out_path,'gb'),im_gr,'radial b');
 res = bruker_mkshapefile(fullfile(out_path,'gc'),ga,'axial c');
+%res = bruker_mkshapefile(fullfile(out_path,'gb'),re_gr,'radial a');
+%res = bruker_mkshapefile(fullfile(out_path,'gc'),re_gr,'radial a');
+

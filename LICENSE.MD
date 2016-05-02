@@ -10,8 +10,9 @@ this Agreement.
 Background
 
 This license contains the terms and conditions for the use of the Program 
-(as defined below) in teaching, scientific research and clinical research, 
-and only provided that the Program then is used for non-commercial purpose.  
+(as defined below) in teaching, scientific and clinical research, 
+and only provided that the Program then is used for non-commercial purpose. 
+
 The licensee is given the rights to use the Program, to distribute the 
 software, to receive the source code, to change and modify the Program and 
 to distribute any modified or changed Program under this license. The 
@@ -26,7 +27,7 @@ or modified copies of this software, they must be distributed under this
 license.
 
 By modelling the GPL, this license guarantees that you're safe when using 
-the Program in teaching, scientific research and clinical research. This 
+the Program in teaching, scientific and clinical research. This 
 license guarantees that the Program will remain available free of charge 
 for non-commercial use. You can modify the Program to your purposes, and 
 you can also share your modifications. 

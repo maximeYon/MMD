@@ -1,34 +1,43 @@
-function bruker_axde_protocol(run_fn)
-% function bruker_axde_protocol(run_fn)
-%
-% run_fn - where to put the data
-%
 % Acquisition protocol for axisymmetric diffusion encoding.
 %
 % Used in Topgaard, Phys. Chem. Chem. Phys. 18, 8545 (2016).
 % http://dx.doi.org/10.1039/c5cp07251d
+%
+% Transfer all files from the protocol folder to
+% /opt/topspin<version>/exp/stan/nmr/lists/gp/user
+% and <dataset>/<expno>
 
 clear all;
 
 % Define path for output folders
-[run_path,run_name,run_ext] = fileparts(run_fn);
+%[run_path,run_name,run_ext] = fileparts(run_fn);
+run_path = cd;
 out_path = fullfile(run_path,'protocol');
-framework_path = fileparts(fileparts(run_path));
+%out_path = '/opt/topspin3.5pl4/exp/stan/nmr/lists/gp/user';
+%out_path = '/opt/topspin3.2/exp/stan/nmr/lists/gp/user';
+
+framework_path = fileparts(fileparts(fileparts(run_path)));
 pa_path = fullfile(framework_path,'tools','uvec','repulsion_angles');
 
-
 % Define timing parameters relative to a total echo time = 1
-n_b = 4;
-bmin = .01;
+n_b = 8;
+bmin = 0.002;
 %brel = linspace(bmin,1,n_b)'; %linear spacing b
 brel = logspace(log10(bmin),0,n_b)'; %linear spacing b
 n_bd = 4; %n_bd = 4, 7, 10, 13,...
 xps.b_delta = linspace(1,-.5,n_bd)';
 %xps.b_delta = [1 0 -.5 -sqrt(.125) sqrt(.125) .5 sqrt(.5) sqrt(.75)]'; n_bd = numel(xps.b_delta);
-n_br = 11;
-load(fullfile(pa_path,num2str(n_br)))
+%xps.b_delta = [1 0 -.5 .5 sqrt(.5) sqrt(.75)]'; n_bd = numel(xps.b_delta);
+%xps.b_delta = [1]'; n_bd = numel(xps.b_delta);
 %xps.b_delta = [0]; n_bd = numel(xps.b_delta);
-%theta = [0]; phi = [0]; n_br = numel(theta);
+n_br = 15;
+load(fullfile(pa_path,num2str(n_br)))
+%theta = pi/2*[0]; phi = pi/2*[0]; n_br = numel(theta);
+%theta = pi/2*[0 2 1 1 1 1 .5 1.5 1 1 .5 1.5]; phi = pi/2*[0 0 0 2 1 3 0 0 .5 1.5 1 3]; n_br = numel(theta);
+%theta = 2*pi*linspace(0,1,17); phi = 3*pi/4*ones(size(theta)); n_br = numel(theta);
+%phi = 2*pi*linspace(0,1,9); theta = 1*pi/4*ones(size(phi)); n_br = numel(theta);
+%theta = 2*pi*linspace(0,1,33); phi = 2*theta; n_br = numel(theta);
+%theta = acos(2*rand(n_br,1)-1); phi = 2*pi*rand(n_br,1);
 
 [b_ind,bd_ind,br_ind] = ndgrid(1:n_b,1:n_bd,1:n_br);
 xps.n = numel(b_ind);
@@ -92,8 +101,9 @@ set(hx,'MarkerSize',10), set(hy,'MarkerSize',8), set(hz,'MarkerSize',6)
 title(['td1 = ' num2str(xps.n)])
 subplot(2,1,2)
 ha = plot(1:xps.n,sqrt(g.xa.^2+g.ya.^2+g.za.^2),'ro');
-hb = plot(1:xps.n,sqrt(g.xa.^2+g.ya.^2+g.za.^2),'ro');
-hc = plot(1:xps.n,sqrt(g.xa.^2+g.ya.^2+g.za.^2),'ro');
+hold on
+hb = plot(1:xps.n,sqrt(g.xb.^2+g.yb.^2+g.zb.^2),'gs');
+hc = plot(1:xps.n,sqrt(g.xc.^2+g.yc.^2+g.zc.^2),'bx');
 
 param = {'xa','xb','xc','ya','yb','yc','za','zb','zc'};
 for nparam = 1:numel(param)
