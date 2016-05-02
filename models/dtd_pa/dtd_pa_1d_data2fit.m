@@ -15,11 +15,11 @@ b_delta = xps.b_delta(ind,:);
 stemp = signal(ind);
 
 dtd = dtd_pa_proliferation(stemp, b, b_delta, opt);
-%dtd
-%pause
+
 dtd = dtd_pa_extinction(stemp, b, b_delta, dtd, opt);
+
 m = dtd_pa_dtd2m(dtd,opt);
-%size(m)
+
 if (opt.dtd_pa.do_plot)
     figure(1), clf
     signal_fit = dtd_pa_1d_fit2data(m, xps);
