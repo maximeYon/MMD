@@ -5,6 +5,11 @@ function [rotmat,rotmatinv] = tm_euler_angles2rotmat(alpha,beta,gamma)
 % First gamma around z, then beta around y, and finally alpha around z
 % Input must be scalars.
 
+if (nargin == 1)
+    gamma = alpha(3);
+    beta  = alpha(2);
+    alpha = alpha(1);
+end
 
 rotmat_alpha = [
     cos(alpha) -sin(alpha) 0
