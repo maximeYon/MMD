@@ -5,13 +5,12 @@ Authors:
 Markus Nilsson
 Daniel Topgaard
 Samo Lasic
-Andre Ahlgren
-Filip Szczepankiewicz
 Carl-Fredrik Westin
 
 This package contains MATLAB files to help researchers analyze multi-
 dimensional diffusion MRI data, for example, data acquired with
-e.g. b-tensors of varying shape.
+e.g. b-tensors of varying shape. If you find this code useful, please
+provide feedback to markus.nilsson@med.lu.se. We appreciate your feedback.
 
 We envision the following usage scenario. The functions herein support 
 step 3 and 4.
