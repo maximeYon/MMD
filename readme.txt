@@ -16,8 +16,12 @@ We envision the following usage scenario. The functions herein support
 step 3 and 4.
 
 1. Define an experiental protocol by selecting b-values, echo times, 
-   image resolution et c. Suggested protocols for MD-MRI can be found on 
-   our website: http://www.multidimensionalmri.org/
+   image resolution et c. 
+
+   Acquisition software for Bruker is found in acq/bruker. 
+
+   For implementations at Siemens and Philips, please contact us at 
+   markus.nilsson@med.lu.se to discuss research cooperations.
 
 2. Run the protocol and acquire data in some native format, for example, 
    DICOM. Unfortunately, all parameters needed to analyse the
