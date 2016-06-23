@@ -7,8 +7,7 @@ function m = dtd_pa_1d_data2fit(signal, xps, opt, ind)
 % http://dx.doi.org/10.1103/PhysRevLett.116.087601
 % Modified for general b-tensor shapes
 
-
-if (nargin < 4), ind = ones(size(signal)); end
+if (nargin < 4), ind = ones(size(signal)) > 0; end
 
 b = xps.b(ind,:);
 b_delta = xps.b_delta(ind,:);

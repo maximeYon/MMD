@@ -1,7 +1,6 @@
 function m = erf_1d_data2fit(signal, xps, opt, ind)
 % function m = erf_1d_data2fit(signal, xps, opt, ind)
 
-if (nargin < 3), opt = erf_opt(); end
 if (nargin < 4), ind = ones(size(signal)) > 0; end
 
 unit_to_SI = [max(signal) 1e-9 1];
