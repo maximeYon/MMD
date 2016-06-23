@@ -28,4 +28,3 @@ load(xps_fn);
 s.xps = xps;
 
 mdm_s_subsample(s, (1:s.xps.n) >= ind_start);
-
