@@ -1,8 +1,19 @@
 function xps = mdm_xps_merge(xps_cell, opt)
 % function xps = mdm_xps_merge(xps_cell, opt)
+% 
+% xps_cell could be a cell of xps structres or filenames
 
 if (nargin < 2), opt.present = 1; end
 opt = mdm_opt(opt);
+
+if (~iscell(xps_cell)), error('first argument must be a cell array'); end
+if (numel(xps_cell) == 0), error('first argument empty'); end
+
+if (exist(xps_cell{1}, 'file')) % assume all are files, load them
+    for c = 1:numel(xps_cell)
+        xps_cell{c} = mdm_xps_load(xps_cell{c});
+    end
+end
 
 
 for i = 1:numel(xps_cell)
@@ -44,7 +55,16 @@ for i = 2:numel(xps_cell)
         if (strcmp(f{c}, 'intent'))
             1;
         else
-            xps.(f{c}) = cat(1, xps.(f{c}), xps_cell{i}.(f{c}));
+            
+            try
+                xps.(f{c}) = cat(1, xps.(f{c}), xps_cell{i}.(f{c}));
+            catch me
+                if (opt.mdm_merge_rethrow_error)
+                    rethrow(me);
+                else
+                    fprintf('field %s could not be merged\n', f{c});
+                end
+            end
         end
         
         
