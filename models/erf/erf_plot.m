@@ -10,12 +10,15 @@ m = erf_1d_data2fit(S, xps, erf_opt);
 % find unique b_delta
 b_delta_input = round(xps.b_delta * 100) / 100;
 
-[b_delta_uni,ind_uni] = unique(b_delta_input);
+[b_delta_uni,~] = unique(b_delta_input);
 
 b_delta_uni = sort(b_delta_uni);
 
-
-cmap = hsv(numel(b_delta_uni));
+if (numel(b_delta_uni) == 1)
+    cmap = [0 0 0];
+else
+    cmap = hsv(numel(b_delta_uni));
+end
 
 cla(h);
 hold(h, 'off');
@@ -23,7 +26,8 @@ for c = 1:numel(b_delta_uni)
     
     ind = b_delta_input == b_delta_uni(c);
     
-    semilogy(h, xps.b(ind) * 1e-9, S(ind) / m(1), 'o', 'color', cmap(c,:), 'markersize', 8, 'markerfacecolor', cmap(c,:));
+    semilogy(h, xps.b(ind) * 1e-9, S(ind) / m(1), 'o', 'color', cmap(c,:), ...
+        'markersize', 5, 'markerfacecolor', cmap(c,:));
     hold(h, 'on');
     
     clear xps2;
@@ -42,7 +46,7 @@ set(h, 'tickdir','out');
 
 
 
-ylim(h, [10^floor(log(min(S(S(:) > 0)))) 1.1]);
+ylim(h, [10^floor(log10(min(S(S(:) > 0) / m(1)))) 1.1]);
 
 xlabel(h, 'b [um^2/ms]');
 ylabel(h, 'Signal');
