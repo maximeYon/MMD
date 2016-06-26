@@ -12,6 +12,8 @@ if (nargin < 3), opt.present = 1; end
 opt = mdm_opt(opt);
 msf_log(['Starting ' mfilename], opt);
 
+if (all(ischar(s))), s = mdm_nii_to_s(s); end
+
 % Build filenames
 [~,name] = msf_fileparts(s.nii_fn);
 out_nii_fn = fullfile(o_path, [name '_pa' opt.nii_ext]);
@@ -63,7 +65,11 @@ for i = 1:numel(f)
         try
             xps.(f{i})(c == c_list,:) = mean(s.xps.(f{i})(id_ind == c, :), 1);
         catch
-            error('failed powder averaging field %s', f{i});
+            if (opt.pa_rethrow_error)
+                error('failed powder averaging field %s', f{i});
+            else
+                warning('failed powder averaging field %s', f{i});
+            end
         end
     end
 end
