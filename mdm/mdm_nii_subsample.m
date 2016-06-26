@@ -1,1 +1,1 @@
-function mdm_nii_subsample(in_fn, ind, out_fn)% function mdm_nii_subsample(in_fn, ind, out_fn)[I,h] = mdm_nii_read(in_fn);mdm_nii_write(I(:,:,:,ind), out_fn, h);
+function out_fn = mdm_nii_subsample(in_fn, ind, out_fn)% function mdm_nii_subsample(in_fn, ind, out_fn)[I,h] = mdm_nii_read(in_fn);mdm_nii_write(I(:,:,:,ind), out_fn, h);

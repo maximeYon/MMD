@@ -7,7 +7,7 @@ opt.mask = msf_ensure_field(opt.mask, 'thresh', 0.1);
 
 
 % define the mask from threshold of b0 image
-I0 = I(:,:,:,opt.mask.b0_ind);
+I0 = mean(I(:,:,:,opt.mask.b0_ind),4);
 M = double(I0)/double(max(I0(:))) > opt.mask.thresh;
 
 M = mio_mask_fill(M);

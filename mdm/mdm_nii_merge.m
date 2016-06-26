@@ -1,4 +1,4 @@
-function mdm_nii_merge(nii_fn_cell, out_nii_fn)
+function out_nii_fn = mdm_nii_merge(nii_fn_cell, out_nii_fn)
 % function mdm_nii_merge(nii_fn_cell, out_nii_fn)
 
 I = [];
