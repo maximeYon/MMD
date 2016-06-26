@@ -212,9 +212,6 @@ if (nargin >= 1)
             case EG.t_ROI_CLEAR
                 EG = mgui_roi_clear_roi(EG);
                                 
-            case EG.t_ROI_AUTO
-                EG = mgui_roi_auto(EG);
-                
             case {EG.t_ROI_WINDOW_MIN, EG.t_ROI_WINDOW_MAX}
                 EG = mgui_roi_window_change(EG);
                 
@@ -261,9 +258,6 @@ if (nargin >= 1)
             case EG.t_ROI_ANALYSIS_STOP
                 EG = mgui_roi_analysis_stop(EG);
                 
-            case EG.t_ROI_ANALYSIS_COPY
-                EG = mgui_roi_analysis_copy(EG);
-                
             case EG.t_ROI_ANALYSIS_PLOT
                 EG = mgui_roi_analysis_plot(EG, hSender);
                 
@@ -299,7 +293,7 @@ end
 % --------------------------------------------------------------
 function EG = mgui_roi_window_change(EG)
 
-EG.caxis = [...
+EG.roi.caxis = [...
     str2double(get(EG.tags.(EG.t_ROI_WINDOW_MIN), 'String'));
     str2double(get(EG.tags.(EG.t_ROI_WINDOW_MAX), 'String'))];
 
@@ -310,32 +304,13 @@ end
 % --------------------------------------------------------------
 function EG = mgui_roi_window_auto(EG)
 
-EG = msf_rmfield(EG, 'caxis');
+if (msf_isfield(EG, 'roi'))
+    EG.roi = msf_rmfield(EG.roi, 'caxis');
+end
+
 EG = mgui_roi_update_panel(EG, 0, 1);
 
 end
-
-% --------------------------------------------------------------
-function EG = mgui_roi_auto(EG)
-
-if (isfield(EG.roi,'I_roi'))
-    EG.roi.I_roi_undo = EG.roi.I_roi;
-    set(EG.tags.(EG.t_ROI_UNDO), 'enable', 'on');
-end
-
-if (ndims(EG.roi.I) == 3)
-    EG.roi.I_roi = mask_volume(EG.roi.I, -1, 0, h_wait);
-elseif ((ndims(EG.roi.I) == 4) && (size(EG.roi.I,1) == 3))
-    EG.roi.I_roi = mask_volume(squeeze(mean(EG.roi.I,1)), -1, 0, h_wait);
-elseif (ndims(EG.roi.I) == 4)
-    EG.roi.I_roi = mask_volume(EG.roi.I(:,:,:,EG.roi.c_volume), -1, 0, h_wait);
-end
-    
-EG.roi.is_updated = 1;
-EG = mgui_roi_update_panel(EG, 0, 1);
-
-end
-
 
 
 
@@ -346,9 +321,9 @@ function EG = mgui_roi_select_volume(EG, value)
 EG.roi.c_volume = EG.roi.c_volume + value;
 
 if (EG.roi.c_volume > size(EG.roi.I,4))
-    EG.roi.c_volume = size(EG.roi.I,4);
-elseif (EG.roi.c_volume < 1)
     EG.roi.c_volume = 1;
+elseif (EG.roi.c_volume < 1)
+    EG.roi.c_volume = size(EG.roi.I,4);
 end
 
 EG = mgui_roi_update_panel(EG, 0, 1);
@@ -401,18 +376,6 @@ set(h_fig, 'UserData', EG);
 end
 
 
-function EG = mgui_roi_analysis_copy(EG)
-
-if (~isfield(EG.roi,'S')), return; end
-
-str = '';
-for c = 1:numel(EG.roi.S)
-    str = [str num2str(EG.roi.S(c)) sprintf('\n')];
-end
-
-clipboard('copy', str);
-
-end
 
 
 
@@ -428,42 +391,6 @@ elseif (EG.roi.c_volume < 1)
 end
 EG = mgui_roi_update_panel(EG, 0, 1);
 
-
-end
-
-
-function EG = mgui_roi_template_slider(EG, do_plus, do_minus)
-
-if (nargin < 3), do_minus = 0; end
-if (nargin < 2), do_plus = 0; end
-
-delta = 0.05;
-
-% Obtain
-% h = EG.tags(EG.t_ROI_TEMPLATE_SLIDER);
-% val = get(h, 'Value');
-
-val= 1;
-
-% Possibly modify
-if (do_minus || do_plus)
-    
-    val_max = get(h, 'Max');
-    val_min = get(h, 'Min');
-    
-    step_size = delta * (val_max - val_min);
-    
-    if (do_minus)
-        val = max(val_min, val - step_size);
-    else
-        val = min(val_max, val + step_size);
-    end
-    set(h, 'Value', val);
-end
-
-% Implement
-EG.roi.template_slider_val = val;
-EG = mgui_roi_update_panel(EG, 0, 1);
 
 end
 
@@ -582,10 +509,7 @@ else
 end
 
 EG = mgui_roi_add_roi(EG, val, I_roi);
-% EG = mgui_roi_update_panel(EG, 0, 1); % performed in roi_add_roi
 set(h_fig, 'UserData', EG);
-
-
 
 end
 

@@ -28,6 +28,8 @@ if (isfield(EG, 'roi'))
     EG.roi = r;
 end
 
+EG = msf_rmfield(EG,'analysis');
+
 % Update content
 EG = mgui_update_panel(EG);
 

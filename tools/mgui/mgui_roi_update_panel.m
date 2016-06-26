@@ -57,8 +57,7 @@ if (do_reload)
     
     % Look for ROI files and load them
     EG = mgui_waitbar(EG, 0.4, 'Loading ROIs...');
-    EG.roi.is_updated = 0;
-    
+    EG.roi.is_updated = 1;
     
     if ...
             (EG.c_mode == 2) && ... % Browse mode
@@ -247,7 +246,6 @@ if (do_reload)
     
     % Set functions to default values
     EG = mgui_roi_set_function(EG, 1);
-    %     EG = mgui_roi_enable_right_panel(EG, 1, 0);
     
 end
 
@@ -268,6 +266,11 @@ if (do_redraw_image)
     
     set(EG.tags.(EG.t_ROI_WINDOW_MIN), 'String', num2str(this_caxis(1), 3));
     set(EG.tags.(EG.t_ROI_WINDOW_MAX), 'String', num2str(this_caxis(2), 3));
+
+    % Update volume number
+    set(EG.tags.(EG.t_ROI_ANALYSIS_CVOL), 'String', sprintf('%i/%i', EG.roi.c_volume, size(EG.roi.I,4)));
+
+    
     
     EG = mgui_waitbar(EG, 0.6, 'Drawing image');
     
@@ -356,8 +359,8 @@ if (do_redraw_image)
         set(h_image,...
             'Tag', t_list{c}, ...
             'ButtonDownFcn', EG.f_roi_gui_callback);
+        set(h, 'xtick', [], 'ytick', []);
         
-        axis(h,'off');
         
         caxis(h, this_caxis(1:2));
         set  (h, 'DataAspectRatio', [ar([2 1]) 1]);
@@ -424,8 +427,15 @@ if (do_redraw_image)
     colormap(gray);    
 
     if (EG.roi.is_updated)
-        EG = mgui_analysis_update_panel(EG);
+        EG.analysis.present = 1;
+        EG.analysis = msf_rmfield(EG.analysis, 'S');
     end
+    
+    EG = mgui_analysis_update_panel(EG);
+    
+    
+    % this should probably not go here, but...
+    EG.roi.is_updated = 0;
     
 end
 

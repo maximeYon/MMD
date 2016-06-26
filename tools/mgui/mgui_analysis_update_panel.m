@@ -72,7 +72,7 @@ if (do_reload)
             if (size(EG.roi.I,4) == 1)
                 f_plot = @(S, xps) plot_histogram(S, xps, h_top, h_bottom);
             else
-                f_plot = @(S, xps) plot_signal_versus_number(S, xps, h_top, h_bottom);
+                f_plot = @(S, xps) mgui_analysis_plot_overview(S, xps, h_top, h_bottom);
             end
         otherwise
             f_plot = @(S,xps) mgui_analysis_plot(str{value}, S, xps, h_top, h_bottom); 
@@ -91,10 +91,16 @@ if (do_update)
             msf_isfield(EG.roi, 'I') && ...
             msf_isfield(EG.roi, 'I_roi'))
         
-        S = zeros(sum(EG.roi.I_roi(:)), size(EG.roi.I,4));
-        for c = 1:size(EG.roi.I,4)
-            tmp = EG.roi.I(:,:,:,c);
-            S(:,c) = tmp(EG.roi.I_roi(:) > 0);
+        if (~isfield(EG,'analysis') || ~isfield(EG.analysis, 'S'))
+            S = zeros(sum(EG.roi.I_roi(:)), size(EG.roi.I,4));
+            for c = 1:size(EG.roi.I,4)
+                tmp = EG.roi.I(:,:,:,c);
+                S(:,c) = tmp(EG.roi.I_roi(:) > 0);
+            end
+            
+            EG.analysis.S = S;
+        else
+            S = EG.analysis.S;
         end
         
     else
@@ -105,8 +111,12 @@ if (do_update)
     cla(h_top,'reset');
     cla(h_bottom,'reset');
     
+    
+    xps = EG.roi.xps;
+    xps.c_volume = EG.roi.c_volume; % bit nasty, but...
+    
     % run analysis and/or plot script
-    f_plot(S, EG.roi.xps);
+    f_plot(S, xps);
         
 end
 
@@ -117,17 +127,5 @@ end
         
     end
 
-    function plot_signal_versus_number(S, xps, h_top, h_bottom)
-        
-        plot(h_top,S, '.-');
-        axis(h_top, 'on');
-        
-        
-        
-        text(0,0,num2str(numel(S)), 'parent', h_bottom);
-        
-        
-        
-    end
 
 end
