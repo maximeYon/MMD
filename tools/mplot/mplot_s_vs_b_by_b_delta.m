@@ -1,10 +1,15 @@
-function mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, fun_opt, h, h2)
+function mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, fun_opt, h, h2, ind)
 % function mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, fun_opt, h, h2)
 
-if (nargin < 4), h2 = []; end
+if (nargin < 7), h2 = []; end
+if (nargin < 8), ind = []; end
 
 % fit function
-m = fun_data2fit(S, xps, fun_opt());
+if (nargin < 8)   
+    m = fun_data2fit(S, xps, fun_opt());
+else
+    m = fun_data2fit(S(ind), mdm_xps_subsample(xps, ind), fun_opt());
+end
 
 
 % find unique b_delta
