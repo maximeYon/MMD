@@ -53,7 +53,7 @@ p.FinalBSplineInterpolationOrder        = 3;
 %  * angles, shear factors, scales, and translation, instead of by the affine matrix.
 %  * It is meant for registration of MR diffusion weighted images, but could be
 %  * used for other images as well of course.
-p.Scales = power(10, [6 6 2  4 4 6  5 5 6  0 0 6 ]);
+p.Scales = power(10, [6 6 2.0  4 4 6  5 5 6  0.5 0.5 6 ]);
 
   
 

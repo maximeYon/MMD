@@ -84,7 +84,7 @@ f_CSF(f_CSF > 0.99) = 0.99;
 
 % Adjusted diffusion tensor, DT2, and CSF-tensor: DT_CSF
 DT_2 = DT;
-DT_2(:, 1:3) = (DT_2(:, 1:3) - D_CSF * repmat(f_CSF, [1 3])) ./ (1 - repmat(f_CSF, [1 3]));
+DT_2(:, 1:3) = (DT_2(:, 1:3) - D_CSF * repmat(f_CSF, [1 3])) ./ (1 + eps - repmat(f_CSF, [1 3]));
 MD_2 = mean(DT_2(:,1:3),2);
 DT_2(MD_2 > D_tissue, 1:3) = D_tissue;
 DT_2(MD_2 > D_tissue, 4:6) = 0;
@@ -107,7 +107,7 @@ D_max = 1.2;
 alpha = 0.8; % Bennet 2003, stretched exponential
 
 b_target = repmat(xps_target.b', [size(DT_3,1) 1]);
-D = DT_3(:,1:6) * xps_target.bt' ./ b_target;
+D = DT_3(:,1:6) * (xps_target.bt + eps)' ./ (b_target + eps);
 
 D(D < D_min) = D_min;
 D(D > D_max) = D_max;

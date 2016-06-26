@@ -4,8 +4,9 @@ function s = mdm_mec_eb(s_target, s_source, p_fn, o_path, opt)
 % Perform motion and eddy currect correction by registering to extrapolated
 % references
 %
-% s_target  - input structure for target data
-% s_source  - input structure for source data (should be low b-values)
+% s_target  - input structure for target data OR a nifti filename
+% s_source  - input structure for source data (should be low b-values) 
+%                               OR a nifti filename
 % p_fn      - parameter filename, to elastix registration scheme
 % o_path    - output path for the new files
 % opt       - options (optional)
@@ -19,6 +20,10 @@ if (nargin < 4), o_path = fileparts(s_target.nii_fn); end
 if (nargin < 5), opt.present = 1; end
 opt = mdm_opt(opt);
 msf_log(['Starting ' mfilename], opt);
+
+% convert nii to s
+if (all(ischar(s_target))), s_target = mdm_nii_to_s(s_target); end
+if (all(ischar(s_source))), s_source = mdm_nii_to_s(s_source); end
 
 [~,name]    = msf_fileparts(s_target.nii_fn);
 ref_fn      = fullfile(o_path, [name '_ref' opt.nii_ext]);
@@ -37,7 +42,10 @@ if (~exist(ref_fn, 'file') || opt.do_overwrite)
         
     % Rescale for easier comparisons
     I_true = mdm_nii_read(s_target.nii_fn);
-    I_ref  = mio_rescale(I_ref, I_true, M);
+    
+    if (numel(I_true) == numel(I_ref))
+        I_ref  = mio_rescale(I_ref, I_true, M);
+    end
         
     % Save output
     msf_delete(ref_fn);

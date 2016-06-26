@@ -38,7 +38,7 @@ p.NumberOfResolutions                   = 1;
 p.MaximumNumberOfIterations             = n_iter; 
 p.NumberOfHistogramBins                 = [32];
 p.ImagePyramicSchedule                  = [1 1 1];
-p.ImageSampler                          = 'Random';
+p.ImageSampler                          = 'RandomCoordinate';
 p.NewSamplesEveryIteration              = 'true';
 p.NumberOfSpatialSamples                = 8192;
 

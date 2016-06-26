@@ -3,7 +3,7 @@ function s = mdm_mec_b0(s, p_fn, o_path, opt)
 % 
 % Perform motion and eddy currect correction by registering to b0
 %
-% s      - input structure
+% s      - input structure OR a nii_fn with xps computed from it
 % p_fn   - parameter filename, to elastix registration scheme
 % o_path - output path for the new files
 % opt    - options (optional)
@@ -15,6 +15,8 @@ if (nargin < 3), o_path = fileparts(s.nii_fn); end
 if (nargin < 4), opt.present = 1; end
 opt = mio_opt(opt);
 msf_log(['Starting ' mfilename], opt);
+
+if (all(ischar(s))), s = mdm_nii_to_s(s); end
 
 % build file names
 [~,name] = msf_fileparts(s.nii_fn);

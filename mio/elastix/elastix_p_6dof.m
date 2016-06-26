@@ -39,9 +39,9 @@ p.CompressResultImage                   = 'false';
 % Resolution and sampling
 p.NumberOfResolutions                   = 2;
 p.MaximumNumberOfIterations             = n_iter; 
-p.NumberOfHistogramBins                 = [64 64];
+p.NumberOfHistogramBins                 = [32 32];
 p.ImagePyramicSchedule                  = [2 2 2 2 1 1 1];
-p.ImageSampler                          = 'Random';
+p.ImageSampler                          = 'RandomCoordnate';
 p.NewSamplesEveryIteration              = 'true';
 p.NumberOfSpatialSamples                = 8192;
 
