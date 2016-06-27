@@ -145,7 +145,7 @@ for c = 1:3
         'Tag', tags.ZOOM_AXES{c});
     
     axes(handle_zoom(c));
-    imagesc(phantom);
+    imagesc(zeros(2,2,3));
     axis off;
     
     left = left + w_zoom_local + mw;
