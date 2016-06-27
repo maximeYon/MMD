@@ -22,7 +22,6 @@ unit_to_SI = [max(signal) 1e-9 (1e-9)^2*[1 1]];
 
         % signal
         s = gamma_1d_fit2data(m, xps);
-        %s = s(ind);
         s = s(ind).*weight(ind);
                 
     end
@@ -41,9 +40,9 @@ unit_to_SI = [max(signal) 1e-9 (1e-9)^2*[1 1]];
     end
 
 % Guesses and bounds
-m_guess   = [max(signal)   1e-9  (1e-9)^2*[.1 .5]];
 m_lb      = [0             1e-11 0 0];
 m_ub      = [2*max(signal) 3e-9  (3e-9)^2*[1 1]];
+m_guess   = m_lb + (m_ub - m_lb) .* rand(size(m_lb));
                 
 t_guess   = m_guess./unit_to_SI;
 t_lb      = m_lb./unit_to_SI;
