@@ -25,6 +25,7 @@ msf_delete({res_fn, tp_fn});
 
 if (r ~= 0) || (~exist(res_fn, 'file'))
     disp(msg);
-    error(['Could not run ElastiX (' cmd_full ')']);
+    msg = 'If elastix is not installed, check readme.txt in the elastix folder';
+    error(sprintf('Could not run ElastiX (%s)\n\n%s', cmd_full, msg));
 end
 
