@@ -1,8 +1,7 @@
 function [res_fn, tp_fn] = elastix_run_elastix(i_fn, ref_fn, p_fn, o_path)
 % function [res_fn, tp_fn] = elastix_run_elastix(i_fn, ref_fn, p_fn, o_path)
 %
-% Runs elastix. Only for Mac/*nix at the moment. For help, see readme.txt
-% in the elastix folder.
+% Runs elastix. For help, see readme.txt in the elastix folder.
 
 cmd = 'elastix';
 cmd = [cmd ' -f "'   ref_fn  '"']; %#ok<AGROW>
@@ -17,7 +16,7 @@ tp_fn  = fullfile(o_path, 'TransformParameters.0.txt');
 if (ismac) || (isunix)
     cmd_full = ['/bin/bash --login -c '' ' cmd ' '' '];
 else
-    error('elastix for windows not implemented');
+    cmd_full = cmd;
 end
 
 msf_delete({res_fn, tp_fn});
@@ -26,6 +25,11 @@ msf_delete({res_fn, tp_fn});
 if (r ~= 0) || (~exist(res_fn, 'file'))
     disp(msg);
     msg = 'If elastix is not installed, check readme.txt in the elastix folder';
-    error(sprintf('Could not run ElastiX (%s)\n\n%s', cmd_full, msg));
+    error('%s\n%s\n\n%s\n%s\n%s\n', ...
+        'Could not run ElastiX with command:', ...
+        cmd_full, ...
+        'If elastix is not installed, you will need to install it.', ...
+        'Instructions for how to do this is found in the following file', ...
+        fullfile(fileparts(mfilename('fullpath')), 'readme.txt'))
 end
 
