@@ -4,7 +4,7 @@ function out_nii_fn = mdm_nii_merge(nii_fn_cell, out_nii_fn)
 I = [];
 for c = 1:numel(nii_fn_cell)
     
-    [I_tmp,h] = mdm_nii_read(nii_fn_cell{c});
+    [I_tmp,h] = mdm_nii_read_and_rescale(nii_fn_cell{c});
     
     if (c == 1)
         I = I_tmp;
@@ -21,7 +21,6 @@ for c = 1:numel(nii_fn_cell)
         
         I = cat(4, I, I_tmp);
                 
-    
     end
 end
 
