@@ -55,6 +55,7 @@ for c = 1:numel(packages)
         tmp = fread(fid2,inf,'char');
         warning off;
         tmp = strrep(tmp,char(10),'<br>');
+        tmp = strrep(tmp, '\', '\\');
         warning on;
         fprintf(fid, char(tmp(:)'));
         fclose(fid2);
