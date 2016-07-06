@@ -45,8 +45,9 @@ n = numel(c_list);
 A = zeros(size(I,1), size(I,2), size(I,3), n);
 
 for c = c_list'
-    A(:,:,:,c == c_list) = nanmean(I(:,:,:,id_ind == c),4);
+    A(:,:,:,c == c_list) = msf_nanmean(I(:,:,:,id_ind == c),4);
 end
+
 
 if (opt.do_pa_abs), A = abs(A); end
 
