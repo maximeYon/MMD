@@ -7,7 +7,7 @@ following fields
 s.nii_fn  - full path to a nifti file
 s.xps     - the eXperimental Parameter Structure
 s.mask_fn - (optional) path to a nifti file with a 3D mask
-               that determined which parts of the data that contains
+               that determines which parts of the data that contains
                actual data and not just background 
 
 EXPERIMENTAL PARAMETER STRUCTURE (xps)
@@ -15,9 +15,12 @@ EXPERIMENTAL PARAMETER STRUCTURE (xps)
 The xps has the following fields. All are in SI units. Not all fields must
 be present. The model code checks that the necessary fields are present.
 
-All parameters in the xps relating to different acquisitions are stored as
-variables of size n x m, where n is the number of image volumes and m is 
-the number of parameters. 
+All parameters in the xps should be are stored as variables of size n x m, 
+where n is the number of image volumes and m is the number of parameters. 
+For example, a 30 direction DTI set with 6 b0 images would render an xps
+with many fields, for example, a 'bt' field of size 36 x 6, where 36 
+is the total number of images and 6 are the number of parameters required 
+to describe the b-tensor.
 
 A) General parameters
 
@@ -100,8 +103,9 @@ C) Diffusion-related parameters in a multiple diffusion encoding setting
 
 i) The following parameters are valid for SDE, DDE et c
 
-- mde_delta1, mde_delta2:            Diffusion encoding time 
-                                     For SDE, we have only mde_delta1
+- mde_delta1, mde_delta2:            Duration of diffusion encoding 
+                                     gradients. 
+                                     Note: For SDE, we have only mde_delta1
 
 - mde_capital_delta1, delta2, et c:  Time between leading edged of encoding
                                      gradients. For SDE, only 

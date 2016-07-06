@@ -16,7 +16,7 @@ Acquisition
 Processing
 1) Conventional diffusion tensors;
     fractional anisotropy;
-    Westin’s shape indices.
+    Westin's shape indices.
 
  2) Isotropic and anisotropic variance of the diffusion tensor distribution;
     orientational order parameters;
@@ -71,7 +71,7 @@ to
 ../mdm_framework/examples/bruker_examples/Avance_III_HD/DTrare2d_setup or
 ../mdm_framework/examples/bruker_examples/Avance_II/DT_axderare2d_test.
 
-5) zg
+5) zg (zero go: perform an acquisition)
 
 6) Copy step1_recon_data.m and step2_run_analysis.m to
 /opt/data/<user>/nmr/<dataset>/<expno>.

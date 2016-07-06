@@ -9,8 +9,12 @@ Carl-Fredrik Westin
 
 This package contains MATLAB files to help researchers analyze multi-
 dimensional diffusion MRI data, for example, data acquired with
-e.g. b-tensors of varying shape. If you find this code useful, please
+b-tensors of varying shape. If you find this code useful, please
 provide feedback to markus.nilsson@med.lu.se. We appreciate your feedback.
+
+The following MATLAB toolboxes are useful to get the code running properly: 
+- Optimization toolbox
+- Image Processing toolbox
 
 We envision the following usage scenario. The functions herein support 
 step 3 and 4.
@@ -35,8 +39,12 @@ step 3 and 4.
             as xps.mde_tm12 = [0.1 0.1 0.25];
 
 
-3. Convert the data to the format supported in this framework. We supply
-   functions to assist in this process, found under the 'multidimensional
+3. Convert the data to the format supported in this framework. Image data
+   in DICOM format is preferabbly converted by the dcm2nii utility
+   https://www.nitrc.org/projects/dcm2nii/ 
+
+   To convert metadata such as b-values into our format, we supply
+   functions to assist in this process under the 'multidimensional
    data management' (mdm) package. 
 
    Example for a DTI-scan where gradient directions and b-values are stored
@@ -45,8 +53,9 @@ step 3 and 4.
         s.nii_fn = 'my_dti_scan.nii';
         s.xps    = mdm_xps_from_gdir('my_dti_scan_gdir.txt');
 
-   The s-structure is now ready to enter a pipeline. The xps structure 
-   contains the experiment parameters.
+   The s-structure is now ready to enter a pipeline. The nii_fn points to 
+   the 4D image data file, and the xps structure contains the experiment 
+   parameters.
 
 4. Execute a pipeline function. You find the pipelines under e.g. 
    models/dti_nls/dti_nls_pipe_example.m. The naming convention here is
@@ -60,9 +69,10 @@ step 3 and 4.
    *_4d_data2fit. The pipeline may include both masking and motion 
    correction. Fitting will be performed in every voxel where the mask
    is non-zero. A manually defined mask can be supplied by setting 
-   s.mask_fn. Alternatively, opt.i_range, opt.j_range, and opt.k_range can 
+   s.mask_fn. In addition, opt.i_range, opt.j_range, and opt.k_range can 
    be set to limit the loop to certain ranges in the first, second and third
-   dimension of the image volume.
+   dimension of the image volume. In that case, the intersect of the mask 
+   and the x_range parameter will be used as the final mask.
 
    From the model-fit structure, several parameter volumes can be generated
    for further analysis. This is done using functions named e.g.
