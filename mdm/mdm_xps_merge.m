@@ -18,6 +18,9 @@ end
 
 
 for i = 1:numel(xps_cell)
+    if (opt.xps_merge_clear_s_ind)
+        xps_cell{i} = msf_rmfield(xps_cell{i}, 's_ind'); 
+    end
     if (isfield(xps_cell{i}, 's_ind'))
         error('merging xps structures with existing s_ind can be ambigious');
     end
