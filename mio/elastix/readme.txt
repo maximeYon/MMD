@@ -22,7 +22,8 @@ MAC
    export PATH=/usr/local/elastix/bin:/usr/local/elastix/parameters:$PATH
    export DYLD_LIBRARY_PATH=/usr/local/elastix/lib:$DYLD_LIBRARY_PATH
 
-   The editing can be done from Matlab by typing 'edit ~./bash_profile'
+   The editing can be done from within Matlab by 
+   typing 'edit ~./bash_profile'
   
 
 WINDOWS
