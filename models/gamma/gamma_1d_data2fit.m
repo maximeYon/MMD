@@ -1,5 +1,7 @@
 function m = gamma_1d_data2fit(signal, xps, opt, ind)
 % function m = gamma_1d_data2fit(signal, xps, opt, ind)
+%
+% m = [s0 d_iso mu2_iso mu2_aniso]
 
 if (nargin < 4), ind = ones(size(signal)) > 0; end
 
