@@ -27,6 +27,9 @@ opt = msf_ensure_field(opt, 'xps_merge_rethrow_error', 1);
 opt = msf_ensure_field(opt, 'pa_rethrow_error', 1);
 
 
+opt = msf_ensure_field(opt, 'filter_sigma', 0);
+
+
 opt = msf_ensure_field(opt, 'do_mask', 1);
 opt = msf_ensure_field(opt, 'do_data2fit', 1);
 opt = msf_ensure_field(opt, 'do_fit2param', 1);

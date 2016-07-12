@@ -1,4 +1,4 @@
-function mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, fun_opt, h, h2, ind)
+function m = mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, fun_opt, h, h2, ind)
 % function mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, fun_opt, h, h2)
 
 if (nargin < 7), h2 = []; end

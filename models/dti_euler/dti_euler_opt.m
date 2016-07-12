@@ -27,4 +27,4 @@ opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccolnorm', {'lambda33','mas
 % to produce standard fa-color map, this would be the way:
 % opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_cmaps',{'fa'});
 % opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccol',{'lambda33vec'});
-% opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccolnorm',{''mask'});
+% opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccolnorm',{'mask'});
