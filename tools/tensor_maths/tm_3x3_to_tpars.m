@@ -3,20 +3,24 @@ function t = tm_3x3_to_tpars(t3x3)
 %
 % calculate derived tensor parameters
 
-if (nargin < 2), t = []; end
+if (any(isnan(t3x3(:))) || any(isinf(t3x3(:))))
+    t3x3 = zeros(3,3);
+end
 
 t.t1x6 = tm_3x3_to_1x6(t3x3);
+
 
 [V,D] = eig(t3x3);
 lambdas = diag(D);
 
 t.trace = sum(lambdas);
-t.iso = t.trace/3;
+t.iso   = t.trace/3;
 
 [~,ind] = sort(lambdas,'descend');
-t.lambda33 = lambdas(ind(1));                        
-t.lambda22 = lambdas(ind(2));                       
-t.lambda11 = lambdas(ind(3));  
+
+t.lambda33    = lambdas(ind(1));                        
+t.lambda22    = lambdas(ind(2));                       
+t.lambda11    = lambdas(ind(3));  
 t.lambda33vec = V(:,ind(1))';
 t.lambda22vec = V(:,ind(2))';
 t.lambda11vec = V(:,ind(3))';

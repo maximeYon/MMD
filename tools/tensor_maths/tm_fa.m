@@ -8,9 +8,9 @@ function fa = tm_fa(a,b)
 
 if (nargin == 1)
     
-    d2 = a;
-    md = tm_md(d2);
-    vl = tm_v_lambda(d2);
+    d_1x6 = a;
+    md = tm_md(d_1x6);
+    vl = tm_v_lambda(d_1x6);
     
 elseif (nargin == 2)
     
