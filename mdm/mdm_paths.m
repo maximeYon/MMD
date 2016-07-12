@@ -1,4 +1,4 @@
-function paths = mdm_paths(tmp)
+function paths = mdm_paths(tmp, suffix)
 % function paths = mdm_paths(tmp)
 %
 % paths will get the required fields:
@@ -9,10 +9,11 @@ function paths = mdm_paths(tmp)
 %
 % if tmp is a struct, we verify that these fields are present
 
+if (nargin < 2), suffix = []; end
 
 if (ischar(tmp))
-    paths.mfs_fn = fullfile(tmp, 'mfs.mat');
-    paths.dps_fn = fullfile(tmp, 'dps.mat');
+    paths.mfs_fn = fullfile(tmp, ['mfs' suffix '.mat']);
+    paths.dps_fn = fullfile(tmp, ['dps' suffix '.mat']);
     paths.nii_path = fullfile(tmp);
 elseif (isstruct(tmp))
     paths = tmp;
