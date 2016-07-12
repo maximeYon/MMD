@@ -4,6 +4,8 @@ function fn = dti_lls_pipe(s, paths, opt)
 % s     - input structure
 % paths - either a pathname or a path structure (see mdm_paths)
 % opt   - (optional) options that drive the pipeline
+%            opt.mask.thresh = 0.1, you may want to adjust it 
+%            
 %
 % fn    - a cell arary with filenames to generated nii files
 
