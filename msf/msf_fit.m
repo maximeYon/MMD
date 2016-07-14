@@ -15,8 +15,10 @@ ss = inf;
 for c = 1:n
     
     g   = l + rand(size(l)) .* (u - l); % guess
-    
+
+    warning off;
     t_tmp = lsqcurvefit(f, g, [], s, l, u, opt); % tmp fit
+    warning on;
     
     ss_tmp = sum( (s - f(t_tmp)).^2 );
     
