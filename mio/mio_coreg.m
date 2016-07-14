@@ -30,7 +30,13 @@ elastix_p_write(p, p_fn);
 % Run ElastiX, Read image volume and transform parameters
 [res_fn, tp_fn] = elastix_run_elastix(mov_fn, ref_fn, p_fn, opt.mio.tmp_path);
 [I_res,h_res] = mdm_nii_read(res_fn);
-tp = elastix_tp_read(tp_fn);
+
+try
+    tp = elastix_tp_read(tp_fn);
+catch me
+    disp(me.message);
+    tp = zeros(3,4) + NaN;
+end
 elastix_t = elastix_p_read(tp_fn);
 
 if (opt.mio.coreg.adjust_intensity)
