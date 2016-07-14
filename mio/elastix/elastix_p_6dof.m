@@ -4,7 +4,7 @@ function p = elastix_p_6dof(n_iter)
 % Use an affine transform, but with all parameters except 
 % translation x, y and rotation around z set to zero
 
-if (nargin < 2), n_iter = 300; end
+if (nargin < 1), n_iter = 300; end
 
 % ImageTypes
 p.FixedInternalImagePixelType           = 'float';
@@ -40,8 +40,9 @@ p.CompressResultImage                   = 'false';
 p.NumberOfResolutions                   = 2;
 p.MaximumNumberOfIterations             = n_iter; 
 p.NumberOfHistogramBins                 = [32 32];
-p.ImagePyramicSchedule                  = [2 2 2 2 1 1 1];
-p.ImageSampler                          = 'RandomCoordnate';
+p.ImagePyramicSchedule                  = [2 2 2 1 1 1];
+p.ImageSampler                          = 'RandomCoordinate';
+
 p.NewSamplesEveryIteration              = 'true';
 p.NumberOfSpatialSamples                = 8192;
 

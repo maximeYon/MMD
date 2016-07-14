@@ -22,6 +22,13 @@ end
 msf_delete(res_fn);
 [r, msg] = system(cmd_full);
 
+msg_pos = strfind(msg, '------- Exception -');
+if (~isempty(msg_pos))
+    msg = msg(msg_pos:end);
+    disp(msg);
+    error('stop');
+end
+
 if (r ~= 0) || (~exist(res_fn, 'file'))
     disp(msg);
     msg = 'If elastix is not installed, check readme.txt in the elastix folder';

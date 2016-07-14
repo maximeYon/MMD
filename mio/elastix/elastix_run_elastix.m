@@ -12,6 +12,9 @@ cmd = [cmd ' -p "'   p_fn  '"']; %#ok<AGROW>
 res_fn = fullfile(o_path, 'result.0.nii');
 tp_fn  = fullfile(o_path, 'TransformParameters.0.txt');
 
+if (~exist(p_fn, 'file'))
+    error('did not find parameter file at %s', p_fn);
+end
 
 if (ismac) || (isunix)
     cmd_full = ['/bin/bash --login -c '' ' cmd ' '' '];
@@ -21,6 +24,16 @@ end
 
 msf_delete({res_fn, tp_fn});
 [r, msg] = system(cmd_full);
+
+
+msg_pos = strfind(msg, 'itk::ExceptionObject');
+if (~isempty(msg_pos))
+    msg = msg(msg_pos:end);
+    msg = msg(min(strfind(msg, sprintf('\n'))):end);
+    disp(msg);
+    error('stop');
+end
+
 
 if (r ~= 0) || (~exist(res_fn, 'file'))
     disp(msg);
