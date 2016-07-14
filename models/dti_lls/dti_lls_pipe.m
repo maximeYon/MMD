@@ -15,7 +15,7 @@ if (nargin < 3), opt.present = 1; end
 % Init structures
 opt   = mdm_opt(opt);
 opt   = dti_lls_opt(opt);
-paths = mdm_paths(paths);     
+paths = mdm_paths(paths, 'dti_lls');     
 
 msf_log(['Starting ' mfilename], opt);    
 
