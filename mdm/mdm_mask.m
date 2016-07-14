@@ -21,7 +21,10 @@ if (~isfield(s,'mask_fn'))
     s.mask_fn = fullfile(path, [name '_' opt.mdm.mask_suffix opt.nii_ext]);
 end
 
-if (exist(s.mask_fn, 'file') && (~opt.do_overwrite))
+% Extra granulatiry over overwrite control needed here to enable use of
+% masks from outside
+do_overwrite = opt.do_overwrite && opt.mask.do_overwrite;
+if (exist(s.mask_fn, 'file') && (~do_overwrite))
     disp(['Skipping, output file already exists: ' s.mask_fn]); return;
 end
 
