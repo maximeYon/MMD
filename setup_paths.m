@@ -10,9 +10,9 @@ if (nargin < 1), do_restore_path = 1; end
 
 clc;
 disp('Welcome!');
-disp('Restoring default path');
 
 if (do_restore_path)
+    disp('Restoring default path');
     restoredefaultpath;
 end
 
