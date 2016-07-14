@@ -4,12 +4,17 @@ function m = mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, fun_opt
 if (nargin < 7), h2 = []; end
 if (nargin < 8), ind = []; end
 
+% adapt xps
+xps = msf_ensure_field(xps, 'b_eta', zeros(size(xps.b_delta)));
+
 % fit function
+
 if (nargin < 8)   
-    m = fun_data2fit(S, xps, fun_opt());
-else
-    m = fun_data2fit(S(ind), mdm_xps_subsample(xps, ind), fun_opt());
+    ind = ones(size(S)) == 1;
 end
+
+m = fun_data2fit(S(ind), mdm_xps_subsample(xps, ind), fun_opt());
+
 
 
 % find unique b_delta
