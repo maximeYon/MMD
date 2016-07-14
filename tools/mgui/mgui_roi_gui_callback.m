@@ -53,6 +53,16 @@ if (nargin >= 1)
                     my_delete(mgui_roi_filename(EG, EG.select));
                     EG = mgui_roi_update_panel(EG, 1, 1);
                     
+                case {'m', 'M'}
+                    
+                    try
+                        EG.roi.is_updated = 1;
+                        EG.roi.I_roi = EG.roi.I == 1;
+                        EG = mgui_roi_update_panel(EG, 0, 1);
+                    catch me
+                        disp(me.message);
+                    end
+                    
                 case {'s', 'S'}
                     
                     [tmp_name, tmp_path] = uiputfile('.nii.gz', 'Save ROI');
@@ -79,16 +89,21 @@ if (nargin >= 1)
                             [I_roi,h] = nifti_read(roi_filename);
                             I_roi = mgui_misc_flip_volume(I_roi, nifti_oricode(h), EG.conf.ori);
                             
-                            
-                            k = inputdlg({'k'}, 'Label value', 1, {'1'});
-                            
-                            k = str2num(k{1});
-                            
-                            if (numel(k) == 1)
-                                l = 0.01;
+                            if (max(I_roi(:) > 1))
+                                
+                                k = inputdlg({'k'}, 'Label value', 1, {'1'});
+                                
+                                k = str2num(k{1});
+                                
+                                if (numel(k) == 1)
+                                    l = 0.01;
+                                else
+                                    l = (k(2) - k(1))/2 + 0.01;
+                                    k = (k(2) + k(1))/2;
+                                end
                             else
-                                l = (k(2) - k(1))/2 + 0.01;
-                                k = (k(2) + k(1))/2;
+                                k = 1;
+                                l = 0.1
                             end
                             
                             I_roi = (I_roi > (k - l)) & (I_roi < (k + l));
