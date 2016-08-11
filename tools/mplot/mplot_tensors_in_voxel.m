@@ -32,7 +32,7 @@ end
 
 if (do_show_tensors)
     [x,y,z] = sphere(29);
-    
+    s.x = x; s.y = y; s.z = z;
     
     for i = 1:n_tensor
         for j = 1:n_tensor
@@ -40,25 +40,8 @@ if (do_show_tensors)
               
                 % select a tensor on random
                 ind = randi(size(dt,1));
+                mplot_tensor(dt(ind,:), [i j k], sc, s, 0.1);
                 
-                dt_3x3 = tm_1x6_to_3x3(dt(ind,:));
-                
-                [M, eig_vals] = eigs(dt_3x3);
-                eig_vals = diag(eig_vals) * 1e9;
-                
-                f = @(x,y,z) sc * [x(:) y(:) z(:)] * M;
-                h = @(x) x(:);
-                g = @(x,y,z) cellfun(@(p) reshape(p,size(x,1),size(x,2)), ...
-                    mat2cell(f(x,y,z),numel(x), [1 1 1]), 'uniformoutput', 0);
-                
-                p = g(x * eig_vals(1),y * eig_vals(2),z * eig_vals(3));
-                [x3,y3,z3] = deal(p{:});
-                
-                c = mean(eig_vals);
-                
-                r = randn(1,3) * 0.1;
-                
-                surf(x3 + i + r(1),y3 + j + r(2), z3 + k + r(3),zeros(size(x3)) + c); hold on;
             end
         end
     end
@@ -66,7 +49,7 @@ end
 
 caxis([-1 3]);
 colormap(fliplr(jet(100)));
-axis off tight vis3d;
+axis off tight equal vis3d;
 camlight left;
 shading interp;
 material([0.7 0.4 0.8 1] );
