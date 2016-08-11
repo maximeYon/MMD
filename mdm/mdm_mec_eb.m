@@ -38,7 +38,8 @@ if (~exist(ref_fn, 'file') || opt.do_overwrite)
         
     % Create reference, improve fitting by some initial smoothing
     I     = mio_smooth_4d(single(I), 0.6);
-    I_ref = mio_ref_extrapolate(I, s_source.xps, s_target.xps, M);
+    ind   = s_source.xps.b < 1.2e9; % limit to low b-values
+    I_ref = mio_ref_extrapolate(I, s_source.xps, s_target.xps, M, ind);
         
     % Rescale for easier comparisons
     I_true = mdm_nii_read(s_target.nii_fn);
