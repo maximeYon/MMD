@@ -50,7 +50,7 @@ if (~exist(ref_fn, 'file') || opt.do_overwrite)
         
     % Save output
     msf_delete(ref_fn);
-    mdm_nii_write(I_ref, ref_fn, h);        
+    mdm_nii_write(single(I_ref), ref_fn, h);        
 end
 
 % Run coregistration
