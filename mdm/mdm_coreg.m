@@ -29,8 +29,6 @@ end
 [I_mov, h_mov] = mdm_nii_read(i_fn);
 [I_ref, h_ref] = mdm_nii_read(r_fn);
 
-assert(all(h_mov.dim(2:4) == h_ref.dim(2:4)), 'files are not equal in size');
-
 if (size(I_ref,4) ~= size(I_mov,4)) && (size(I_ref,4) ~= 1)
     error('Unexpected size of reference in fourth dimension');
 end

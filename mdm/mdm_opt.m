@@ -53,5 +53,5 @@ opt.mask.present = 1;
 % extra layer of granulatiry, both opt.do_overwrite and
 % opt.mask.do_overwrite must be true in order for mask overwrite to take
 % place
-opt.mask = msf_ensure_field(opt.mask, 'do_overwrite', 1);
+opt.mask = msf_ensure_field(opt.mask, 'do_overwrite', 0);
 
