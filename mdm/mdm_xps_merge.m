@@ -9,10 +9,14 @@ opt = mdm_opt(opt);
 if (~iscell(xps_cell)), error('first argument must be a cell array'); end
 if (numel(xps_cell) == 0), error('first argument empty'); end
 
-if (~isstruct(xps_cell{1}) && (exist(xps_cell{1}, 'file'))) 
-    % assume all are files, load them
-    for c = 1:numel(xps_cell)
-        xps_cell{c} = mdm_xps_load(xps_cell{c});
+if (~isstruct(xps_cell{1}))
+    if (exist(xps_cell{1}, 'file'))
+        % assume all are files, load them
+        for c = 1:numel(xps_cell)
+            xps_cell{c} = mdm_xps_load(xps_cell{c});
+        end
+    else
+        error('unknown input (file does not exist?)');        
     end
 end
 

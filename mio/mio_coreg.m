@@ -1,5 +1,5 @@
 function [I_res,tp,h_res,elastix_t] = mio_coreg(I_mov, I_ref, p, opt, h_mov, h_ref)
-% function [I_res,tp,h_res,elastix_t] = mio_coreg(I_mov, I_ref, p, opt, h_mov, h_ref)
+% function [I_res,tp,h_res,elastix_t] = mio_coreg(I_mov, I_ref, p, opt, h_mov, h_ref, opt)
 
 if (nargin < 4), opt.present = 1; end
 if (nargin < 5), h_mov = mdm_nii_h_empty; end
@@ -34,7 +34,7 @@ elastix_p_write(p, p_fn);
 try
     tp = elastix_tp_read(tp_fn);
 catch me
-    disp(me.message);
+    msf_fprintf(opt, 'Unable to read elastix transform params (%s)', me.message);
     tp = zeros(3,4) + NaN;
 end
 elastix_t = elastix_p_read(tp_fn);

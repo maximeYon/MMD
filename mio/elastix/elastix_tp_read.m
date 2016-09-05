@@ -9,7 +9,7 @@ str = fread(fid, inf, 'uint8=>char')';
 fclose(fid);
 
 if isempty(strfind(lower(str), lower('(Transform "AffineDTITransform")')))
-    error('for now, this function only works for AffineDTITransform');
+    error('elastix_tp_read: for now, this function only works for AffineDTITransform');
 end
 
 % Find the TransformParameters line

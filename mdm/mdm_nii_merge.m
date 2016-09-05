@@ -1,5 +1,16 @@
-function out_nii_fn = mdm_nii_merge(nii_fn_cell, out_nii_fn)
+function out_nii_fn = mdm_nii_merge(nii_fn_cell, out_nii_fn, opt)
 % function mdm_nii_merge(nii_fn_cell, out_nii_fn)
+
+if (nargin < 3), opt.present = 1; end
+
+opt = mdm_opt(opt);
+
+
+
+if (exist(out_nii_fn, 'file') && ~opt.do_overwrite)
+    msf_fprintf(opt, 'File found, skipping (%s)\n', out_nii_fn); 
+    return;
+end
 
 I = [];
 for c = 1:numel(nii_fn_cell)

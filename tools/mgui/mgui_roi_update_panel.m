@@ -429,9 +429,9 @@ if (do_redraw_image)
     if (EG.roi.is_updated)
         EG.analysis.present = 1;
         EG.analysis = msf_rmfield(EG.analysis, 'S');
+        EG = mgui_analysis_update_panel(EG);
     end
     
-    EG = mgui_analysis_update_panel(EG);
     
     
     % this should probably not go here, but...

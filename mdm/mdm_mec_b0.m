@@ -16,6 +16,7 @@ if (nargin < 4), opt.present = 1; end
 opt = mio_opt(opt);
 msf_log(['Starting ' mfilename], opt);
 
+% convert nii_fn to s if needed
 if (all(ischar(s))), s = mdm_nii_to_s(s); end
 
 % build file names
