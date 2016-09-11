@@ -30,6 +30,8 @@ end
     function [tmp_path, tmp_fn] = do_gunzip(in_fn, h_only)
         tmp_path = msf_tmp_path(1);
         
+        h_only = h_only & (datenum(version('-date')) < datenum('2015-02-13'));
+        
         if (h_only && isunix)
             [~,name] = fileparts(in_fn);
             tmp_fn = fullfile(tmp_path, name);
