@@ -8,6 +8,10 @@ function fa = tm_fa(a,b)
 
 if (nargin == 1)
     
+    if (size(a,1) == 3) && (size(a,2) == 3)
+        a = tm_3x3_to_1x6(a);
+    end
+    
     d_1x6 = a;
     md = tm_md(d_1x6);
     vl = tm_v_lambda(d_1x6);
