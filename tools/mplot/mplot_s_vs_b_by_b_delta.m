@@ -34,17 +34,23 @@ cla(h);
 hold(h, 'off');
 for c = 1:numel(b_delta_uni)
     
-    ind = b_delta_input == b_delta_uni(c);
+    ind2 = b_delta_input == b_delta_uni(c);
     
-    semilogy(h, xps.b(ind) * 1e-9, S(ind) / m(1), 'o', 'color', cmap(c,:), ...
+    ind3 = ind2 & (~ind);
+    
+    semilogy(h, xps.b(ind2) * 1e-9, S(ind2) / m(1), 'o', 'color', cmap(c,:), ...
         'markersize', 5, 'markerfacecolor', cmap(c,:));
+
     hold(h, 'on');
+
+    semilogy(h, xps.b(ind3) * 1e-9, S(ind3) / m(1), 'x', 'color', cmap(c,:), ...
+        'markersize', 10, 'markerfacecolor', cmap(c,:));
     
     clear xps2;
     xps2.n = 32;
-    xps2.b = linspace(eps, max(xps.b(ind)) * 1.1, xps2.n);
-    xps2.b_delta = mean(xps.b_delta(ind));
-    xps2.b_eta   = mean(xps.b_eta(ind));
+    xps2.b = linspace(eps, max(xps.b(ind2)) * 1.1, xps2.n);
+    xps2.b_delta = mean(xps.b_delta(ind2));
+    xps2.b_eta   = mean(xps.b_eta(ind2));
     
     S_fit = fun_fit2data(m, xps2);
     

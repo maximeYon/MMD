@@ -48,6 +48,8 @@ else
             tmp = I(:,k,:,c);
         case 3
             tmp = I(:,:,k,c);
+        otherwise
+            error('check this');
     end
     imagesc(flipud(squeeze(mean(tmp,d))'));
     
