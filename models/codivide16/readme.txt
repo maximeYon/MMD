@@ -12,5 +12,5 @@ the non-diffusion weighted signal, the free-water signal fraction, the
 tissue-fraction of water with anisotropic diffusion, and the isotropic
 diffusivity of the tissue component.
 
-The model first appeared in Lampinen et al (2016) NeuroImage (submitted)
+The model first appeared in Lampinen et al (2016) NeuroImage (minor revision)
 
