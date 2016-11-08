@@ -24,7 +24,10 @@ msf_log(['Starting ' mfilename], opt);
 
 % Prepare: mask and powder average
 s = mdm_mask(s, @mio_mask_thresh, [], opt);
-s = mdm_powder_average(s, fileparts(s.nii_fn), opt); 
+
+if (opt.gamma.do_pa)
+    s = mdm_powder_average(s, fileparts(s.nii_fn), opt);
+end
 
 % Run the analysis
 mdm_data2fit(@gamma_4d_data2fit, s, paths.mfs_fn, opt);

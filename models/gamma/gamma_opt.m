@@ -9,6 +9,7 @@ opt.gamma = msf_ensure_field(opt.gamma, 'tmp', 1);
 opt.gamma = msf_ensure_field(opt.gamma, 'lsq_opts', ...
     optimoptions('lsqcurvefit', 'display', 'off','MaxFunEvals',1e3));
 opt.gamma = msf_ensure_field(opt.gamma, 'do_plot', 0);
+opt.gamma = msf_ensure_field(opt.gamma, 'do_pa', 0);
 opt.gamma = msf_ensure_field(opt.gamma, 'do_weight', 0);
 opt.gamma = msf_ensure_field(opt.gamma, 'weight_sthresh', .2);
 opt.gamma = msf_ensure_field(opt.gamma, 'weight_wthresh', 5);

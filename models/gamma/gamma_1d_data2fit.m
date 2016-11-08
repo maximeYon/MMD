@@ -5,7 +5,17 @@ function m = gamma_1d_data2fit(signal, xps, opt, ind)
 
 if (nargin < 4), ind = ones(size(signal)) > 0; end
 
-unit_to_SI = [max(signal) 1e-9 (1e-9)^2*[1 1]];
+if (isfield(xps, 's_ind'))
+    ns = max(xps.s_ind) - 1;
+else
+    ns = 0;
+end
+
+
+unit_to_SI = [max(signal) 1e-9 (1e-9)^2*[1 1] ones(1,ns)];
+
+
+
 
     function m = t2m(t) % convert local params to outside format
         
@@ -14,8 +24,11 @@ unit_to_SI = [max(signal) 1e-9 (1e-9)^2*[1 1]];
         d_iso       = t(2);
         mu2_iso     = t(3);
         mu2_aniso   = t(4);
+        
+        sw          = t((end-(ns - 1)):end);
+        
 
-        m = [s0 d_iso mu2_iso mu2_aniso] .* unit_to_SI;
+        m = [s0 d_iso mu2_iso mu2_aniso sw] .* unit_to_SI;
     end
                             
     function s = my_1d_fit2data(t,varargin)
@@ -42,8 +55,8 @@ unit_to_SI = [max(signal) 1e-9 (1e-9)^2*[1 1]];
     end
 
 % Guesses and bounds
-m_lb      = [0             1e-11 0 0];
-m_ub      = [2*max(signal) 3e-9  (3e-9)^2*[1 1]];
+m_lb      = [0             1e-11           0 0  0.5 * ones(1,ns)];
+m_ub      = [2*max(signal) 3e-9  (3e-9)^2*[1 1] 2.0 * ones(1,ns)];
 m_guess   = m_lb + (m_ub - m_lb) .* rand(size(m_lb));
                 
 t_guess   = m_guess./unit_to_SI;
@@ -53,7 +66,7 @@ t_ub      = m_ub./unit_to_SI;
 
 % initial fit with weighting using guess value of MD
 weight = ones(xps.n,1);
-if opt.gamma.do_weight
+if (opt.gamma.do_weight)
     weight = weightfun(opt.gamma.weight_sthresh,opt.gamma.weight_mdthresh,opt.gamma.weight_wthresh);
 end
 
@@ -63,12 +76,12 @@ t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind).*weight(ind), t_lb, t_
 m = t2m(t);
 
 % redo the fit with updated value of MD
-if opt.gamma.do_weight
+if (opt.gamma.do_weight)
     weight = weightfun(opt.gamma.weight_sthresh,m(2),opt.gamma.weight_wthresh);
-end
 
 t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind).*weight(ind), t_lb, t_ub,...
     opt.gamma.lsq_opts);
+end
 
 m = t2m(t);
 

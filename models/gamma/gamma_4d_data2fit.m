@@ -5,6 +5,9 @@ if (nargin < 3), opt = []; end
 
 ind = 1:s.xps.n;
 
+% set b_eta = 0 if it is not in the xps already
+if (~isfield(s.xps, 'b_eta')), s.xps.b_eta = zeros(size(s.xps.b)); end
+
 % Verify the xps
 gamma_check_xps(s.xps);
 
