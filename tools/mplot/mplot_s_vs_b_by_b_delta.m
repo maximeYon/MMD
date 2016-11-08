@@ -47,12 +47,17 @@ for c = 1:numel(b_delta_uni)
         'markersize', 10, 'markerfacecolor', cmap(c,:));
     
     clear xps2;
-    xps2.n = 32;
-    xps2.b = linspace(eps, max(xps.b(ind2)) * 1.1, xps2.n);
-    xps2.b_delta = mean(xps.b_delta(ind2));
-    xps2.b_eta   = mean(xps.b_eta(ind2));
-    
-    S_fit = fun_fit2data(m, xps2);
+    try
+        xps2.n = 32;
+        xps2.b = linspace(eps, max(xps.b(ind2)) * 1.1, xps2.n);
+        xps2.b_delta = mean(xps.b_delta(ind2));
+        xps2.b_eta   = mean(xps.b_eta(ind2));
+        
+        S_fit = fun_fit2data(m, xps2);
+    catch
+        xps2 = mdm_xps_subsample(xps, ind2);
+        S_fit = fun_fit2data(m, xps2);
+    end
     
     semilogy(h, xps2.b * 1e-9, S_fit / m(1), '-', 'color', cmap(c,:), 'linewidth', 2);
 end

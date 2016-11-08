@@ -86,8 +86,8 @@ if (nargin >= 1)
                         try
                             % XXX: This should probably be done in a little
                             % more elaborate way
-                            [I_roi,h] = nifti_read(roi_filename);
-                            I_roi = mgui_misc_flip_volume(I_roi, nifti_oricode(h), EG.conf.ori);
+                            [I_roi,h] = mdm_nii_read(roi_filename);
+                            I_roi = mgui_misc_flip_volume(I_roi, mdm_nii_oricode(h), EG.conf.ori);
                             
                             if (max(I_roi(:) > 1))
                                 
@@ -107,9 +107,6 @@ if (nargin >= 1)
                             end
                             
                             I_roi = (I_roi > (k - l)) & (I_roi < (k + l));
-                            
-%                             I_roi = imfilter(double(I_roi), my_fspecial('gaussian',[5 5 5], 1, size(I_roi))) > 0.75;
-                            
                             
                             EG.roi.is_updated = 1;
                             EG.roi.I_roi = I_roi;

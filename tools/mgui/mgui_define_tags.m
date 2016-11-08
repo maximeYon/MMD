@@ -10,7 +10,7 @@ EG.conf.do_rethrow_error  = 0;
 EG.conf.disable_waitbar   = 1;
 EG.conf.ori               = 'LAS';
 EG.conf.roi_col           = 'r';
-EG.conf.version_str       = 'mdm_0.0.0';
+EG.conf.version_str       = '0.1';
 
 EG.hSender = [];
 
