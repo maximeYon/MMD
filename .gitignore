@@ -7,4 +7,7 @@ index.html
 acq/bruker/protocol/g*
 acq/bruker/AvanceIIIHDTopSpin3.2/protocol/*
 acq/bruker/AvanceIITopSpin2.1/protocol/*
+tools/ut/ut_report/*
+tools/ut/ut_report
+
 

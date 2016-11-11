@@ -1,6 +1,7 @@
-function msf_ut_run
+function ut_run
+% function ut_run
 
-rd = fullfile(fileparts(mfilename('fullpath')), '..');
+rd = fullfile(fileparts(mfilename('fullpath')), '..', '..');
 pd = fileparts(mfilename('fullpath'));
 
 packages = {...
@@ -18,7 +19,13 @@ packages = {...
 date_str = datestr(now, 'yyyy_mm_dd_HH_MM_SS');
 date_str = 'tmp';
 
-fid = fopen(fullfile(pd, 'ut_report', sprintf('ut_%s.txt', date_str)), 'w');
+log_fn = fullfile(pd, 'ut_report', sprintf('ut_%s.txt', date_str));
+msf_mkdir(fileparts(log_fn));
+fid = fopen(log_fn, 'w');
+
+if (fid == -1)
+    error('Could not open file for writing: %s', log_fn);
+end
 
 for c = 1:numel(packages)
     
