@@ -1,6 +1,8 @@
 function [I,h] = mdm_nii_read(nii_fn)
 % function [I,h] = mdm_nii_read(nii_fn)
 
+if (~all(ischar(nii_fn))), error('nii_fn should be of char type'); end
+
 % Possibly unzip file
 [nii_fn, tmp_path, tmp_fn] = mdm_nii_gunzip(nii_fn);
 if (~exist(nii_fn, 'file')), error(['File does not exist: ' nii_fn]); end

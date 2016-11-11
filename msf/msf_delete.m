@@ -12,7 +12,7 @@ end
 
 try
     if (isdir(fn) && exist(fn, 'dir'))
-        rmdir(fn);
+        rmdir(fn, 's');
     elseif (exist(fn, 'file'))
         delete(fn);
     end
