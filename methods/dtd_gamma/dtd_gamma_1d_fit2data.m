@@ -1,5 +1,5 @@
-function s = gamma_1d_fit2data(m, xps)
-% function s = gamma_1d_fit2data(m, xps)
+function s = dtd_gamma_1d_fit2data(m, xps)
+% function s = dtd_gamma_1d_fit2data(m, xps)
 %
 % s0        = m(1);
 % d_iso     = m(2);

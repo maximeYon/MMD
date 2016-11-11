@@ -1,5 +1,5 @@
-function m = gamma_1d_data2fit(signal, xps, opt, ind)
-% function m = gamma_1d_data2fit(signal, xps, opt, ind)
+function m = dtd_gamma_1d_data2fit(signal, xps, opt, ind)
+% function m = dtd_gamma_1d_data2fit(signal, xps, opt, ind)
 %
 % m = [s0 d_iso mu2_iso mu2_aniso]
 
@@ -36,7 +36,7 @@ unit_to_SI = [max(signal+eps) 1e-9 (1e-9)^2*[1 1] ones(1,ns)];
         m = t2m(t);
 
         % signal
-        s = gamma_1d_fit2data(m, xps);
+        s = dtd_gamma_1d_fit2data(m, xps);
         s = s(ind).*weight(ind);
                 
     end
@@ -66,28 +66,28 @@ t_ub      = m_ub./unit_to_SI;
 
 % initial fit with weighting using guess value of MD
 weight = ones(xps.n,1);
-if (opt.gamma.do_weight)
-    weight = weightfun(opt.gamma.weight_sthresh,opt.gamma.weight_mdthresh,opt.gamma.weight_wthresh);
+if (opt.dtd_gamma.do_weight)
+    weight = weightfun(opt.dtd_gamma.weight_sthresh,opt.dtd_gamma.weight_mdthresh,opt.dtd_gamma.weight_wthresh);
 end
 
 t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind).*weight(ind), t_lb, t_ub,...
-    opt.gamma.lsq_opts);
+    opt.dtd_gamma.lsq_opts);
 
 m = t2m(t);
 
 % redo the fit with updated value of MD
-if (opt.gamma.do_weight)
-    weight = weightfun(opt.gamma.weight_sthresh,m(2),opt.gamma.weight_wthresh);
+if (opt.dtd_gamma.do_weight)
+    weight = weightfun(opt.dtd_gamma.weight_sthresh,m(2),opt.dtd_gamma.weight_wthresh);
 
 t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind).*weight(ind), t_lb, t_ub,...
-    opt.gamma.lsq_opts);
+    opt.dtd_gamma.lsq_opts);
 end
 
 m = t2m(t);
 
 
-if (opt.gamma.do_plot)
-    signal_fit = gamma_1d_fit2data(m, xps);
+if (opt.dtd_gamma.do_plot)
+    signal_fit = dtd_gamma_1d_fit2data(m, xps);
     semilogy(xps.b,signal,'.',xps.b,signal_fit,'o',xps.b,m(1)*weight,'x');
     set(gca,'YLim',m(1)*[.01 1.2])
     pause(0.05);

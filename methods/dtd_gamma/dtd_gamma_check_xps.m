@@ -1,5 +1,5 @@
-function gamma_check_xps( xps )
-% function gamma_check_xps( xps )
+function dtd_gamma_check_xps( xps )
+% function dtd_gamma_check_xps( xps )
 
 f = {'b_delta', 'b_eta', 'b', 'n'};
 
