@@ -37,7 +37,7 @@ for c = 1:n_map
         case 2 % mean diffusivity
             param = 'md';
             
-            x = v2m(tm_inner(m2v(mfs.dt), tm_3x3_to_1x6(dtd_3x3_iso())), size(mfs.dt));
+            x = v2m(tm_inner(m2v(mfs.dt), tm_3x3_to_1x6(tm_3x3_iso())), size(mfs.dt));
             x = x * 1e9;
             
             min_max = [0 4];
