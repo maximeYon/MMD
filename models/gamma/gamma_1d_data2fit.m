@@ -12,7 +12,7 @@ else
 end
 
 
-unit_to_SI = [max(signal) 1e-9 (1e-9)^2*[1 1] ones(1,ns)];
+unit_to_SI = [max(signal+eps) 1e-9 (1e-9)^2*[1 1] ones(1,ns)];
 
 
 
@@ -56,7 +56,7 @@ unit_to_SI = [max(signal) 1e-9 (1e-9)^2*[1 1] ones(1,ns)];
 
 % Guesses and bounds
 m_lb      = [0             1e-11           0 0  0.5 * ones(1,ns)];
-m_ub      = [2*max(signal) 3e-9  (3e-9)^2*[1 1] 2.0 * ones(1,ns)];
+m_ub      = [2*max(signal+eps) 3e-9  (3e-9)^2*[1 1] 2.0 * ones(1,ns)];
 m_guess   = m_lb + (m_ub - m_lb) .* rand(size(m_lb));
                 
 t_guess   = m_guess./unit_to_SI;
