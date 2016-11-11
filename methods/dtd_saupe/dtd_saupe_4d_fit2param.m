@@ -1,5 +1,5 @@
-function dps_fn = saupe_4d_fit2param(mfs_fns, dps_fn, opt)
-% function fn = saupe_4d_fit2param(mfs_fn, o_path, opt)
+function dps_fn = dtd_saupe_4d_fit2param(mfs_fns, dps_fn, opt)
+% function fn = dtd_saupe_4d_fit2param(mfs_fn, o_path, opt)
 %
 % Saupe order tensor imaging
 % Combination of DTI, gamma, and erf
