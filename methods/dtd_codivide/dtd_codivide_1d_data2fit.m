@@ -1,5 +1,5 @@
-function m = codivide16_1d_data2fit(signal, xps, opt, ind)
-% function m = codivide16_1d_data2fit(signal, xps, opt, ind)
+function m = dtd_codivide_1d_data2fit(signal, xps, opt, ind)
+% function m = dtd_codivide_1d_data2fit(signal, xps, opt, ind)
 %
 % s0     = m(1);
 % v_at   = m(2);
@@ -8,7 +8,7 @@ function m = codivide16_1d_data2fit(signal, xps, opt, ind)
 % md_fw  = m(5);
 %
 
-if (nargin < 3), opt = codivide16_opt(); end
+if (nargin < 3), opt = dtd_codivide_opt(); end
 if (nargin < 4), ind = ones(size(signal)) > 0; end
 
 if (isfield(xps, 's_ind'))
@@ -43,7 +43,7 @@ lambda = mean(signal);
     function s = my_1d_fit2data(t,varargin)
         
         m = t2m(t);
-        s = codivide16_1d_fit2data(m, xps);
+        s = dtd_codivide_1d_fit2data(m, xps);
         
         penalty = exp(max(0, t(2) + t(3) - 1)) - 1;
         
@@ -56,15 +56,15 @@ lambda = mean(signal);
 t_lb      = [0  eps  eps     eps 0.8 * ones(1,ns)];
 t_ub      = [2 1-eps 1 - eps 1.8 1.2 * ones(1,ns)];
 
-[t,ss_fit] = msf_fit(@my_1d_fit2data, [signal(ind); 0], t_lb, t_ub, opt.codivide16.n_rep, ...
-    opt.codivide16.lsq_opts);
+[t,ss_fit] = msf_fit(@my_1d_fit2data, [signal(ind); 0], t_lb, t_ub, opt.dtd_codivide.n_rep, ...
+    opt.dtd_codivide.lsq_opts);
 
 % test if a pure CSF fit is better
 t_lb      = [0  1*eps  1.0-eps 1*eps 2.7 0.8 * ones(1,ns)];
 t_ub      = [2  2*eps  1.0     2*eps 4.0 1.2 * ones(1,ns)];
 
-[t2, ss_fit2] = msf_fit(@my_1d_fit2data, [signal(ind); 0], t_lb, t_ub, opt.codivide16.n_rep, ...
-    opt.codivide16.lsq_opts);
+[t2, ss_fit2] = msf_fit(@my_1d_fit2data, [signal(ind); 0], t_lb, t_ub, opt.dtd_codivide.n_rep, ...
+    opt.dtd_codivide.lsq_opts);
 
 if (ss_fit < ss_fit2)
     m = t2m(t);

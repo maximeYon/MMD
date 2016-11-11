@@ -1,5 +1,5 @@
-function s = codivide16_1d_fit2data(m, xps)
-% function s = codivide16_1d_fit2data(m, xps)
+function s = dtd_codivide_1d_fit2data(m, xps)
+% function s = dtd_codivide_1d_fit2data(m, xps)
 %
 % s0     = m(1);
 % v_at   = m(2);

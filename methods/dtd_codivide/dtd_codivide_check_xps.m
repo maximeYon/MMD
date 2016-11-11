@@ -1,5 +1,5 @@
-function codivide16_check_xps( xps )
-% function codivide16_check_xps( xps )
+function dtd_codivide_check_xps( xps )
+% function dtd_codivide_check_xps( xps )
 %
 % xps-fields required: b_delta, b, and n
 
