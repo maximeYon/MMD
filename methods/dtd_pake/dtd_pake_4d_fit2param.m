@@ -1,5 +1,5 @@
-function dps = erf_4d_fit2param(mfs_fn, dps_fn, opt)
-% function dps = erf_4d_fit2param(dps_fn, dps_fn, opt)
+function dps = dtd_pake_4d_fit2param(mfs_fn, dps_fn, opt)
+% function dps = dtd_pake_4d_fit2param(dps_fn, dps_fn, opt)
 
 if (nargin < 2), dps_fn = []; end
 if (nargin < 3), opt = []; end

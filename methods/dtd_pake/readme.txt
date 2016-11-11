@@ -1,4 +1,4 @@
-Estimate microscopic anisotropy by utilizing the erf model. 
+Estimate microscopic anisotropy by utilizing the dtd_pake model. 
 
 Assumes powder averaging and axisymmetric b-tensors
 

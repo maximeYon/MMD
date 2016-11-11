@@ -1,4 +1,5 @@
-function erf_check_xps( xps )
+function dtd_pake_check_xps( xps )
+% function dtd_pake_check_xps( xps )
 
 f = {'b_delta', 'b', 'n'};
 
