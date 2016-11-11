@@ -25,10 +25,12 @@ for c = 1:numel(opt.(method).fig_maps)
     A = A(:,:,k);
     B = B(:,:,k);
     
-    % compare the two
-    if (any( abs(A(:) - B(:)) > 1e-3 * max(q(A),q(B))))
-        error('%s, gamma analysed file differs (%s)', mfilename, map);
-    end
-        
+    % compare the two: allow a difference of 1% of max image value in at
+    % most 1% of all voxels
+    n = sum( abs(A(:) - B(:)) > 1e-2 * max(q(A),q(B)));
+    n_tol = 0.01 * sum( (A(:) ~= 0) & (B(:) ~= 0) );
+    if (n > n_tol)
+        error('%s, %s, analysed file differs (%s)', mfilename, method, map);
+    end        
     
 end
