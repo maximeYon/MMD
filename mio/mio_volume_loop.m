@@ -64,6 +64,7 @@ for k = 1:size(I,3)
             if (n_workers == 1) % single core
                 for i = 1:size(I,1)
                     if (M(i,j,k) == 0), continue; end
+                    if (all(I(i,j,k,:) == 0)), continue; end
                     p(:,i,j,k) = f_fun(double(squeeze(I(i,j,k,:))), f_sup(i,j,k));
                 end
                 
@@ -72,6 +73,7 @@ for k = 1:size(I,3)
                 % but it did not improve performance much
                 parfor i = 1:size(I,1)
                     if (M(i,j,k) == 0), continue; end
+                    if (all(I(i,j,k,:) == 0)), continue; end
                     q = feval(f_sup,i,j,k);
                     p(:,i,j,k) = f_fun(double(squeeze(I(i,j,k,:))), q);
                 end

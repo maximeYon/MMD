@@ -18,7 +18,7 @@ if (all(ischar(s))), s = mdm_nii_to_s(s); end
 
 % Build filenames: either o_path is a filename or a output path, treat
 % the data differently depending on this
-if (strcmpi(o_path(max(1, end-5):end), '.nii.gz'))
+if (strcmpi(o_path(max(1, end-6):end), '.nii.gz'))
     out_nii_fn = o_path;
     out_xps_fn = mdm_xps_fn_from_nii_fn(out_nii_fn);
 else
