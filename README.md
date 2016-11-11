@@ -9,7 +9,7 @@ Three families of methods are currently implemented within the framework of MD-d
 * Diffusional exchange
 * Diffusion and incoherent flow
 
-The methods are described briefly [here](../documentation/models/README.md), in some more detail in two review articles,<sup>1,2</sup> and more exhaustively in the original publications cited for each method.
+The methods are described briefly [here](../master/models/README.md), in some more detail in two review articles,<sup>1,2</sup> and more exhaustively in the original publications cited for each method.
 
 ## How to start
 
