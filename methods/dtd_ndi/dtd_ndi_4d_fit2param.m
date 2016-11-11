@@ -1,4 +1,4 @@
-function dps = ndi16_4d_fit2param(mfs_fn, dps_fn, opt)
+function dps = dtd_ndi_4d_fit2param(mfs_fn, dps_fn, opt)
 % function dps = kaden16_4d_fit2param(mfs_fn, dps_fn, opt)
 
 if (nargin < 2), dps_fn = []; end

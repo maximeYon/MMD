@@ -1,5 +1,5 @@
-function s = ndi16_1d_fit2data(m, xps)
-% function s = ndi16_1d_fit2data(m, xps)
+function s = dtd_ndi_1d_fit2data(m, xps)
+% function s = dtd_ndi_1d_fit2data(m, xps)
 %
 % m = [s0 v_int v_csf lambda md_csf]
 % 

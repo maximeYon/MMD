@@ -1,5 +1,5 @@
-function ndi16_check_xps( xps )
-% function ndi16_check_xps( xps )
+function dtd_ndi_check_xps( xps )
+% function dtd_ndi_check_xps( xps )
 %
 % required xps-fields: b and n
 

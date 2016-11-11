@@ -1,7 +1,7 @@
-function m = ndi16_1d_data2fit(signal, xps, opt, ind)
-% function m = ndi16_1d_data2fit(signal, xps, opt, ind)
+function m = dtd_ndi_1d_data2fit(signal, xps, opt, ind)
+% function m = dtd_ndi_1d_data2fit(signal, xps, opt, ind)
 
-if (nargin < 3), opt = ndi16_opt(); end
+if (nargin < 3), opt = dtd_ndi_opt(); end
 if (nargin < 4), ind = ones(size(signal)) > 0; end
 
 unit_to_SI = [max(signal) 1 1 1e-9 1e-9];
@@ -23,7 +23,7 @@ unit_to_SI = [max(signal) 1 1 1e-9 1e-9];
         m = t2m(t);
 
         % signal
-        s = ndi16_1d_fit2data(m, xps);
+        s = dtd_ndi_1d_fit2data(m, xps);
         s = s(ind);
                 
     end
@@ -34,10 +34,10 @@ t_lb      = [eps    eps  eps  ];
 t_ub      = [2-eps 1-eps 1-eps];
 
 ss = inf;
-for c = 1:opt.ndi16.n_rep
+for c = 1:opt.dtd_ndi.n_rep
     t_guess   = t_lb + rand(size(t_lb)) .* (t_ub - t_lb);
     
-    t_tmp = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind), t_lb, t_ub, opt.ndi16.lsq_opts);
+    t_tmp = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind), t_lb, t_ub, opt.dtd_ndi.lsq_opts);
     
     s_tmp = my_1d_fit2data(t_tmp);
     
