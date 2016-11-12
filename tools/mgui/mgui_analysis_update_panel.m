@@ -25,7 +25,7 @@ if (do_reload)
     end
     
     
-    d = dir(fullfile(fileparts(mfilename('fullpath')), '..', '..','models'));
+    d = dir(fullfile(fileparts(mfilename('fullpath')), '..', '..','methods'));
     
     str = {'Overview'};
     for c = 1:numel(d)

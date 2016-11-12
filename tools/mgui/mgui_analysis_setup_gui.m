@@ -26,7 +26,7 @@ axis off;
 
 left   = 10; 
 bottom = 664;
-width  = 100;
+width  = 200;
 height = 15;
 
 

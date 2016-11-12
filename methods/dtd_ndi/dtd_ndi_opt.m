@@ -9,3 +9,5 @@ opt.dtd_ndi = msf_ensure_field(opt.dtd_ndi, 'lsq_opts', ...
     optimoptions('lsqcurvefit', 'display', 'off','MaxFunEvals',1e4));
 
 opt.dtd_ndi = msf_ensure_field(opt.dtd_ndi, 'n_rep', 1); 
+
+opt.dtd_ndi = msf_ensure_field(opt.dtd_ndi, 'pa_method', 1);

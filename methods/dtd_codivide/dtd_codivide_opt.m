@@ -8,6 +8,8 @@ opt.dtd_codivide.present = 1;
 opt.dtd_codivide = msf_ensure_field(opt.dtd_codivide, 'lsq_opts', ...
     optimoptions('lsqcurvefit', 'display', 'off','MaxFunEvals',1e4));
 
+opt.dtd_codivide = msf_ensure_field(opt.dtd_codivide, 'pa_method', 1); 
+
 
 opt.dtd_codivide = msf_ensure_field(opt.dtd_codivide, 'fig_maps', ...
     {'s0','v_at','v_fw','md_t'});

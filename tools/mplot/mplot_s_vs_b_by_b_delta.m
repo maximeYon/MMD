@@ -27,7 +27,7 @@ b_delta_uni = sort(b_delta_uni);
 if (numel(b_delta_uni) == 1)
     cmap = [0 0 0];
 else
-    cmap = hsv(numel(b_delta_uni));
+    cmap = 0.8 * hsv(numel(b_delta_uni) + 2);
 end
 
 cla(h);
