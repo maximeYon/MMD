@@ -2,8 +2,8 @@ function EG = mgui_analysis_setup_gui(EG, h)
 % function EG = mgui_roi_setup_gui(EG, h)
 
 
-left = 0.15;
-width = 0.75;
+left = 0.20;
+width = 0.70;
 
 EG.handles.h_analysis_top_axes = axes(...
     'parent', h, ...

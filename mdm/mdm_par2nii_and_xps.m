@@ -41,14 +41,14 @@ for c = find(cellfun(@(x) x(1) == '.', txt))
 end
 
 % Read the information specific for each image
-txt2 = txt(cellfun(@(x) (x(1) ~= '.') && (x(1) ~= '.'), txt));
+txt2 = txt(cellfun(@(x) (x(1) ~= '.') && (x(1) ~= '.') && (x(1) ~= '#'), txt));
 if (numel(txt2) == 0), error('strange PAR file'); end
 for c = 1:numel(txt2)
-
+    
     try
         info = eval(['[' txt2{c} ']']);
     catch me
-        disp(me.error);
+        disp(me.message);
         error('cannot read line in PAR file');
     end
     
@@ -113,8 +113,8 @@ fid = fopen(rec_fn,'r');
 I = fread(fid, inf, 'ushort');
 fclose(fid);
 
-n_x = s.info(1).image_size(1);
-n_y = s.info(1).image_size(2);
+n_x = s.info(end).image_size(1);
+n_y = s.info(end).image_size(2);
 n_z = s.n_slice;
 
 I = reshape(I, n_x, n_y, numel(I) / (n_x * n_y));
