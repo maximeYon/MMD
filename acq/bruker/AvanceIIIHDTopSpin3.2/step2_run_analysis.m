@@ -27,7 +27,7 @@
 % 6) Size-shape-orientation diffusion tensor distributions.
 %    Work in progress
 
-models         = {'dti_euler', 'gamma', 'erf', 'saupe', 'dtd_pa', 'dtd'};
+models         = {'dti_euler', 'dtd_gamma', 'dtd_pake', 'saupe', 'dtd_pa'};
 c_model        = 1:6;
 
 % Prepare paths
@@ -51,8 +51,8 @@ opt.verbose       = 1;
 opt.do_overwrite  = 1;
 
 opt.dti_euler.fig_maps  = {'s0','iso'}; %output figures S0, D_iso
-opt.gamma.fig_maps      = {'ciso','cmu'}; %c_iso, c_mu
-opt.erf.fig_maps        = {'delta'}; %D_Delta
+opt.dtd_gamma.fig_maps      = {'ciso','cmu'}; %c_iso, c_mu
+opt.dtd_pake.fig_maps        = {'delta'}; %D_Delta
 opt.mask.thresh         = 0.1;
 
 % Connect to data
@@ -71,16 +71,14 @@ for n_model = c_model
     switch (models{c_model(n_model)})
         case 'dti_euler'
             nii_fn = dti_euler_pipe(s, paths, opt);
-        case 'gamma'
-            nii_fn = gamma_pipe(s, paths, opt);
-        case 'erf'
-            nii_fn = erf_pipe(s, paths, opt);
+        case 'dtd_gamma'
+            nii_fn = dtd_gamma_pipe(s, paths, opt);
+        case 'dtd_pake'
+            nii_fn = dtd_pake_pipe(s, paths, opt);
         case 'saupe'
             nii_fn = saupe_pipe(s, paths, opt);
         case 'dtd_pa'
             nii_fn = dtd_pa_pipe(s, paths, opt);
-        case 'dtd'
-            nii_fn = dtd_pipe(s, paths, opt);
     end
     % convert all .nii.gz files to .pdf
     if (opt.do_mapspdf)
