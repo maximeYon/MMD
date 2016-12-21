@@ -22,6 +22,9 @@ if (size(I,1) == 3) && (ndims(I) == 4)
             tmp = I(:,:,:,k);
     end
     
+    tmp = squeeze(tmp);
+    tmp = permute(tmp, [3 2 1]);
+    tmp = tmp(:,end:-1:1,:);
     
     if (max(tmp(:)) > 1)
         tmp = tmp / quantile(tmp(:), 0.99);
@@ -29,7 +32,7 @@ if (size(I,1) == 3) && (ndims(I) == 4)
     tmp(tmp > 1) = 1;
     tmp(tmp < 0) = 0;
     
-    imagesc(permute(squeeze(tmp(:,:,end:-1:1)), [3 2 1]));
+    imagesc(tmp);
     axis image off;
             
     
