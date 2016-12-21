@@ -1,5 +1,11 @@
 function mplot_tensor(dt, d, sc, s, r_std)
 % function mplot_tensor(dt, d, sc, s, r_std)
+%
+% dt - diffusion tensor in voigt format
+% d  - tensor center 1x3 vector
+% sc - tensor scaling
+% s  - coordinates
+% r_std - random displacement
 
 if (nargin < 2), d = [0 0 0]; end
 if (nargin < 3), sc = 1; end
@@ -34,3 +40,12 @@ surf(...
     zeros(size(x3)) + mean(eig_vals)); 
 
 hold on;
+
+if (1)
+caxis([-1 3]);
+colormap(fliplr(jet(100)));
+axis off tight equal vis3d;
+camlight left;
+shading interp;
+material([0.7 0.4 0.8 1] );
+end
