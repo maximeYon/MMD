@@ -2,7 +2,7 @@ function s = fexi11_1d_fit2data(m, xps)
 % function s = fexi11_1d_fit2data(m, xps)
 %
 
-ind_non_eq = xps.mde_b1 > 0; % index of filtered data
+ind_non_eq = xps.mde_b1 > 100e6; % index of filtered data % xxx needs improvement
 
 ADC0  = m(1);
 sigma = m(2);

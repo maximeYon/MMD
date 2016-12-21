@@ -11,7 +11,10 @@ if (nargin < 4), ind = ~isnan(signal); end
 
 signal = double(signal);
 
-S0 = signal(xps.mde_b2_ind==1);
+tmp_ind = xps.mde_b2_ind==min(xps.mde_b2_ind);
+S0 = signal(tmp_ind);
+S0(xps.s_ind(tmp_ind)) = S0;
+
 
 t_guess    = [1.000  0.5 4.00 ones(size(S0'))];
 t_lb       = [0.001  0.0 0.00 zeros(size(S0'))];

@@ -8,10 +8,11 @@ S_fit = fexi11_1d_fit2data(m, xps);
 
 
 c_list = unique(xps.s_ind)';
-tm = zeros(1, numel(c_list));
-ADC = tm;
+tm      = zeros(1, numel(c_list));
+ADC     = tm;
 ADC_fit = tm;
-bf = tm;
+bf      = tm;
+
 for c = c_list
     
     ind = xps.s_ind == c;
@@ -29,19 +30,26 @@ for c = c_list
     
 end
 
-tm(bf == 0) = -10e-3;
+tm(bf <= 0.1e9) = -10e-3;
 
+[~,ind] = sort(tm);
+tm = tm(ind);
+ADC = ADC(ind);
+ADC_fit = ADC_fit(ind);
 
 cla(h);
 hold(h, 'off');
 plot(h, tm * 1e3, ADC * 1e9, 'o', 'markerfacecolor', 'blue');
 hold(h, 'on');
-plot(h, tm * 1e3, ADC_fit * 1e9, '-');
+plot(h, tm * 1e3, ADC_fit * 1e9, 'k-');
 
 ylabel(h, 'ADC (um^2/ms)');
 xlabel(h, 'Mixing time (ms)');
 
+xlim(h, [-20e-3 max(tm) + 20e-3] * 1e3);
 
+title(h, sprintf('ADC = %0.1f, sigma = %0.2f, AXR = %0.1f', ...
+    m(1) * 1e9, m(2), m(3)));
 
 axis(h, 'on');
 box(h, 'off');
