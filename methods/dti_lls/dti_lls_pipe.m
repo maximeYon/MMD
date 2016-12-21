@@ -15,13 +15,13 @@ if (nargin < 3), opt.present = 1; end
 % Init structures
 opt   = mdm_opt(opt);
 opt   = dti_lls_opt(opt);
-paths = mdm_paths(paths, 'dti_lls');     
+paths = mdm_paths(paths, opt.dti_lls.fig_prefix);     
 
 msf_log(['Starting ' mfilename], opt);    
 
 % Smooth and prepare mask
 if (opt.filter_sigma > 0)
-    s = mdm_smooth(s, opt.filter_sigma, [], opt);
+    s = mdm_smooth(s, opt.filter_sigma, paths.nii_path, opt);
 end
 
 s = mdm_mask(s, @mio_mask_thresh, [], opt);
