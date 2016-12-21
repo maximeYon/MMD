@@ -21,6 +21,7 @@ if (nargin < 5), opt.present = 1; end
 opt = mdm_opt(opt);
 msf_log(['Starting ' mfilename], opt);
 
+
 % convert nii to s
 if (all(ischar(s_target))), s_target = mdm_nii_to_s(s_target); end
 if (all(ischar(s_source))), s_source = mdm_nii_to_s(s_source); end
@@ -38,7 +39,7 @@ if (~exist(ref_fn, 'file') || opt.do_overwrite)
         
     % Create reference, improve fitting by some initial smoothing
     I     = mio_smooth_4d(single(I), 0.6);
-    ind   = s_source.xps.b < 1.2e9; % limit to low b-values
+    ind   = s_source.xps.b < opt.mdm.mec_eb.b_limit; % limit to low b-values
     I_ref = mio_ref_extrapolate(I, s_source.xps, s_target.xps, M, ind);
         
     % Rescale for easier comparisons

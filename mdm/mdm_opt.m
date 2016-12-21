@@ -46,7 +46,8 @@ opt.mdm.present = 1;
 opt.mdm = msf_ensure_field(opt.mdm, 'mask_suffix', 'mask');
 opt.mdm = msf_ensure_field(opt.mdm, 'txt_read_skip_comments', 0);
 
-
+opt.mdm.mec_eb.present = 1;
+opt.mdm.mec_eb = msf_ensure_field(opt.mdm.mec_eb, 'b_limit', 1.1e9);
 
 opt.mask.present = 1;
 
