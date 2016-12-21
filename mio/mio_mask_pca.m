@@ -5,6 +5,7 @@ function M = mio_mask_pca(I, opt)
 
 if (nargin < 3), opt.present = 1; end
 opt = mdm_opt(opt);
+opt = mio_opt(opt);
 
 sz = size(I);
 I = reshape(single(I), prod(sz(1:3)), sz(4));
@@ -23,7 +24,7 @@ I2 = imfilter(single(I2), ones(3,3,3)/27);
 M = reshape(sqrt(mean(I.^2,2)),sz(1:3));
 M = imfilter(M, ones(3,3,3) / 27);
 
-M = (M ./ I2) > 1.3;
+M = (M ./ I2) > opt.mask.pca_threshold;
 
 
 M = imfilter(single(M), ones(3,3,3)) > 10; % get rid of lonely voxels
