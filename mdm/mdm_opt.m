@@ -40,8 +40,6 @@ opt = msf_ensure_field(opt, 'do_report_pdf', 1);
 opt = msf_ensure_field(opt, 'do_maps_pdf', 1);
 
 
-opt = msf_ensure_field(opt, 'do_pa_abs', 1);
-
 opt.mdm.present = 1;
 opt.mdm = msf_ensure_field(opt.mdm, 'mask_suffix', 'mask');
 opt.mdm = msf_ensure_field(opt.mdm, 'txt_read_skip_comments', 0);
@@ -51,8 +49,12 @@ opt.mdm.mec_eb = msf_ensure_field(opt.mdm.mec_eb, 'b_limit', 1.1e9);
 
 opt.mask.present = 1;
 
-% extra layer of granulatiry, both opt.do_overwrite and
+% extra layer of granularity, both opt.do_overwrite and
 % opt.mask.do_overwrite must be true in order for mask overwrite to take
 % place
 opt.mask = msf_ensure_field(opt.mask, 'do_overwrite', 0);
+
+
+
+
 

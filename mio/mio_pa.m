@@ -3,17 +3,26 @@ function A = mio_pa(I, xps, opt)
 
 if (nargin < 3), opt = []; end
 
-opt = mdm_opt(opt);
+opt = mio_opt(opt);
 
 % figure out which b-tensors to average
-[~,c_list, id_ind] = mdm_pa_ind_from_xps(xps);
+[~,c_list, id_ind] = mdm_pa_ind_from_xps(xps, opt);
 
 A = zeros(size(I,1), size(I,2), size(I,3), numel(c_list));
 
-for c = c_list'
-    A(:,:,:,c == c_list) = msf_nanmean(double(I(:,:,:,id_ind == c)),4);
+switch (opt.mio.pa.method)
+    case 'geo' % not really powder averaging, should rename function
+        f = @(x) msf_nangeomean(x, 4);
+    case 'ari'
+    f = @(x) msf_nanmean(x, 4);
+    otherwise
+        error('unknown averaging method');
 end
 
-if (opt.do_pa_abs), A = abs(A); end
+for c = c_list'
+    A(:,:,:,c == c_list) = f(double(I(:,:,:,id_ind == c)));
+end
+
+if (opt.mio.pa.do_abs), A = abs(A); end
 
 

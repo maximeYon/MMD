@@ -1,11 +1,13 @@
-function [a_ind, c_list, id_ind] = mdm_pa_ind_from_xps(xps)
-% function [a_ind, c_list, id_ind] = mdm_pa_ind_from_xps(xps)
+function [a_ind, c_list, id_ind] = mdm_pa_ind_from_xps(xps, opt)
+% function [a_ind, c_list, id_ind] = mdm_pa_ind_from_xps(xps, opt)
 %
 % Volumes with identical rotations is defined from xps.a_ind
 %
 % If this does not exist, we try to compute it, but beware of errors in
 % this step
 
+if (nargin < 2), opt = []; end 
+opt = mdm_opt(opt);
 
 if (isfield(xps, 'a_ind'))
     % If the user has supplied an averaging index vector, just use it
