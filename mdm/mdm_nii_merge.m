@@ -5,8 +5,6 @@ if (nargin < 3), opt.present = 1; end
 
 opt = mdm_opt(opt);
 
-
-
 if (exist(out_nii_fn, 'file') && ~opt.do_overwrite)
     msf_fprintf(opt, 'File found, skipping (%s)\n', out_nii_fn); 
     return;
@@ -16,6 +14,17 @@ I = [];
 for c = 1:numel(nii_fn_cell)
     
     [I_tmp,h] = mdm_nii_read_and_rescale(nii_fn_cell{c});
+    
+    if (h.dim(1) ~= 4)
+        warning('you may run into issues when using non 4D data, e.g. single slices');
+    end
+    
+    if (h.dim(1) == 3) && (h.dim(5) == 1)
+        h.dim(5) = h.dim(4);
+        h.dim(4) = 1;
+        h.dim(1) = 4;
+        I_tmp = reshape(I_tmp, h.dim(2:5)');
+    end
     
     if (c == 1)
         I = I_tmp;

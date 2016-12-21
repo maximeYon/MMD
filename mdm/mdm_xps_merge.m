@@ -1,6 +1,6 @@
 function xps = mdm_xps_merge(xps_cell, opt)
 % function xps = mdm_xps_merge(xps_cell, opt)
-% 
+%
 % xps_cell could be a cell of xps structres or filenames
 
 if (nargin < 2), opt.present = 1; end
@@ -16,20 +16,35 @@ if (~isstruct(xps_cell{1}))
             xps_cell{c} = mdm_xps_load(xps_cell{c});
         end
     else
-        error('unknown input (file does not exist?)');        
+        error('unknown input (file does not exist?)');
     end
 end
 
 
-for i = 1:numel(xps_cell)
-    if (opt.xps_merge_clear_s_ind)
-        xps_cell{i} = msf_rmfield(xps_cell{i}, 's_ind'); 
+% see if all components already have s_ind structures that are unique
+tmp = cellfun(@(x) isfield(x, 's_ind'), xps_cell);
+
+if (all(tmp)) % all have s_ind's
+    s_ind = [];
+    for c = 1:numel(xps_cell)
+        if (any(ismember(xps_cell{c}.s_ind, s_ind)))
+            error('s_ind exist, but is non-unique, address before merge');
+        end
+        s_ind = cat(1, s_ind, xps_cell{c}.s_ind);
     end
-    if (isfield(xps_cell{i}, 's_ind'))
-        error('merging xps structures with existing s_ind can be ambigious');
+    
+    % everything's ok!
+    
+elseif (~any(tmp)) % not one has an s_ind
+    for c = 1:numel(xps_cell)
+        xps_cell{c}.s_ind = zeros(xps_cell{c}.n, 1) + c;
     end
-    xps_cell{i}.s_ind = zeros(xps_cell{i}.n, 1) + i;
+else % some but not all have s_ind's
+    error('merging xps structures with (partly) existing s_ind is ambigious');
 end
+
+
+
 
 xps = xps_cell{1};
 

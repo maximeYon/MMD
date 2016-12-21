@@ -32,6 +32,10 @@ tmp = cell2mat(tmp);
 % compile the output
 xps.b   = tmp(4,:)' * 1e6; 
 xps.u   = tmp(1:3,:)';
+
+% demand normalization of the vectors
+xps.u   = xps.u ./ repmat(sqrt(sum(xps.u.^2,2)), 1, 3);
+
 xps.n   = numel(xps.b);
 xps.bt  = tm_1x3_to_1x6(xps.b, zeros(size(xps.b)), xps.u);
 xps.bt2 = tm_1x6_to_1x21(xps.bt);
