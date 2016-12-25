@@ -18,7 +18,7 @@ opt = dti_nls_opt;
 
 xps.n = 13;
 xps.bt = tm_1x3_to_1x6(...
-    [0 ones(1,12) * 1e9]', zeros(1,13)', [1 0 0; uvec_elstat_12dir]);
+    [0 ones(1,12) * 1e9]', zeros(1,13)', [1 0 0; uvec_elstat(12)]);
 
 
 switch (c_ut)

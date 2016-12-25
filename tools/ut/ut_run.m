@@ -1,5 +1,7 @@
-function ut_run
+function ut_run(do_save_report)
 % function ut_run
+
+if (nargin == 0), do_save_report = 0; end
 
 rd = fullfile(fileparts(mfilename('fullpath')), '..', '..');
 pd = fileparts(mfilename('fullpath'));
@@ -16,25 +18,31 @@ packages = {...
     'methods/quick_dti'};
 
 
-date_str = datestr(now, 'yyyy_mm_dd_HH_MM_SS');
-date_str = 'tmp';
-
-log_fn = fullfile(pd, 'ut_report', sprintf('ut_%s.txt', date_str));
-msf_mkdir(fileparts(log_fn));
-fid = fopen(log_fn, 'w');
-
-if (fid == -1)
-    error('Could not open file for writing: %s', log_fn);
+if (do_save_report)
+    date_str = datestr(now, 'yyyy_mm_dd_HH_MM_SS');
+    
+    log_fn = fullfile(pd, 'ut_report', sprintf('ut_%s.txt', date_str));
+    msf_mkdir(fileparts(log_fn));
+    fid = fopen(log_fn, 'w');
+    
+    if (fid == -1)
+        error('Could not open file for writing: %s', log_fn);
+    end
+else
+    clc;
+    fid = -1;
 end
+
+c_err = 0;
 
 for c = 1:numel(packages)
     
-    fprintf(fid, 'PACKAGE: %s\n', packages{c});
-    fprintf(fid, '---------------------------------\n', packages{c});
-    
+
     d = dir(fullfile(rd, packages{c}, 'ut_*.m'));
-    fprintf(fid, 'Found %i ut_*.m files\n\n', numel(d));
-        
+    
+    my_fprintf(fid, 'PACKAGE: %s (%i ut_*.m files)\n', packages{c}, numel(d));
+    my_fprintf(fid, '---------------------------------\n', packages{c});
+    
     
     for c_file = 1:numel(d)
         
@@ -47,24 +55,39 @@ for c = 1:numel(packages)
             disp(me.message);
         end
         
-        fprintf(fid, 'Executing %i unit tests in %s\n', n_ut, m_fn);
+        my_fprintf(fid, 'Executing %i unit tests in %s.m\n', n_ut, m_fn);
         
         for c_ut = 1:n_ut
             try
-                txt = feval(m_fn, c_ut);
-                txt = [txt ': ok'];
+                txt = ['OK  for ' feval(m_fn, c_ut)];
             catch me
-                txt = me.message;
+                txt = ['ERR with ' me.message];
+                c_err = c_err + 1;
             end
             
-            fprintf(fid, 'Test %2.0f reports %s\n', c_ut, txt);
+            my_fprintf(fid, 'Test %2.0f, %s\n', c_ut, txt);
             
         end
         
     end
     
-    fprintf(fid, '\n');
+    my_fprintf(fid, '\n');
     
 end
 
-fclose(fid);
+my_fprintf(fid, 'Total errors: %i\n', c_err);
+
+if (fid ~= -1), fclose(fid); end
+
+end
+
+function my_fprintf(fid, str, varargin)
+
+str = sprintf(str, varargin{:});
+fprintf(str);
+
+if (fid ~= -1)
+    fprintf(fid, str);
+end
+
+end

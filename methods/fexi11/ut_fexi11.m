@@ -57,8 +57,8 @@ switch (c_ut)
         fn = 'fexi11_4d_data2fit';
         
         
-        n_x = 16;
-        I = zeros(n_x,n_x,4,xps.n);
+        n_x = 4;
+        I = zeros(n_x,n_x,3,xps.n);
         
         adc = 0.7e-9;
         sigma = 0.5;
@@ -85,9 +85,7 @@ switch (c_ut)
         mdm_nii_write(single(I), s.nii_fn, h);
         mdm_nii_write(ones(size(I,1), size(I,2), size(I,3)), s.mask_fn, h);
         
-        tic;
         maps_fn = fexi11_4d_data2fit(s, fullfile(p, 'fexi.mat'));
-        toc;
         
         rmdir(p, 's');
         
