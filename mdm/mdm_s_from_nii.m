@@ -1,5 +1,5 @@
-function s = mdm_nii_to_s(nii_fn)
-% function s = mdm_nii_to_s(nii_fn)
+function s = mdm_s_from_nii(nii_fn)
+% function s = mdm_s_from_nii(nii_fn)
 %
 % converts a nii_fn to an input structure with two fields
 %
