@@ -43,6 +43,7 @@ end
 % Read the information specific for each image
 txt2 = txt(cellfun(@(x) (x(1) ~= '.') && (x(1) ~= '.') && (x(1) ~= '#'), txt));
 if (numel(txt2) == 0), error('strange PAR file'); end
+
 for c = 1:numel(txt2)
     
     try
@@ -129,7 +130,15 @@ I = I(:,:,good_ind);
 s.info = s.info(good_ind); 
 
 % Split data into separate images
-I = reshape(I, n_x, n_y, n_z, numel(I) / (n_x * n_y * n_z));
+n_vol = numel(I) / (n_x * n_y * n_z);
+x = repmat(1:n_z, n_vol, 1);
+if (all(x(:) == [s.info(:).c_slice]'))
+    I = reshape(I, n_x, n_y, n_vol, n_z);
+    I = permute(I, [1 2 4 3]);
+else
+    I = reshape(I, n_x, n_y, n_z, n_vol);
+end
+
 s.info = s.info([s.info.c_slice] == 1); % assume first slice is sufficient
 
 % Rescale images
@@ -155,7 +164,7 @@ h = mdm_nii_h_empty;
 h.pixdim(2:4) = [s.info(1).pixel_spacing s.info(1).slice_thickness];
 h.dim(2:4)    = [n_x n_y n_z];
 
-warning('assuming LAS orientation for nifti, which mat be wrong');
+warning('assuming LAS orientation for nifti, which may be wrong');
 I = I(:,end:-1:1,:,:); % flip in to LAS
 h.sform_code    = 1;
 h.srow_x        = [-h.pixdim(2) 0 0 +single(h.dim(2)) * h.pixdim(2) / 2];
