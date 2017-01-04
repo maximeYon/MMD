@@ -8,4 +8,4 @@ function s = mdm_powder_average(varargin)
 
 warning('legacy, use mdm_s_powder_average instead');
 
-s = mdm_powder_average(varargin{:});
+s = mdm_s_powder_average(varargin{:});
