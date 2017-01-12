@@ -3,7 +3,7 @@ function fn = ut_mdm(c_ut)
 %
 % Run unit tests on the files in this package
 
-if (nargin == 0), fn = 3; return; end
+if (nargin == 0), fn = 4; return; end
 
 
 switch (c_ut)
@@ -110,5 +110,34 @@ switch (c_ut)
         if (any( abs(xps.b - b) > 1 ))
             error('%s, ut_mdm test %i, xps_pa error', fn, c_ut);
         end
+        
+        
+    case 4
+        fn = 'mdm_xps_from_gdir.m';
+        
+        tmp_fn = fullfile(msf_tmp_path, 'tmp.txt');
+        fid = fopen(tmp_fn, 'w');
+        fprintf(fid, '0,0,0,0\n1, 0, 0, 1000 \n0, 1, 0, 1000\n0,0,1,1000');
+        fclose(fid);
+        
+        xps = mdm_xps_from_gdir(tmp_fn);
+        
+        msf_delete(tmp_fn);
+        rmdir(fileparts(tmp_fn));
+        
+        b = [0 1 1 1]' * 1e9;
+
+        if (any( abs(xps.b - b) > 1 ))
+            error('%s, ut_mdm test %i, xps.b error', fn, c_ut);
+        end
+
+        if (any(isnan(xps.u(:))))
+            error('%s, ut_mdm test %i, xps.u error', fn, c_ut);
+        end
+            
+        if (any(any( abs(xps.u - [0 0 0; eye(3)]) > eps)))
+            error('%s, ut_mdm test %i, xps.u error', fn, c_ut);
+        end
+        
                 
 end

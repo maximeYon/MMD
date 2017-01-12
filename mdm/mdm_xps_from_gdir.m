@@ -34,7 +34,7 @@ xps.b   = tmp(4,:)' * 1e6;
 xps.u   = tmp(1:3,:)';
 
 % demand normalization of the vectors
-xps.u   = xps.u ./ repmat(sqrt(sum(xps.u.^2,2)), 1, 3);
+xps.u   = xps.u ./ repmat(eps + sqrt(sum(xps.u.^2,2)), 1, 3);
 
 xps.n   = numel(xps.b);
 xps.bt  = tm_1x3_to_1x6(xps.b, zeros(size(xps.b)), xps.u);
