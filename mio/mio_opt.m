@@ -20,6 +20,11 @@ opt.mio.coreg = msf_ensure_field(opt.mio.coreg, 'adjust_intensity', 0);
 opt.mask.present = 1;
 opt.mask = msf_ensure_field(opt.mask, 'pca_threshold', 1.3);
 
+
+opt.mask = msf_ensure_field(opt.mask, 'b0_ind', 1);
+opt.mask = msf_ensure_field(opt.mask, 'threshold', 0.1);
+
+
 opt.mio.pa.present = 1;
 opt.mio.pa = msf_ensure_field(opt.mio.pa, 'do_abs', 1);
 opt.mio.pa = msf_ensure_field(opt.mio.pa, 'method', 'ari');
