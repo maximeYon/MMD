@@ -17,7 +17,7 @@ paths.mfs_gamma_fn     = fullfile(fileparts(paths.mfs_fn), 'mfs_gamma.mat');
 paths.mfs_erf_fn       = fullfile(fileparts(paths.mfs_fn), 'mfs_erf.mat');
 
 % Prepare: mask etc
-s = mdm_mask(s, @mio_mask_thresh, [], opt);
+s = mdm_mask(s, @mio_mask_threshold, [], opt);
 
 % Run sub analyses
 mdm_data2fit(@dti_euler_4d_data2fit, s, paths.mfs_dti_euler_fn, opt);

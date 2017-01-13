@@ -15,8 +15,8 @@ paths = mdm_paths(paths);
 msf_log(['Starting ' mfilename], opt);
 
 % Prepare: mask etc
-s = mdm_mask(s, @mio_mask_thresh, [], opt);
-s = mdm_powder_average(s, fileparts(s.nii_fn), opt);
+s = mdm_s_mask(s, @mio_mask_threshold, [], opt);
+s = mdm_s_powder_average(s, fileparts(s.nii_fn), opt);
 
 % Run the analysis
 mdm_data2fit(@dtd_pa_4d_data2fit, s, paths.mfs_fn, opt);
