@@ -12,7 +12,7 @@ opt.dti_lls = msf_ensure_field(opt.dti_lls, ...
 opt.dti_lls = msf_ensure_field(opt.dti_lls, 'fig_maps', ...
     {'s0','fa', 'md', 'ad', 'rd'});
 
-opt.dti_lls = msf_ensure_field(opt.dti_lls, 'fig_prefix', 'dti_lls_');
+opt.dti_lls = msf_ensure_field(opt.dti_lls, 'fig_prefix', 'dti_lls');
 
 % produce standard fa-color map
 opt.dti_lls = msf_ensure_field(opt.dti_lls, 'fig_cmaps',{'fa'});

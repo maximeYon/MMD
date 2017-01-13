@@ -20,7 +20,6 @@ dps.mask  = mfs.mask;
 % compute md, fa, and color fa
 dps.s0 = mfs.m(:,:,:,1);
 
-
 % pull out the tensors (in um2/ms) and compute relevant metrics
 dt_1x6 = g(mfs.m(:,:,:,2:7), 6) * 1e9;
 
@@ -34,7 +33,15 @@ dps.ad  = mio_min_max_cut( f(L(:,1), 1), [0 4]);
 dps.rd  = mio_min_max_cut( f(mean(L(:,2:3),2), 1), [0 4]);
 dps.u   = f(U, 3);
 
+% ensure all parameters are real (imag values can arise if intensity is
+% negative)
+fn = {'s0', 'fa', 'md', 'ad', 'rd', 'u'};
+for c = 1:numel(fn)
+    dps.(fn{c}) = real(dps.(fn{c}));
+end
+
 dps.fa_col = permute(255 * abs(dps.u) .* repmat(dps.fa, [1 1 1 3]), [4 1 2 3]);
+
 
 if (~isempty(dps_fn))
     mdm_dps_save(dps, mfs.s, dps_fn, opt);
