@@ -97,8 +97,13 @@ for k = 1:size(I,3) % traverse in third dimension for now
             
             tmp = linspace(-1,1,numel(tmpx))';
             
-            p = polyfit(tmp(tmpind), tmpx(tmpind), 2);
-            fmind(c) = polyval(p, 0);
+            try
+                p = polyfit(tmp(tmpind), tmpx(tmpind), 2);
+                fmind(c) = polyval(p, 0);
+            catch me
+                1;
+                fmind(c) = 0;
+            end
             
         end
         

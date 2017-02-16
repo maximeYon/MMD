@@ -22,7 +22,7 @@ h.scl_inter = 0;
 if (any(imag(I) ~= 0)), I = abs(I); end 
 
 % Analyze and store output
-mfs.m       = mio_volume_loop(fun, I, M);
+mfs.m       = mio_volume_loop(fun, I, M, opt);
 mfs.mask    = M;
 mfs.nii_h   = h;
 
