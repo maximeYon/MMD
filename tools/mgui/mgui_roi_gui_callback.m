@@ -46,7 +46,7 @@ if (nargin >= 1)
                 case {'t', 'T'} 
 
                     EG = mgui_template_view(EG, ...
-                        my_isfield(event_info, 'Character') && strcmp(event_info.Character, 'T'));
+                        msf_isfield(event_info, 'Character') && strcmp(event_info.Character, 'T'));
                                         
                 case {'delete'} % delete ROI
                     
