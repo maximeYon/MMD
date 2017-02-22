@@ -3,9 +3,7 @@ function fn = ut_mio(c_ut)
 %
 % Run unit tests on the files in this package
 
-% if (nargin == 0), fn = 6; return; end
-
-c_ut = 6;
+if (nargin == 0), fn = 6; return; end
 
 switch (c_ut)
     
@@ -90,7 +88,6 @@ switch (c_ut)
         if (sum(M(:)) ~= 0)
             error('%s, ut_mio test %i, step 3', fn, c_ut); 
         end
-        
         
         M = mio_mask_threshold(I, opt, 0, 1);
         
