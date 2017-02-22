@@ -4,7 +4,6 @@ function M = mio_mask_keep_largest(M)
 M = M > 0;
 
 if (all(M(:) == 0))
-    warning('mask is empty');
     return; 
 end
 
