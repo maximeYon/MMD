@@ -15,8 +15,6 @@ end
 unit_to_SI = [max(signal+eps) 1e-9 (1e-9)^2*[1 1] ones(1,ns)];
 
 
-
-
     function m = t2m(t) % convert local params to outside format
         
         % define model parameters
@@ -27,38 +25,51 @@ unit_to_SI = [max(signal+eps) 1e-9 (1e-9)^2*[1 1] ones(1,ns)];
         
         sw          = t((end-(ns - 1)):end);
         
-
         m = [s0 d_iso mu2_iso mu2_aniso sw] .* unit_to_SI;
+        
     end
-                            
+
     function s = my_1d_fit2data(t,varargin)
         
         m = t2m(t);
-
+        
         % signal
         s = dtd_gamma_1d_fit2data(m, xps);
         s = s(ind).*weight(ind);
-                
+        
     end
 
-% soft heaviside weighting function
-% limit the fit to the initial slope
-% sthresh: normalized signal threshold value [0.2]
-% mdthresh: MD [1e-9]
-% wthresh: width of transition from 1 to 0 [5]
-% bthresh: b-value at transition
+    % soft heaviside weighting function
+    % limit the fit to the initial slope
+    % sthresh: normalized signal threshold value [0.2]
+    % mdthresh: MD [1e-9]
+    % wthresh: width of transition from 1 to 0 [5]
+    % bthresh: b-value at transition
     function weight = weightfun(sthresh,mdthresh,wthresh)
         
         bthresh = -log(sthresh)/mdthresh;
         weight = .5*(1-erf(wthresh*(xps.b - bthresh)/bthresh));
-                        
+        
     end
 
+    % Weight function that corrects for hetrascedacity due to different number
+    % of images being averaged in the powder avereaged signal
+    function w = calc_weight_from_signal_samples
+        if ~isfield(xps, 'pa_w')
+            w = ones(size(xps.b));
+            warning('xps.pa_w is missing! Assuming equal weights!');
+        else
+            w = sqrt( xps.pa_w / max(xps.pa_w) );
+        end
+    end
+
+
 % Guesses and bounds
-m_lb      = [0             1e-11           0 0  0.5 * ones(1,ns)];
-m_ub      = [2*max(signal+eps) 3e-9  (3e-9)^2*[1 1] 2.0 * ones(1,ns)];
+m_lb      = [0                  1e-12          0*[1 1]   0.5 * ones(1,ns)];
+m_ub      = [2*max(signal+eps)  4e-9    (3e-9)^2*[1 1]   2.0 * ones(1,ns)];
+
 m_guess   = m_lb + (m_ub - m_lb) .* rand(size(m_lb));
-                
+
 t_guess   = m_guess./unit_to_SI;
 t_lb      = m_lb./unit_to_SI;
 t_ub      = m_ub./unit_to_SI;
@@ -70,20 +81,50 @@ if (opt.dtd_gamma.do_weight)
     weight = weightfun(opt.dtd_gamma.weight_sthresh,opt.dtd_gamma.weight_mdthresh,opt.dtd_gamma.weight_wthresh);
 end
 
-t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind).*weight(ind), t_lb, t_ub,...
-    opt.dtd_gamma.lsq_opts);
-
-m = t2m(t);
-
-% redo the fit with updated value of MD
-if (opt.dtd_gamma.do_weight)
-    weight = weightfun(opt.dtd_gamma.weight_sthresh,m(2),opt.dtd_gamma.weight_wthresh);
-
-t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind).*weight(ind), t_lb, t_ub,...
-    opt.dtd_gamma.lsq_opts);
+% Weight with 1/sqrt(n) so that LS-fit is weighted to 1/n propto 1/variance
+if (opt.dtd_gamma.do_pa_weight)
+    weight = weight .* calc_weight_from_signal_samples;
 end
 
-m = t2m(t);
+
+r_thr = inf;
+
+for i = 1:opt.dtd_gamma.fit_iters
+    
+    t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind).*weight(ind), t_lb, t_ub,...
+        opt.dtd_gamma.lsq_opts);
+    
+    m = t2m(t);
+    
+    % redo the fit with updated value of MD
+    if (opt.dtd_gamma.do_weight)
+        weight = weightfun(opt.dtd_gamma.weight_sthresh,m(2),opt.dtd_gamma.weight_wthresh);
+        
+        if opt.dtd_gamma.do_pa_weight
+            weight = weight .* calc_weight_from_signal_samples;
+        end
+        
+        t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind).*weight(ind), t_lb, t_ub,...
+            opt.dtd_gamma.lsq_opts);
+        
+        m = t2m(t);
+    end
+    
+    
+    % Check residual
+    s_fit = dtd_gamma_1d_fit2data(m, xps);
+    
+    res   = sum(((signal-s_fit).*weight).^2);
+    
+    if res < r_thr
+        r_thr = res;
+        m_keep = m;
+    end
+    
+end
+
+
+m = m_keep;
 
 
 if (opt.dtd_gamma.do_plot)
@@ -94,3 +135,7 @@ if (opt.dtd_gamma.do_plot)
 end
 
 end
+
+
+
+
