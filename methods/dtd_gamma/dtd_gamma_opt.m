@@ -12,9 +12,13 @@ opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'lsq_opts', ...
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'do_plot', 0);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'do_pa', 0);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'do_weight', 0);
-opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'weight_sthresh', .2);
-opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'weight_wthresh', 5);
+opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'do_pa_weight', 1);
+opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'weight_sthresh', .07);
+opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'weight_wthresh', 2);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'weight_mdthresh', 1e-9);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'fig_maps', ...
-    {'s0','iso','mu2iso','mu2aniso','ufa','ciso','cmu'});
+    {'s0','iso','mu2iso','mu2aniso','ufa','ciso','cmu','s0', ...
+    'MD', 'Vi', 'Va', 'Vt', 'MKi', 'MKa', 'MKt', 'ufa'});
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'fig_prefix', 'dtd_gamma');
+
+opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'fit_iters', 1);
