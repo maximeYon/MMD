@@ -60,7 +60,7 @@ s.nii_fn = fullfile(i, 'data_sub.nii.gz');
 s.xps = mdm_xps_load(fullfile(i, 'xps_sub.mat'));
 
 % Run analysis
-for n_model = c_model
+for n_model = 1:numel(c_model)
     tic;
     
     % OUTPUT: define paths for data, fit parameters, and maps
