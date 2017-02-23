@@ -1,4 +1,4 @@
-function xps_pa = mdm_xps_pa(xps, opt)
+ function xps_pa = mdm_xps_pa(xps, opt)
 % function xps = mdm_xps_pa(xps)
 
 if (nargin < 2), opt = mdm_opt; end
@@ -31,3 +31,21 @@ for i = 1:numel(f)
 end
 
 xps_pa.n = numel(xps_pa.b);
+
+% Remember the number of images (weight) that were averaged
+
+xps_pa.pa_w = zeros(size(c_list));
+
+for i = 1:numel(c_list)
+   
+    xps_pa.pa_w(i) = sum(id_ind == c_list(i));
+    
+end
+
+
+
+
+
+
+
+

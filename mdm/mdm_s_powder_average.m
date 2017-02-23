@@ -1,5 +1,5 @@
-function s = mdm_powder_average(s, o_path, opt)
-% function s = mdm_powder_average(s, o_path, opt)
+function s = mdm_s_powder_average(s, o_path, opt)
+% function s = mdm_s_powder_average(s, o_path, opt)
 %
 % Average over rotations. Image volumes with identical rotations is defined
 % from s.xps.a_ind
