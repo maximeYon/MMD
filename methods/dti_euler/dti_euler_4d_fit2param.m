@@ -53,7 +53,7 @@ for nk = 1:sz(3)
             dt_lambda = diag([lambdax, lambday, lambdaz]);
             
             dt3x3 = rotmat*dt_lambda*rotmatinv;
-            dt = tm_t2tpars(dt3x3);
+            dt = tm_3x3_to_tpars(dt3x3);
             
             mfs.t1x6(ni,nj,nk,:) = dt.t1x6;
             

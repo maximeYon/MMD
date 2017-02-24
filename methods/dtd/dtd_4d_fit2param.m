@@ -57,7 +57,7 @@ for nk = 1:sz(3)
                     dt1x6 = (dtd_nx6'*w)'/s0;
                     dt3x3 = tm_1x6_to_3x3(dt1x6);
 
-                    dt = tm_t2tpars(dt3x3);
+                    dt = tm_3x3_to_tpars(dt3x3);
 
                     dps.t1x6(ni,nj,nk,:) = dt.t1x6;
                     dps.lambdazzvec(ni,nj,nk,:) = dt.lambdazzvec;

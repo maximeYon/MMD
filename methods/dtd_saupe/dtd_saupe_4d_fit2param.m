@@ -12,24 +12,24 @@ if (nargin < 3), opt = []; end
 opt = mdm_opt(opt);
 
 dps_dti   = dti_euler_4d_fit2param(mfs_fns{1});
-dps_gamma = gamma_4d_fit2param(mfs_fns{2});
-dps_erf   = erf_4d_fit2param(mfs_fns{3});
+dps_gamma = dtd_gamma_4d_fit2param(mfs_fns{2});
+dps_pake   = dtd_pake_4d_fit2param(mfs_fns{3});
 dps       = dps_dti;
 
 sz = size(dps.m);
 
 % create parameter maps and save them
 kronecker = permute(repmat([1 1 1 0 0 0]',[1 sz(3) sz(2) sz(1)]),[4 3 2 1]);
-dps.t1x6 = (dps_dti.t1x6./repmat(dps_dti.iso,[1 1 1 6]) - kronecker)./repmat(dps_erf.delta,[1 1 1 6])/2;
+dps.t1x6 = (dps_dti.t1x6./repmat(dps_dti.iso,[1 1 1 6]) - kronecker)./repmat(dps_pake.delta,[1 1 1 6])/2;
 dps.t1x6prim = (2*dps.t1x6 + kronecker)/3;
 dps.t1x6(isnan(dps.t1x6)) = 0;
 dps.t1x6prim(isnan(dps.t1x6prim)) = 0;
 
-dps.slambdaxx = (dps_dti.lambdaxx./dps_dti.iso - 1)./dps_erf.delta/2;
+dps.slambdaxx = (dps_dti.lambdaxx./dps_dti.iso - 1)./dps_pake.delta/2;
 dps.slambdaxx(isnan(dps.slambdaxx)) = 0;
-dps.slambdayy = (dps_dti.lambdayy./dps_dti.iso - 1)./dps_erf.delta/2;
+dps.slambdayy = (dps_dti.lambdayy./dps_dti.iso - 1)./dps_pake.delta/2;
 dps.slambdayy(isnan(dps.slambdayy)) = 0;
-dps.slambdazz = (dps_dti.lambdazz./dps_dti.iso - 1)./dps_erf.delta/2;
+dps.slambdazz = (dps_dti.lambdazz./dps_dti.iso - 1)./dps_pake.delta/2;
 dps.slambdazz(isnan(dps.slambdazz)) = 0;
 
 dps.slambdaxxprim = (2*dps.slambdaxx + 1)/3;

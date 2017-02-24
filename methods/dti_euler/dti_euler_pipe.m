@@ -18,7 +18,7 @@ paths = mdm_paths(paths);
 msf_log(['Starting ' mfilename], opt);    
 
 % Prepare mask
-s = mdm_mask(s, @mio_mask_thresh, [], opt);
+s = mdm_s_mask(s, @mio_mask_thresh, [], opt);
 
 % Fit and derive parameters
 mdm_data2fit(@dti_euler_4d_data2fit, s, paths.mfs_fn, opt);
