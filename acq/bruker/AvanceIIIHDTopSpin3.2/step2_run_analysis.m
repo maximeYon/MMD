@@ -9,15 +9,15 @@
 % 2) Isotropic and anisotropic variance of the diffusion tensor distribution;
 %    orientational order parameters;
 %    microscopic diffusion anisotropy.
-%    See Lasic et al, Front. Phys. 2, 11 (2014), 
+%    See Lasic et al, Front. Phys. 2, 11 (2014). 
 %    http://dx.doi.org/10.3389/fphy.2014.00011.
 %
 % 3) Shape of the microscopic diffusion tensor (prolate, sphere, oblate).
-%    See, Eriksson et al., J. Chem. Phys. 142, 104201 (2015),
+%    See, Eriksson et al., J. Chem. Phys. 142, 104201 (2015).
 %    http://dx.doi.org/10.1063/1.4913502.
 %
 % 4) Saupe order tensors.
-%    See Topgaard, Phys. Chem. Chem. Phys. 18, 8545 (2016),
+%    See Topgaard, Phys. Chem. Chem. Phys. 18, 8545 (2016).
 %    http://dx.doi.org/10.1039/c5cp07251d.
 %
 % 5) Size-shape diffusion tensor distributions.
@@ -25,9 +25,10 @@
 %    http://dx.doi.org/10.1103/PhysRevLett.116.087601.
 %   
 % 6) Size-shape-orientation diffusion tensor distributions.
-%    Work in progress
+%    See Topgaard. J. Magn. Reson. 275, 98 (2017).
+%    http://dx.doi.org/10.1016/j.jmr.2016.12.007
 
-models         = {'dti_euler', 'dtd_gamma', 'dtd_pake', 'saupe', 'dtd_pa'};
+models         = {'dti_euler', 'dtd_gamma', 'dtd_pake', 'dtd_saupe', 'dtd_pa', 'dtd'};
 c_model        = 1:6;
 
 % Prepare paths
@@ -44,20 +45,20 @@ opt.do_data2fit  = 1;
 opt.do_fit2param = 1;
 opt.do_param2nii = 1;
 
+opt.do_nii2pdf    = 1;
 opt.do_report_pdf = 1;
-opt.do_mapspdf    = 1;
 
 opt.verbose       = 1;
 opt.do_overwrite  = 1;
 
-opt.dti_euler.fig_maps  = {'s0','iso'}; %output figures S0, D_iso
-opt.dtd_gamma.fig_maps      = {'ciso','cmu'}; %c_iso, c_mu
-opt.dtd_pake.fig_maps        = {'delta'}; %D_Delta
+opt.dti_euler.fig_maps  = {'s0','iso','fa'};
+opt.dtd_gamma.fig_maps      = {'s0','iso','ciso','cmu'};
+opt.dtd_pake.fig_maps        = {'s0','iso','delta'};
 opt.mask.thresh         = 0.1;
 
 % Connect to data
 s.nii_fn = fullfile(i, 'data_sub.nii.gz');
-s.xps = mdm_xps_load(fullfile(i, 'xps_sub.mat'));
+s.xps = mdm_xps_load(fullfile(i, 'data_sub_xps.mat'));
 
 % Run analysis
 for n_model = 1:numel(c_model)
@@ -75,13 +76,15 @@ for n_model = 1:numel(c_model)
             nii_fn = dtd_gamma_pipe(s, paths, opt);
         case 'dtd_pake'
             nii_fn = dtd_pake_pipe(s, paths, opt);
-        case 'saupe'
-            nii_fn = saupe_pipe(s, paths, opt);
+        case 'dtd_saupe'
+            nii_fn = dtd_saupe_pipe(s, paths, opt);
         case 'dtd_pa'
             nii_fn = dtd_pa_pipe(s, paths, opt);
+        case 'dtd'
+            nii_fn = dtd_pipe(s, paths, opt);
     end
     % convert all .nii.gz files to .pdf
-    if (opt.do_mapspdf)
+    if (opt.do_nii2pdf)
         mdm_nii2pdf(nii_fn, [], opt);
     end
     toc;
