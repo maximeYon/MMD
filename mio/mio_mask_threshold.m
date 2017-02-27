@@ -22,6 +22,9 @@ opt = mio_opt(opt);
 if (nargin < 3), threshold = opt.mask.threshold; end
 if (nargin < 4), ind = opt.mask.b0_ind; end
 
+% Disallow model fits to complex data
+if (any(imag(I) ~= 0)), I = abs(I); end 
+
 % define the mask from threshold of b0 image
 I0 = mean(I(:,:,:,ind),4);
 
