@@ -21,4 +21,23 @@ dps.ciso = dps.mu2iso./dps.iso.^2;
 dps.ciso(isnan(dps.ciso)) = 0;
 dps.cmu = dps.ufa.^2;
 
+% create parameter maps and save them
+dps.MD = dps.m(:,:,:,2)*1e9;
+dps.Vi = dps.m(:,:,:,3)*1e9*1e9;
+dps.Va = dps.m(:,:,:,4)*1e9*1e9;
+dps.Vt = dps.Vi + dps.Va;
+
+dps.NVi = dps.Vi ./ dps.MD.^2;
+dps.NVa = dps.Va ./ dps.MD.^2;
+dps.NVt = dps.Vt ./ dps.MD.^2;
+
+dps.MKi = 3 * dps.Vi ./ dps.MD.^2;
+dps.MKa = 3 * dps.Va ./ dps.MD.^2;
+dps.MKt = 3 * dps.Vt ./ dps.MD.^2;
+
+dps.Vl = 5/2 * dps.Va;
+
+dps.ufa_old = sqrt(3/2) * sqrt(1./(dps.MD.^2./dps.Vl+1));
+dps.ufa     = sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.Vi + dps.MD.^2) );
+
 if (~isempty(dps_fn)), mdm_dps_save(dps, dps.s, dps_fn, opt); end
