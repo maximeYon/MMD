@@ -11,9 +11,13 @@ rs        = [1 m(5:end)]; % Relative signal (Series 1, 2, 3, ...)
 
 % signal baseline coefficient that adjusts for variable baseline signal
 % across multiple series (xps.s_ind).
-sw = s0 * sum(  mtimes(  ones(size(xps.b)), rs    ) .* ...
-                      (  xps.s_ind == 1:numel(rs) )  , 2);
-                               
+if (numel(rs) > 1)
+    sw = s0 * sum(  mtimes(  ones(size(xps.b)), rs       ) .* ...
+                 (  bsxfun(@eq, xps.s_ind, 1:numel(rs))  )  , 2);
+else
+    sw = s0;
+end
+                   
 % Total diffusional variance (mu2) is the weighted sum of the isotropic 
 % (mu2_iso) and anisotorpic (mu2_aniso) components.
 mu2 = mu2_iso + mu2_aniso.*xps.b_delta.^2.*(xps.b_eta.^2+3)/3;
