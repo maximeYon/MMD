@@ -3,7 +3,7 @@ function fn = ut_mdm(c_ut)
 %
 % Run unit tests on the files in this package
 
-if (nargin == 0), fn = 4; return; end
+if (nargin == 0), fn = 5; return; end
 
 
 switch (c_ut)
@@ -112,15 +112,19 @@ switch (c_ut)
         end
         
         
-    case 4
+    case 4 
         fn = 'mdm_xps_from_gdir.m';
         
+        % write a gdir file
         tmp_fn = fullfile(msf_tmp_path, 'tmp.txt');
         fid = fopen(tmp_fn, 'w');
         fprintf(fid, '0,0,0,0\n1, 0, 0, 1000 \n0, 1, 0, 1000\n0,0,1,1000');
         fclose(fid);
         
+        % read it, convert to xps
         xps = mdm_xps_from_gdir(tmp_fn);
+        xps2 = mdm_xps_from_gdir(tmp_fn, [], 0);
+        xps3 = mdm_xps_from_gdir(tmp_fn, [], -0.5);
         
         msf_delete(tmp_fn);
         rmdir(fileparts(tmp_fn));
@@ -139,5 +143,60 @@ switch (c_ut)
             error('%s, ut_mdm test %i, xps.u error', fn, c_ut);
         end
         
-                
+        if (any(abs(xps2.b_delta) > 1e-10))
+            error('%s, ut_mdm test %i, xps.b_delta error', fn, c_ut);
+        end
+        
+        if (any(abs(xps3.b_delta - (-0.5)) > 1e-10))
+            error('%s, ut_mdm test %i, xps.b_delta error', fn, c_ut);
+        end
+        
+            
+    case 5
+        fn = 'mdm_xps_from_bval_bvec.m';
+        
+        % write b-val and b-vec files
+        o = msf_tmp_path();
+        bval_fn = fullfile(o, 'bval.txt');
+        fid = fopen(bval_fn, 'w');
+        fprintf(fid, '1 1000 1000 1000');
+        fclose(fid);
+        
+        bvec_fn = fullfile(o, 'bvec.txt');
+        fid = fopen(bvec_fn, 'w');
+        fprintf(fid, '1 1 0 0\n 0 0 1 0\n 0 0 0 1');
+        fclose(fid);
+        
+        % read it, convert to xps
+        xps1 = mdm_xps_from_bval_bvec(bval_fn, bvec_fn);
+        xps2 = mdm_xps_from_bval_bvec(bval_fn, bvec_fn, 0);
+        xps3 = mdm_xps_from_bval_bvec(bval_fn, bvec_fn, -0.5);
+        
+        msf_delete(bval_fn);
+        msf_delete(bvec_fn);
+        rmdir(fileparts(bval_fn));
+        
+        b = [1/1000 1 1 1]' * 1e9;
+
+        if (any( abs(xps1.b - b) > 1 ))
+            error('%s, ut_mdm test %i, xps.b error', fn, c_ut);
+        end
+
+        if (any(isnan(xps1.u(:))))
+            error('%s, ut_mdm test %i, xps.u error', fn, c_ut);
+        end
+            
+        if (any(any( abs(xps1.u - [1 0 0; eye(3)]) > eps)))
+            error('%s, ut_mdm test %i, xps.u error', fn, c_ut);
+        end
+        
+        if (any(abs(xps2.b_delta) > 1e-10))
+            error('%s, ut_mdm test %i, xps.b_delta error #1', fn, c_ut);
+        end
+        
+        if (any(abs(xps3.b_delta - (-0.5)) > 1e-10))
+            error('%s, ut_mdm test %i, xps.b_delta error #2', fn, c_ut);
+        end        
+        
+        
 end
