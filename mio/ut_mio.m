@@ -3,7 +3,7 @@ function fn = ut_mio(c_ut)
 %
 % Run unit tests on the files in this package
 
-if (nargin == 0), fn = 1; return; end
+if (nargin == 0), fn = 6; return; end
 
 switch (c_ut)
     
@@ -56,5 +56,44 @@ switch (c_ut)
                 if (~all(P(:) == 14*2)), error('%s, ut_mio test %i', fn, c_ut); end
                 
         end
+        
+        
+    case 6
+        fn = 'mio_mask_threshold.m';
+
+        % make phantom
+        I = repmat(phantom(128), 1, 1, 128);
+        I = cat(4, zeros(size(I)), I, zeros(size(I)));
+        
+        % expect this
+        M_exp = mio_mask_fill(I(:,:,:,2) > 0);
+        
+        opt.mask.b0_ind = 2;
+        
+        M = mio_mask_threshold(I, opt);
+        
+        % test that it works
+        if (sum(M(:)) == 0)
+            error('%s, ut_mio test %i, step 1', fn, c_ut); 
+        end
+        
+        if (any(M(:) ~= M_exp(:)))
+            error('%s, ut_mio test %i, step 2', fn, c_ut); 
+        end
+        
+        
+        % check arguments
+        M = mio_mask_threshold(I, opt, 1);
+        
+        if (sum(M(:)) ~= 0)
+            error('%s, ut_mio test %i, step 3', fn, c_ut); 
+        end
+        
+        M = mio_mask_threshold(I, opt, 0, 1);
+        
+        if (sum(M(:)) ~= 0)
+            error('%s, ut_mio test %i, step 4', fn, c_ut); 
+        end
+
         
 end

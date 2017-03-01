@@ -54,10 +54,9 @@ unit_to_SI = [max(signal+eps) 1e-9 (1e-9)^2*[1 1] ones(1,ns)];
 
     % Weight function that corrects for hetrascedacity due to different number
     % of images being averaged in the powder avereaged signal
-    function w = calc_weight_from_signal_samples
+    function w = calc_weight_from_signal_samples()
         if ~isfield(xps, 'pa_w')
             w = ones(size(xps.b));
-            warning('xps.pa_w is missing! Assuming equal weights!');
         else
             w = sqrt( xps.pa_w / max(xps.pa_w) );
         end
@@ -83,7 +82,7 @@ end
 
 % Weight with 1/sqrt(n) so that LS-fit is weighted to 1/n propto 1/variance
 if (opt.dtd_gamma.do_pa_weight)
-    weight = weight .* calc_weight_from_signal_samples;
+    weight = weight .* calc_weight_from_signal_samples();
 end
 
 
@@ -101,7 +100,7 @@ for i = 1:opt.dtd_gamma.fit_iters
         weight = weightfun(opt.dtd_gamma.weight_sthresh,m(2),opt.dtd_gamma.weight_wthresh);
         
         if opt.dtd_gamma.do_pa_weight
-            weight = weight .* calc_weight_from_signal_samples;
+            weight = weight .* calc_weight_from_signal_samples();
         end
         
         t = lsqcurvefit(@my_1d_fit2data, t_guess, [], signal(ind).*weight(ind), t_lb, t_ub,...

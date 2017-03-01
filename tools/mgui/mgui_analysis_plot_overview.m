@@ -41,7 +41,11 @@ axis(h_top, 'on');
 box(h_top, 'off');
 set(h_top, 'tickdir','out', 'ticklength', [0.03 0.1]);
 
-axis(h_top, [ [1 xps.n] + [-1 1] * 0.5 0 (max(S(:)) + eps) * 1.1]);
+if (min(S(:)) < 0)
+    axis(h_top, [ [1 xps.n] + [-1 1] * 0.5 [-1 1] * (max(abs(S(:))) + eps) * 1.1]);    
+else
+    axis(h_top, [ [1 xps.n] + [-1 1] * 0.5 0 (max(S(:)) + eps) * 1.1]);
+end
 
 xlabel(h_top, 'Acq number');
 ylabel(h_top, 'Signal');

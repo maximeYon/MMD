@@ -6,12 +6,9 @@ function fn = ut_tensor_maths(c_ut)
 % 
 
 % n_ut = number of unit tests
-n_ut = 3;
+n_ut = 5;
 
-if (nargin == 0)
-    fn = n_ut;
-    return;
-end
+if (nargin == 0), fn = n_ut; return; end
 
 switch (c_ut)
     
@@ -74,6 +71,29 @@ switch (c_ut)
         if ( any( abs(fa - [1 0]') > eps ) )
             error('%s: FA calculation not working', fn);
         end
+        
+        
+    case 5
+        fn = 'tm_tpars_to_1x6.m';
+        
+        % define b-value, direction (u) and b_delta
+        b = 1.0;
+        u = uvec_elstat(50);
+        b_delta = linspace(-0.5, 1.0, size(u, 1))';
+
+        % compute b-tensor from the tensor parameters above
+        bt = tm_tpars_to_1x6(b, b_delta, u);
+
+        % check that we get the same parameter back
+        b_delta_out = zeros(size(b_delta));
+        for c = 1:size(bt, 1)
+            tp = tm_1x6_to_tpars(bt(c,:));
+            b_delta_out(c) = tp.delta;
+        end
+        
+        if (any( abs(b_delta - b_delta_out) > 1e-10))
+            error('%s, ut_tensor_maths test %i, b_delta error', fn, c_ut);
+        end            
         
         
 end

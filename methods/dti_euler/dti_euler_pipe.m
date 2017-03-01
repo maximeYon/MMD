@@ -5,7 +5,7 @@ function fn = dti_euler_pipe(s, paths, opt)
 % paths - either a pathname or a path structure (see mdm_paths)
 % opt   - (optional) options that drive the pipeline
 %
-% fn    - a cell arary with filenames to generated nii files
+% fn    - a cell array with filenames to generated nii files
 
 if (nargin < 2), paths = fileparts(s.nii_fn); end
 if (nargin < 3), opt.present = 1; end
@@ -18,7 +18,7 @@ paths = mdm_paths(paths);
 msf_log(['Starting ' mfilename], opt);    
 
 % Prepare mask
-s = mdm_mask(s, @mio_mask_thresh, [], opt);
+s = mdm_s_mask(s, @mio_mask_threshold, [], opt);
 
 % Fit and derive parameters
 mdm_data2fit(@dti_euler_4d_data2fit, s, paths.mfs_fn, opt);

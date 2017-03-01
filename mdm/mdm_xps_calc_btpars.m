@@ -4,7 +4,7 @@ function xps = mdm_xps_calc_btpars(xps)
 for c = 1:xps.n
     t = tm_1x6_to_3x3(xps.bt(c,:));
     
-    t = tm_t2tpars(t);
+    t = tm_3x3_to_tpars(t);
     
     f = fieldnames(t);
     for c_field = 1:numel(f)

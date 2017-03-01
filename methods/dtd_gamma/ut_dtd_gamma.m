@@ -4,12 +4,9 @@ function fn = ut_dtd_gamma(c_ut)
 % if c_ut is not supplied, the function returns the number of unit tests
 
 % n_ut = number of unit tests
-n_ut = 1;
+n_ut = 4;
 
-if (nargin < 1)
-    fn = n_ut;
-    return;
-end
+if (nargin < 1), fn = n_ut; return; end
 
 switch c_ut
     
@@ -17,7 +14,7 @@ switch c_ut
         % UT of simplest case where LTE and STE are used with a single
         % baseline signal.
         
-        fn  = 'dtd_gamma_1d_data2fit';
+        fn  = 'dtd_gamma_1d_data2fit.m';
         opt = dtd_gamma_opt;
         
         tissue      = [100 .9e-9 0.4e-18 0.8e-18];
@@ -35,9 +32,9 @@ switch c_ut
         
         t = dtd_gamma_1d_data2fit(signal, xps, opt);
         
-        E = (t-tissue)./tissue;
+        E = (t-tissue)./(tissue + eps);
         
-        if any(abs(E) > 0.001) % 0.1% threshold
+        if (any(abs(E) > 0.001)) % 0.1% threshold
             error('%s, ut_dtd_gamma test %i, fit returns unexpected values!', fn, c_ut);
         end
         
@@ -46,7 +43,7 @@ switch c_ut
         % UT of a simple LTE, STE and PTE fitting where STE and LTE have
         % 20% higher and 10% lower baseline signal, respectively.
            
-        fn  = 'dtd_gamma_1d_data2fit';
+        fn  = 'dtd_gamma_1d_data2fit.m';
         opt = dtd_gamma_opt;
         
         tissue      = [100 .9e-9 0.4e-18 0.8e-18 1.2 0.9];
@@ -66,7 +63,7 @@ switch c_ut
         
         t = dtd_gamma_1d_data2fit(signal, xps, opt);
         
-        E = (t-tissue)./tissue;
+        E = (t-tissue)./(tissue + eps);
         
         if any(abs(E) > 0.001) % 0.1% threshold
             error('%s, ut_dtd_gamma test %i, fit returns unexpected values!', fn, c_ut);
@@ -78,7 +75,7 @@ switch c_ut
         % tissue values. Threshold is raised to 1% because Viso is usually
         % overestimated when MD is high and Viso is low.
 
-        fn  = 'dtd_gamma_1d_data2fit';
+        fn  = 'dtd_gamma_1d_data2fit.m';
         opt = dtd_gamma_opt;
         opt.dtd_gamma.fit_iters = 3;
         
@@ -106,7 +103,7 @@ switch c_ut
         
         for i = 1:size(tissue, 1)
             t = dtd_gamma_1d_data2fit(signal(i,:)', xps, opt);
-            E = (t-tissue(i,:))./tissue(i,:);
+            E = (t-tissue(i,:))./(tissue(i,:) + eps);
             if any(abs(E) > 0.01) % 1% threshold
                 error('%s, ut_dtd_gamma test %i, fit returns unexpected values!', fn, c_ut);
             end
@@ -119,7 +116,7 @@ switch c_ut
         % and powder-averaged data if the correction for heteroscedasticity 
         % is correct.
         
-        fn  = 'dtd_gamma_1d_data2fit';
+        fn  = 'dtd_gamma_1d_data2fit.m';
         opt = dtd_gamma_opt;
         opt.dtd_gamma.do_pa_weight = 1; % do_pa_weight must be true for this test.
         
@@ -142,17 +139,11 @@ switch c_ut
         t    = dtd_gamma_1d_data2fit(signal   , xps   , opt);
         t_pa = dtd_gamma_1d_data2fit(signal_pa, xps_pa, opt);
         
-        E = (t-t_pa)./t;
+        E = (t-t_pa)./(t+eps);
         
         if any(abs(E) > 0.001) % 0.1% threshold
-            error('%s, ut_dtd_gamma test %i, powder average and non-powder data render differnt results!', fn, c_ut);
+            error('%s, ut_dtd_gamma test %i, powder average and non-powder data render different results!', fn, c_ut);
         end
-        
-        
-        
-    otherwise
-        fn = 'N/A';
-        error('%s, ut_dtd_gamma test %i, is not a defined UT!', fn, c_ut);
         
 end
 

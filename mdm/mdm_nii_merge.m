@@ -10,16 +10,16 @@ if (exist(out_nii_fn, 'file') && ~opt.do_overwrite)
     return;
 end
 
+% read and merge files
 I = [];
 for c = 1:numel(nii_fn_cell)
     
     [I_tmp,h] = mdm_nii_read_and_rescale(nii_fn_cell{c});
     
-    if (h.dim(1) ~= 4)
-        warning('you may run into issues when using non 4D data, e.g. single slices');
-    end
+    if (h.dim(1) == 3) && (h.dim(5) == 1) && (h.bitpix ~= 32) 
+        warning(['this piece of code is experimental, ' ...
+            'report its use to markus.nilsson@med.lu.se']); 
     
-    if (h.dim(1) == 3) && (h.dim(5) == 1)
         h.dim(5) = h.dim(4);
         h.dim(4) = 1;
         h.dim(1) = 4;
@@ -40,7 +40,6 @@ for c = 1:numel(nii_fn_cell)
         end
         
         I = cat(4, I, I_tmp);
-                
     end
 end
 

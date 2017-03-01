@@ -13,7 +13,7 @@ if (nargin < 2), prefix = []; end
 if (nargin < 3), suffix = []; end
 
 if (ischar(tmp))
-    paths.pa_fn  = fullfile(tmp, [prefix 'pa'  suffix '.nii.gz']);
+    paths.pa_fn  = fullfile(tmp, [prefix suffix '_pa.nii.gz']);
     paths.mfs_fn = fullfile(tmp, [prefix 'mfs' suffix '.mat']);
     paths.dps_fn = fullfile(tmp, [prefix 'dps' suffix '.mat']);
     paths.nii_path = fullfile(tmp);

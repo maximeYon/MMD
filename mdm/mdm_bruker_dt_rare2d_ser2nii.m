@@ -195,6 +195,7 @@ for ntd1 = 1:td1
     end
     I = fftshift(fft(ifftshift(I,2),[],2),2);
     Itd1(:,:,1,ntd1) = I;
+    %figure(1), clf, imagesc(abs(I)'), set(gca,'YDir','normal'), axis square, pause(.1)
 end
 
 % make nifti headear

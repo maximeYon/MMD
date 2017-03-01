@@ -124,6 +124,7 @@ end
         
         hist(h_top, S);
         axis(h_top, 'on');
+        title(h_top, num2str(nanmean(S(:)'),3));
         
     end
 
