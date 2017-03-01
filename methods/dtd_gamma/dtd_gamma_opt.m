@@ -10,7 +10,7 @@ opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'pa_method', 1);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'lsq_opts', ...
     optimoptions('lsqcurvefit', 'display', 'off','MaxFunEvals',1e3));
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'do_plot', 0);
-opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'do_pa', 0);
+opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'do_pa', 1);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'do_weight', 0);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'do_pa_weight', 1);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'weight_sthresh', .07);
