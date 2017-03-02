@@ -28,3 +28,7 @@ I       = mio_smooth_4d(single(I), filter_sigma, opt);
 mdm_nii_write(single(I), nii_fn, h);
 
 s.nii_fn = nii_fn;
+
+% always overwrite the xps if we've written a new image
+opt.do_overwrite = 1; 
+mdm_xps_save(s.xps, mdm_xps_fn_from_nii_fn(s.nii_fn), opt);
