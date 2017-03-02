@@ -47,21 +47,26 @@ opt = mdm_opt;
 % Connect to the data
 s.nii_fn = fullfile(pwd, 'data.nii');
 s.xps = mdm_xps_from_gdir('data_gdir.txt');
+
+% Determine output path
+o_path = pwd;
  
 % Define which data to include in the reference 
 % (only b-values below 1000 s/mm2)
-s_ref = mdm_s_subsample(s, s.xps.b <= 1e9, fileparts(s.nii_fn), opt); 
+s_ref = mdm_s_subsample(s, s.xps.b <= 1e9, o_path, opt); 
  
 % Write the elastix parameter file
 p = elastix_p_affine;
 p_fn = elastix_p_write(p, 'p.txt');
  
 % First run a conventional coregistratin of the reference
-s_ref = mdm_mec_b0(s_ref, p_fn, fileparts(s_ref.nii_fn), opt);
+s_ref = mdm_mec_b0(s_ref, p_fn, o_path, opt);
  
 % Run an extrapolation-based registration
-mdm_mec_eb(s, s_ref, p_fn);
+s_registered = mdm_mec_eb(s, s_ref, p_fn, o_path, opt);
 ```
+
+Now `s_registered` can be used in the subsequent analysis.
 
 ## Construction of the xps
 The xps hold information on how the experiment was performed. All variables are given in SI-units, and have predetermined names according to [this specification](mdm/readme.txt). Please see functions `mdm_xps_*` for help on how to construct an xps. For an example, see below
