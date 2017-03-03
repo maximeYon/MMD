@@ -1,10 +1,15 @@
 function [L, v_1] = tm_1x6_eigvals(v_1x6, c_method)
 % function [L, v_1] = tm_1x6_eigvals(v_1x6, c_method)
 %
+% Compute eignvalues/vectors from a tensor/tensors on Voigt 1x6 notation
 %
 % c_method
 %   1 - Cardano's fast method
 %   2 - eigs in Matlab
+%
+% Output:
+% L    - eigenvalues
+% v_1 - first eigenvector (longest)
 if (nargin < 2), c_method = 1; end
 
 switch (c_method)
@@ -27,7 +32,9 @@ switch (c_method)
         p = c_2.^2 - 3 * c_1;
         q = -27/2 * c_0 - c_2.^3  + 9/2 * c_2 .* c_1;
         
-        phi = 1/3 * atan( sqrt( 27 * (1/4 * c_1.^2 .* (p - c_1) + c_0 .* (q + 27/4 * c_0))) ./ q);
+        tmp = 27 * (1/4 * c_1.^2 .* (p - c_1) + c_0 .* (q + 27/4 * c_0));
+        tmp(tmp < 0) = 0;
+        phi = 1/3 * atan( sqrt( tmp ) ./ (q + eps));
         
         phi = phi + pi * (q < 0);
         

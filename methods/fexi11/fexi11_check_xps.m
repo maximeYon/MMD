@@ -1,7 +1,15 @@
 function fexi11_check_xps(xps)
 % function fexi11_check_xps(xps)
 % 
-% checks that all required fields are found in the xps
+% Checks that all required fields are found in the xps. The required fields
+% are:
+% 
+% mde_b1      - filter b-value
+% mde_b2      - detection b-value
+% mde_tm12    - mixing time
+% s_ind       - series index, yields separate b0's
+% mde_b2_ind  - detection b-values, for guessing s0
+
 
 mdm_xps_check(xps);
 

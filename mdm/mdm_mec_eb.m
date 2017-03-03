@@ -58,3 +58,5 @@ end
 s = s_target;
 s.nii_fn = mdm_coreg(s.nii_fn, ref_fn, p_fn, o_path, opt);
 
+mdm_xps_save(s.xps, mdm_xps_fn_from_nii_fn(s.nii_fn));
+

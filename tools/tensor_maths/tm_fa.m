@@ -25,3 +25,5 @@ end
 
 
 fa = sqrt( (3/2) * (1 + md.^2./vl).^(-1) );
+
+fa = real( fa ); % should not be imag, but noise may lead to negative vl
