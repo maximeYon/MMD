@@ -36,9 +36,17 @@ while (c <= nargin)
     
     data_value = varargin{c}; c = c + 1;    
     
+    
     if (~strcmpi(input_flag, cat(2, mandatory_arguments, optional_arguments)))
         print_msg(['Unknown argument: ' input_flag]); return;
     end
+    
+    switch (input_flag)
+        case {'i_range', 'j_range', 'k_range'}
+            data_value = str2num(data_value);
+    end
+            
+    
     
     input.(input_flag) = data_value;
     
