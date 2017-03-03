@@ -68,30 +68,18 @@ The xps holds all relevant experimental information, i.e., how the experiment wa
 
 **Creating an xps based on a single nii file**
 
-If a single nii file is the basis for the analysis, a single path is used to define its location `nii_fn = 'nii_filename.nii';`. Each nii file is usually associated with files that contain information about the diffusion encoding directions and b-values that were used. These can be used to automatically generate appropriate xps structures. To do this, call
+If a single nii file is the basis for the analysis, a single path is used to define its location `s.nii_fn = 'nii_filename.nii';`. Each nii file is usually associated with files that contain information about the diffusion encoding directions and b-values that were used. These can be used to automatically generate appropriate xps structures. To do this, call
 
 ```matlab 
-xps = mdm_xps_from_gdir('gdir_filename.txt', b_delta);
+s.xps = mdm_xps_from_gdir('gdir_filename.txt', b_delta);
 ``` 
 or 
 
 ```matlab
-xps = mdm_xps_from_bval_bvec('bval_filename.bval', 'bvec_filename.bvec', b_delta);
+s.xps = mdm_xps_from_bval_bvec('bval_filename.bval', 'bvec_filename.bvec', b_delta);
 ```
 
-depending on what format is used. Note that the files currently do not contain information about the shape of the b-tensor, thus `b_delta` must be specified by the user. Furthermore, note that the path to gdir.txt and .bval/.bvec files can be generated based on `nii_fn` by calling either
-
-```matlab 
-gdir_fn = mdm_fn_nii2gdir(nii_fn);
-```
-
- or 
-
-```matlab
-[bval_fn, bvec_fn] = mdm_fn_nii2bvalbvec(nii_fn);
-```
-
-The resulting xps can be saved by using `mdm_xps_save`. If the name of the .mat-file holding the xps is related to the nii filename as specified in `mdm_xps_fn_from_nii_fn`, the framework will automatically find the xps. 
+depending on what format is used. Note that the files currently do not contain information about the shape of the b-tensor, thus `b_delta` must be specified by the user. Furthermore, the path to gdir.txt and .bval/.bvec files can be generated based on `nii_fn` by calling either `mdm_fn_nii2gdir` or `mdm_fn_nii2bvalbvec`. The resulting xps can be saved by using `mdm_xps_save`. If the name of the .mat-file holding the xps is related to the nii filename as specified in `mdm_xps_fn_from_nii_fn`, the framework will automatically find the xps. 
 
 **Example: xps from single nii file**
 
@@ -120,34 +108,33 @@ mdm_xps_save(s.xps, xps_fn)
 
 **Creating an xps based on multiple nii files**
 
-In some cases all the necessary data cannot be acquired in a single series, which results in multiple nii files that need to be combined during the analysis. For example, encoding with linear and spherical b-tensors is currently performed in two separate series, but we wish to analyze them simultaneously. In the case when the analysis relies on multiple nii files we first create partial xps structures (according to the method for single nii files), and then we merge the nii files by using `mdm_nii_merge`, and the xps structures using `mdm_xps_merge`.
+In some cases all the necessary data cannot be acquired in a single series, which results in multiple nii files that need to be combined during the analysis. For example, encoding with linear and spherical b-tensors is currently performed in two separate series, but we wish to analyze them simultaneously. In the case when the analysis relies on multiple nii files we first create partial a cell array of partial s structures, and then call `mdm_s_merge` to merge them all into one. There are also separate functions to merge nii files and xps structures (`mdm_nii_merge` and `mdm_xps_merge`).
 
 **Example: xps from multiple nii files**
 
-This example uses alla the tools form the previous example. It assumes that full filenames are specified to all necessary nii files, and that corersponding gdir.txt or .bval/.bvec files are in the same folder and that they have standardized names (according to `mdm_fn_nii2gdir` and `mdm_fn_nii2bvalbvec`). The partial xps structures are first stored in a cell array of structures and then merged, along with the nii files. Note that this example includes only the case where gdir.txt files are used to create the xps, but can be modified to use .bval/.bvec.
+This example uses alla the tools form the previous example. It assumes that full filenames are specified to all necessary nii files, and that corersponding gdir.txt or .bval/.bvec files with standardized names are in the same folder (see `mdm_fn_nii2gdir` and `mdm_fn_nii2bvalbvec` for standard names). All necessary nii files and corresponding xps structures are first stored in a cell array of structures. Then the cell array of partial s structures is merged. Note that this example includes only the case where gdir.txt files are used to create the xps, but can be modified to use .bval/.bvec according to the example above.
 
 ```matlab
-% Cell array of all files that are going to be merged
-file_list = {'nii_filename_1.nii', 'nii_filename_2.nii', 'nii_filename_3.nii'};
+% Create a cell array of s structures.
+s{1}.nii_fn = 'nii_filename_1.nii';
+s{2}.nii_fn = 'nii_filename_2.nii';
+s{3}.nii_fn = 'nii_filename_3.nii';
 
 % Corresponding b-tensor shapes. In this case: spherical, linear, and planar.
 b_deltas  = [0 1 -.5];
 
-% Define a name for the merged nii
-merged_nii_fn = 'merged_nii_filename.nii';
+% Define a name for the merged nii (output)
+merged_nii_path = '...\output_directory\';
+merged_nii_name = 'merged_nii_name.nii';
 
-% Loop over nii files, create partial xps structures, and store them in a cell array
+% Loop over nii files to create partial xps structures, and store them in the cell array.
 for i = 1:numel(file_list)
-	gdir_fn = mdm_fn_nii2gdir(file_list{i});
-    xps_array{i} = mdm_xps_from_gdir(gdir_fn, [], b_deltas(i));
+	gdir_fn  = mdm_fn_nii2gdir(s{i}.nii_fn);
+    s{i}.xps = mdm_xps_from_gdir(gdir_fn, [], b_deltas(i));
 end
 
-% Merge the nii files, for future use. This function also saves the nii to merged_nii_fn.
-s.nii_fn = mdm_nii_merge(file_list, merged_nii_fn);
-
-% Merge the xps structures into one. Then save the xps for future use.
-s.xps = mdm_xps_merge(xps_array);
-mdm_xps_save(s.xps, mdm_xps_fn_from_nii_fn(s.nii_fn));
+% Merge the s structure, and save the merged nii along with its corresponding xps.mat file.
+s_merged = mdm_s_merge(s, merged_nii_path, merged_nii_name);
 
 ```
 
