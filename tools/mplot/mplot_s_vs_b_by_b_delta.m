@@ -70,7 +70,7 @@ set(h, 'tickdir','out');
 
 ylim(h, [10^floor(log10(min(S(S(:) > 0) / m(1)))) 1.1]);
 
-xlabel(h, 'b [µm^2/ms]');
+xlabel(h, 'b [um^2/ms]');
 ylabel(h, 'Signal');
 
 
