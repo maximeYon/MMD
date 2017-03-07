@@ -3,6 +3,10 @@ function m = dti_lls_1d_data2fit(signal, xps, opt, ind)
 
 if (nargin < 4), ind = ones(size(signal)) > 0; end
 
+if (xps.n ~= numel(signal))
+    error('The xps does not match the data: xps.n = %i vs numel(signal) = %i', ...
+        xps.n, numel(signal));
+end
 
 % log S = X * B (B --> m, our model parameters)
 %

@@ -23,8 +23,8 @@ if (strcmpi(o_path(max(1, end-6):end), '.nii.gz'))
     out_xps_fn = mdm_xps_fn_from_nii_fn(out_nii_fn);
 else
     [~,name] = msf_fileparts(s.nii_fn);
-    out_nii_fn = fullfile(o_path, [name '_pa' opt.nii_ext]);
-    out_xps_fn = fullfile(o_path, [name '_pa_xps.mat']);
+    out_nii_fn = fullfile(o_path, [name '_' opt.mdm.pa_suffix opt.nii_ext]);
+    out_xps_fn = mdm_xps_fn_from_nii_fn(out_nii_fn);
 end
 
 
@@ -40,8 +40,8 @@ end
 
 % Run the powder averaging functions
 [I,h] = mdm_nii_read(s.nii_fn);
-I = mio_pa(I, s.xps);
-s.xps = mdm_xps_pa(s.xps); 
+I = mio_pa(I, s.xps, opt);
+s.xps = mdm_xps_pa(s.xps, opt); 
 
 
 % Build a new file name and save

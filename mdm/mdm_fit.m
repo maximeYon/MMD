@@ -43,7 +43,9 @@ while (c <= nargin)
     
     switch (input_flag)
         case {'i_range', 'j_range', 'k_range'}
-            data_value = str2num(data_value);
+            if (ischar(data_value))
+                data_value = str2num(data_value);
+            end
     end
             
     
