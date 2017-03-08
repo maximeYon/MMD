@@ -65,6 +65,15 @@ if (isempty(xps))
     end
 end
 
+% If it is still empty, check for bval bvec
+if (isempty(xps))
+    [tmpa,tmpb] = mdm_fn_nii2bvalbvec(filename);
+    
+    if (exist(tmpa, 'file') && exist(tmpb,'file'))
+        xps = mdm_xps_from_bval_bvec(tmpa,tmpb);
+    end
+end
+
     
 % Rotate the volume
 if (do_flip) && (isfield(header, 'my_hdr') && (isfield(header.my_hdr,'ori')))

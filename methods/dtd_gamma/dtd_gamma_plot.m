@@ -17,7 +17,7 @@ Vl = 5/2 * m(4);
 uFA = sqrt(3/2) * sqrt( Vl ./ (Vl + m(3) + m(2).^2) );
 
 title_str = {...
-    ['S_0 = ' num2str(S0, 2) '   MD = ' num2str(MD, 2) ' µm^2/ms']; ...
-    ['MK_I = ' num2str(MKi, 2) '   MKa = ' num2str(MKa, 2) '   µFA = ' num2str(uFA, 2)]};
+    ['S_0 = ' num2str(S0, 2) '   MD = ' num2str(MD, 2) ' um^2/ms']; ...
+    ['MK_I = ' num2str(MKi, 2) '   MKa = ' num2str(MKa, 2) '   uFA = ' num2str(uFA, 2)]};
 
 title(h, title_str)
