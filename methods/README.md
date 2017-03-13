@@ -36,7 +36,7 @@ The MD-dMRI methods for quantifying DTDs can be classified according to the obta
 
 | Name | reference | size| shape | orientation| algorithm |
 | ---:|:---:|:---:|:---:|:---:|:----:|
-| dtd_full | Topgaard 2017<sup>1</sup> | distribution | distribution | distribution | NNLS |
+| dtd | Topgaard 2017<sup>1</sup> | distribution | distribution | distribution | NNLS |
 | dtd_saupe | Topgaard 2016<sup>8</sup> | 1 component | 1 component | order tensor | NLSQ |
 | dtd_covariance | Westin 2016<sup>9</sup> |  mean and variance | mean and variance | order parameter | LLSQ |
 | dtd_gamma | Lasič 2014<sup>10</sup> |  mean and variance | mean | order parameter | NLSQ |
