@@ -41,14 +41,13 @@ msf_mkdir(o);
 
 % Prepare options
 opt = mdm_opt();
-opt.do_recon     = 0;
-opt.do_mask      = 0;
-opt.do_data2fit  = 0;
-opt.do_fit2param = 0;
-opt.do_param2nii = 0;
+opt.do_mask      = 1;
+opt.do_data2fit  = 1;
+opt.do_fit2param = 1;
+opt.do_param2nii = 1;
 
-opt.do_xps2pdf    = 0;
-opt.do_nii2pdf    = 0;
+opt.do_xps2pdf    = 1;
+opt.do_nii2pdf    = 1;
 opt.do_dtdpdf     = 1;
 
 opt.verbose       = 1;

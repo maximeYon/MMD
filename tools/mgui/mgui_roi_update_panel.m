@@ -23,6 +23,7 @@ if (do_reload)
     EG = mgui_waitbar(EG, 0.1, 'Loading...');
     try
         [I, header, filename, ext, xps] = mgui_contrast_load(EG);% , EG.select);
+        I = abs(I);
     catch me
         disp(getReport(me,'Extended'));
         return;
@@ -344,7 +345,8 @@ if (do_redraw_image)
         % Display current image
         h_image = findobj(get(h, 'Children'), 'Type', 'Image');
         if (isempty(h_image))
-            h_image = imagesc(single(I), 'parent', h);
+            h_image = imagesc(single(abs(I)), 'parent', h);
+            %h_image = imagesc(single(I), 'parent', h);
         else
             if (numel(h_image) > 1)
                 disp('strange!');

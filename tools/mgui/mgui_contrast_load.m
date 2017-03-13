@@ -18,6 +18,7 @@ end
 % Matlab images are displayed as YX
 [I, header] = mdm_nii_read(filename);
 I = double(I);
+I = abs(I);
 
 header.my_hdr.ori = mdm_nii_oricode(header);
 
