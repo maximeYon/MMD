@@ -15,7 +15,7 @@ The methods are described briefly [here](methods/README.md), in some more detail
 
 Run setup_paths in the root folder to put files in the Matlab path.
 
-To analyze data, you can use the `method_name_4d_data2fit` and `method_name_4d_fit2param` functions, where `method_name` refers to one of the mehods implemented [here](methods). Alternatively, you can use the `mdm_fit` command. See `mdm_fit --help` for an overview of how to use the command. An example is provided below: 
+To analyze data, you can use the `method_name_4d_data2fit` and `method_name_4d_fit2param` functions, where `method_name` refers to one of the methods implemented [here](methods). Alternatively, you can use the `mdm_fit` command. See `mdm_fit --help` for an overview of how to use the command. An example is provided below: 
 
 ```matlab
 mdm_fit --data input/data.nii.gz ...
