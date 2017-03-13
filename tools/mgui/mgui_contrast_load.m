@@ -49,13 +49,20 @@ if (isfield(header.my_hdr, 'ref_scale') && ...
 end
 
 % Check if there is an xps-file available
-[tmp_a, tmp_b] = fileparts(filename);
-[~,tmp_b]      = fileparts(tmp_b);
-xps_filename = fullfile(tmp_a, [tmp_b '_xps.mat']);
+xps_filename = mdm_xps_fn_from_nii_fn(filename);
 if (exist(xps_filename, 'file'))
     xps = mdm_xps_load(xps_filename);
 else
     xps = [];
+end
+
+% If there's no xps, check for gdir
+if (isempty(xps))
+    gdir_filename = mdm_fn_nii2gdir(filename);
+    
+    if (exist(gdir_filename, 'file'))
+        xps = mdm_xps_from_gdir(gdir_filename);
+    end
 end
 
     

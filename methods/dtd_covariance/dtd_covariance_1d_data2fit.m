@@ -28,11 +28,25 @@ if (nargin < 4), ind = ones(size(signal)) > 0; end
 % parallell toolbox if you are in a hurry
 
 
+% Exclude data points with zero or negative values
+ind = ind & (signal > 0);
+
+
 % Setup regressors for diffusion tensor distribution (DTD) model
 b0 = ones(size(xps.bt(ind,:),1), 1);
 b2 = xps.bt(ind,:)      * 1e-9 ;   %SI unit conversion
-b4 = tm_1x6_to_1x21(b2);           %SI unit conversion already done for b2
-X = [b0 b2 b4];
+
+if (opt.dtd_covariance.do_dki)
+    % the dtd_covariance model can be reduced to the DKI model by using
+    % the directions (normalized, stored in xps.u) and the b-values 
+    % to create a 1x15 4th order tensor which captures a subset of the
+    % information available if using the full covariance model
+    b4 = tm_1x3_to_1x15(xps.u(ind,:)) .* repmat(xps.b(ind).^2 * 1e-18, 1, 15);
+else
+    b4 = tm_1x6_to_1x21(b2); % SI unit conversion already done for b2
+end
+
+X = [b0 -b2 1/2 * b4];
     
 if (opt.dtd_covariance.do_heteroscedasticity_correction)
     C2 = diag(signal(ind));
@@ -49,12 +63,12 @@ if (rcond(tmp) > 1e-10) % some small number
     
     m(1)    = exp(m(1));
     m(2:7)  = m(2:7)  * 1e-9;   %converting back to SI units
-    m(8:28) = m(8:28) * 1e-18;  %converting back to SI units
+    m(8:end) = m(8:end) * 1e-18;  %converting back to SI units
     
 else
     warning('rcond fail in dtd_covariance_1d_data2fit')
 
     % number of paramters, S0 + 6 for mean + 21 for cov = 28
-    m = zeros(1,28);
+    m = zeros(1, size(X,2));
 end
 

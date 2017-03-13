@@ -28,7 +28,7 @@ if (any(imag(I) ~= 0)), I = abs(I); end
 % define the mask from threshold of b0 image
 I0 = mean(I(:,:,:,ind),4);
 
-M = single(I0) > (threshold * single(max(I0(:))));
+M = single(I0) > (threshold * single(quantile(I0(:),0.99)));
 
 M = mio_mask_fill(M);
 M = mio_mask_keep_largest(M);

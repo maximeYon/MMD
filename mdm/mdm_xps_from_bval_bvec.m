@@ -1,5 +1,14 @@
 function xps = mdm_xps_from_bval_bvec(bval_fn, bvec_fn, b_delta)
-% function xps = mdm_xps_from_bval_bvec(bval_fn, bvec_fn)
+% function xps = mdm_xps_from_bval_bvec(bval_fn, bvec_fn, b_delta)
+%
+% Create an xps from the b-value and b-vec file resulting from a dcm2nii
+% conversion
+%
+% bval_fn - path to b-value file
+% bvec_fn - path to vector file
+%
+% optional
+% b_delta - anisotropy of the b-tensor, range -0.5-1.0 (default 1.0)
 
 if (nargin < 3), b_delta = 1; end
 
@@ -15,27 +24,18 @@ bval = mdm_txt_read(bval_fn);
 xps.b = str2num(bval{1})' * 1e6;
 xps.n = numel(xps.b);
 
-
-if (isempty(bvec_fn))
-    return;
-end
+if (isempty(bvec_fn)), return; end
 
 bvec = mdm_txt_read(bvec_fn);
 assert(numel(bvec) == 3, 'strange bvec file');
 
 gdir = [str2num(bvec{1}); str2num(bvec{2}); str2num(bvec{3})];
 
-xps.bt = tm_1x3_to_1x6(xps.b, zeros(size(xps.b)), gdir');
+% compute b-tensors from b-values, b_delta value(s) and symmetry axis
+bt = tm_tpars_to_1x6(xps.b, b_delta, gdir');
+xps = mdm_xps_from_bt(bt);
 
-
-if (b_delta == 0)
-    xps.bt = repmat([1/3 1/3 1/3 0 0 0], size(xps.bt,1), 1) .* repmat(xps.b, 1, 6);
-elseif (b_delta ~= 1)
-    error('not yet implemented');
-end
-
-xps = mdm_xps_from_bt(xps.bt);
-
+% store the direction as well
 xps.u = gdir';
 
 

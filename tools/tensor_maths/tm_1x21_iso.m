@@ -7,4 +7,4 @@ function [E_bulk, E_shear, E2_iso] = tm_1x21_iso()
 [E_bulk, E_shear, E2_iso] = tm_6x6_iso;
 E_bulk  = tm_6x6_to_1x21(E_bulk);
 E_shear = tm_6x6_to_1x21(E_shear);
-E2_iso   = tm_6x6_to_1x21(E2_iso);
+E2_iso  = tm_6x6_to_1x21(E2_iso);

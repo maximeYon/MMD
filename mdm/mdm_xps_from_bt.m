@@ -16,5 +16,5 @@ for c = 1:size(bt, 1)
     xps.b_delta(c)  = tp.delta;
     xps.b_eta(c)    = tp.eta;
     xps.bt(c,:)     = bt(c,:);
-    
+    xps.u(c,:)      = tp.lambda33vec;
 end

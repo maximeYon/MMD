@@ -1,5 +1,21 @@
 function fn = mdm_param2nii(dps_fn, o_path, fig_opt, opt)
 % function fn = mdm_param2nii(dps_fn, o_path, fig_opt, opt)
+%
+% Save parameters from dps as nifti files
+%
+% Input:
+% dps_fn  - filename to display parameter structure
+% o_path  - output path
+% fig_opt - figure options, with two important fields
+%           fig_opt.fig_maps: cell array with contrasts to save to nii
+%           fig_opt.fig_cmaps: cell array with color maps to save to nii
+%
+% Optional:
+% opt     - options structure
+%
+% Output:
+% fn      - cell array with written nifti files
+
 
 if (nargin < 4), opt = []; end
 

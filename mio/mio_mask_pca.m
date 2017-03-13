@@ -7,7 +7,8 @@ if (nargin < 3), opt.present = 1; end
 opt = mdm_opt(opt);
 opt = mio_opt(opt);
 
-sz = size(I);
+sz = [size(I,1) size(I,2) size(I,3) size(I,4)];
+
 I = reshape(single(I), prod(sz(1:3)), sz(4));
 I = I - repmat(mean(I,2), 1, size(I,2));
 

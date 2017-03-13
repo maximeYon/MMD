@@ -42,6 +42,7 @@ opt = msf_ensure_field(opt, 'do_dtdpdf', 1);
 
 opt.mdm.present = 1;
 opt.mdm = msf_ensure_field(opt.mdm, 'mask_suffix', 'mask');
+opt.mdm = msf_ensure_field(opt.mdm, 'pa_suffix', 'pa');
 opt.mdm = msf_ensure_field(opt.mdm, 'txt_read_skip_comments', 0);
 
 opt.mdm.mec_eb.present = 1;
