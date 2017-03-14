@@ -1,4 +1,4 @@
-#Multidimensional diffusion MRI 
+# Multidimensional diffusion MRI 
 
 Multidimensional diffusion MRI (MD-dMRI) is a family of conceptually related methods relying on advanced gradient modulation schemes and data processing approaches to simultaneously quantify several microstructural and dynamical properties of tissue by separating their effects on the detected MRI signal into multiple acquisition and analysis dimensions.
 
@@ -9,7 +9,7 @@ Three families of methods are currently implemented within the framework of MD-d
 * Diffusional exchange
 * Diffusion and incoherent flow
 
-The methods are described briefly [here](methods/README.md), in some more detail in two review articles,[<sup>1,2</sup>](#references) and more exhaustively in the original publications cited for each method.
+The methods are described briefly [here](methods/README.md), in some more detail in two review articles,[<sup>1,2</sup>](references) and more exhaustively in the original publications cited for each method.
 
 ## How to start
 
