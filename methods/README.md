@@ -5,7 +5,7 @@ Three families of methods are currently implemented within the framework of MD-d
 * [Diffusional exchange](#diffusional-exchange)
 * [Diffusion and incoherent flow](#diffusion-and-incoherent-flow)
 
-The methods are described briefly below, in some more detail in two review articles,[<sup>1,2</sup>](#methods/references) and more exhaustively in the original publications cited for each method. Before a mathematically and physically correct description of the methods and the parameters that can be obtained, we start with a more hand-waving line of reasoning intended for a non-expert reader that has previous experience of conventional dMRI. The following text assumes familiarity with standard dMRI terminology such as diffusion tensors, diffusion anisotropy, kurtosis, orientation distributions functions, and intravoxel incoherent motion, as well as the commonly used acronyms DTI, MD, FA, and DKI.<sup>3-6</sup>
+The methods are described briefly below, in some more detail in two review articles,<sup>1,2</sup> and more exhaustively in the original publications cited for each method. Before a mathematically and physically correct description of the methods and the parameters that can be obtained, we start with a more hand-waving line of reasoning intended for a non-expert reader that has previous experience of conventional dMRI. The following text assumes familiarity with standard dMRI terminology such as diffusion tensors, diffusion anisotropy, kurtosis, orientation distributions functions, and intravoxel incoherent motion, as well as the commonly used acronyms DTI, MD, FA, and DKI.<sup>3-6</sup>
 
 The description of the methods is followed by some [details about our Matlab code](#methods/implementation-details) for generating MD-dMRI parameter maps.
 
