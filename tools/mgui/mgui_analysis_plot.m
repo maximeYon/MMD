@@ -18,7 +18,7 @@ MS = mean(S, 1)';
 
 if (exist([plot_fun_name '.m'], 'file'))
     try % standard plot function
-        
+
         feval(plot_fun_name, MS, xps, h_top, h_bottom);
         return;
         
@@ -37,7 +37,7 @@ if (exist([plot_fun_name '.m'], 'file'))
 end
 
 try % standard 1d fit
-    
+
     opt = feval(fun_opt);
     m = feval(fun_1d_data2fit, MS, xps, opt);
     S_fit = feval(fun_1d_fit2data, m, xps)';
