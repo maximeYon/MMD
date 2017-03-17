@@ -4,7 +4,7 @@ function mgui_analysis_plot_overview(S, xps, h_top, h_bottom, S_fit)
 if (isempty(S))
     axes(h_top);
     cla;
-    text(0, 0, 'No signal data / wrong xps');
+    text(0, 0, 'Draw ROI');
     ylim([-1 1]);
     xlim([0 10]);
     axis(h_top, 'off');

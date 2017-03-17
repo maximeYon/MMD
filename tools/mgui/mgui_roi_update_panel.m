@@ -344,7 +344,7 @@ if (do_redraw_image)
         % Display current image
         h_image = findobj(get(h, 'Children'), 'Type', 'Image');
         if (isempty(h_image))
-            h_image = imagesc(single(I), 'parent', h);
+            h_image = imagesc(single(real(I)), 'parent', h);
         else
             if (numel(h_image) > 1)
                 disp('strange!');

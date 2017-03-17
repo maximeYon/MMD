@@ -1,5 +1,5 @@
-function odf_s = dist_odf_discrete_to_smooth(odf_d,odf_s)
-% function odf_s = dist_odf_discrete_to_smooth(odf_d,odf_s)
+function odf_s = dist_odf_discrete2smooth(odf_d,odf_s)
+% function odf_s = dist_odf_discrete2smooth(odf_d,odf_s)
 %
 % Convert from discrete to smooth 2D odf. Gaussian convolution.
 %

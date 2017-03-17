@@ -26,7 +26,7 @@ if (opt.do_param2nii == 0)
     return;
 end
 
-% init: no not require any figures to be made
+% init: do not require any figures to be made
 fig_opt = msf_ensure_field(fig_opt, 'fig_maps', {});
 fig_opt = msf_ensure_field(fig_opt, 'fig_cmaps', {});
 
