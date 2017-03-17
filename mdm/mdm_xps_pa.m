@@ -1,13 +1,18 @@
- function xps_pa = mdm_xps_pa(xps, opt)
-% function xps = mdm_xps_pa(xps)
+function xps_pa = mdm_xps_pa(xps, opt)
+% function xps_pa = mdm_xps_pa(xps, opt)
+%
+% Returns the powder-averaged xps
 
 if (nargin < 2), opt = mdm_opt; end
 
 [~,c_list, id_ind] = mdm_pa_ind_from_xps(xps);
 
+% Start by some house keeping
+if (isfield(xps, 'n_bs')), xps_pa.n_bs = xps.n_bs; end
+if (isfield(xps, 'n_bl')), xps_pa.n_bl = xps.n_bl; end
+xps = msf_rmfield(xps, {'n','n_bs','n_bl','n_br'});
 
 % Average fields in xps
-xps = rmfield(xps, 'n');
 f = fieldnames(xps);
 for i = 1:numel(f)
     for c = c_list'

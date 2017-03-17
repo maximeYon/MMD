@@ -9,3 +9,6 @@ for c = 1:numel(f)
     assert( isfield( xps, f{c} ), ['xps.' f{c} ' required']);
 end
 
+if (max(xps.b(:)) < 10)
+    error('Maximal b-value too low (should be in SI units)');
+end
