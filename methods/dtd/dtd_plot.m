@@ -9,6 +9,9 @@ lw = 1;
 
 opt = mdm_opt();
 opt = dtd_opt(opt);
+
+opt.dtd.dmin = .2/max(xps.b);
+
 m = feval('dtd_1d_data2fit', S, xps, opt);
 S_fit = feval('dtd_1d_fit2data', m, xps)';
 
