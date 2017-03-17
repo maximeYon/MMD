@@ -1,7 +1,11 @@
-function mdm_xps2pdf(xps_path, opt)
+function mdm_xps2pdf(xps_in, opt)
 % function dtd_mkpdf(dps_fn, pdf_path, opt)
 
-xps = mdm_xps_load(fullfile(xps_path, 'xps.mat'));
+if isstruct(xps_in)
+    xps = xps_in;
+elseif isdir(xps_in)   
+    xps = mdm_xps_load(fullfile(xps_in, 'xps.mat'));
+end
 
 figsize = 5*5*[1 1];
 figaspect = figsize(1)/figsize(2);
@@ -13,6 +17,8 @@ ms = 5*15;
 figure(1), clf
 set(gcf, 'PaperUnits','centimeters', 'PaperPosition', 1*[0 0 figsize],'PaperSize', figsize);
 axh1 = axes('position',[.03 .32 .65 .65]);
+
+xps = mdm_xps_calc_btpars(xps);
 
 c.x = xps.b/1e9;
 c.y = xps.b_delta;
@@ -36,8 +42,13 @@ axis(axh1,'square')
 xlabel('\itb\rm / 10^9 sm^-^2','FontSize',fs)
 ylabel('\itb\rm_{\Delta}','FontSize',fs)
 
-fn = fullfile(xps_path, 'xps.pdf');
-eval(['print ' fn ' -loose -dpdf'])
+if isstruct(xps_in)
+    xps = xps_in;
+elseif isdir(xps_in)   
+    fn = fullfile(xps_in, 'xps.pdf');
+    eval(['print ' fn ' -loose -dpdf'])
+end
+
 
 
 
