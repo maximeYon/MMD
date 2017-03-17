@@ -59,8 +59,7 @@ Name: vasco16. Reference: Ahlgren 2016.<sup>14</sup>
 
 # Implementation details
 
-All functions that concern a specific method are located in methods/name (folder currently named 'models' will be renamed to 'methods'). 
-In that folder, a specific set of functions must be present that conforms to the following structure of the function call
+All functions that concern a specific method are located in methods/name. In that folder, a specific set of functions must be present that conforms to the following structure of the function call
 
 ```matlab
 m = name_1d_data2fit(signal, xps, opt, ind)
