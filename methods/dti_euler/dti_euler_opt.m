@@ -16,7 +16,7 @@ opt.dti_euler = msf_ensure_field(opt.dti_euler, 'weight_wthresh', 2);
 
 % control which maps that are generated as nifti files
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_maps', ...
-    {'s0','iso','fa','cl','cp','cm'});
+    {'s0','iso','fa','cl','cp'});
 
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_prefix', 'dti');
 

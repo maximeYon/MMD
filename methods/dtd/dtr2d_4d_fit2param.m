@@ -1,5 +1,5 @@
-function dps = dtd_4d_fit2param(mfs_fn, dps_fn, opt)
-% function dps = dtd_4d_fit2param(mfs_fn, dps_fn, opt)
+function dps = dtr2d_4d_fit2param(mfs_fn, dps_fn, opt)
+% function dps = dtr2d_4d_fit2param(mfs_fn, dps_fn, opt)
 
 if (nargin < 2), dps_fn = []; end
 if (nargin < 3), opt = []; end
@@ -20,7 +20,9 @@ dps.lambda22vec = zeros([sz(1) sz(2) sz(3) 3]);
 dps.lambda33vec = zeros([sz(1) sz(2) sz(3) 3]);
 dtiparam = {'trace','iso','lambda33','lambda22','lambda11','lambdazz','lambdaxx','lambdayy','vlambda',...
     'delta','eta','s','p','l','fa','cs','cl','cp','cm'};
-param = {dtiparam{:},'miso','viso','maniso','vaniso','msaniso','vsaniso'};
+udtiparam = {'udelta','ufa','ucs','ucl','ucp'};
+param = {dtiparam{:},udtiparam{:},'miso','viso','maniso','vaniso','msaniso','vsaniso','mr2','vr2','s_fw','s_st','s_lt','s_pt','s_plt',...
+    's_splt','s_residue'};
 for nparam = 1:numel(param)
     eval(['dps.' param{nparam} ' = zeros([sz(1) sz(2) sz(3)]);']);
 end
@@ -30,14 +32,25 @@ for nk = 1:sz(3)
             %ni = 11; nj = 9; nk = 1;
             if dps.mask(ni,nj,nk)
                 m = squeeze(dps.m(ni,nj,nk,:))';
-                dtd = dtd_m2dtd(m);
-                [n,par,perp,theta,phi,w] = dtd_dist2par(dtd);
+                dtr2d = dtr2d_m2dtr2d(m);
+                [n,par,perp,theta,phi,r2,w] = dtr2d_dist2par(dtr2d);
                                 
                 if n > 0
-                    s0 = ones(1,n)*w;
                     iso_v = (par + 2*perp)/3;
                     aniso_v = par - perp;
                     saniso_v = aniso_v.^2;
+                    ratio_v = par./perp;
+
+                    ind_fw = all([iso_v > 2e-9, r2 < 2],2);
+                    ind_st = all([iso_v>5e-10, iso_v<2e-9, ratio_v > 1/3, ratio_v < 3, r2 > 5],2);
+                    ind_lt = all([iso_v>5e-10, iso_v<2e-9, ratio_v > 3, r2 > 5],2);
+                    ind_pt = all([iso_v>5e-10, iso_v<2e-9, ratio_v < 1/3, r2 > 5],2);
+
+                    s0 = ones(1,n)*w;
+                    s_fw = ind_fw'*w;
+                    s_st = ind_st'*w;
+                    s_lt = ind_lt'*w;
+                    s_pt = ind_pt'*w;
                     
                     miso = iso_v'*w/s0;
                     viso = (iso_v-miso)'.^2*w/s0;
@@ -45,17 +58,28 @@ for nk = 1:sz(3)
                     vaniso = (aniso_v-maniso)'.^2*w/s0;
                     msaniso = saniso_v'*w/s0;
                     vsaniso = (saniso_v-msaniso)'.^2*w/s0;
+                    mr2 = r2'*w/s0;
+                    vr2 = (r2-mr2)'.^2*w/s0;
 
                     dps.s0(ni,nj,nk) = s0;
+                    dps.s_fw(ni,nj,nk) = s_fw;
+                    dps.s_st(ni,nj,nk) = s_st;
+                    dps.s_pt(ni,nj,nk) = s_pt;
+                    dps.s_lt(ni,nj,nk) = s_lt;
+                    dps.s_plt(ni,nj,nk) = s_lt+s_pt;
+                    dps.s_splt(ni,nj,nk) = s_st+s_lt+s_pt;
+                    dps.s_residue(ni,nj,nk) = s0-s_fw-s_st-s_lt-s_pt;
                     dps.miso(ni,nj,nk) = miso;
                     dps.viso(ni,nj,nk) = viso;
                     dps.maniso(ni,nj,nk) = maniso;
                     dps.vaniso(ni,nj,nk) = vaniso;
                     dps.msaniso(ni,nj,nk) = msaniso;
                     dps.vsaniso(ni,nj,nk) = vsaniso;
+                    dps.mr2(ni,nj,nk) = mr2;
+                    dps.vr2(ni,nj,nk) = vr2;
 
-                    [dtd_nx6,w] = dtd_dist2nx6w(dtd);
-                    dt1x6 = (dtd_nx6'*w)'/s0;
+                    [dtr2d_nx6,r2,w] = dtr2d_dist2nx6r2w(dtr2d);
+                    dt1x6 = (dtr2d_nx6'*w)'/s0;
                     dt3x3 = tm_1x6_to_3x3(dt1x6);
 
                     dt = tm_3x3_to_tpars(dt3x3);
@@ -72,10 +96,11 @@ for nk = 1:sz(3)
                         eval(['dps.' dtiparam{nparam} '(ni,nj,nk) = dt.' dtiparam{nparam} ';']);
                     end
                     
-                    udtd = [par'; perp'; 0*theta'; 0*phi'; w'];
-                    udtd = [n; udtd(:)];
-                    [udtd_nx6,w] = dtd_dist2nx6w(udtd);
-                    udt1x6 = (udtd_nx6'*w)'/s0;
+                    [n,par,perp,theta,phi,r2,w] = dtr2d_dist2par(dtr2d);
+                    udtr2d = [par'; perp'; 0*theta'; 0*phi'; r2'; w'];
+                    udtr2d = [n; udtr2d(:)];
+                    [udtr2d_nx6,r2,w] = dtr2d_dist2nx6r2w(udtr2d);
+                    udt1x6 = (udtr2d_nx6'*w)'/s0;
                     udt3x3 = tm_1x6_to_3x3(udt1x6);
                     udt = tm_3x3_to_tpars(udt3x3);
 

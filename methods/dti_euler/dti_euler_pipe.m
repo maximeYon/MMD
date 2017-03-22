@@ -18,12 +18,22 @@ paths = mdm_paths(paths);
 msf_log(['Starting ' mfilename], opt);    
 
 % Prepare mask
-s = mdm_s_mask(s, @mio_mask_threshold, [], opt);
+if (opt.do_mask)
+    s = mdm_s_mask(s, @mio_mask_threshold, [], opt);
+end
 
 % Fit and derive parameters
-mdm_data2fit(@dti_euler_4d_data2fit, s, paths.mfs_fn, opt);
-mdm_fit2param(@dti_euler_4d_fit2param, paths.mfs_fn, paths.dps_fn, opt);
+if (opt.do_data2fit)
+    mdm_data2fit(@dti_euler_4d_data2fit, s, paths.mfs_fn, opt);
+end
+if (opt.do_fit2param)
+    mdm_fit2param(@dti_euler_4d_fit2param, paths.mfs_fn, paths.dps_fn, opt);
+end
 
-% Save niftis
-fn = mdm_param2nii(paths.dps_fn, paths.nii_path, opt.dti_euler, opt); 
+% Save nifti parameter maps    
+if (opt.do_param2nii)
+    fn = mdm_param2nii(paths.dps_fn, paths.nii_path, opt.dti_euler, opt);
+end
+
+
 

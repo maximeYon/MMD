@@ -7,6 +7,7 @@ opt.dtd_pa.present = 1;
 
 opt.dtd_pa = msf_ensure_field(opt.dtd_pa, 'tmp', 1); 
 opt.dtd_pa = msf_ensure_field(opt.dtd_pa, 'do_plot', 0);
+opt.dtd_pa = msf_ensure_field(opt.dtd_pa, 'do_pa', 1);
 opt.dtd_pa = msf_ensure_field(opt.dtd_pa, 'ind_start', 2);
 opt.dtd_pa = msf_ensure_field(opt.dtd_pa, 'dmin', 1e-11);
 opt.dtd_pa = msf_ensure_field(opt.dtd_pa, 'dmax', 5e-9);
@@ -18,5 +19,5 @@ opt.dtd_pa = msf_ensure_field(opt.dtd_pa, 'n_extinction', 20);
 opt.dtd_pa = msf_ensure_field(opt.dtd_pa, 'dfuzz', .1);
 
 opt.dtd_pa = msf_ensure_field(opt.dtd_pa, 'fig_maps', ...
-    {'s0','miso','viso','maniso','vaniso'});
+    {'s0','miso','viso_n','msaniso_n','vsaniso_n'});
 opt.dtd_pa = msf_ensure_field(opt.dtd_pa, 'fig_prefix', 'dtd_pa');

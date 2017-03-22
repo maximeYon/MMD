@@ -22,7 +22,7 @@ opt.mask = msf_ensure_field(opt.mask, 'pca_threshold', 1.3);
 
 
 opt.mask = msf_ensure_field(opt.mask, 'b0_ind', 1);
-opt.mask = msf_ensure_field(opt.mask, 'threshold', 0.1);
+opt.mask = msf_ensure_field(opt.mask, 'threshold', 0.05);
 
 
 opt.mio.pa.present = 1;

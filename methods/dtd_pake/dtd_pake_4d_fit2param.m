@@ -15,14 +15,12 @@ dps.delta = dps.m(:,:,:,3);
 
 dps.par = dps.iso.*(1 + 2*dps.delta);
 dps.perp = dps.iso.*(1 - dps.delta);
-dps.logratio = log10(dps.par./dps.perp);
-dps.logratio(isnan(dps.logratio)) = 0;
-dps.vlambda = 2*(dps.iso.*dps.delta).^2;
-dps.vlambda(isnan(dps.vlambda)) = 0;
-dps.mu2aniso = 2/5*dps.vlambda;
+dps.aniso = dps.iso.*dps.delta;
+
+dps.saniso = dps.aniso.^2;  % square anisotropic diffusivity
+dps.saniso_n = dps.saniso./dps.iso.^2; % Normalized
+dps.vlambda = 2*dps.saniso;
 dps.ufa = sqrt(3/2)*sqrt(1./(dps.iso.^2./dps.vlambda+1));
-dps.ufa(isnan(dps.ufa)) = 0;
-dps.cmu = dps.ufa.^2;
 
 if (~isempty(dps_fn)), mdm_dps_save(dps, dps.s, dps_fn, opt); end
 

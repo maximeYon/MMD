@@ -26,18 +26,15 @@ opt = msf_ensure_field(opt, 'xps_merge_clear_s_ind', 0);
 opt = msf_ensure_field(opt, 'xps_merge_rethrow_error', 1);
 opt = msf_ensure_field(opt, 'pa_rethrow_error', 1);
 
-
 opt = msf_ensure_field(opt, 'filter_sigma', 0);
-
 
 opt = msf_ensure_field(opt, 'do_mask', 1);
 opt = msf_ensure_field(opt, 'do_data2fit', 1);
 opt = msf_ensure_field(opt, 'do_fit2param', 1);
 opt = msf_ensure_field(opt, 'do_param2nii', 1);
 
-
-opt = msf_ensure_field(opt, 'do_nii2pdf', 1);
-opt = msf_ensure_field(opt, 'do_dtdpdf', 1);
+opt = msf_ensure_field(opt, 'do_nii2pdf', 0);
+opt = msf_ensure_field(opt, 'do_m2pdf', 1);
 
 
 opt.mdm.present = 1;
