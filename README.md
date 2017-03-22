@@ -146,7 +146,7 @@ s_merged = mdm_s_merge(s, merged_nii_path, merged_nii_name);
 Get acquainted with by xps structure by reading mdm/readme.txt.An extensive description of the code structure is found at http://markus-nilsson.github.io/md-dmri/.  
 
 
-#References
+# References
 1. D. Topgaard. Multidimensional diffusion MRI. J. Magn. Reson. 275, 98-113 (2017). [link](http://dx.doi.org/10.1016/j.jmr.2016.12.007)
 2. D. Topgaard. NMR methods for studying microscopic diffusion anisotropy. In: R. Valiullin (Ed.) Diffusion NMR in confined systems: Fluid transport in porous solids and heterogeneous materials, New Developments in NMR 9, Royal Society of Chemistry, Cambridge, UK (2017). [link](http://dx.doi.org/10.1039/9781782623779-00226)
 
