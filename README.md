@@ -13,7 +13,7 @@ The methods are described briefly [here](methods/README.md), in some more detail
 
 ## How to start
 
-Run setup_paths in the root folder to put files in the Matlab path.
+Run setup_paths in the root folder to put files in the Matlab path. Test the framework by processing and viewing the [example data](https://github.com/daniel-topgaard/md-dmri-data).
 
 To analyze data, you can use the `method_name_4d_data2fit` and `method_name_4d_fit2param` functions, where `method_name` refers to one of the methods implemented [here](methods). Alternatively, you can use the `mdm_fit` command. See `mdm_fit --help` for an overview of how to use the command. An example is provided below: 
 
