@@ -24,3 +24,4 @@ opt.dtd = msf_ensure_field(opt.dtd, 'fig_prefix', 'dtd');
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_cmaps',{'fa','cl','cp','ufa'});
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccol',{'t1x6','lambda33vec','lambda11vec','s1x6prim'});
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccolnorm',{'lambda33','mask','mask','slambda33prim'});
+opt.dtd = msf_ensure_field(opt.dtd, 'do_dtdpdf', 0);
