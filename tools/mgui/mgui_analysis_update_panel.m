@@ -29,6 +29,7 @@ d = dir(fullfile(fileparts(mfilename('fullpath')), '..', '..','methods'));
 
 % Set default method
 str = {'Overview'};
+method_name = {'NaN'};
 
 % Populate popup with additional methods
 for c = 1:numel(d)
@@ -50,6 +51,8 @@ for c = 1:numel(d)
                 disp(me.message);
             end
         end
+        
+        method_name{end+1} = d(c).name;
     end
 end
 
@@ -91,7 +94,7 @@ switch (c_method)
         end
         
     otherwise % run custom plot scripts
-        f_plot = @(S,xps) mgui_analysis_plot(str{c_method}, ...
+        f_plot = @(S,xps) mgui_analysis_plot(method_name{c_method}, ...
             S, xps, h_top, h_bottom);
 end
 

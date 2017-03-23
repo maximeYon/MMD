@@ -26,6 +26,19 @@ if (exist([plot_fun_name '.m'], 'file'))
         fprintf('%s err: %s\n', plot_fun_name, me.message);
     end
     
+    % if complex, try with magnitude data
+    if (any(~isreal(MS(:))))
+        try % standard plot function
+            
+            feval(plot_fun_name, abs(MS), xps, h_top, h_bottom);
+            warning('Performed analysis on magnitude part of complex data ? dataset will perhaps not work with fit methods');
+            return;
+            
+        catch me
+            fprintf('%s err: %s\n', plot_fun_name, me.message);
+        end
+    end
+    
     try % with one argument less
         
         feval(plot_fun_name, MS, xps, h_top);
