@@ -19,8 +19,9 @@ dps.lambda11vec = zeros([sz(1) sz(2) sz(3) 3]);
 dps.lambda22vec = zeros([sz(1) sz(2) sz(3) 3]);
 dps.lambda33vec = zeros([sz(1) sz(2) sz(3) 3]);
 dtiparam = {'trace','iso','lambda33','lambda22','lambda11','lambdazz','lambdaxx','lambdayy','vlambda',...
-    'delta','eta','s','p','l','fa','cs','cl','cp','cm'};
-param = {dtiparam{:},'miso','viso','maniso','vaniso','msaniso','vsaniso'};
+    'delta','eta','s','p','l','fa','cs','cp','cl','cm'};
+udtiparam = {'udelta','ucs','ucp','ucl','ufa'};
+param = {dtiparam{:},udtiparam{:},'miso','viso','maniso','vaniso','msaniso','vsaniso'};
 for nparam = 1:numel(param)
     eval(['dps.' param{nparam} ' = zeros([sz(1) sz(2) sz(3)]);']);
 end

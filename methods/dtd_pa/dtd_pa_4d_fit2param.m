@@ -9,7 +9,7 @@ dps = mdm_mfs_load(mfs_fn);
 
 % create parameter maps and save them
 sz = size(dps.m);
-udtiparam = {'udelta','ufa','ucs','ucl','ucp'};
+udtiparam = {'udelta','ucs','ucp','ucl','ufa'};
 param = {udtiparam{:},'s0','miso','viso','maniso','vaniso','msaniso','vsaniso'};
 for nparam = 1:numel(param)
     eval(['dps.' param{nparam} ' = zeros([sz(1) sz(2) sz(3)]);']);

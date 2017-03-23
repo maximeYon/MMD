@@ -21,7 +21,7 @@ w_threshold = .02;
 s0_threshold = .1;
 
 figure(1), clf
-set(gcf, 'PaperUnits','centimeters', 'PaperPosition', 1*[0 0 figsize],'PaperSize', figsize);
+set(gcf, 'PaperUnits','centimeters', 'PaperPosition', min(sz(1:2))/16*[0 0 figsize],'PaperSize', min(sz(1:2))/16*figsize);
 
 left = 0;
 bottom = 0;

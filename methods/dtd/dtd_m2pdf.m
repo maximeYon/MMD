@@ -21,7 +21,7 @@ w_threshold = .02;
 s0_threshold = .1;
 
 figure(1), clf
-set(gcf, 'PaperUnits','centimeters', 'PaperPosition', 1*[0 0 figsize],'PaperSize', figsize);
+set(gcf, 'PaperUnits','centimeters', 'PaperPosition', min(sz(1:2))/16*[0 0 figsize],'PaperSize', min(sz(1:2))/16*figsize);
 
 left = 0;
 bottom = 0;
@@ -65,7 +65,7 @@ ymax = log10(ratiomax);
 
                         c.x = log10(iso);
                         c.y = log10(par./perp);
-                        c.ms = ms_max*sqrt(w/s0max);
+                        c.ms = 16/min(sz(1:2))*ms_max*sqrt(w/s0max);
                         c.bright = fa;
                         c.r = abs(xcos);
                         c.g = abs(ycos);
