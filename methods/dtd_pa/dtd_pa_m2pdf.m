@@ -77,7 +77,7 @@ ymax = log10(ratiomax);
                                 set(h1,'MarkerSize',c.ms(nc),'Color',col,'MarkerFaceColor',col)
                             end
                         end
-                        set(axh1,'XLim',[xmin xmax], 'YLim',[ymin ymax],'XTick',[],'YTick',[])
+                        set(axh1,'XLim',[xmin xmax]+.2*(xmax-xmin)*[-1 1], 'YLim',[ymin ymax]+.2*(ymax-ymin)*[-1 1],'XTick',[],'YTick',[])
                         axis(axh1,'square','off')
                        end
                 end
@@ -125,7 +125,7 @@ axh2 = axes('position',[.05 .32 .65 .65]);
         end
     end
 %end
-set(gca,'XLim',[xmin xmax], 'YLim',[ymin ymax],'YAxisLocation','right',...
+set(gca,'XLim',[xmin xmax]+.2*(xmax-xmin)*[-1 1], 'YLim',[ymin ymax]+.2*(ymax-ymin)*[-1 1],'YAxisLocation','right',...
 'XTick',[-11:-8],'YTick',-2:2,'TickDir','out','TickLength',.03*[1 1],...
 'FontSize',fs,'LineWidth',lw)
 axis square
