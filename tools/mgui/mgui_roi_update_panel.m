@@ -229,7 +229,7 @@ if (do_reload)
             EG.roi.c_volume = 1;
         end
         
-        if (numel(EG.roi.c_volume) == 0),
+        if (numel(EG.roi.c_volume) == 0)
             EG.roi.c_volume = 1;
         end
     end

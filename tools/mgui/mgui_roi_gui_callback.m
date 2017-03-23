@@ -275,8 +275,10 @@ if (nargin >= 1)
                 
                 
                 % cheap!
-            case EG.t_ANALYSIS_POPUP
-                EG = mgui_update_panel(EG);
+            case {EG.t_ANALYSIS_POPUP, EG.t_ANALYSIS_REDO_BUTTON}
+                EG = mgui_analysis_update_panel(EG);
+                
+                
                 
         end
     end

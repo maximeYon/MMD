@@ -79,6 +79,9 @@ c_method = get(h_popup, 'value');
 % connect plot function to method
 switch (c_method)
     
+    case 0
+        f_plot = @(S,xps) 1;
+    
     case 1 % show the default overview 1D or 2D
         if (size(EG.roi.I,4) == 1)
             f_plot = @(S, xps) plot_histogram(S, xps, h_top, h_bottom);
