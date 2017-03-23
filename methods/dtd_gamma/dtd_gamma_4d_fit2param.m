@@ -1,5 +1,12 @@
 function dps = dtd_gamma_4d_fit2param(mfs_fn, dps_fn, opt)
 % function dps = dtd_gamma_4d_fit2param(mfs_fn, dps_fn, opt)
+%
+% Calculates derived parameters from the primary parameters of the
+% gamma fit.
+%
+% Parameters introduced in Lasic et al, Front. Phys. 2, 11 (2014). http://dx.doi.org/10.3389/fphy.2014.00011.
+% Renamed in Westin et al, Neuroimage 135, 345 (2016), Szczepankiewicz et
+% al, Neuroimage 142, 522 (2016), and Topgaard. J. Magn. Reson. 275, 98 (2017).
 
 if (nargin < 2), dps_fn = []; end
 if (nargin < 3), opt = []; end
@@ -7,38 +14,36 @@ if (nargin < 3), opt = []; end
 opt = mdm_opt(opt);
 dps = mdm_mfs_load(mfs_fn);
 
-% create parameter maps and save them
 dps.s0 = dps.m(:,:,:,1);
-dps.iso = dps.m(:,:,:,2);
-dps.mu2iso = dps.m(:,:,:,3);
-dps.mu2aniso = dps.m(:,:,:,4);
 
-dps.vlambda = 5/2*dps.mu2aniso;
-dps.vlambda(isnan(dps.vlambda)) = 0;
-dps.ufa = sqrt(3/2)*sqrt(1./(dps.iso.^2./dps.vlambda+1));
-dps.ufa(isnan(dps.ufa)) = 0;
-dps.ciso = dps.mu2iso./dps.iso.^2;
-dps.ciso(isnan(dps.ciso)) = 0;
-dps.cmu = dps.ufa.^2;
+% Parameters according to terminology in Szczepankiewicz (2016)
+dps.MD = dps.m(:,:,:,2)*1e9; % mean diffusivity
+dps.Vi = dps.m(:,:,:,3)*1e9*1e9; % \mu_2^{iso} in Lasic (2014)
+dps.Va = dps.m(:,:,:,4)*1e9*1e9; % \Delta\mu_2 in Lasic (2014)
+dps.Vt = dps.Vi + dps.Va; % \mu_2 in Lasic (2014)
 
-% create parameter maps and save them
-dps.MD = dps.m(:,:,:,2)*1e9;
-dps.Vi = dps.m(:,:,:,3)*1e9*1e9;
-dps.Va = dps.m(:,:,:,4)*1e9*1e9;
-dps.Vt = dps.Vi + dps.Va;
+dps.NVi = dps.Vi ./ dps.MD.^2; % \tilde{\mu}_2^{iso} in Lasic (2014), C_{MD} in Westin (2016)
+dps.NVa = dps.Va ./ dps.MD.^2; % \Delta\tilde{\mu}_2 in Lasic (2014)
+dps.NVt = dps.Vt ./ dps.MD.^2; % \tilde{\mu}_2 in Lasic (2014)
 
-dps.NVi = dps.Vi ./ dps.MD.^2;
-dps.NVa = dps.Va ./ dps.MD.^2;
-dps.NVt = dps.Vt ./ dps.MD.^2;
-
-dps.MKi = 3 * dps.Vi ./ dps.MD.^2;
-dps.MKa = 3 * dps.Va ./ dps.MD.^2;
-dps.MKt = 3 * dps.Vt ./ dps.MD.^2;
+dps.MKi = 3 * dps.NVi; % Multiply by 3 to get kurtosis
+dps.MKa = 3 * dps.NVa;
+dps.MKt = 3 * dps.NVt;
 
 dps.Vl = 5/2 * dps.Va;
 
-dps.ufa_old = sqrt(3/2) * sqrt(1./(dps.MD.^2./dps.Vl+1));
-dps.ufa     = sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.Vi + dps.MD.^2) );
+dps.ufa_old = sqrt(3/2) * sqrt(1./(dps.MD.^2./dps.Vl+1)); % Lasic (2014)
+dps.ufa     = sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.Vi + dps.MD.^2) ); % Szczepankiewicz (2016)
+
+% Topgaard. J. Magn. Reson. 275, 98 (2017). https://dx.doi.org/10.1016/j.jmr.2016.12.007
+% Recommened for comparison with results from the dtd method.
+dps.miso = dps.m(:,:,:,2); % Mean isotropic diffusivity, see Eq. (68)
+mu2iso = dps.m(:,:,:,3);
+mu2aniso = dps.m(:,:,:,4);
+dps.viso = mu2iso;  % Variance of isotropic diffusivities, see Eqs. (48) and (69)
+dps.msaniso = 5/4*mu2aniso;  % Mean-square anisotropic diffusivity, see Eqs. (50) and (69)
+dps.viso_n = dps.viso./dps.miso.^2; % Normalized
+dps.msaniso_n = dps.msaniso./dps.miso.^2;
 
 
 for i = 5:size(dps.m, 4)

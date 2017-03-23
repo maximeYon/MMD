@@ -13,7 +13,7 @@ The methods are described briefly [here](methods/README.md), in some more detail
 
 ## How to start
 
-Run setup_paths in the root folder to put files in the Matlab path.
+Run setup_paths.m in the root folder to put files in the Matlab path. Test the framework by processing and viewing the [example data](https://github.com/daniel-topgaard/md-dmri-data).
 
 To analyze data, you can use the `method_name_4d_data2fit` and `method_name_4d_fit2param` functions, where `method_name` refers to one of the methods implemented [here](methods). Alternatively, you can use the `mdm_fit` command. See `mdm_fit --help` for an overview of how to use the command. An example is provided below: 
 
@@ -146,7 +146,7 @@ s_merged = mdm_s_merge(s, merged_nii_path, merged_nii_name);
 Get acquainted with by xps structure by reading mdm/readme.txt.An extensive description of the code structure is found at http://markus-nilsson.github.io/md-dmri/.  
 
 
-#References
+# References
 1. D. Topgaard. Multidimensional diffusion MRI. J. Magn. Reson. 275, 98-113 (2017). [link](http://dx.doi.org/10.1016/j.jmr.2016.12.007)
 2. D. Topgaard. NMR methods for studying microscopic diffusion anisotropy. In: R. Valiullin (Ed.) Diffusion NMR in confined systems: Fluid transport in porous solids and heterogeneous materials, New Developments in NMR 9, Royal Society of Chemistry, Cambridge, UK (2017). [link](http://dx.doi.org/10.1039/9781782623779-00226)
 

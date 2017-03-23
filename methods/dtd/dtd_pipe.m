@@ -32,14 +32,10 @@ end
 % Save nifti parameter maps    
 if (opt.do_param2nii)
     fn = mdm_param2nii(paths.dps_fn, paths.nii_path, opt.dtd, opt);
-    % Convert all .nii.gz files to .pdf
-    if (opt.do_nii2pdf)
-        mdm_nii2pdf(fn, [], opt);
-    end
 end
 
 % Save dtd pdf   
-if (opt.do_dtdpdf)
+if (opt.do_m2pdf)
     dtd_m2pdf(paths.dps_fn, paths.nii_path, opt);
 end
 

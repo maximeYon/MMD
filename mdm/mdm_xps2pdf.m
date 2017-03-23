@@ -1,5 +1,7 @@
 function mdm_xps2pdf(xps_in, opt)
-% function dtd_mkpdf(dps_fn, pdf_path, opt)
+% function mdm_xps2pdf(xps_in, opt)
+% Quick viewing of the acquisition protocol by plotting b_delta vs. b
+% as points color-coded with the b-tensor orientation.
 
 if isstruct(xps_in)
     xps = xps_in;

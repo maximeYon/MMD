@@ -1,8 +1,7 @@
-function dtd_pa_mkpdf(dps_fn, pdf_path, opt)
-% function dtd_pa_mkpdf(dps_fn, pdf_path, opt)
+function dtd_mkpdf(dps_fn, pdf_path, opt)
+% function dtd_mkpdf(dps_fn, pdf_path, opt)
  
 dps = mdm_dps_load(dps_fn);
-
 sz = size(dps.m);
 
 
@@ -60,16 +59,52 @@ title('V(D_{aniso})','FontSize',fs)
 axis off
 
 axes('position',[left+2*width 0 width height])
-z = squeeze(dps.ufa(:,:,nk))';
-clim = [0 1];
-imagesc(z)
-set(gca,'YDir','normal','CLim',clim,'XTick',[],'YTick',[])
-colormap('gray')
-title('uFA','FontSize',fs)
+param = 'ufa';
+col = 's1x6prim';
+colnorm = 'slambda33prim';
+
+eval(['c.bright = dps.' param '(:,:,nk);'])
+eval(['c.r = squeeze(abs(dps.' col '(:,:,nk,1)))./dps.' colnorm ';'])
+eval(['c.g = squeeze(abs(dps.' col '(:,:,nk,2)))./dps.' colnorm ';'])
+eval(['c.b = squeeze(abs(dps.' col '(:,:,nk,3)))./dps.' colnorm ';'])
+
+Icol = zeros(size(c.bright,2),size(c.bright,1),3);
+Icol(:,:,1) = (c.bright.*c.r)';
+Icol(:,:,2) = (c.bright.*c.g)';
+Icol(:,:,3) = (c.bright.*c.b)';
+Icol(isnan(Icol)) = 0;
+Icol(isinf(Icol)) = 0;
+Icol(Icol>1) = 1;
+Icol(Icol<0) = 0;
+
+image(Icol)
+set(gca,'YDir','normal')
+title('uFA S_{ii}','FontSize',fs)
 axis off
 
+axes('position',[left+2*width bottom width height])
+param = 'fa';
+col = 't1x6';
+colnorm = 'lambda33';
 
+eval(['c.bright = dps.' param '(:,:,nk);'])
+eval(['c.r = squeeze(abs(dps.' col '(:,:,nk,1)))./dps.' colnorm ';'])
+eval(['c.g = squeeze(abs(dps.' col '(:,:,nk,2)))./dps.' colnorm ';'])
+eval(['c.b = squeeze(abs(dps.' col '(:,:,nk,3)))./dps.' colnorm ';'])
 
+Icol = zeros(size(c.bright,2),size(c.bright,1),3);
+Icol(:,:,1) = (c.bright.*c.r)';
+Icol(:,:,2) = (c.bright.*c.g)';
+Icol(:,:,3) = (c.bright.*c.b)';
+Icol(isnan(Icol)) = 0;
+Icol(isinf(Icol)) = 0;
+Icol(Icol>1) = 1;
+Icol(Icol<0) = 0;
+
+image(Icol)
+set(gca,'YDir','normal')
+title('FA D_{ii}','FontSize',fs)
+axis off
 
 height = 1;
 width = height/figaspect;
@@ -87,8 +122,8 @@ colormap('gray')
 hold on
 
 
-dmin = opt.dtd_pa.dmin;
-dmax = opt.dtd_pa.dmax;
+dmin = opt.dtd.dmin;
+dmax = opt.dtd.dmax;
 ratiomax = dmax/dmin;
 
 nx = 30; ny = nx;
@@ -112,8 +147,8 @@ for nk = 1:sz(3)
         for ni = 1:sz(1)
             if dps.mask(ni,nj,nk)
                 m = squeeze(dps.m(ni,nj,nk,:))';
-                dtd = dtd_pa_m2dtd(m);
-                [n,par,perp,w] = dtd_pa_dist2par(dtd);
+                dtd = dtd_m2dtd(m);
+                [n,par,perp,theta,phi,w] = dtd_dist2par(dtd);
                 if n>0
                     logiso = log10((par + 2*perp)/3);
                     logratio = log10(par./perp);
@@ -141,7 +176,7 @@ z = reshape(ptot,[nx ny]);
 zprojx = sum(z,2);
 zprojy = sum(z,1);
 
-nclevels = 3;
+nclevels = 5;
 clevels = max(z(:))*linspace(0,1,nclevels+2);
 clevels = clevels(2:(nclevels+1));
 
@@ -173,6 +208,7 @@ axis off
 
 pause(1)
 
+%nclevels = 3;
 clevels = max(p(:))*linspace(0,1,nclevels+2);
 clevels = clevels(2:(nclevels+1));
 
@@ -190,13 +226,14 @@ for nk = 1:sz(3)
                     axis square
                     axis off
                 end
-            end
+            end            
         end
     end
 end
 
 
 set(gcf, 'PaperPosition', 1*[0 0 figsize],'PaperSize', figsize);
-eval(['print ' pdf_path '/dtd_pa -loose -dpdf'])
+eval(['print ' pdf_path '/dtd -loose -dpdf'])
+
 
 

@@ -1,5 +1,5 @@
-function dtd_m2pdf(dps_fn, pdf_path, opt)
-% function dtd_m2pdf(dps_fn, pdf_path, opt)
+function dtd_pa_m2pdf(dps_fn, pdf_path, opt)
+% function dtd_pa_m2pdf(dps_fn, pdf_path, opt)
  
 dps = mdm_dps_load(dps_fn);
 sz = size(dps.m);
@@ -36,8 +36,8 @@ axis off
 colormap('gray')
 hold on
 
-dmin = opt.dtd.dmin;
-dmax = opt.dtd.dmax;
+dmin = opt.dtd_pa.dmin;
+dmax = opt.dtd_pa.dmax;
 ratiomin = dmin/dmax;
 ratiomax = dmax/dmin;
 
@@ -53,23 +53,18 @@ ymax = log10(ratiomax);
                 m = squeeze(dps.m(ni,nj,nk,:))';
                 s0 = dps.s0(ni,nj,nk);
                 if s0 > s0_threshold*s0max
-                    dtd = dtd_m2dtd(m);
-                    [n,par,perp,theta,phi,w] = dtd_dist2par(dtd);
+                    dtd = dtd_pa_m2dtd(m);
+                    [n,par,perp,w] = dtd_pa_dist2par(dtd);
                     if n>0
-                        xcos = cos(phi).*sin(theta);
-                        ycos = sin(phi).*sin(theta);
-                        zcos = cos(theta);
-
                         iso = tm_eigvals2iso([par perp perp]);
-                        fa = tm_eigvals2fa([par perp perp]);
 
                         c.x = log10(iso);
                         c.y = log10(par./perp);
                         c.ms = ms_max*sqrt(w/s0max);
-                        c.bright = fa;
-                        c.r = abs(xcos);
-                        c.g = abs(ycos);
-                        c.b = abs(zcos);
+                        c.bright = 0*iso;
+                        c.r = 0*iso;
+                        c.g = 0*iso;
+                        c.b = 0*iso;
 
                         sub_left = (ni-1)*sub_width;
                         sub_bottom = (nj-1)*sub_height;
@@ -91,7 +86,7 @@ ymax = log10(ratiomax);
     end
 %end
 
-eval(['print ' pdf_path '/dtd_2Dmap -loose -dpdf'])
+eval(['print ' pdf_path '/dtd_pa_2Dmap -loose -dpdf'])
 
 figure(2), clf
 set(gcf, 'PaperUnits','centimeters', 'PaperPosition', 1*[0 0 figsize],'PaperSize', figsize);
@@ -103,23 +98,18 @@ axh2 = axes('position',[.05 .32 .65 .65]);
                 m = squeeze(dps.m(ni,nj,nk,:))';
                 s0 = dps.s0(ni,nj,nk);
                 if s0 > s0_threshold*s0max
-                    dtd = dtd_m2dtd(m);
-                    [n,par,perp,theta,phi,w] = dtd_dist2par(dtd);
+                    dtd = dtd_pa_m2dtd(m);
+                    [n,par,perp,w] = dtd_pa_dist2par(dtd);
                     if n>0
-                        xcos = cos(phi).*sin(theta);
-                        ycos = sin(phi).*sin(theta);
-                        zcos = cos(theta);
-
                         iso = tm_eigvals2iso([par perp perp]);
-                        fa = tm_eigvals2fa([par perp perp]);
 
                         c.x = log10(iso);
                         c.y = log10(par./perp);
                         c.ms = ms_max*sqrt(w/s0max);
-                        c.bright = fa;
-                        c.r = abs(xcos);
-                        c.g = abs(ycos);
-                        c.b = abs(zcos);
+                        c.bright = 0*iso;
+                        c.r = 0*iso;
+                        c.g = 0*iso;
+                        c.b = 0*iso;
 
                         for nc = 1:n
                             if w(nc) > w_threshold*s0
@@ -142,7 +132,7 @@ axis square
 xlabel('log(\itD\rm_{iso} / m^2s^-^1)','FontSize',fs)
 ylabel('log(\itD\rm_{||} / \itD\rm_{\perp})','FontSize',fs)
 
-eval(['print ' pdf_path '/dtd_global -loose -dpdf'])
+eval(['print ' pdf_path '/dtd_pa_global -loose -dpdf'])
 
 % ptot = sum(sum(sum(p,1),2),3);
 % z = reshape(ptot,[nx ny]);
