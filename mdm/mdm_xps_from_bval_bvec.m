@@ -19,6 +19,7 @@ if (nargin == 1) || (isempty(bvec_fn)) % assume it is a nifti filename
 end
 
 if (~exist(bval_fn, 'file')), error('could not find %s', bval_fn); end
+if (~exist(bvec_fn, 'file')), error('could not find %s', bvec_fn); end
 
 bval = mdm_txt_read(bval_fn);
 xps.b = str2num(bval{1})' * 1e6;
@@ -30,6 +31,10 @@ bvec = mdm_txt_read(bvec_fn);
 assert(numel(bvec) == 3, 'strange bvec file');
 
 gdir = [str2num(bvec{1}); str2num(bvec{2}); str2num(bvec{3})];
+
+if (size(gdir,2) ~= numel(xps.b))
+    error('bval and bvec of differnt size');
+end
 
 % compute b-tensors from b-values, b_delta value(s) and symmetry axis
 bt = tm_tpars_to_1x6(xps.b, b_delta, gdir');

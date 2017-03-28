@@ -13,7 +13,7 @@ MAC
 3) Move the program folder into /usr/local/elastix, e.g. by
     'sudo mv ~/Downloads/elastix /usr/local'
 
-4) Typing 'ls /usr/local/elasmtix' should now show to folder, bin and lib
+4) Typing 'ls /usr/local/elastix' should now show to folder, bin and lib
  
 5) To run, you need to be able to start elastix from your terminal by 
    typing 'elastix'. Do this by editing ~/.bash_profile, and add the following

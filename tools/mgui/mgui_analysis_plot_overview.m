@@ -23,14 +23,33 @@ MS = mean(S, 1)';
 hold(h_top, 'on');
 
 if (size(S, 1) < 50)
-    plot(h_top, x, S', '.-', 'color', col_gray);
+    
+    % Deal with complex signals
+    if (any(~isreal(S(:))))
+        S_plot = abs(S');
+    else
+        S_plot = S';
+    end
+    
+    plot(h_top, x, S_plot, '.-', 'color', col_gray);
+    
+else
+    
+    if (any(~isreal(S(:))))
+        MS_plot = abs(MS);
+        MD_plot = std(abs(S), [], 1);
+    else
+        MS_plot = MS;
+        MD_plot = std(S, [], 1);
+    end
+    
+    errorbar(h_top, x, MS_plot, MD_plot, 'ks-');
+    
+    
+    if (isfield(xps, 'c_volume'))
+        plot(h_top, x(xps.c_volume), MS_plot(xps.c_volume), 'ko', 'markerfacecolor', 'red', 'markersize', 9);
+    end
 end
-
-errorbar(h_top, x, MS, std(S, [], 1), 'ks-');
-
-if (isfield(xps, 'c_volume'))
-    plot(h_top, x(xps.c_volume), MS(xps.c_volume), 'ko', 'markerfacecolor', 'red', 'markersize', 9);
-end    
 
 if (nargin > 4)
     plot(h_top, x, S_fit, '-', 'color', col_red);
@@ -41,11 +60,16 @@ axis(h_top, 'on');
 box(h_top, 'off');
 set(h_top, 'tickdir','out', 'ticklength', [0.03 0.1]);
 
-if (min(S(:)) < 0)
-    axis(h_top, [ [1 xps.n] + [-1 1] * 0.5 [-1 1] * (max(abs(S(:))) + eps) * 1.1]);    
-else
-    axis(h_top, [ [1 xps.n] + [-1 1] * 0.5 0 (max(S(:)) + eps) * 1.1]);
+% Compute y-scaling
+if (any(~isreal(S(:))))
+    y_axis = [0 max(abs(S(:)) + eps) * 1.1];
+elseif (min(S(:)) < 0)
+    y_axis = [-1 1] * (max(abs(S(:))) + eps) * 1.1;
+else % standard case
+    y_axis = [0 max(S(:) + eps) * 1.1];
 end
+
+axis(h_top, [ [1 xps.n] + [-1 1] * 0.5 y_axis]);
 
 xlabel(h_top, 'Acq number');
 ylabel(h_top, 'Signal');

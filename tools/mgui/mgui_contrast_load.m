@@ -18,7 +18,6 @@ end
 % Matlab images are displayed as YX
 [I, header] = mdm_nii_read(filename);
 I = double(I);
-I = abs(I);
 
 header.my_hdr.ori = mdm_nii_oricode(header);
 
@@ -63,6 +62,15 @@ if (isempty(xps))
     
     if (exist(gdir_filename, 'file'))
         xps = mdm_xps_from_gdir(gdir_filename);
+    end
+end
+
+% If it is still empty, check for bval bvec
+if (isempty(xps))
+    [tmpa,tmpb] = mdm_fn_nii2bvalbvec(filename);
+    
+    if (exist(tmpa, 'file') && exist(tmpb,'file'))
+        xps = mdm_xps_from_bval_bvec(tmpa,tmpb);
     end
 end
 
