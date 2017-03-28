@@ -39,7 +39,7 @@ if (opt.do_param2nii)
 end
 
 % Save dtr2d pdf   
-if (opt.do_dtr2dpdf)
+if (opt.do_m2pdf)
     dtr2d_m2pdf(paths.dps_fn, paths.nii_path, opt);
 end
 

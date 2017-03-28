@@ -5,10 +5,10 @@ dps = mdm_dps_load(dps_fn);
 sz = size(dps.m);
 msf_mkdir(pdf_path);
 
-figsize = 20*10*[1 1];
-fs = 20*10;
-lw = 20*1;
-ms_max = 20*1;
+figsize = 5*10*[1 1];
+fs = 5*10;
+lw = 5*1;
+ms_max = 5*2;
 
 figaspect = figsize(1)/figsize(2);
 width = 1;
@@ -21,7 +21,8 @@ w_threshold = .02;
 s0_threshold = .1;
 
 figure(1), clf
-set(gcf, 'PaperUnits','centimeters', 'PaperPosition', 1*[0 0 figsize],'PaperSize', figsize);
+%set(gcf, 'PaperUnits','centimeters', 'PaperPosition', min(sz(1:2))/16*[0 0 figsize],'PaperSize', min(sz(1:2))/16*figsize);
+set(gcf, 'PaperUnits','centimeters', 'PaperPosition', [0 0 figsize],'PaperSize', figsize);
 
 left = 0;
 bottom = 0;
@@ -50,9 +51,20 @@ ymax = log10(ratiomax);
 zmin = log10(r2min);
 zmax = log10(r2max);
 
+if isfield(opt,'nj_range')
+    nj_range = opt.nj_range;
+else
+    nj_range =  1:sz(2);
+end
+if isfield(opt,'ni_range')
+    ni_range = opt.ni_range;
+else
+    ni_range =  1:sz(1);
+end
+
 % %for nk = 1:sz(3)
-    for nj = 1:sz(2)
-        for ni = 1:sz(1)
+    for nj = nj_range
+        for ni = ni_range
             if dps.mask(ni,nj,nk)
                 m = squeeze(dps.m(ni,nj,nk,:))';
                 s0 = dps.s0(ni,nj,nk);
@@ -69,7 +81,7 @@ zmax = log10(r2max);
 
                         c.x = log10(iso);
                         c.y = log10(par./perp);
-                        c.ms = 2*ms_max*sqrt(w/s0max);
+                        c.ms = 100/min(sz(1:2))*ms_max*sqrt(w/s0max);
                         c.bright = fa;
                         c.r = abs(xcos);
                         c.g = abs(ycos);
@@ -96,7 +108,8 @@ zmax = log10(r2max);
     end
 % %end
 
-eval(['print ' pdf_path '/dtr2d -loose -dpdf'])
+% eval(['print ' pdf_path '/dtr2d_2Dmap -loose -dpdf'])
+eval(['print ' pdf_path '/dtr2d_2Dmap -loose -dpng -r300'])
 pause(1)
 
 figure(2), clf
@@ -108,8 +121,8 @@ cla(axh2), cla(axh3), cla(axh4)
 hold(axh2,'on'), hold(axh3,'on'), hold(axh4,'on')
 axis(axh2,'square'), axis(axh3,'square'), axis(axh4,'square')
 %for nk = 1:sz(3)
-    for nj = 1:sz(2)
-        for ni = 1:sz(1)
+    for nj = nj_range
+        for ni = ni_range
             if dps.mask(ni,nj,nk)
                 m = squeeze(dps.m(ni,nj,nk,:))';
                 s0 = dps.s0(ni,nj,nk);
@@ -127,7 +140,7 @@ axis(axh2,'square'), axis(axh3,'square'), axis(axh4,'square')
                         c.x = log10(iso);
                         c.y = log10(par./perp);
                         c.z = log10(r2);
-                        c.ms = ms_max*sqrt(w/s0max);
+                        c.ms = 5*ms_max*sqrt(w/s0max);
                         c.bright = fa;
                         c.r = abs(xcos);
                         c.g = abs(ycos);

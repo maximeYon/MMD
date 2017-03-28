@@ -34,7 +34,7 @@ zmax = log10(r2max);
 
 [n,par,perp,theta,phi,r2,w] = dtr2d_dist2par(dtr2d_m2dtr2d(m));
 s0 = sum(w);
-r2
+
 cla(axh);
 hold(axh, 'off');
 h1 = plot(axh,1:xps.n,S,'o',1:xps.n,S_fit,'x');
