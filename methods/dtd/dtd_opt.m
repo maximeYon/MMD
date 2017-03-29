@@ -19,8 +19,8 @@ opt.dtd = msf_ensure_field(opt.dtd, 'ofuzz', .1*2*pi);
 opt.dtd = msf_ensure_field(opt.dtd, 'dfuzz', .1);
 
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_maps', ...
-    {'s0','miso','viso','maniso','vaniso'});
+    {'s0','miso','ciso','mdelta','vdelta'});
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_prefix', 'dtd');
-opt.dtd = msf_ensure_field(opt.dtd, 'fig_cmaps',{'fa','cl','cp','mask'});
+opt.dtd = msf_ensure_field(opt.dtd, 'fig_cmaps',{'fa','cl','cp','ufa'});
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccol',{'t1x6','lambda33vec','lambda11vec','s1x6prim'});
-opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccolnorm',{'lambda33','mask','mask','mask'});
+opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccolnorm',{'lambda33','mask','mask','slambda33prim'});

@@ -8,10 +8,17 @@ if (isfield(EG.roi, 'caxis'))
     return;
 end
 
+% Pull out the relevant image
 if ((ndims(EG.roi.I) == 4) && (size(EG.roi.I,1) ~= 3))
     I = EG.roi.I(:,:,:,c_volume);
 else
     I = EG.roi.I;
+end
+
+% Deal with compelx data (this should ideally be done earlier and in one 
+% place, but we want to keep the complex nature as long as possible)
+if (any(~isreal(I(:))))
+    I = abs(I); 
 end
 
 if (numel(I) > 0)

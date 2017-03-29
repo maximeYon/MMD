@@ -2,12 +2,10 @@ function m = dtd_1d_data2fit(signal, xps, opt, ind)
 % function m = dtd_1d_data2fit(signal, xps, opt, ind)
 %
 % Size-shape-orientation diffusion tensor distribution
-% Work in progress
 
+if (nargin < 4), ind = ones(size(signal)) > 0; end
 
-if (nargin < 4), ind = ones(size(signal)); end
-
-bt_mx6 = xps.bt(ind,:);
+bt_mx6 = xps.bt(find(ind),:);
 stemp = signal(ind);
 
 dtd = dtd_proliferation(stemp, bt_mx6, opt);

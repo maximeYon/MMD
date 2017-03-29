@@ -14,30 +14,31 @@ Acquisition
  http://dx.doi.org/10.1002/mrm.1910030602.
 
 Processing
-1) Conventional diffusion tensors;
-    fractional anisotropy;
-    Westin's shape indices.
+1)	Conventional diffusion tensors;
+	fractional anisotropy;
+	Westin's shape indices.
 
- 2) Isotropic and anisotropic variance of the diffusion tensor distribution;
-    orientational order parameters;
-    microscopic diffusion anisotropy.
-    See Lasic et al, Front. Phys. 2, 11 (2014), 
-    http://dx.doi.org/10.3389/fphy.2014.00011.
+ 2)	Isotropic and anisotropic variance of the diffusion tensor distribution;
+	orientational order parameters;
+ 	microscopic diffusion anisotropy.
+	See Lasic et al, Front. Phys. 2, 11 (2014), 
+	http://dx.doi.org/10.3389/fphy.2014.00011.
 
- 3) Shape of the microscopic diffusion tensor (prolate, sphere, oblate).
-    See, Eriksson et al., J. Chem. Phys. 142, 104201 (2015),
-    http://dx.doi.org/10.1063/1.4913502.
+ 3)	Shape of the microscopic diffusion tensor (prolate, sphere, oblate).
+	See, Eriksson et al., J. Chem. Phys. 142, 104201 (2015),
+	http://dx.doi.org/10.1063/1.4913502.
 
- 4) Saupe order tensors.
-    See Topgaard, Phys. Chem. Chem. Phys. 18, 8545 (2016),
-    http://dx.doi.org/10.1039/c5cp07251d.
+ 4)	Saupe order tensors.
+	See Topgaard, Phys. Chem. Chem. Phys. 18, 8545 (2016),
+	http://dx.doi.org/10.1039/c5cp07251d.
 
- 5) Size-shape diffusion tensor distributions.
-    See de Almeida Martins and Topgaard, Phys. Rev. Lett. 116, 087601 (2016).
-    http://dx.doi.org/10.1103/PhysRevLett.116.087601.
+ 5)	Size-shape diffusion tensor distributions.
+	See de Almeida Martins and Topgaard, Phys. Rev. Lett. 116, 087601 (2016).
+	http://dx.doi.org/10.1103/PhysRevLett.116.087601.
    
- 6) Size-shape-orientation diffusion tensor distributions.
-    Work in progress
+ 6)	Size-shape-orientation diffusion tensor distributions.
+	See Topgaard. J. Magn. Reson. 275, 98 (2017).
+	http://dx.doi.org/10.1016/j.jmr.2016.12.007
 
 
 Two versions available:
@@ -46,14 +47,13 @@ Tested on Bruker 500 MHz with MIC-5 probe at Physical Chemistry, Lund University
 
 2) Avance III HD TopSpin 3.2.
 Tested on Bruker 600 MHz with MIC-5 probe at Swedish NMR Center, Gothenburg.
-Does NOT work with TopSpin 3.5 because of a software bug causing uncontrolled scaling of the gradient waveforms (inquire with Klaus Zick when this bug will be fixed).
 
 
 Procedure
 0) Set up Matlab paths by executing setup_paths.m.
 
 1) Copy pulse program DT_axderare2d from
-../mdm_framework/mdm_topgaard/acq/bruker/Avance<version>/pulseprograms
+../md-dmri/acq/bruker/Avance<version>/pulseprograms
 to 
 /opt/topspin<version>/exp/stan/nmr/lists/pp/users.
 
@@ -62,14 +62,13 @@ bruker_axde_waveform.m and
 bruker_axde_protocol.m.
 
 3) Copy all gradient shape files g* from
-../mdm_framework/mdm_topgaard/acq/bruker/Avance<version>/protocol
+../md-dmri/acq/bruker/Avance<version>/protocol
 to
 /opt/topspin<version>/exp/stan/nmr/lists/gp/users and
 /opt/data/<user>/nmr/<dataset>/<expno>.
 
-4) Set acquisition parameters according to the instructions in the pulse program or by copying the example data sets
-../mdm_framework/examples/bruker_examples/Avance_III_HD/DTrare2d_setup or
-../mdm_framework/examples/bruker_examples/Avance_II/DT_axderare2d_test.
+4) Set acquisition parameters according to the instructions in the pulse program or by copying the example data sets at
+https://github.com/daniel-topgaard/md-dmri-data
 
 5) zg (zero go: perform an acquisition)
 
@@ -82,3 +81,5 @@ to
 
 9) Parameter maps in nifti and pdf format can be found in
 /opt/data/<user>/nmr/<dataset>/<expno>/NII_RES/maps.
+
+10) View the data with the GUI included in the md-dmri framework.

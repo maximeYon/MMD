@@ -1,4 +1,4 @@
-#MD-dMRI methods
+# MD-dMRI methods
 
 Three families of methods are currently implemented within the framework of MD-dMRI:
 * [Diffusion tensor distributions](#diffusion-tensor-distributions)
@@ -7,7 +7,7 @@ Three families of methods are currently implemented within the framework of MD-d
 
 The methods are described briefly below, in some more detail in two review articles,<sup>1,2</sup> and more exhaustively in the original publications cited for each method. Before a mathematically and physically correct description of the methods and the parameters that can be obtained, we start with a more hand-waving line of reasoning intended for a non-expert reader that has previous experience of conventional dMRI. The following text assumes familiarity with standard dMRI terminology such as diffusion tensors, diffusion anisotropy, kurtosis, orientation distributions functions, and intravoxel incoherent motion, as well as the commonly used acronyms DTI, MD, FA, and DKI.<sup>3-6</sup>
 
-The description of the methods is followed by some [details about our Matlab code](#implementation-details) for generating MD-dMRI parameter maps.
+The description of the methods is followed by some [details about our Matlab code](#methods/implementation-details) for generating MD-dMRI parameter maps.
 
 ## Diffusion tensor distributions
 The microscopic geometry of tissue is imprinted in the sizes, shapes, and orientations of the water diffusion tensors that are measured with dMRI. Conventional methods give diffusion tensors that are averaged over all the microscopic water environments within the millimeter-size imaging voxels, thereby giving ambiguous information for heterogeneous tissue which is ubiquitous in the human brain. Our MD-dMRI methods have the capability to disentangle the effects of microscopic diffusion tensor sizes, shapes, and orientations, allowing for detailed tissue characterization in terms of well-defined statistical measures of the diffusion tensor distributions. These measures have simple and intuitive relations to tissue properties such as average cell shape and variability of cell density.
@@ -36,7 +36,7 @@ The MD-dMRI methods for quantifying DTDs can be classified according to the obta
 
 | Name | reference | size| shape | orientation| algorithm |
 | ---:|:---:|:---:|:---:|:---:|:----:|
-| dtd_full | Topgaard 2017<sup>1</sup> | distribution | distribution | distribution | NNLS |
+| dtd | Topgaard 2017<sup>1</sup> | distribution | distribution | distribution | NNLS |
 | dtd_saupe | Topgaard 2016<sup>8</sup> | 1 component | 1 component | order tensor | NLSQ |
 | dtd_covariance | Westin 2016<sup>9</sup> |  mean and variance | mean and variance | order parameter | LLSQ |
 | dtd_gamma | Lasič 2014<sup>10</sup> |  mean and variance | mean | order parameter | NLSQ |
@@ -59,8 +59,7 @@ Name: vasco16. Reference: Ahlgren 2016.<sup>14</sup>
 
 # Implementation details
 
-All functions that concern a specific method are located in methods/name (folder currently named 'models' will be renamed to 'methods'). 
-In that folder, a specific set of functions must be present that conforms to the following structure of the function call
+All functions that concern a specific method are located in methods/name. In that folder, a specific set of functions must be present that conforms to the following structure of the function call
 
 ```matlab
 m = name_1d_data2fit(signal, xps, opt, ind)

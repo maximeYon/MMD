@@ -6,7 +6,7 @@ function s = msf_rmfield(s, f)
 
 if (iscell(f))
     for c = 1:numel(f)
-       s = my_rmfield(s, f{c}); 
+       s = msf_rmfield(s, f{c}); 
     end
     return;
 end

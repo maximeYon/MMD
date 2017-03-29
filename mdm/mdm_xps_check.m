@@ -13,7 +13,7 @@ for c = 1:numel(f)
     if (strcmp(f{c}, 'c_volume')), continue; end
     
     if (size(xps.(f{c}), 1) ~= xps.n)
-        error('field %s is of wrong size (%s)', f{c}, num2str(size(f{c}))); 
+        error('field %s is of wrong size (%s)', f{c}, num2str(size(xps.(f{c})))); 
     end
     
 end

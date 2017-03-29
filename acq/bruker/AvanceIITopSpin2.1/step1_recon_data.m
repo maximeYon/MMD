@@ -1,5 +1,6 @@
 % Reconstruct nii from Bruker format
 % Execute from the opt/data/<user>/nmr/<dataset>/<expno> folder
+% containing the ser and acqus files
 
 % Image recon parameters
 rps.smooth          = 300e-6; %Gaussian smoothing in [m]

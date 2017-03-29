@@ -58,7 +58,7 @@ if n > 0
     [dtd_nx6,w] = dtd_dist2nx6w(dtd);
     dt1x6 = (dtd_nx6'*w)'/s0;
     dt3x3 = tm_1x6_to_3x3(dt1x6);
-    dt = tm_t2tpars(dt3x3);
+    dt = tm_3x3_to_tpars(dt3x3);
 
     dps1d.t1x6(1,:) = dt.t1x6;
     dps1d.lambdazzvec(1,:) = dt.lambdazzvec;

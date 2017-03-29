@@ -1,5 +1,5 @@
-function dist_s = dist_2d_discrete_to_smooth(dist_d,dist_s)
-% function dist_s = dist_2d_discrete_to_smooth(dist_d,dist_s)
+function dist_s = dist_2d_discrete2smooth(dist_d,dist_s)
+% function dist_s = dist_2d_discrete2smooth(dist_d,dist_s)
 %
 % Convert from discrete to smooth 2D distribution. Gaussian convolution.
 %

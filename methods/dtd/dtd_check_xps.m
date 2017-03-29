@@ -1,5 +1,5 @@
-function dti_euler_check_xps(xps)
-% function dti_euler_check_xps(xps)
+function dtd_check_xps(xps)
+% function dtd_check_xps(xps)
 % 
 % checks that all required fields are found in the xps
 

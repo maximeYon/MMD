@@ -30,6 +30,10 @@ assert(numel(bvec) == 3, 'strange bvec file');
 
 gdir = [str2num(bvec{1}); str2num(bvec{2}); str2num(bvec{3})];
 
+if (size(gdir,2) ~= numel(xps.b))
+    error('bval and bvec of differnt size');
+end
+
 % compute b-tensors from b-values, b_delta value(s) and symmetry axis
 bt  = tm_tpars_to_1x6(xps.b, b_delta, gdir');
 xps = mdm_xps_from_bt(bt);
