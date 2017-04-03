@@ -24,7 +24,7 @@ if (opt.filter_sigma > 0)
     s = mdm_s_smooth(s, opt.filter_sigma, [], opt);
 end
 
-s = mdm_mask(s, @mio_mask_threshold, [], opt);
+s = mdm_s_mask(s, @mio_mask_threshold, [], opt);
 
 % Fit and derive parameters
 mdm_data2fit(@dtd_codivide_4d_data2fit, s, paths.mfs_fn, opt);
