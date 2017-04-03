@@ -42,8 +42,9 @@ dps.C_M   = mio_min_max_cut(dps.C_M, 0, 1);
 dps.C_c   = mio_min_max_cut(dps.C_c, 0, 1);
 
 % ********* Calculate kurtosis measures ************
-dps.K_bulk  = 3 * dps.V_MD ./ dps.V_MD2;           % < C , E_bulk>  / < Dsol2, E_bulk >
-dps.K_shear = (6/5) * dps.V_shear ./ dps.V_MD2;    % < C , E_shear> / < Dsol2, E_bulk >
-dps.MK      = dps.K_bulk + dps.K_shear;            % < C , E_tsym>  / < Dsol2, E_bulk >  %check formula
-dps.K_mu    = (6/5) * dps.V_shear1 ./ dps.V_MD1;   %  V_shear1 / < Dsol2, E_bulk >
+% Naming these according to the dtd_gamma nomenclature
+dps.MKi  = 3 * dps.V_MD ./ dps.V_MD2;           % < C , E_bulk>  / < Dsol2, E_bulk >
+dps.MKa  = (6/5) * dps.V_shear ./ dps.V_MD2;    % < C , E_shear> / < Dsol2, E_bulk >
+dps.MKt  = dps.MKi + dps.MKa;                   % < C , E_tsym>  / < Dsol2, E_bulk >  %check formula
+dps.K_mu = (6/5) * dps.V_shear1 ./ dps.V_MD1;   %  V_shear1 / < Dsol2, E_bulk >
 

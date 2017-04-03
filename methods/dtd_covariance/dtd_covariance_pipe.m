@@ -17,14 +17,17 @@ opt   = dtd_covariance_opt(opt);
 
 paths = mdm_paths(paths, 'dtd_covariance');   
 
-msf_log(['Starting ' mfilename], opt);    
+msf_log(['Starting ' mfilename], opt);
+
+% Check that the xps is proper
+dtd_covariance_check_xps(s.xps);
 
 % Smooth and prepare mask
 if (opt.filter_sigma > 0)
-    s = mdm_smooth(s, opt.filter_sigma, [], opt);
+    s = mdm_smooth(s, opt.filter_sigma, paths.nii_path, opt);
 end
 
-s = mdm_mask(s, @mio_mask_threshold, [], opt);
+s = mdm_s_mask(s, @mio_mask_threshold, paths.nii_path, opt);
 
 % Fit and derive parameters
 mdm_data2fit(@dtd_covariance_4d_data2fit, s, paths.mfs_fn, opt);
