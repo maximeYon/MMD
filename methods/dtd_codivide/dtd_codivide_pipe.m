@@ -15,7 +15,7 @@ if (nargin < 3), opt.present = 1; end
 % Init structures
 opt   = mdm_opt(opt);
 opt   = dtd_codivide_opt(opt);
-paths = mdm_paths(paths, '_codivide');     
+paths = mdm_paths(paths, 'dtd_codivide');     
 
 msf_log(['Starting ' mfilename], opt);    
 
