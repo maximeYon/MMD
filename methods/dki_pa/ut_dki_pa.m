@@ -86,8 +86,8 @@ switch (c_ut)
                 error('%s, ut_dki_pa test %i, variance estimate wrong', fn, c_ut);
             end
             
-            if (any( abs(va_est - va_exp) > 1e-3))
-                error('%s, ut_dki_pa test %i, shear variance wrong', fn, c_ut);
+            if (any( abs(va_est - va_exp) > 2e-3))
+                error('%s, ut_dki_pa test %i, shear variance wrong (%0.3f vs %0.3f)', fn, c_ut, va_est, va_exp);
             end
             
         end
