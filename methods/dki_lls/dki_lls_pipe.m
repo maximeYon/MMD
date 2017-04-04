@@ -1,5 +1,5 @@
-function fn = dtd_covariance_pipe(s, paths, opt)
-% function fn = dtd_covariance_pipe(s, paths, opt)
+function fn = dki_lls_pipe(s, paths, opt)
+% function fn = dki_lls_pipe(s, paths, opt)
 %
 % s     - input structure
 % paths - either a pathname or a path structure (see mdm_paths)
@@ -13,14 +13,14 @@ if (nargin < 3), opt.present = 1; end
 
 % Init structures
 opt   = mdm_opt(opt);
-opt   = dtd_covariance_opt(opt);
+opt   = dki_lls_opt(opt);
 
-paths = mdm_paths(paths, 'dtd_covariance');   
+paths = mdm_paths(paths, 'dki_lls');   
 
 msf_log(['Starting ' mfilename], opt);
 
 % Check that the xps is proper
-dtd_covariance_check_xps(s.xps);
+dki_lls_check_xps(s.xps);
 
 % Smooth and prepare mask
 if (opt.filter_sigma > 0)
@@ -30,9 +30,9 @@ end
 s = mdm_s_mask(s, @mio_mask_threshold, paths.nii_path, opt);
 
 % Fit and derive parameters
-mdm_data2fit(@dtd_covariance_4d_data2fit, s, paths.mfs_fn, opt);
-mdm_fit2param(@dtd_covariance_4d_fit2param, paths.mfs_fn, paths.dps_fn, opt);
+mdm_data2fit(@dki_lls_4d_data2fit, s, paths.mfs_fn, opt);
+mdm_fit2param(@dki_lls_4d_fit2param, paths.mfs_fn, paths.dps_fn, opt);
 
 % Save niftis
-fn = mdm_param2nii(paths.dps_fn, paths.nii_path, opt.dtd_covariance, opt); 
+fn = mdm_param2nii(paths.dps_fn, paths.nii_path, opt.dki_lls, opt); 
 

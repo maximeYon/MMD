@@ -12,10 +12,13 @@ function paths = mdm_paths(tmp, prefix, suffix)
 if (nargin < 2), prefix = []; end
 if (nargin < 3), suffix = []; end
 
+% Poor code to prettify output filenames
+if (numel(prefix) > 0) && (prefix(end) ~= '_'), us = '_'; else us = ''; end
+
 if (ischar(tmp))
     paths.pa_fn  = fullfile(tmp, [prefix suffix '_pa.nii.gz']);
-    paths.mfs_fn = fullfile(tmp, [prefix 'mfs' suffix '.mat']);
-    paths.dps_fn = fullfile(tmp, [prefix 'dps' suffix '.mat']);
+    paths.mfs_fn = fullfile(tmp, [prefix us 'mfs' suffix '.mat']);
+    paths.dps_fn = fullfile(tmp, [prefix us 'dps' suffix '.mat']);
     paths.nii_path = fullfile(tmp);
 elseif (isstruct(tmp))
     paths = tmp;

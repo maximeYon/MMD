@@ -27,6 +27,12 @@ else
     out_xps_fn = mdm_xps_fn_from_nii_fn(out_nii_fn);
 end
 
+% Is already powder averaged?
+if (isfield(s.xps, 'pa_w'))
+    disp('Skipping, input file is already powder averaged');
+    return;
+end
+
 
 % Do not overwrite
 if (exist(out_nii_fn, 'file') && (~opt.do_overwrite))

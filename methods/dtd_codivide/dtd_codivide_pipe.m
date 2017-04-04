@@ -15,7 +15,7 @@ if (nargin < 3), opt.present = 1; end
 % Init structures
 opt   = mdm_opt(opt);
 opt   = dtd_codivide_opt(opt);
-paths = mdm_paths(paths, '_codivide');     
+paths = mdm_paths(paths, 'dtd_codivide');     
 
 msf_log(['Starting ' mfilename], opt);    
 
@@ -24,7 +24,7 @@ if (opt.filter_sigma > 0)
     s = mdm_s_smooth(s, opt.filter_sigma, [], opt);
 end
 
-s = mdm_mask(s, @mio_mask_threshold, [], opt);
+s = mdm_s_mask(s, @mio_mask_threshold, [], opt);
 
 % Fit and derive parameters
 mdm_data2fit(@dtd_codivide_4d_data2fit, s, paths.mfs_fn, opt);
