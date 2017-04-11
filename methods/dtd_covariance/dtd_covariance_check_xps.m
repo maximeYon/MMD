@@ -13,3 +13,13 @@ for c = 1:numel(required_fields)
     end
 end
     
+% Check that the b-tensors produce an invertible matrix
+opt = dtd_covariance_opt();
+
+tmp = warning('query'); warning off; % probe without throwing warning
+[~,cond] = dtd_covariance_1d_data2fit(abs(randn(1,xps.n)), xps, opt);
+warning(tmp);
+
+if (cond < 1e-10)
+    error('The b-tensors cannot form an overdetermined equation system');
+end
