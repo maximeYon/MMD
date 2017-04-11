@@ -17,8 +17,8 @@ sub_width = 1/sz(1);
 sub_height = 1/sz(2)*figaspect;
 
 s0max = max(reshape(dps.s0,numel(dps.s0),1));
-w_threshold = .02;
-s0_threshold = .1;
+w_threshold = 0;
+s0_threshold = 0;
 
 figure(1), clf
 %set(gcf, 'PaperUnits','centimeters', 'PaperPosition', min(sz(1:2))/16*[0 0 figsize],'PaperSize', min(sz(1:2))/16*figsize);
@@ -28,7 +28,7 @@ left = 0;
 bottom = 0;
 axes('position',[left bottom width height])
 
-nk = 8;
+nk = round(sz(3)/2);
 z = squeeze(dps.s0(:,:,nk))';
 clim = max(z(:))*[0 1];
 imagesc(z)
@@ -171,7 +171,7 @@ xlabel(axh2,'log(\itD\rm_{iso} / m^2s^-^1)','FontSize',fs)
 ylabel(axh2,'log(\itD\rm_{||} / \itD\rm_{\perp})','FontSize',fs)
 
 set(axh3,'XLim',[xmin xmax]+.2*(xmax-xmin)*[-1 1], 'YLim',[zmin zmax]+.2*(zmax-zmin)*[-1 1],...
-'XTick',[-11:.5:-8],'YTick',0:.5:1.5,'XTickLabel','')
+'XTick',[-11:1:-8],'YTick',0:.5:1.5,'XTickLabel','')
 ylabel(axh3,'log(\itR\rm_{2} / s^-^1)','FontSize',fs)
 
 set(axh4,'XLim',[zmin zmax]+.2*(zmax-zmin)*[-1 1], 'YLim',[ymin ymax]+.2*(ymax-ymin)*[-1 1],...
