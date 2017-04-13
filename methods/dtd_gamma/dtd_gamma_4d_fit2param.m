@@ -37,8 +37,9 @@ dps.MKt = 3 * dps.Vt ./ dps.MD.^2;
 
 dps.Vl = 5/2 * dps.Va;
 
-dps.ufa_old = sqrt(3/2) * sqrt(1./(dps.MD.^2./dps.Vl+1));
-dps.ufa     = sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.Vi + dps.MD.^2) );
+% sqrt of negative variances.
+dps.ufa_old = real(sqrt(3/2) * sqrt(1./(dps.MD.^2./dps.Vl+1)));
+dps.ufa     = real(sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.Vi + dps.MD.^2) ));
 
 
 for i = 5:size(dps.m, 4)
