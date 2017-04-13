@@ -54,23 +54,6 @@ unit_to_SI = [max(signal+eps) 1e-9 (1e-9)^2*[1 1] ones(1,ns)];
         end
     end
 
-% Create 100 random guesses and use the one with lowest residual. This
-% function is reasonably fast, and avoids strange fitting results due to
-% poor initial guessing.
-    function guess = dtd_gamma_rand_guess(lb, ub)
-        iter = 100;
-        thr = inf;
-        for j = 1:iter
-            m_rand = lb + (ub - lb) .* rand(size(lb));
-            s_rand = dtd_gamma_1d_fit2data(m_rand, xps);
-            r_rand = sum(((signal-s_rand).*weight).^2);
-            if r_rand < thr
-                thr = r_rand;
-                guess = m_rand;
-            end
-        end
-    end
-
 
 % Guesses and bounds
 m_lb      = [0                   1e-12   -(3e-9)^2*[1 1]   0.5 * ones(1,ns)];
@@ -98,7 +81,7 @@ for i = 1:opt.dtd_gamma.fit_iters
     end
     
     % Create a random guess
-    m_guess = dtd_gamma_rand_guess(m_lbz, m_ub);
+    m_guess = msf_fit_random_guess(@dtd_gamma_1d_fit2data, signal, xps, m_lbz, m_ub, weight, 50);
     t_guess = m_guess./unit_to_SI;
     
     
