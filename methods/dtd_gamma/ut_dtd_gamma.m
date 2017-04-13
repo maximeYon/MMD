@@ -4,7 +4,7 @@ function fn = ut_dtd_gamma(c_ut)
 % if c_ut is not supplied, the function returns the number of unit tests
 
 % n_ut = number of unit tests
-n_ut = 4;
+n_ut = 5;
 
 if (nargin < 1), fn = n_ut; return; end
 
@@ -173,6 +173,9 @@ switch c_ut
             error('%s, ut_dtd_gamma test %i, fit returns unexpected values!', fn, c_ut);
         end
         
+        
+    otherwise
+        error('No such test is defined!');
         
 end
 
