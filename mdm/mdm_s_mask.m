@@ -33,5 +33,6 @@ if (opt.do_mask)
     [I,h] = mdm_nii_read(s.nii_fn);
     if (any(imag(I(:)) ~= 0)), I = abs(I); end
     M = mask_fun(I, opt);
+    msf_mkdir(fileparts(s.mask_fn));
     mdm_nii_write(uint8(M), s.mask_fn, h);
 end
