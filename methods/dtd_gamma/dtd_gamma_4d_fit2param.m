@@ -37,6 +37,7 @@ dps.MKt = 3 * dps.Vt ./ dps.MD.^2;
 
 dps.Vl = 5/2 * dps.Va;
 
+% Calculate uFA. Take real component to avoid complex values due to
 % sqrt of negative variances.
 dps.ufa_old = real(sqrt(3/2) * sqrt(1./(dps.MD.^2./dps.Vl+1)));
 dps.ufa     = real(sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.Vi + dps.MD.^2) ));
