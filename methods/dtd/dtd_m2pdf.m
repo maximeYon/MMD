@@ -5,10 +5,10 @@ dps = mdm_dps_load(dps_fn);
 sz = size(dps.m);
 msf_mkdir(pdf_path);
 
-figsize = 5*5*[1 1];
-fs = 5*10;
-lw = 5*1;
-ms_max = 5*5;
+figsize = 8.3*[1 1];
+fs = 6;
+lw = 1;
+ms_max = 8;
 
 figaspect = figsize(1)/figsize(2);
 width = 1;
@@ -91,11 +91,11 @@ ymax = log10(ratiomax);
     end
 %end
 
-eval(['print ' pdf_path '/dtd_2Dmap -loose -dpdf'])
+eval(['print ' pdf_path '/dtd_2Dmap -loose -dpng -r600'])
 
 figure(2), clf
-set(gcf, 'PaperUnits','centimeters', 'PaperPosition', 1*[0 0 figsize],'PaperSize', figsize);
-axh2 = axes('position',[.05 .32 .65 .65]);
+set(gcf, 'PaperUnits','centimeters', 'PaperPosition', 1*[0 0 .5*figsize],'PaperSize', .5*figsize);
+axh2 = axes('position',[.18 .18 .75 .75]);
 %for nk = 1:sz(3)
     for nj = 1:sz(2)
         for ni = 1:sz(1)
@@ -135,14 +135,14 @@ axh2 = axes('position',[.05 .32 .65 .65]);
         end
     end
 %end
-set(gca,'XLim',[xmin xmax]+.2*(xmax-xmin)*[-1 1], 'YLim',[ymin ymax]+.2*(ymax-ymin)*[-1 1],'YAxisLocation','right',...
-'XTick',[-11:-8],'YTick',-2:2,'TickDir','out','TickLength',.03*[1 1],...
+set(gca,'XLim',[xmin xmax]+.2*(xmax-xmin)*[-1 1], 'YLim',[ymin ymax]+.2*(ymax-ymin)*[-1 1],'YAxisLocation','left',...
+'XTick',[-11:-8],'YTick',-2:2,'TickDir','out','TickLength',.02*[1 1],...
 'FontSize',fs,'LineWidth',lw)
 axis square
-xlabel('log(\itD\rm_{iso} / m^2s^-^1)','FontSize',fs)
-ylabel('log(\itD\rm_{||} / \itD\rm_{\perp})','FontSize',fs)
+%xlabel('log(\itD\rm_{iso} / m^2s^-^1)','FontSize',fs)
+%ylabel('log(\itD\rm_{||} / \itD\rm_{\perp})','FontSize',fs)
 
-eval(['print ' pdf_path '/dtd_global -loose -dpdf'])
+eval(['print ' pdf_path '/dtd_global -loose -dpng -r1200'])
 
 % ptot = sum(sum(sum(p,1),2),3);
 % z = reshape(ptot,[nx ny]);
