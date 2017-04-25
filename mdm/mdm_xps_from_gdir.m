@@ -18,6 +18,7 @@ if (nargin < 3), b_delta = 1; end
 if (isempty(delimeter)), delimeter = ','; end
 if (b_delta < -0.5) || (b_delta > 1), error('b_delta out of range'); end
 
+if (~exist(gdir_fn)), error('Did not find file %s', gdir_fn); end
 
 % read text and split by delimeter, keeping only non-empty entries to solve
 % problems of multiple consequtive delimeters such as spaces

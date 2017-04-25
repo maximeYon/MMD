@@ -9,6 +9,7 @@ opt = mdm_opt(opt);
 if (~iscell(xps_cell)), error('first argument must be a cell array'); end
 if (numel(xps_cell) == 0), error('first argument empty'); end
 
+% Load xps's
 if (~isstruct(xps_cell{1}))
     if (exist(xps_cell{1}, 'file'))
         % assume all are files, load them
@@ -20,6 +21,10 @@ if (~isstruct(xps_cell{1}))
     end
 end
 
+% Check that all xps structs are fine
+for c = 1:numel(xps_cell)
+    mdm_xps_check(xps_cell{c});
+end
 
 % see if all components already have s_ind structures that are unique
 tmp = cellfun(@(x) isfield(x, 's_ind'), xps_cell);

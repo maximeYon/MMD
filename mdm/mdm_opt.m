@@ -53,6 +53,10 @@ opt.mask.present = 1;
 opt.mask = msf_ensure_field(opt.mask, 'do_overwrite', 0);
 
 
+% options for powder averaging
+opt.mdm.pa.present = 1;
+opt.mdm.pa = msf_ensure_field(opt.mdm.pa, 'db', 0.2e9);
+opt.mdm.pa = msf_ensure_field(opt.mdm.pa, 'db_delta2', 0.25);
 
 
 

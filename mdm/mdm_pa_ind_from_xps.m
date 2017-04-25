@@ -23,8 +23,8 @@ else
     if (isfield(xps, 'b') && (isfield(xps, 'b_delta')))
         
         % define step in b and b_delta
-        db = 0.1; % units of um2/ms
-        db_delta2 = 0.025;
+        db        = opt.mdm.pa.db * 1e-9; % units of um2/ms
+        db_delta2 = opt.mdm.pa.db_delta2;
         
         b = xps.b * 1e-9;
         b_delta2 = xps.b_delta.^2 .* sign(xps.b_delta);

@@ -8,6 +8,9 @@ opt.dki_pa.present = 1;
 opt.dki_pa = msf_ensure_field(opt.dki_pa, ...
     'do_heteroscedasticity_correction', 1);
 
+opt.dki_pa = msf_ensure_field(opt.dki_pa, ...
+    'do_include_b_tensor_anisotropy', 0);
+
 % control which maps that are generated as nifti files
 opt.dki_pa = msf_ensure_field(opt.dki_pa, 'fig_maps', {'s0','MD', 'MK'});
 

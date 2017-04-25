@@ -23,7 +23,6 @@ if (do_reload)
     EG = mgui_waitbar(EG, 0.1, 'Loading...');
     try
         [I, header, filename, ext, xps] = mgui_contrast_load(EG);% , EG.select);
-        I = abs(I);
     catch me
         disp(getReport(me,'Extended'));
         return;
@@ -230,7 +229,7 @@ if (do_reload)
             EG.roi.c_volume = 1;
         end
         
-        if (numel(EG.roi.c_volume) == 0),
+        if (numel(EG.roi.c_volume) == 0)
             EG.roi.c_volume = 1;
         end
     end
@@ -342,11 +341,17 @@ if (do_redraw_image)
             continue;
         end
         
+        % Deal with complex images
+        if (any(~isreal(I)))
+            I_display = single(abs(I));
+        else
+            I_display = single(I);
+        end
+        
         % Display current image
         h_image = findobj(get(h, 'Children'), 'Type', 'Image');
         if (isempty(h_image))
-            h_image = imagesc(single(abs(I)), 'parent', h);
-            %h_image = imagesc(single(I), 'parent', h);
+            h_image = imagesc(I_display, 'parent', h);
         else
             if (numel(h_image) > 1)
                 disp('strange!');
@@ -354,8 +359,11 @@ if (do_redraw_image)
                 h_image = h_image(1);
             end
             
-            set(h_image, 'CData', single(I), 'parent', h);
+            set(h_image, 'CData', I_display, 'parent', h);
         end
+        
+        % Clear the temporary display iamge
+        clear I_display;
         
         
         set(h_image,...

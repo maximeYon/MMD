@@ -1,4 +1,4 @@
-function m = dtd_covariance_1d_data2fit(signal, xps, opt, ind)
+function [m,cond] = dtd_covariance_1d_data2fit(signal, xps, opt, ind)
 % function m = dtd_covariance_1d_data2fit(signal, xps, opt, ind)
 %
 % Diffusion tensor distribution (DTD) modeling using cumulant expansion:
@@ -13,6 +13,8 @@ function m = dtd_covariance_1d_data2fit(signal, xps, opt, ind)
 % The output from this function will be a model parameter vector of
 % dimension 1 + 6 + 21 = 28
 %
+% The second output is the condition number of the matrix used in the
+% inversion
 
 if (nargin < 4), ind = ones(size(signal)) > 0; end
 
@@ -54,9 +56,11 @@ else
     C2 = 1;
 end
 
+% Compute condition number
 tmp = (X' * C2 * X);
+cond = rcond(tmp);
 
-if (rcond(tmp) > 1e-10) % some small number
+if (cond > 1e-10) % some small number
  
     % perform regression to estimate model parameters m
     m = tmp \ X' * C2 * real(log(signal(ind)));
