@@ -42,7 +42,7 @@ xps.n   = numel(xps.b);
 xps.bt  = tm_tpars_to_1x6(xps.b, b_delta, xps.u);
 xps.bt2 = tm_1x6_to_1x21(xps.bt);
 xps.b_delta = zeros(size(xps.b)) + b_delta;
-
+xps.b_eta   = zeros(size(xps.b));
 
 % 
 % if (b_delta == 0)
