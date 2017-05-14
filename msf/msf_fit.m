@@ -10,6 +10,11 @@ function [t,ss] = msf_fit(f, s, l, u, n, opt)
 % n - number of repetitions
 % opt - options for lsqcurvefit
 
+if (nargin < 6) % slow
+    opt = optimoptions(...
+        'lsqcurvefit', 'display', ...
+        'off','MaxFunEvals',1e4); 
+end
 
 ss = inf;
 for c = 1:n
