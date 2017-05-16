@@ -5,7 +5,7 @@ function xps_pa = mdm_xps_pa(xps, opt)
 
 if (nargin < 2), opt = mdm_opt; end
 
-[~,c_list, id_ind] = mdm_pa_ind_from_xps(xps);
+[~,c_list, id_ind] = mdm_pa_ind_from_xps(xps, opt);
 
 % Start by some house keeping
 if (isfield(xps, 'n_bs')), xps_pa.n_bs = xps.n_bs; end
