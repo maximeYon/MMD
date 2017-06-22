@@ -13,9 +13,7 @@ function xps = mdm_xps_from_bval_bvec(bval_fn, bvec_fn, b_delta)
 if (nargin < 3), b_delta = 1; end
 
 if (nargin == 1) || (isempty(bvec_fn)) % assume it is a nifti filename
-    [nii_path, nii_name] = msf_fileparts(bval_fn);
-    bval_fn = fullfile(nii_path, [nii_name '.bval']);
-    bvec_fn = fullfile(nii_path, [nii_name '.bvec']);
+    [bval_fn, bvec_fn] = mdm_fn_nii2bvalbvec(bval_fn);
 end
 
 if (~exist(bval_fn, 'file')), error('could not find %s', bval_fn); end
@@ -37,7 +35,7 @@ if (size(gdir,2) ~= numel(xps.b))
 end
 
 % compute b-tensors from b-values, b_delta value(s) and symmetry axis
-bt = tm_tpars_to_1x6(xps.b, b_delta, gdir');
+bt  = tm_tpars_to_1x6(xps.b, b_delta, gdir');
 xps = mdm_xps_from_bt(bt);
 
 % store the direction as well
