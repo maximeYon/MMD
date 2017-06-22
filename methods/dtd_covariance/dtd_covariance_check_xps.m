@@ -17,7 +17,7 @@ end
 opt = dtd_covariance_opt();
 
 tmp = warning('query'); warning off; % probe without throwing warning
-[~,cond] = dtd_covariance_1d_data2fit(abs(randn(1,xps.n)), xps, opt);
+[~,cond] = dtd_covariance_1d_data2fit(abs(randn(xps.n,1)), xps, opt);
 warning(tmp);
 
 if (cond < 1e-10)
