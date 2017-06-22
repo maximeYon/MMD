@@ -8,7 +8,7 @@ function s = mdm_s_from_nii(nii_fn, b_delta)
 %
 % assumes the xps filename can be constructred from the nii_fn
 
-if (nargin < 2), b_delta = 0; end
+if (nargin < 2), b_delta = 1; end
 
 s.nii_fn = nii_fn;
 
@@ -19,7 +19,7 @@ if (exist(mdm_xps_fn_from_nii_fn(nii_fn), 'file'))
 elseif (exist(mdm_fn_nii2gdir(nii_fn), 'file'))
     
     % Lund-generated gdir file
-    s.xps = mdm_xps_from_gdir(mdm_fn_nii2gdir(nii_fn), b_delta);
+    s.xps = mdm_xps_from_gdir(mdm_fn_nii2gdir(nii_fn), [], b_delta);
 
 elseif (exist(mdm_fn_nii2bvalbvec(nii_fn), 'file'))
 
