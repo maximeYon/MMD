@@ -7,56 +7,27 @@ function msf_imagesc(I,d,k,c)
 % k - slice
 % c - volume
 
-if (size(I,1) == 3) && (ndims(I) == 4)
-    % assume it is a color image
+if (nargin < 2) || (isempty(d)), d = 3; end
+if (nargin < 3) || (isempty(k)), k = round(size(I,d)/2); end
+if (nargin < 4) || (isempty(c)), c = 1; end
+
+if (size(I,1) == 3) && (ndims(I) == 4) % assume it is a color image
     
-    if (nargin < 2), d = 3; end
-    if (nargin < 3) || isempty(k), k = round(size(I, d + 1)/2 ); end
+    tmp = mio_3d_to_2d_slice(I,d,k,1);
     
-    switch (d)
-        case 1
-            tmp = I(:,k,:,:);
-        case 2
-            tmp = I(:,:,k,:);
-        case 3
-            tmp = I(:,:,:,k);
-    end
-    
-    tmp = squeeze(tmp);
-    tmp = permute(tmp, [3 2 1]);
-    tmp = tmp(:,end:-1:1,:);
+    if (isa(tmp, 'uint8')), tmp = double(tmp) / 255; end
     
     if (max(tmp(:)) > 1)
-        tmp = tmp / quantile(tmp(:), 0.99);
+        tmp = tmp / quantile(tmp(:), 0.999);
     end
+    
     tmp(tmp > 1) = 1;
     tmp(tmp < 0) = 0;
     
-    imagesc(tmp);
-    axis image off;
-            
-    
 else
-    
-    if (nargin < 2), d = 3; end
-    if (nargin < 3) || (isempty(k)), k = round(size(I,d)/2); end
-    if (nargin < 4) || (isempty(c)), c = 1; end
-    
     colormap(gray);
-    
-    switch (d)
-        case 1
-            tmp = I(k,:,:,c);
-        case 2
-            tmp = I(:,k,:,c);
-        case 3
-            tmp = I(:,:,k,c);
-        otherwise
-            error('check this');
-    end
-    imagesc(flipud(squeeze(mean(tmp,d))'));
-    
-    axis image off;
-    
-    
+    tmp = mio_3d_to_2d_slice(I(:,:,:,c),d,k);
 end
+
+imagesc(tmp);
+axis image off;
