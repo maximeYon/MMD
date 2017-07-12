@@ -34,7 +34,7 @@ dps = [];
 fn  = {};
 
 % grayscale maps
-for n = 1:numel(fig_opt.fig_maps);
+for n = 1:numel(fig_opt.fig_maps)
     
     param = fig_opt.fig_maps{n};
     
@@ -57,7 +57,7 @@ for n = 1:numel(fig_opt.fig_maps);
 end
 
 % color maps
-for n = 1:numel(fig_opt.fig_cmaps);
+for n = 1:numel(fig_opt.fig_cmaps)
     
     param   = fig_opt.fig_cmaps{n};
     col     = fig_opt.fig_ccol{n};
