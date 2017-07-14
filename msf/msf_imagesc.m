@@ -7,11 +7,14 @@ function msf_imagesc(I,d,k,c)
 % k - slice
 % c - volume
 
+% assume it is a color image if it follows these conditions
+is_color = (size(I,1) == 3) && (ndims(I) == 4);
+
 if (nargin < 2) || (isempty(d)), d = 3; end
-if (nargin < 3) || (isempty(k)), k = round(size(I,d)/2); end
+if (nargin < 3) || (isempty(k)), k = round(size(I,d + is_color)/2); end
 if (nargin < 4) || (isempty(c)), c = 1; end
 
-if (size(I,1) == 3) && (ndims(I) == 4) % assume it is a color image
+if (is_color) 
     
     tmp = mio_3d_to_2d_slice(I,d,k,1);
     
