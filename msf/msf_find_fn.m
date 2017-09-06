@@ -48,11 +48,8 @@ if (numel(d) == 0)
 end
 
 if (numel(d) ~= 1)
-    for c = 1:numel(d)
-        disp(d(c).name);
-    end
-        
-    f(sprintf('non-unique pattern: ', pattern)); return;
+    str = []; for c = 1:numel(d), str = [str d(c).name ' ']; end
+    f(sprintf('non-unique pattern (%s) with results: %s', pattern, str)); return;
 end
 
 fn = fullfile(bp, d(1).name);

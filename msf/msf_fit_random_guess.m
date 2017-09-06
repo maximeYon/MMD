@@ -11,6 +11,8 @@ end
 
 thr = inf;
 
+guess = [];
+
 for j = 1:iterations
     m_rand = lb + (ub - lb) .* rand(size(lb));
     
