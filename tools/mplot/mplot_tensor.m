@@ -18,6 +18,7 @@ dt_3x3 = tm_1x6_to_3x3(dt);
 [M, eig_vals] = eigs(dt_3x3);
 eig_vals = diag(eig_vals) * 1e9;
 
+eig_vals = sqrt(eig_vals);
 
 f = @(x,y,z) sc * [x(:) y(:) z(:)] * M;
 g = @(x,y,z) cellfun(@(p) reshape(p,size(x,1),size(x,2)), ...
@@ -37,15 +38,15 @@ surf(...
     x3 + d(1) + r(1), ...
     y3 + d(2) + r(2), ...
     z3 + d(3) + r(3), ...
-    zeros(size(x3)) + mean(eig_vals)); 
+    zeros(size(x3)) + mean(eig_vals));
 
 hold on;
 
-if (1)
-caxis([-1 3]);
-colormap(fliplr(jet(100)));
-axis off tight equal vis3d;
-camlight left;
-shading interp;
-material([0.7 0.4 0.8 1] );
+if (0)
+    caxis([-1 3]);
+    colormap(fliplr(jet(100)));
+    axis off tight equal vis3d;
+    camlight left;
+    shading interp;
+    material([0.7 0.4 0.8 1] );
 end
