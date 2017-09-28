@@ -37,6 +37,9 @@ datatype = mdm_nii_datatype(h_mov.datatype, 1);
 
 p = elastix_p_read(p_fn);
 
+% Save the header
+h_new = h_ref;
+
 if (opt.mio.coreg.clear_header) % needed to get interpretable tps
     h_ref = clear_ref_header(h_ref);
     h_mov = clear_ref_header(h_mov);
@@ -59,7 +62,7 @@ for c = 1:size(I_mov, 4)
 end
 
 % Write output
-mdm_nii_write(I, o_fn, h_ref);
+mdm_nii_write(I, o_fn, h_new);
 elastix_tpm_write(P, tpm_fn);
 
 

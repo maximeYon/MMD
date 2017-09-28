@@ -32,6 +32,7 @@ dps.MKt = 3 * dps.NVt;
 
 dps.Vl = 5/2 * dps.Va;
 
+<<<<<<< HEAD
 dps.ufa_old = sqrt(3/2) * sqrt(1./(dps.MD.^2./dps.Vl+1)); % Lasic (2014)
 dps.ufa     = sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.Vi + dps.MD.^2) ); % Szczepankiewicz (2016)
 
@@ -44,6 +45,12 @@ dps.viso = mu2iso;  % Variance of isotropic diffusivities, see Eqs. (48) and (69
 dps.msaniso = 5/4*mu2aniso;  % Mean-square anisotropic diffusivity, see Eqs. (50) and (69)
 dps.viso_n = dps.viso./dps.miso.^2; % Normalized
 dps.msaniso_n = dps.msaniso./dps.miso.^2;
+=======
+% Calculate uFA. Take real component to avoid complex values due to
+% sqrt of negative variances.
+dps.ufa_old = real(sqrt(3/2) * sqrt(1./(dps.MD.^2./dps.Vl+1)));
+dps.ufa     = real(sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.Vi + dps.MD.^2) ));
+>>>>>>> markus-nilsson/master
 
 
 for i = 5:size(dps.m, 4)
