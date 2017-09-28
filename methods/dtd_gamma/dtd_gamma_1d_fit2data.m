@@ -19,7 +19,7 @@ else
 end
                    
 % Total diffusional variance (mu2) is the weighted sum of the isotropic 
-% (mu2_iso) and anisotorpic (mu2_aniso) components.
+% (mu2_iso) and anisotropic (mu2_aniso) components.
 mu2 = mu2_iso + mu2_aniso.*xps.b_delta.^2.*(xps.b_eta.^2+3)/3;
 
 % Singnal equation based on the laplace transform of the gamma distribution.
