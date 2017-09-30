@@ -1,12 +1,21 @@
-function m = mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, fun_opt, h, h2, ind)
-% function mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, fun_opt, h, h2)
+function m = mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, opt, h, h2, ind)
+% function mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, opt, h, h2)
 
 if (nargin < 3), fun_data2fit = []; end
 if (nargin < 4), fun_fit2data = []; end
-if (nargin < 5), fun_opt = []; end
+if (nargin < 5), opt = []; end
 if (nargin < 6), h = gca; end
 if (nargin < 7), h2 = []; end
 if (nargin < 8), ind = []; end
+
+% init
+opt = mplot_opt(opt);
+
+data_marker = 'o';
+
+if (isempty(fun_data2fit) || isempty(fun_fit2data))
+    data_marker = 'o-';
+end
 
 % adapt xps
 xps = msf_ensure_field(xps, 'b_eta', zeros(size(xps.b_delta)));
@@ -18,7 +27,7 @@ if (nargin < 8)
 end
 
 if (~isempty(fun_data2fit))
-    m = fun_data2fit(S(ind), mdm_xps_subsample(xps, ind), fun_opt());
+    m = fun_data2fit(S(ind), mdm_xps_subsample(xps, ind), opt);
 else
     m = [];
 end
@@ -35,7 +44,7 @@ b_delta_uni = sort(b_delta_uni);
 if (numel(b_delta_uni) == 1)
     cmap = [0 0 0];
 else
-    cmap = 0.8 * hsv(numel(b_delta_uni) + 2);
+    cmap = 0.7 * hsv(numel(b_delta_uni) + 2);
 end
 
 cla(h);
@@ -49,7 +58,7 @@ for c = 1:numel(b_delta_uni)
     % Construct a fitted signal
     clear xps2;
     try
-        xps2.n = 32;
+        xps2.n = 64;
         xps2.b = linspace(eps, max(xps.b(ind2)) * 1.1, xps2.n)';
         
         z = zeros(size(xps2.b));
@@ -66,6 +75,8 @@ for c = 1:numel(b_delta_uni)
                 
             xps2.s_ind = z + tmp(1); % all should be equal
         end
+    catch me
+        1;
     end
     
     if (isempty(m))
@@ -87,8 +98,8 @@ for c = 1:numel(b_delta_uni)
         end
     end
     
-    semilogy(h, xps.b(ind2) * 1e-9, S(ind2) / sc, 'o', 'color', cmap(c,:), ...
-        'markersize', 5, 'markerfacecolor', cmap(c,:));
+    semilogy(h, xps.b(ind2) * 1e-9, S(ind2) / sc, data_marker, 'color', cmap(c,:), ...
+        'markersize', 5, 'markerfacecolor', cmap(c,:), 'linewidth', 2);
 
     hold(h, 'on');
 
@@ -99,15 +110,13 @@ for c = 1:numel(b_delta_uni)
 end
 
 axis(h, 'on');
-box(h, 'off');
-set(h, 'tickdir','out');
 
 
 xlim(h, [0 max(xps2.b) * 1.1e-9]);
-ylim(h, [10^floor(log10(min(S(S(:) > 0) / sc))) 1.1]);
+ylim(h, [min(0.1, max(0.0001, 10^floor(log10(min(S(S(:) > 0) / sc))))) 1.1]);
 
-xlabel(h, 'b [ms/um^2]');
-ylabel(h, 'Signal');
+xlabel(h, 'b [ms/um^2]', 'fontsize', opt.mplot.fs);
+ylabel(h, 'Signal', 'fontsize', opt.mplot.fs);
 
 
 
@@ -125,3 +134,11 @@ if (~isempty(h2))
     axis(h2, 'off');
 
 end
+
+set(h,...
+    'TickDir','out', ...
+    'TickLength',.02*[1 1], ...
+    'FontSize',opt.mplot.fs, ...
+    'LineWidth',opt.mplot.lw, ...
+    'Box','off')
+
