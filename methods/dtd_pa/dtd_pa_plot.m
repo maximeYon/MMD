@@ -1,5 +1,5 @@
 function dtd_pa_plot(m, opt)
-% function dtd_pa_mkpdf(dps_fn, pdf_path, opt)
+% function dtd_pa_plot(m, opt)
 
 
 dmin = opt.dtd_pa.dmin;

@@ -1,8 +1,21 @@
-function m = mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, fun_opt, h, h2, ind)
-% function mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, fun_opt, h, h2)
+function m = mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, opt, h, h2, ind)
+% function mplot_s_vs_b_by_b_delta(S, xps, fun_data2fit, fun_fit2data, opt, h, h2)
 
+if (nargin < 3), fun_data2fit = []; end
+if (nargin < 4), fun_fit2data = []; end
+if (nargin < 5), opt = []; end
+if (nargin < 6), h = gca; end
 if (nargin < 7), h2 = []; end
 if (nargin < 8), ind = []; end
+
+% init
+opt = mplot_opt(opt);
+
+data_marker = 'o';
+
+if (isempty(fun_data2fit) || isempty(fun_fit2data))
+    data_marker = 'o-';
+end
 
 % adapt xps
 xps = msf_ensure_field(xps, 'b_eta', zeros(size(xps.b_delta)));
@@ -13,7 +26,11 @@ if (nargin < 8)
     ind = ones(size(S)) == 1;
 end
 
-m = fun_data2fit(S(ind), mdm_xps_subsample(xps, ind), fun_opt());
+if (~isempty(fun_data2fit))
+    m = fun_data2fit(S(ind), mdm_xps_subsample(xps, ind), opt);
+else
+    m = [];
+end
 
 
 
@@ -27,7 +44,7 @@ b_delta_uni = sort(b_delta_uni);
 if (numel(b_delta_uni) == 1)
     cmap = [0 0 0];
 else
-    cmap = 0.8 * hsv(numel(b_delta_uni) + 2);
+    cmap = 0.7 * hsv(numel(b_delta_uni) + 2);
 end
 
 cla(h);
@@ -38,40 +55,68 @@ for c = 1:numel(b_delta_uni)
     
     ind3 = ind2 & (~ind);
     
-    semilogy(h, xps.b(ind2) * 1e-9, S(ind2) / m(1), 'o', 'color', cmap(c,:), ...
-        'markersize', 5, 'markerfacecolor', cmap(c,:));
+    % Construct a fitted signal
+    clear xps2;
+    try
+        xps2.n = 64;
+        xps2.b = linspace(eps, max(xps.b(ind2)) * 1.1, xps2.n)';
+        
+        z = zeros(size(xps2.b));
+        
+        xps2.b_delta = z + mean(xps.b_delta(ind2));
+        xps2.b_eta   = z + mean(xps.b_eta(ind2));
+        
+        if (isfield(xps, 's_ind'))
+            tmp = xps.s_ind(ind2);
+            
+            if (numel(unique(tmp)) ~= 1)
+                error('Cannot figure out which s_ind to use');
+            end
+                
+            xps2.s_ind = z + tmp(1); % all should be equal
+        end
+    catch me
+        1;
+    end
+    
+    if (isempty(m))
+        S_fit = zeros(xps2.n,1);
+        sc = max(S(:));
+    else
+        try
+            
+            S_fit = fun_fit2data(m, xps2);
+            
+            % This now allows for separate scaling of each series
+            sc = S_fit(1);
+        catch
+            xps2 = mdm_xps_subsample(xps, ind2);
+            S_fit = fun_fit2data(m, xps2);
+            
+            % Scale by m(1) assuming it represents S0
+            sc = m(1);
+        end
+    end
+    
+    semilogy(h, xps.b(ind2) * 1e-9, S(ind2) / sc, data_marker, 'color', cmap(c,:), ...
+        'markersize', 5, 'markerfacecolor', cmap(c,:), 'linewidth', 2);
 
     hold(h, 'on');
 
-    semilogy(h, xps.b(ind3) * 1e-9, S(ind3) / m(1), 'x', 'color', cmap(c,:), ...
+    semilogy(h, xps.b(ind3) * 1e-9, S(ind3) / sc, 'x', 'color', cmap(c,:), ...
         'markersize', 10, 'markerfacecolor', cmap(c,:));
-    
-    clear xps2;
-    try
-        xps2.n = 32;
-        xps2.b = linspace(eps, max(xps.b(ind2)) * 1.1, xps2.n);
-        xps2.b_delta = mean(xps.b_delta(ind2));
-        xps2.b_eta   = mean(xps.b_eta(ind2));
-        
-        S_fit = fun_fit2data(m, xps2);
-    catch
-        xps2 = mdm_xps_subsample(xps, ind2);
-        S_fit = fun_fit2data(m, xps2);
-    end
-    
-    semilogy(h, xps2.b * 1e-9, S_fit / m(1), '-', 'color', cmap(c,:), 'linewidth', 2);
+
+    semilogy(h, xps2.b * 1e-9, S_fit / sc, '-', 'color', cmap(c,:), 'linewidth', 2);
 end
 
 axis(h, 'on');
-box(h, 'off');
-set(h, 'tickdir','out');
 
 
+xlim(h, [0 max(xps2.b) * 1.1e-9]);
+ylim(h, [min(0.1, max(0.0001, 10^floor(log10(min(S(S(:) > 0) / sc))))) 1.1]);
 
-ylim(h, [10^floor(log10(min(S(S(:) > 0) / m(1)))) 1.1]);
-
-xlabel(h, 'b [ms/um^2]');
-ylabel(h, 'Signal');
+xlabel(h, 'b [ms/um^2]', 'fontsize', opt.mplot.fs);
+ylabel(h, 'Signal', 'fontsize', opt.mplot.fs);
 
 
 
@@ -89,3 +134,11 @@ if (~isempty(h2))
     axis(h2, 'off');
 
 end
+
+set(h,...
+    'TickDir','out', ...
+    'TickLength',.02*[1 1], ...
+    'FontSize',opt.mplot.fs, ...
+    'LineWidth',opt.mplot.lw, ...
+    'Box','off')
+
