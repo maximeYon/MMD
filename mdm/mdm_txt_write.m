@@ -1,5 +1,5 @@
-function txt = mdm_txt_write(txt, txt_fn, opt)
-% function txt = mdm_txt_write(txt, txt_fn, opt)
+function txt_fn = mdm_txt_write(txt, txt_fn, opt)
+% function txt_fn = mdm_txt_write(txt, txt_fn, opt)
 %
 % This function write each line in txt, a cell, as separate lines in txt_fn
 

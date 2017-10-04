@@ -2,7 +2,7 @@ function EG = mgui_browse_update_panel(EG)
 % function EG = mgui_browse_update_panel(EG)
 
 % Remove trailing filesep in path
-if (EG.browse.path(end) == filesep)
+if (~isempty(EG.browse.path)) && (EG.browse.path(end) == filesep)
     EG.browse.path = EG.browse.path(1:(end-1)); 
 end
 

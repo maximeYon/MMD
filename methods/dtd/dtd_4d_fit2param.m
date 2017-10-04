@@ -25,6 +25,12 @@ param = {dtiparam{:},udtiparam{:},'miso','viso','maniso','vaniso','msaniso','vsa
 for nparam = 1:numel(param)
     eval(['dps.' param{nparam} ' = zeros([sz(1) sz(2) sz(3)]);']);
 end
+
+Ncomp = numel(opt.dtd.comp_isomax);
+for ncomp = 1:Ncomp
+    eval(['dps.comp' num2str(ncomp) ' = zeros([sz(1) sz(2) sz(3)]);']);
+end
+
 for nk = 1:sz(3)
     for nj = 1:sz(2)
         for ni = 1:sz(1)
@@ -35,11 +41,18 @@ for nk = 1:sz(3)
                 [n,par,perp,theta,phi,w] = dtd_dist2par(dtd);
                                 
                 if n > 0
-                    s0 = ones(1,n)*w;
                     iso_v = (par + 2*perp)/3;
                     aniso_v = par - perp;
                     saniso_v = aniso_v.^2;
+                    ratio_v = par./perp;                   
                     
+                    for ncomp = 1:Ncomp
+                        eval(['ind = all([iso_v > opt.dtd.comp_isomin(' num2str(ncomp) '), iso_v < opt.dtd.comp_isomax(' num2str(ncomp) '), ratio_v > opt.dtd.comp_ratiomin(' num2str(ncomp) '), ratio_v < opt.dtd.comp_ratiomax(' num2str(ncomp) ')],2);'])
+                        comp = ind'*w;
+                        eval(['dps.comp' num2str(ncomp) '(ni,nj,nk) = comp;']);
+                    end
+
+                    s0 = ones(1,n)*w;
                     miso = iso_v'*w/s0;
                     viso = (iso_v-miso)'.^2*w/s0;
                     maniso = aniso_v'*w/s0;

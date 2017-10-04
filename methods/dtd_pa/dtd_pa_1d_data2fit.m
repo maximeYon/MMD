@@ -22,9 +22,6 @@ m = dtd_pa_dtd2m(dtd,opt);
 if (opt.dtd_pa.do_plot)
     figure(1), clf
     signal_fit = dtd_pa_1d_fit2data(m, xps);
-    %[~,s_ind] = sort(signal_fit,'descend');
-    %semilogy(xps.b,signal,'.',xps.b,signal_fit,'o',xps.b,m(1)*weight,'x');
     plot(1:xps.n,signal,'o',1:xps.n,signal_fit,'x');
-    %set(gca,'YLim',m(1)*[.01 1.2])
     pause(0.05);
 end

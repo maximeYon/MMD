@@ -142,6 +142,19 @@ axis square
 %xlabel('log(\itD\rm_{iso} / m^2s^-^1)','FontSize',fs)
 %ylabel('log(\itD\rm_{||} / \itD\rm_{\perp})','FontSize',fs)
 
+Ncomp = numel(opt.dtd.comp_isomax);
+for ncomp = 1:Ncomp
+    isomin = opt.dtd.comp_isomin(ncomp);
+    isomax = opt.dtd.comp_isomax(ncomp);
+    ratiomin = opt.dtd.comp_ratiomin(ncomp);
+    ratiomax = opt.dtd.comp_ratiomax(ncomp);
+    
+    plot(log10([isomin isomax isomax isomin isomin]),...
+        log10([ratiomin ratiomin ratiomax ratiomax ratiomin]),...
+        'k-','LineWidth',.25*lw)        
+end
+
+
 eval(['print ' pdf_path '/dtd_global -loose -dpng -r1200'])
 
 % ptot = sum(sum(sum(p,1),2),3);
