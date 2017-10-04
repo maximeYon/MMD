@@ -10,8 +10,9 @@ end
 opt.mplot = msf_ensure_field(opt.mplot, 'lw', 1);
 opt.mplot = msf_ensure_field(opt.mplot, 'fs', 10);
 opt.mplot = msf_ensure_field(opt.mplot, 'ms', 5);
-opt.mplot = msf_ensure_field(opt.mplot, 'dtd_col_mode', 1);
 
+opt.mplot = msf_ensure_field(opt.mplot, 'dtd_col_mode', 1);
+opt.mplot = msf_ensure_field(opt.mplot, 'dtd_plot_type', 'point_estimate');
 
 
 
