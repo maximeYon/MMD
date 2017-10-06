@@ -35,6 +35,9 @@ for i = 1:numel(f)
     end
 end
 
+% Remove directions and b-tensors, they no longer make sense
+xps_pa = msf_rmfield(xps_pa, {'u', 'bt'});
+
 xps_pa.n = numel(xps_pa.b);
 
 % Remember the number of images (weight) that were averaged
