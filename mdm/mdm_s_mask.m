@@ -7,6 +7,7 @@ function s = mdm_s_mask(s, mask_fun, path, opt)
 % not exist already
 
 % init
+if (nargin < 2) || (isempty(mask_fun)), mask_fun = @mio_mask_threshold; end
 if (nargin < 3) || (isempty(path)), path = fileparts(s.nii_fn); end
 if (nargin < 4), opt.present = 1; end
 

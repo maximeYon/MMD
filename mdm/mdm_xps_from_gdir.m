@@ -39,6 +39,7 @@ if (size(u,1) ~= numel(b))
     error('b and u are differnt length');
 end
 
+
 % compute b-tensors from b-values, b_delta value(s) and symmetry axis
 bt  = tm_tpars_to_1x6(b, b_delta, u);
 xps = mdm_xps_from_bt(bt);

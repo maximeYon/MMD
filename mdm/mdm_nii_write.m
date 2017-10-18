@@ -1,4 +1,4 @@
-function mdm_nii_write(I, nii_fn, h, is_colour)
+function nii_fn = mdm_nii_write(I, nii_fn, h, is_colour)
 % function mdm_nii_write(I, nii_fn, h, is_colour)
 
 if (nargin < 4), is_colour = 0; end
@@ -8,11 +8,12 @@ if (nargin < 3) || (numel(h) == 0), h = mdm_nii_h_empty; end
 h = nii_make_header(h);
 
 % Create temporary path if writing compressed nifti
-[nii_fn, folder_gz, tmp_path] = do_gzip(nii_fn);
+[tmp_nii_fn, folder_gz, tmp_path] = do_gzip(nii_fn);
+
 try
-    fid = fopen(nii_fn, 'w');
+    fid = fopen(tmp_nii_fn, 'w');
     
-    if (fid == -1), error(['Could not open file for writing: ' nii_fn]); end
+    if (fid == -1), error(['Could not open file for writing: ' tmp_nii_fn]); end
     
     fwrite(fid, int32(h.sizeof_hdr(1)),    'int32');
     fwrite(fid, uint8(h.data_type(1:10)),  'uint8');
@@ -106,15 +107,15 @@ catch me
     
     % Clear up and rethrow error
     fclose(fid);
-    delete(nii_fn);
+    delete(tmp_nii_fn);
     rmdir(tmp_path,'s');
     rethrow(me);
 end
 
 % gzip the temporary file
 if (~isempty(folder_gz))
-    gzip(nii_fn, folder_gz);
-    delete(nii_fn);
+    gzip(tmp_nii_fn, folder_gz);
+    delete(tmp_nii_fn);
     rmdir(tmp_path,'s');
 end
 

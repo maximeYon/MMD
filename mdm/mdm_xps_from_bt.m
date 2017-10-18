@@ -1,6 +1,10 @@
 function xps = mdm_xps_from_bt(bt)
 % function xps = mdm_xps_from_bt(bt)
 
+if (size(bt,1) == 3) && (size(bt,2) == 3) && (ndims(bt) == 2)
+    bt = tm_3x3_to_1x6(bt);
+end
+
 xps.n       = size(bt, 1);
 
 xps.b       = zeros(xps.n, 1);

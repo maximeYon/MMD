@@ -55,3 +55,18 @@ t.cp(isnan(t.cp)) = 0;
 t.cs = t.s./t.trace;
 t.cs(isnan(t.cs)) = 0;
 
+
+% Compute parallel and perpendicular components
+% First determine whether it is prolate or oblate
+if (t.cl > t.cp)
+    t.para = t.lambda33;
+    t.perp = (t.lambda11 + t.lambda22) / 2;
+    t.norm = t.lambda33vec;
+else
+    t.para = t.lambda11;
+    t.perp = (t.lambda22 + t.lambda33) / 2;
+    t.norm = t.lambda11vec;
+end
+    
+        
+

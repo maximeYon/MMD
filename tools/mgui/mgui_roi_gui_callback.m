@@ -79,7 +79,9 @@ if (nargin >= 1)
                     end
                     
                 case {'l', 'L'}
-                    [tmp_name, tmp_path] = uigetfile({'.nii;*.nii.gz', 'NIFTI'}, 'Load ROI');
+                    [tmp_name, tmp_path] = uigetfile(...
+                        {'.nii;*.nii.gz', 'NIFTI'}, 'Load ROI', ...
+                        EG.browse.path);
                     roi_filename = fullfile(tmp_path, tmp_name);
                     
                     if (roi_filename ~= 0)
