@@ -10,11 +10,10 @@ S_fit = f_fit2data(m, xps)';
 % Clear, plot, and configure 
 cla(h); hold(h, 'off');
 
-plot(h,...
-    1:xps.n,S,'o',...
-    1:xps.n,S_fit,'x', ...
-    'MarkerSize',opt.mplot.ms, ...
-    'LineWidth',opt.mplot.lw);
+plot(h,1:xps.n,S,    'ko','MarkerSize',round(opt.mplot.ms*1.5), 'MarkerFaceColor', 'black');
+hold(h, 'on');
+plot(h,1:xps.n,S_fit,'ko','MarkerSize',round(opt.mplot.ms*1.0), 'MarkerFaceColor', 'red');
+hold(h, 'off');
 
 axis(h,'tight');
 
