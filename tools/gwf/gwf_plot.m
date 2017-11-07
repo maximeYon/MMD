@@ -56,6 +56,7 @@ ylim([-1 1] * max(abs(gwf(:) * 1e3) * 1.1));
 box off;
 set(gca,'tickdir', 'out', 'ticklength', [0.03 0.05]);
 set(gca,'linewidth', 2);
+title('Effective gradient');
 
 % PLOT THE SPECTRA
 % --------------------------
@@ -69,14 +70,14 @@ for c = 1:size(gwf, 2)
         'LineWidth', 2); hold on;
 end
 
-xlim([-1 1] * max(p.f_max, 2 * pars.gwf_spectral_trace_rms_norm));
+xlim([0 1] * max(p.f_max, 2 * pars.gwf_spectral_trace_rms_norm));
 xlabel('f [Hz]');
 ylabel('Enc power');
 box off;
 set(gca,'tickdir', 'out', 'ticklength', [0.03 0.05]);
 set(gca,'linewidth', 2);
 set(gca,'ytick', []);
-title('Spectrum of q(t)');
+title('Power spectrum of q(t)');
 
 % SHOW g-SPECTRA FOR MECHANICAL ANALYSIS
 % --------------------------------------
@@ -100,14 +101,14 @@ for c = 1:size(gwf, 2)
         'LineWidth', 2); hold on;
 end
 
-xlim([-1 1] * max(p.f_max, 5 * pars.gwf_spectral_trace_rms_norm));
+xlim([0 1] * max(p.f_max, 5 * pars.gwf_spectral_trace_rms_norm));
 xlabel('f [Hz]');
 ylabel('Enc power');
 box off;
 set(gca,'tickdir', 'out', 'ticklength', [0.03 0.05]);
 set(gca,'linewidth', 2);
 set(gca,'ytick', []);
-title('Spectrum of g(t)');
+title('Power spectrum of g(t)');
 
 % PRINT AN ANALYSIS
 % --------------------------
@@ -115,15 +116,16 @@ title('Spectrum of g(t)');
 axes('position', [0.54 0.5 0.4 0.35]);
 text(0,0,{...
     'GRADIENT WAVEFORM ANALYSIS^ _ ', ...
+    [sprintf('|k_0| = %2.1f 1/mm', 1e-3 * sqrt(sum(pars.k0.^2)))], ...
     ['b = ' sprintf('%2.1f', pars.b * 1e-9) ' ms/um^2, ' ...
     'b_\Delta = ' sprintf('%1.2f', pars.b_delta) ', ' ...
     'b_\eta = '   sprintf('%1.2f', pars.b_eta) '_ ^ '], ...    
-    sprintf('|\\alpha|^2 = %1.0f s/mm^2 (flow comp)_ ^ ', pars.alpha_norm * 1e-6), ...
+    sprintf('|\\alpha|^2 = %1.0f s^2/mm^2 (flow comp)_ ^ ', pars.alpha_norm * 1e-6), ...
     sprintf('V_f = Tr(M_1) / Tr(b) =  %1.0f 1/s, [M_1]_\\Delta = %1.1f _ ^ ', pars.gwf_spectral_trace_rms_norm, pars.gwf_spectral_M1_delta), ...
     ['Max slew rate = ' sprintf('%2.0f, %2.0f, %2.0f', pars.slew_rate_max(1), pars.slew_rate_max(2), pars.slew_rate_max(3)) ' T/m/s^ _ '], ...
     ['Max gradient = ' sprintf('%2.0f, %2.0f, %2.0f', pars.gradient_max(1)*1e3, pars.gradient_max(2)*1e3, pars.gradient_max(3)*1e3) ' mT/m^ _ '], ...
     ['Energy index = ' sprintf('%2.0f', pars.energy_index) '_ ^ '], ...
-    ['Maxwell index = ' sprintf('%2.0f', pars.maxwell_index) '_ ^ '], ...
+    ['Maxwell index = ' sprintf('%2.0f', pars.maxwell_index) ' (mT/m)^2 _ ^ '], ...
     });
 ylim([-20 10]);
 axis off;
