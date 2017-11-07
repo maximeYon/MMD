@@ -1,5 +1,7 @@
-function h = mdm_nii_read_header(nii_fn)
+function h = mdm_nii_read_header(nii_fn, do_print)
 % function h = mdm_nii_read_header(nii_fn)
+
+if (nargin < 2), do_print = 0; end
 
 % Possibly unzip the file
 [nii_fn, tmp_path, tmp_nii_fn] = mdm_nii_gunzip(nii_fn, 1);
@@ -55,4 +57,12 @@ h.magic             = fread(fid, 8, 'char');            % should be 'n+ 1'
 fclose(fid);
 if (~isempty(tmp_nii_fn)), delete(tmp_nii_fn); end
 if (~isempty(tmp_path)), rmdir(tmp_path); end
+
+
+if (do_print)
+    disp(sprintf('h.descrip:\t %s', char(h.descrip')));    
+    disp(sprintf('h.db_name:\t %s', char(h.db_name')));  
+    disp(sprintf('h.pixdim: \t %1.2fx%1.2fx%1.2f', h.pixdim(2), h.pixdim(3), h.pixdim(4)));  
+    disp(sprintf('h.dim:    \t %ix%ix%i', h.dim(2), h.dim(3), h.dim(4)));  
+end
 
