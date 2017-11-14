@@ -7,6 +7,8 @@ function bt = gwf_to_bt(gwf, rf, dt)
 %
 % Following notation in Westin et al (2016) NeuroImage 135
 
+gwf_check(gwf, rf, dt);
+
 q = gwf_to_q(gwf, rf, dt);
 
 bt = q' * q * dt;
