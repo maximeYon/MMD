@@ -63,6 +63,6 @@ if (do_print)
     disp(sprintf('h.descrip:\t %s', char(h.descrip')));    
     disp(sprintf('h.db_name:\t %s', char(h.db_name')));  
     disp(sprintf('h.pixdim: \t %1.2fx%1.2fx%1.2f', h.pixdim(2), h.pixdim(3), h.pixdim(4)));  
-    disp(sprintf('h.dim:    \t %ix%ix%i', h.dim(2), h.dim(3), h.dim(4)));  
+    disp(sprintf('h.dim:    \t %ix%ix%ix%i', h.dim(2), h.dim(3), h.dim(4), h.dim(5)));  
 end
 
