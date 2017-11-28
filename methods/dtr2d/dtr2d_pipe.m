@@ -12,9 +12,10 @@ fn = '';
 if (nargin < 3), opt.present = 1; end
 
 opt = mdm_opt(opt);
-opt = dtr2d_opt(opt)
+opt = dtr2d_opt(opt);
 paths = mdm_paths(paths);
 msf_log(['Starting ' mfilename], opt);
+
 
 % Prepare: mask etc
 if (opt.do_mask)

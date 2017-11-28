@@ -23,7 +23,7 @@ opt.dtr2d = msf_ensure_field(opt.dtr2d, 'r2fuzz', .1);
 
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_maps', ...
     {'s0','s_fw','s_st','s_lt','s_pt','s_plt', 's_splt','s_residue',...
-    'miso','viso_n','maniso_n','vaniso_n','msaniso_n','vsaniso_n','mr2','vr2','ufa','fa','op'});
+    'miso','viso_n','maniso_n','vaniso_n','msaniso_n','vsaniso_n','mr2','vr2_n','ufa','fa','op'});
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_prefix', 'dtr2d');
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_cmaps',{'fa','cl','cp','ufa','ucl','ucp'});
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_ccol',{'t1x6','lambda33vec','lambda11vec','s1x6prim','s1x6prim','s1x6prim'});

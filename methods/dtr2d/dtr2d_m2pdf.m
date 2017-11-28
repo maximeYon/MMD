@@ -166,16 +166,16 @@ set([axh2; axh3; axh4],'TickDir','out','TickLength',.03*[1 1],...
 'FontSize',fs,'LineWidth',lw,'Box','on')
 
 set(axh2,'XLim',[xmin xmax]+.2*(xmax-xmin)*[-1 1], 'YLim',[ymin ymax]+.2*(ymax-ymin)*[-1 1],...
-'XTick',[-11:.5:-8],'YTick',-2:2)
+'XTick',[-11:1:-8],'YTick',-2:2)
 xlabel(axh2,'log(\itD\rm_{iso} / m^2s^-^1)','FontSize',fs)
 ylabel(axh2,'log(\itD\rm_{||} / \itD\rm_{\perp})','FontSize',fs)
 
 set(axh3,'XLim',[xmin xmax]+.2*(xmax-xmin)*[-1 1], 'YLim',[zmin zmax]+.2*(zmax-zmin)*[-1 1],...
-'XTick',[-11:1:-8],'YTick',0:.5:1.5,'XTickLabel','')
+'XTick',[-11:1:-8],'YTick',0:.5:2.5,'XTickLabel','')
 ylabel(axh3,'log(\itR\rm_{2} / s^-^1)','FontSize',fs)
 
 set(axh4,'XLim',[zmin zmax]+.2*(zmax-zmin)*[-1 1], 'YLim',[ymin ymax]+.2*(ymax-ymin)*[-1 1],...
-'XTick',[0:.5:1.5],'YTick',-2:2,'YTickLabel','')
+'XTick',[0:.5:2.5],'YTick',-2:2,'YTickLabel','')
 xlabel(axh4,'log(\itR\rm_{2} / s^-^1)','FontSize',fs)
 
 eval(['print ' pdf_path '/dtr2d_global -loose -dpdf'])

@@ -29,7 +29,7 @@ unit_to_SI = [max(signal) 1e-9 1];
 % guesses and bounds
 m_guess   = [max(signal)   1e-9  -0.25];
 m_lb      = [0             1e-11 -0.49];
-m_ub      = [2*max(signal) 3e-9  -0.001];
+m_ub      = [2*max(signal) 3.5e-9  -0.001];
 
 t_guess   = m_guess./unit_to_SI;
 t_lb      = m_lb./unit_to_SI;
@@ -46,7 +46,7 @@ chisq_oblate = var(signal(ind) - signal_fit(ind));
 % guesses and bounds
 m_guess   = m_oblate.* [1 1 -1];
 m_lb      = [0             1e-11 0];
-m_ub      = [2*max(signal) 3e-9  1];
+m_ub      = [2*max(signal) 3.5e-9  1];
                 
 t_guess   = m_guess./unit_to_SI;
 t_lb      = m_lb./unit_to_SI;

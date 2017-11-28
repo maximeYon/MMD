@@ -8,6 +8,7 @@ if (nargin < 4), ind = ones(size(signal)) > 0; end
 bt_mx6 = xps.bt(find(ind),:);
 te = xps.te(ind);
 stemp = signal(ind);
+stemp = abs(stemp);
 
 dtr2d = dtr2d_proliferation(stemp, bt_mx6, te, opt);
 %dtr2d

@@ -17,6 +17,7 @@ if (nargin < 1), opt.present = 1; end
 opt = msf_ensure_field(opt, 'nii_ext', '.nii.gz');
 opt = msf_ensure_field(opt, 'do_overwrite', 1);
 opt = msf_ensure_field(opt, 'verbose', 0);
+opt = msf_ensure_field(opt, 'assert_input_args', 1);
 
 opt = msf_ensure_field(opt, 'do_recon', 1);
 opt = msf_ensure_field(opt, 'do_xps2pdf', 0);

@@ -1,8 +1,10 @@
 function s = dtd_pa_1d_fit2data(m, xps)
+% function s = dtd_pa_1d_fit2data(m, xps)
 
-if m(1)>0
+if (m(1) > 0)
+    
     dtd_pa = dtd_pa_m2dtd(m);
-    [n,par,perp,w] = dtd_pa_dist2par(dtd_pa);
+    [~,par,perp,w] = dtd_pa_dist2par(dtd_pa);
     diso = (par + 2*perp)/3;
     ddelta = (par - perp)/3./diso;
     
@@ -11,7 +13,8 @@ if m(1)>0
     k = exp(-bd).*exp(bddeldel).*...
         sqrt(pi)/2.*real(gammainc(3*bddeldel,1/2)./sqrt(3*bddeldel));
 
-    indx = bddeldel == 0;
+    % Correct an issue where gammainc(x)/sqrt(x) is undefined for small x
+    indx = abs(bddeldel) < 10 * eps;
     k(indx) = exp(-bd(indx));
     k(bd == 0) = 1;
     k(bddeldel < -10) = 0;

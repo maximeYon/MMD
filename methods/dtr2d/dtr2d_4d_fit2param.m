@@ -42,9 +42,9 @@ for nk = 1:sz(3)
                     ratio_v = par./perp;
 
                     ind_fw = all([iso_v > 2e-9, r2 < 2],2);
-                    ind_st = all([iso_v>5e-10, iso_v<2e-9, ratio_v > 1/3, ratio_v < 3, r2 > 5],2);
-                    ind_lt = all([iso_v>5e-10, iso_v<2e-9, ratio_v > 3, r2 > 5],2);
-                    ind_pt = all([iso_v>5e-10, iso_v<2e-9, ratio_v < 1/3, r2 > 5],2);
+                    ind_st = all([iso_v>1e-10, iso_v<2e-9, ratio_v > 1/3, ratio_v < 3, r2 > 5],2);
+                    ind_lt = all([iso_v>1e-10, iso_v<2e-9, ratio_v > 3, r2 > 5],2);
+                    ind_pt = all([iso_v>1e-10, iso_v<2e-9, ratio_v < 1/3, r2 > 5],2);
 
                     s0 = ones(1,n)*w;
                     s_fw = ind_fw'*w;
@@ -126,11 +126,13 @@ dps.msaniso_n = dps.msaniso./dps.miso.^2;
 dps.msaniso_n(isnan(dps.msaniso_n)) = 0;
 dps.vsaniso_n = dps.vsaniso./dps.miso.^4;
 dps.vsaniso_n(isnan(dps.vsaniso_n)) = 0;
+dps.vr2_n = dps.vr2./dps.mr2.^2;
+dps.vr2_n(isnan(dps.vr2_n)) = 0;
 
 %2nd moments of P(Deff)
 dps.mu2iso = dps.viso;
 dps.mu2aniso = 4/5*dps.msaniso;
-dps.mu2macro = 4/45*((dps.lambda33-dps.lambda11).^2 + (dps.lambda22-dps.lambda11).*(dps.lambda22-dps.lambda33));
+dps.mu2macro = 4/5*((dps.lambda33-dps.lambda11).^2 + (dps.lambda22-dps.lambda11).*(dps.lambda22-dps.lambda33));
 
 dps.mdelta = dps.maniso_n/3;
 % dps.ufa = sqrt(3/2)*sqrt(1./((dps.miso.^2+dps.mu2iso)./(5/2*dps.mu2aniso)+1));

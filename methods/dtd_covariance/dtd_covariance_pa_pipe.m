@@ -23,6 +23,7 @@ opt.dtd_covariance.present = 1;
 opt.dtd_covariance = msf_ensure_field(opt.dtd_covariance, 'fig_maps', maps);   
 opt.dtd_covariance = msf_ensure_field(opt.dtd_covariance, 'fig_cmaps',{});
 opt = dtd_covariance_opt(opt);
+opt.dki_pa.do_heteroscedasticity_correction = 1;
 
 paths = mdm_paths(paths, 'dtd_covariance_pa');   
 

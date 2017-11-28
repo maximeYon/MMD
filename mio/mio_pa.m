@@ -1,5 +1,7 @@
 function A = mio_pa(I, xps, opt)
 % function A = mio_pa(I, xps, opt)
+%
+% opt.mio.pa.method - ari or geo
 
 if (nargin < 3), opt = []; end
 

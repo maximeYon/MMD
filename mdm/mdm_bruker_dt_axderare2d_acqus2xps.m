@@ -14,7 +14,7 @@ if (nargin < 2), xps_fn = []; end
 load(fullfile(data_path,'NMRacqus'))
 
 % xps calculation assumes that the pulse program is DT_axderare2d
-if any(strcmp(NMRacqus.pulprog,{'DT_axderare2d'})) ~= 1
+if any(strcmp(NMRacqus.pulprog,{'DT_axderare2d','SM_moacrare2drs'})) ~= 1
     error('Wrong pulse program')
 end
 
