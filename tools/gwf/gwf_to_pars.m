@@ -50,7 +50,7 @@ xps.gwf_spectral_trace_rms_norm = ...
 % Maxwell index: This is a relative index
 M = tm_1x6_to_3x3( sum(tm_1x3_to_1x6(1, 0, gwf) .* r(rf, 6)) * dt );
 
-xps.maxwell_index = 1e9 * sqrt(trace(M * M));
+xps.maxwell_index = sqrt(trace(M * M)); % unit: (T/m)^2 s
 
 
 
