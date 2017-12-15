@@ -3,6 +3,7 @@ function rf = gwf_to_rf(g, rf)
 %
 % Tries to guess the pause periods where RF pulses are played out
 
+if (nargin < 2), rf = []; end
 if (~isempty(rf)), return; end % deals with init situations
 
 ind1 = 2:(size(g,1)-2); % exclude first and last points
