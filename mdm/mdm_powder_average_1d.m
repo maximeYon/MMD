@@ -1,7 +1,10 @@
-function [signal_pa,xps_pa] = mdm_powder_average_1d(signal,xps,opt)
-% function [signal_pa,xps_pa] = mdm_powder_average_1d(signal,xps)
+function [signal_pa,xps_pa] = mdm_powder_average_1d(signal, xps, opt)
+% function [signal_pa,xps_pa] = mdm_powder_average_1d(signal, xps, opt)
 %
 % Returns a powder-average of a 1d signal
+
+if (nargin < 3), opt = []; end 
+opt = mdm_opt(opt);
 
 [~,c_list, id_ind] = mdm_pa_ind_from_xps(xps,opt);
 
