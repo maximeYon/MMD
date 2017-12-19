@@ -2,8 +2,6 @@ function opt = mdm_opt(opt)
 % function opt = mdm_opt(opt)
 %
 % Specifies default options 
-1;
-
 
 % opt.nii_ext - eiterh '.nii' or '.nii.gz' for compressed nii
 
@@ -27,6 +25,8 @@ opt = msf_ensure_field(opt, 'xps_merge_clear_s_ind', 0);
 opt = msf_ensure_field(opt, 'xps_merge_rethrow_error', 1);
 opt = msf_ensure_field(opt, 'pa_rethrow_error', 1);
 
+
+opt = msf_ensure_field(opt, 'mdm_xps_throw_error', 1);
 
 opt = msf_ensure_field(opt, 'filter_sigma', 0);
 

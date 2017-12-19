@@ -14,6 +14,7 @@ if (isa(opt, 'function_handle'))
 end
 
 % init
+if (isa(opt, 'function_handle')), opt = opt(); end
 opt = mplot_opt(opt);
 
 data_marker = 'o';

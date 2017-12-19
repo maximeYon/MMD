@@ -26,9 +26,13 @@ elseif (exist(mdm_fn_nii2bvalbvec(nii_fn), 'file'))
     % Conventional bval bvec from dcm2nii
     [a,b] = mdm_fn_nii2bvalbvec(nii_fn);
     s.xps = mdm_xps_from_bval_bvec(a,b, b_delta);
+    
+else
+    
+    error('Missing xps');   
 
 end
 
 if (~msf_isfield(s.xps, 'b_eta'))
-    s.xps.b_eta = zeros(size(s.xps.n, 1));
+    s.xps.b_eta = zeros(s.xps.n, 1);
 end

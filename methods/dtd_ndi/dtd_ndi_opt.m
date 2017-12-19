@@ -10,10 +10,12 @@ opt.dtd_ndi = msf_ensure_field(opt.dtd_ndi, 'lsq_opts', ...
 
 opt.dtd_ndi = msf_ensure_field(opt.dtd_ndi, 'n_rep', 1); 
 
+opt.dtd_ndi = msf_ensure_field(opt.dtd_ndi, 'adjust_v_int', 0); 
+
 opt.dtd_ndi = msf_ensure_field(opt.dtd_ndi, 'pa_method', 1);
 
 
 opt.dtd_ndi = msf_ensure_field(opt.dtd_ndi, 'fig_maps', ...
-    {'s0','v_int'});
+    {'s0','v_int', 'v_csf'});
 
 opt.dtd_ndi = msf_ensure_field(opt.dtd_ndi, 'fig_prefix', 'dtd_ndi');
