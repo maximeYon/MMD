@@ -36,6 +36,8 @@ ind = ind & (signal > 0);
 
 % Setup regressors for diffusion tensor distribution (DTD) model
 b0 = ones(xps.n, 1);
+b0 = b0(ind);
+
 b2 = xps.bt(ind,:)      * 1e-9 ;   %SI unit conversion
 
 if (opt.dtd_covariance.do_dki)

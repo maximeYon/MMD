@@ -31,41 +31,19 @@ tmp = cellfun(@(x) str2double(x)', tmp, 'uniformoutput', 0);
 tmp = cell2mat(tmp);
 
 % compile the output
-xps.b   = tmp(4,:)' * 1e6; 
-xps.u   = tmp(1:3,:)';
+b = tmp(4,:)' * 1e6; 
+u = tmp(1:3,:)';
+u = u ./ repmat(eps + sqrt(sum(u.^2,2)), 1, 3);
 
-% demand normalization of the vectors
-xps.u   = xps.u ./ repmat(eps + sqrt(sum(xps.u.^2,2)), 1, 3);
+if (size(u,1) ~= numel(b))
+    error('b and u are differnt length');
+end
 
-xps.n   = numel(xps.b);
-% xps.bt  = tm_1x3_to_1x6(xps.b, zeros(size(xps.b)), xps.u);
-xps.bt  = tm_tpars_to_1x6(xps.b, b_delta, xps.u);
-xps.bt2 = tm_1x6_to_1x21(xps.bt);
-xps.b_delta = zeros(size(xps.b)) + b_delta;
-xps.b_eta   = zeros(size(xps.b));
 
-% 
-% if (b_delta == 0)
-%     xps.bt = repmat([1/3 1/3 1/3 0 0 0], size(xps.bt,1), 1) .* repmat(xps.b, 1, 6);
-% elseif (b_delta ~= 1)
-%     
-%     for c = 1:size(xps.bt, 1)
-%         
-%         p = tm_3x3_to_tpars( tm_1x6_to_3x3( xps.bt(c, :) ) );
-%         b = p.trace;
-%     
-%         b_stick = xps.bt(c,:) / b;
-%         b_sphere = tm_3x3_to_1x6( eye(3,3) / 3 );
-%     
-%         % b = c1 + c2
-%         c2 = b * b_delta;
-%         c1 = b - c2;
-%     
-%         xps.bt(c,:) = c1 * b_sphere + c2 * b_stick;
-%     
-%     end
-%     
-% %     error('not yet implemented');
-% end
+% compute b-tensors from b-values, b_delta value(s) and symmetry axis
+bt  = tm_tpars_to_1x6(b, b_delta, u);
+xps = mdm_xps_from_bt(bt);
 
+% store the direction as well
+xps.u = u;
 
