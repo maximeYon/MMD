@@ -35,7 +35,7 @@ else
     elseif (isfield(xps, 'b'))
         
         % just do pa of b
-        db = 0.1e9; % units of um2/ms
+        db = 0.01e9; % units of um2/ms
         x = xps.b / db;
         [~,~,a_ind] = unqiuetol(x, 1/max(abs(x)));
         
