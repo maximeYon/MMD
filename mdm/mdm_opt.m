@@ -2,8 +2,6 @@ function opt = mdm_opt(opt)
 % function opt = mdm_opt(opt)
 %
 % Specifies default options 
-1;
-
 
 % opt.nii_ext - eiterh '.nii' or '.nii.gz' for compressed nii
 

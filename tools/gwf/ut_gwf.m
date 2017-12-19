@@ -40,5 +40,20 @@ switch (c_ut)
             error('%s, ut_gwf test %i, bt calculation error', fn, c_ut);
         end
 
+    case 2
+        fn = 'gwf_analysis.m'; % will now only check that it executes
+        
+        g_max = 200e-3;
+        
+        gwf = [...
+            +1 +1 +0 -1 -1 +0 +0 +0 +0 +0 +0 +0 +0 +0 +0 ;
+            +0 +0 +0 +0 +0 +1 +1 +0 -1 -1 +0 +0 +0 +0 +0 ;
+            +0 +0 +0 +0 +0 +0 +0 +0 +0 +0 +1 +1 +0 -1 -1 ]' * g_max;
+        
+        dt = 1e-3;
+
+        txt = gwf_analysis(gwf, [], dt);
+               
+        
         
 end

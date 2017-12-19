@@ -1,8 +1,11 @@
-function q = gwf_to_q(gwf, rf, dt)
-% function q = gwf_to_q(gwf, rf, dt)
+function q = gwf_to_q(gwf, rf, dt, opt)
+% function q = gwf_to_q(gwf, rf, dt, opt)
 
-if (isempty(rf)), rf = gwf_to_rf(gwf); end
+if (nargin < 4), opt = []; end 
 
-g_eff = gwf .* repmat(rf, 1, 3);
+opt = gwf_opt(opt);
 
-q = msf_const_gamma('1H') * cumsum( g_eff, 1 ) * dt;
+
+g_eff = gwf_to_g_eff(gwf, rf, dt);
+
+q = msf_const_gamma(opt.gwf.nucleus) * cumsum( g_eff, 1 ) * dt;
