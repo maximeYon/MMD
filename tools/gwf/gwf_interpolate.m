@@ -9,7 +9,7 @@ gwf_check(gwf, rf, dt);
 
 scale = round(scale);
 
-gwf_out = zeros(size(gwf,1) * scale, 3);
+gwf_out = zeros(size(gwf,1) * scale, size(gwf,2));
 rf_out  = zeros(size(rf, 1) * scale, 1);
 
 for k = 1:scale
