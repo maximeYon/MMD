@@ -37,7 +37,7 @@ u = tmp(1:3,:)';
 % Make a trick to ensure that tensor shapes survives the tensor
 % computations
 u_norm = u;
-u_norm(1, :) = u_norm(1, :) + 0.00001;
+u_norm(:, 1) = u_norm(:, 1) + 0.00001;
 u_norm = u_norm ./ repmat(eps + sqrt(sum(u_norm.^2,2)), 1, 3);
 
 if (size(u,1) ~= numel(b)), error('b and u are different lengths'); end
