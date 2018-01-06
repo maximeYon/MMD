@@ -20,25 +20,25 @@ if (~exist(bval_fn, 'file')), error('could not find %s', bval_fn); end
 if (~exist(bvec_fn, 'file')), error('could not find %s', bvec_fn); end
 
 bval = mdm_txt_read(bval_fn);
-xps.b = str2num(bval{1})' * 1e6;
-xps.n = numel(xps.b);
+b    = str2num(bval{1})' * 1e6;
 
 if (isempty(bvec_fn)), return; end
 
 bvec = mdm_txt_read(bvec_fn);
 assert(numel(bvec) == 3, 'strange bvec file');
 
-gdir = [str2num(bvec{1}); str2num(bvec{2}); str2num(bvec{3})];
+% Extract and normalize the diffusion encoding directions
+u = [str2num(bvec{1}); str2num(bvec{2}); str2num(bvec{3})]';
+u = u ./ repmat(eps + sqrt(sum(u.^2,2)), 1, 3);
 
-if (size(gdir,2) ~= numel(xps.b))
+if (size(u,1) ~= numel(b))
     error('bval and bvec of differnt size');
 end
 
 % compute b-tensors from b-values, b_delta value(s) and symmetry axis
-bt  = tm_tpars_to_1x6(xps.b, b_delta, gdir');
+bt  = tm_tpars_to_1x6(b, b_delta, u);
 xps = mdm_xps_from_bt(bt);
 
 % store the direction as well
-xps.u = gdir';
-
+xps.u = u;
 

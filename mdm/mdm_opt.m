@@ -2,8 +2,6 @@ function opt = mdm_opt(opt)
 % function opt = mdm_opt(opt)
 %
 % Specifies default options 
-1;
-
 
 % opt.nii_ext - eiterh '.nii' or '.nii.gz' for compressed nii
 
@@ -27,6 +25,12 @@ opt = msf_ensure_field(opt, 'xps_merge_clear_s_ind', 0);
 opt = msf_ensure_field(opt, 'xps_merge_rethrow_error', 1);
 opt = msf_ensure_field(opt, 'pa_rethrow_error', 1);
 
+<<<<<<< HEAD
+=======
+
+opt = msf_ensure_field(opt, 'mdm_xps_throw_error', 1);
+
+>>>>>>> markus-nilsson/master
 opt = msf_ensure_field(opt, 'filter_sigma', 0);
 
 opt = msf_ensure_field(opt, 'do_mask', 1);
@@ -56,7 +60,7 @@ opt.mask = msf_ensure_field(opt.mask, 'do_overwrite', 0);
 
 % options for powder averaging
 opt.mdm.pa.present = 1;
-opt.mdm.pa = msf_ensure_field(opt.mdm.pa, 'db', 0.2e9);
+opt.mdm.pa = msf_ensure_field(opt.mdm.pa, 'db', 0.025e9);
 opt.mdm.pa = msf_ensure_field(opt.mdm.pa, 'db_delta2', 0.25);
 
 
