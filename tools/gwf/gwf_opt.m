@@ -11,3 +11,8 @@ opt.gwf = msf_ensure_field(opt.gwf, ...
 
 opt.gwf = msf_ensure_field(opt.gwf, 'nucleus', '1H');
 opt.gwf = msf_ensure_field(opt.gwf, 'f_max', 100);
+
+opt.gwf = msf_ensure_field(opt.gwf, 'plot_t_rf_ex', -1);
+opt.gwf = msf_ensure_field(opt.gwf, 'plot_t_rf_echo', -1);
+opt.gwf = msf_ensure_field(opt.gwf, 'plot_t_adc', -1);
+opt.gwf = msf_ensure_field(opt.gwf, 'plot_t_te', -1);

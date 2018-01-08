@@ -9,8 +9,11 @@ function bt = gwf_to_bt(gwf, rf, dt)
 
 gwf_check(gwf, rf, dt);
 
-% integrating q^2 requires some additional resolution, in order avoid bias
-[gwf,rf,dt] = gwf_interpolate(gwf, rf, dt, 16);
+% numerical integration of q^2 requires some temporal resolution
+% in order to avoid bias
+if (dt > 1e-4) % 2do: replace with soft limit
+    [gwf,rf,dt] = gwf_interpolate(gwf, rf, dt, 16);
+end
 
 % compute q and the bt
 q = gwf_to_q(gwf, rf, dt);
