@@ -16,7 +16,7 @@ out_path = fullfile(run_path,'protocol');
 %out_path = '/opt/topspin3.5pl4/exp/stan/nmr/lists/gp/user';
 %out_path = '/opt/topspin3.2/exp/stan/nmr/lists/gp/user';
 
-framework_path = fileparts(fileparts(fileparts(run_path)));
+framework_path = fileparts(fileparts(fileparts(fileparts(run_path))));
 pa_path = fullfile(framework_path,'tools','uvec','repulsion_angles');
 
 % Define timing parameters relative to a total echo time = 1
@@ -25,7 +25,7 @@ bmin = 0.002;
 %brel = linspace(bmin,1,n_b)'; %linear spacing b
 brel = logspace(log10(bmin),0,n_b)'; %linear spacing b
 n_bd = 4; %n_bd = 4, 7, 10, 13,...
-xps.b_delta = linspace(1,-.5,n_bd)';
+b_delta = linspace(1,-.5,n_bd)';
 %xps.b_delta = [1 0 -.5 -sqrt(.125) sqrt(.125) .5 sqrt(.5) sqrt(.75)]'; n_bd = numel(xps.b_delta);
 %xps.b_delta = [1 0 -.5 .5 sqrt(.5) sqrt(.75)]'; n_bd = numel(xps.b_delta);
 %xps.b_delta = [1]'; n_bd = numel(xps.b_delta);
@@ -49,7 +49,9 @@ xps.br_ind = reshape(br_ind,xps.n,1); % Same br_ind means same b-tensor orientat
 xps.a_ind = reshape(a_ind,xps.n,1); % Same a_ind means same b-tensor size and shape
 
 brel = brel(xps.b_ind);
-xps.b_delta = xps.b_delta(xps.bd_ind);
+xps.b_delta = b_delta(xps.bd_ind);
+xps.theta = theta(xps.br_ind);
+xps.phi = phi(xps.br_ind);
 
 grel = sqrt(brel);
 zeta = acos(sqrt((xps.b_delta*2+1)/3));

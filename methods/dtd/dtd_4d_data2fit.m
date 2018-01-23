@@ -5,7 +5,11 @@ if (nargin < 3), opt = []; end
 
 res = -1;
 
-ind = opt.dtd.ind_start:s.xps.n;
+if opt.do_bootstrap
+    ind = opt.bootstrap.ind;
+else
+    ind = opt.dtd.ind_start:s.xps.n;
+end
 
 %Verify the xps
 %dti_euler_mic_check_xps(s.xps);

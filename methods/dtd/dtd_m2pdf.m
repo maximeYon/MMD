@@ -1,40 +1,51 @@
-function dtd_m2pdf(dps_fn, pdf_path, opt)
+function dtd_m2pdf(paths, opt)
 % function dtd_m2pdf(dps_fn, pdf_path, opt)
  
-dps = mdm_dps_load(dps_fn);
-sz = size(dps.m);
-msf_mkdir(pdf_path);
+mfs = mdm_mfs_load(paths.mfs_fn);
+dps = mdm_dps_load(paths.dps_fn);
+sz = size(mfs.m);
+msf_mkdir(paths.pdf_path);
 
-figsize = 8.3*[1 1];
-fs = 6;
-lw = 1;
-ms_max = 8;
+figsize = 2*11*[1 1];
+fs = 2*6;
+lw = 2*1;
+ms_max = 2*10;
 
 figaspect = figsize(1)/figsize(2);
-width = 1;
+width = .998;
 height = width*figaspect;
 sub_width = 1/sz(1);
 sub_height = 1/sz(2)*figaspect;
 
 s0max = max(reshape(dps.s0,numel(dps.s0),1));
-w_threshold = .02;
+w_threshold = .01;
 s0_threshold = .1;
 
 figure(1), clf
 set(gcf, 'PaperUnits','centimeters', 'PaperPosition', min(sz(1:2))/16*[0 0 figsize],'PaperSize', min(sz(1:2))/16*figsize);
 
-left = 0;
-bottom = 0;
+left = .001;
+bottom = .001;
 axes('position',[left bottom width height])
 
 nk = ceil(sz(3)/2);
 z = squeeze(dps.s0(:,:,nk))';
 clim = max(z(:))*[0 1];
-imagesc(z)
+hs0 = imagesc(z);
 set(gca,'YDir','normal','CLim',clim)
 axis off
 colormap('gray')
 hold on
+
+grid.yx = repmat(0:1:sz(1),[2 1]);
+grid.yy = repmat([0; sz(2)],[1 sz(1)+1]);
+grid.xx = repmat([0; sz(1)],[1 sz(2)+1]);
+grid.xy = repmat(0:1:sz(2),[2 1]);
+
+plot(.5+grid.xx,.5+grid.xy,'-k','LineWidth',.5)
+plot(.5+grid.yx,.5+grid.yy,'-k','LineWidth',.5)
+
+delete(hs0)
 
 dmin = opt.dtd.dmin;
 dmax = opt.dtd.dmax;
@@ -50,7 +61,7 @@ ymax = log10(ratiomax);
     for nj = 1:sz(2)
         for ni = 1:sz(1)
             if dps.mask(ni,nj,nk)
-                m = squeeze(dps.m(ni,nj,nk,:))';
+                m = squeeze(mfs.m(ni,nj,nk,:))';
                 s0 = dps.s0(ni,nj,nk);
                 if s0 > s0_threshold*s0max
                     dtd = dtd_m2dtd(m);
@@ -79,10 +90,11 @@ ymax = log10(ratiomax);
                                 h1 = plot(c.x(nc),c.y(nc),'o','LineWidth',.1);
                                 hold on
                                 col = c.bright(nc)*[c.r(nc) c.g(nc) c.b(nc)];
-                                set(h1,'MarkerSize',c.ms(nc),'Color',col,'MarkerFaceColor',col)
+                                %set(h1,'MarkerSize',c.ms(nc),'Color',col,'MarkerFaceColor',col)
+                                set(h1,'MarkerSize',c.ms(nc),'Color',col,'MarkerFaceColor','none','LineWidth',.5*lw)
                             end
                         end
-                        set(axh1,'XLim',[xmin xmax]+.2*(xmax-xmin)*[-1 1], 'YLim',[ymin ymax]+.2*(ymax-ymin)*[-1 1],'XTick',[],'YTick',[])
+                        set(axh1,'XLim',[xmin xmax]+.01*(xmax-xmin)*[-1 1], 'YLim',[ymin ymax]+.01*(ymax-ymin)*[-1 1],'XTick',[],'YTick',[])
                         axis(axh1,'square','off')
                        end
                 end
@@ -91,16 +103,30 @@ ymax = log10(ratiomax);
     end
 %end
 
-eval(['print ' pdf_path '/dtd_2Dmap -loose -dpng -r600'])
+eval(['print ' paths.pdf_path '/dtd_2Dmap -loose -dpng -r600'])
 
 figure(2), clf
 set(gcf, 'PaperUnits','centimeters', 'PaperPosition', 1*[0 0 .5*figsize],'PaperSize', .5*figsize);
-axh2 = axes('position',[.18 .18 .75 .75]);
+axh2 = axes('position',[.01 .14 .85 .85]);
+hold on
+Nbin = numel(opt.dtd.bin_disomax);
+for nbin = 1:Nbin
+    disomin = opt.dtd.bin_disomin(nbin);
+    disomax = opt.dtd.bin_disomax(nbin);
+    dratiomin = opt.dtd.bin_dratiomin(nbin);
+    dratiomax = opt.dtd.bin_dratiomax(nbin);
+    
+    ph = plot(log10([disomin disomax disomax disomin disomin]),...
+        log10([dratiomin dratiomin dratiomax dratiomax dratiomin]),...
+        'k-','LineWidth',.5*lw);
+    set(ph,'Color',.7*[1 1 1])
+end
+
 %for nk = 1:sz(3)
     for nj = 1:sz(2)
         for ni = 1:sz(1)
             if dps.mask(ni,nj,nk)
-                m = squeeze(dps.m(ni,nj,nk,:))';
+                m = squeeze(mfs.m(ni,nj,nk,:))';
                 s0 = dps.s0(ni,nj,nk);
                 if s0 > s0_threshold*s0max
                     dtd = dtd_m2dtd(m);
@@ -124,9 +150,8 @@ axh2 = axes('position',[.18 .18 .75 .75]);
                         for nc = 1:n
                             if w(nc) > w_threshold*s0
                                 h1 = plot(c.x(nc),c.y(nc),'o','LineWidth',.01);
-                                hold on
                                 col = c.bright(nc)*[c.r(nc) c.g(nc) c.b(nc)];
-                                set(h1,'MarkerSize',c.ms(nc),'Color',col,'MarkerFaceColor',col)
+                                set(h1,'MarkerSize',c.ms(nc),'Color',col,'MarkerFaceColor','none','LineWidth',.5*lw)
                             end
                         end
                     end
@@ -135,27 +160,15 @@ axh2 = axes('position',[.18 .18 .75 .75]);
         end
     end
 %end
-set(gca,'XLim',[xmin xmax]+.2*(xmax-xmin)*[-1 1], 'YLim',[ymin ymax]+.2*(ymax-ymin)*[-1 1],'YAxisLocation','left',...
+set(axh2,'XLim',[xmin xmax]+.01*(xmax-xmin)*[-1 1], 'YLim',[ymin ymax]+.01*(ymax-ymin)*[-1 1],'YAxisLocation','right',...
 'XTick',[-11:-8],'YTick',-2:2,'TickDir','out','TickLength',.02*[1 1],...
-'FontSize',fs,'LineWidth',lw)
+'Box','on','FontSize',fs,'LineWidth',lw)
 axis square
 %xlabel('log(\itD\rm_{iso} / m^2s^-^1)','FontSize',fs)
 %ylabel('log(\itD\rm_{||} / \itD\rm_{\perp})','FontSize',fs)
 
-Ncomp = numel(opt.dtd.comp_isomax);
-for ncomp = 1:Ncomp
-    isomin = opt.dtd.comp_isomin(ncomp);
-    isomax = opt.dtd.comp_isomax(ncomp);
-    ratiomin = opt.dtd.comp_ratiomin(ncomp);
-    ratiomax = opt.dtd.comp_ratiomax(ncomp);
-    
-    plot(log10([isomin isomax isomax isomin isomin]),...
-        log10([ratiomin ratiomin ratiomax ratiomax ratiomin]),...
-        'k-','LineWidth',.25*lw)        
-end
 
-
-eval(['print ' pdf_path '/dtd_global -loose -dpng -r1200'])
+eval(['print ' paths.pdf_path '/dtd_global -loose -dpng -r1200'])
 
 % ptot = sum(sum(sum(p,1),2),3);
 % z = reshape(ptot,[nx ny]);

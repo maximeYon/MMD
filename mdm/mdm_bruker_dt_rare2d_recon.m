@@ -9,14 +9,12 @@ if (nargin < 5), opt.present = 1; end
 
 opt = mdm_opt(opt);
 
-% Fit models
-ind_start = 2; % Exclude first image
 
 % Book-keeping
 
 msf_mkdir(fullfile(out_path)); 
-xps_fn = fullfile(out_path, 'xps.mat');
 nii_fn = fullfile(out_path, ['data' opt.nii_ext]);
+xps_fn = fullfile(out_path, 'data_xps.mat');
 
 % convert bruker acquistion parameters to xps
 mdm_bruker_acqus2mat(data_path);
@@ -27,4 +25,5 @@ s.nii_fn = nii_fn;
 load(xps_fn);
 s.xps = xps;
 
-mdm_s_subsample(s, (1:s.xps.n) >= ind_start);
+% ind_start = 2; % Exclude first image
+% mdm_s_subsample(s, (1:s.xps.n) >= ind_start);
