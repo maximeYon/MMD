@@ -68,9 +68,6 @@ t.cl(isnan(t.cl)) = 0;
 t.cp = t.p./t.trace;
 t.cp(isnan(t.cp)) = 0;
 t.cs = t.s./t.trace;
-<<<<<<< HEAD
-t.cs(isnan(t.cs)) = 0;
-=======
 t.cs(isnan(t.cs)) = 0;
 
 
@@ -86,6 +83,4 @@ else
     t.norm = t.lambda11vec;
 end
     
-        
 
->>>>>>> markus-nilsson/master
