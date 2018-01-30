@@ -82,5 +82,3 @@ else
     t.perp = (t.lambda22 + t.lambda33) / 2;
     t.norm = t.lambda11vec;
 end
-    
-

@@ -20,22 +20,7 @@ s0max = max(reshape(dps.s0,numel(dps.s0),1));
 w_threshold = 0;
 s0_threshold = 0;
 
-figure(1), clf
-%set(gcf, 'PaperUnits','centimeters', 'PaperPosition', min(sz(1:2))/16*[0 0 figsize],'PaperSize', min(sz(1:2))/16*figsize);
-set(gcf, 'PaperUnits','centimeters', 'PaperPosition', [0 0 figsize],'PaperSize', figsize);
-
-left = 0;
-bottom = 0;
-axes('position',[left bottom width height])
-
-nk = round(sz(3)/2);
-z = squeeze(dps.s0(:,:,nk))';
-clim = max(z(:))*[0 1];
-imagesc(z)
-set(gca,'YDir','normal','CLim',clim)
-axis off
-colormap('gray')
-hold on
+clim = .9*s0max*[0 1];
 
 dmin = opt.dtr2d.dmin;
 dmax = opt.dtr2d.dmax;
@@ -51,6 +36,11 @@ ymax = log10(ratiomax);
 zmin = log10(r2min);
 zmax = log10(r2max);
 
+if isfield(opt,'nk_range')
+    nk_range = opt.nk_range;
+else
+    nk_range =  1:sz(3);
+end
 if isfield(opt,'nj_range')
     nj_range = opt.nj_range;
 else
@@ -62,7 +52,18 @@ else
     ni_range =  1:sz(1);
 end
 
-% %for nk = 1:sz(3)
+for nk = nk_range
+    figure(1), clf
+    set(gcf, 'PaperUnits','centimeters', 'PaperPosition', [0 0 figsize],'PaperSize', figsize);
+    left = 0;
+    bottom = 0;
+    axes('position',[left bottom width height])
+    z = squeeze(dps.s0(:,:,nk))';
+    imagesc(z)
+    set(gca,'YDir','normal','CLim',clim)
+    axis off
+    colormap('gray')
+    hold on
     for nj = nj_range
         for ni = ni_range
             if dps.mask(ni,nj,nk)
@@ -106,11 +107,12 @@ end
              end
         end
     end
-% %end
-
 % eval(['print ' pdf_path '/dtr2d_2Dmap -loose -dpdf'])
-eval(['print ' pdf_path '/dtr2d_2Dmap -loose -dpng -r300'])
+eval(['print ' pdf_path '/dtr2d_2Dmap' num2str(nk) ' -loose -dpng -r300'])
 pause(1)
+end
+
+return
 
 figure(2), clf
 set(gcf, 'PaperUnits','centimeters', 'PaperPosition', 1*[0 0 figsize],'PaperSize', figsize);

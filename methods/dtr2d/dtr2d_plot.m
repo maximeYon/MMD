@@ -12,7 +12,7 @@ opt = dtr2d_opt(opt);
 
 opt.dtr2d.dmin = .1/max(xps.b);
 opt.dtr2d.r2min = .1/max(xps.te);
-opt.dtr2d.r2max = 1/min(xps.te);
+opt.dtr2d.r2max = 2/min(xps.te);
 %opt.dtr2d
 
 S = abs(S);

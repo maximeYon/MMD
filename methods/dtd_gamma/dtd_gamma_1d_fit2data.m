@@ -22,15 +22,10 @@ end
 % (mu2_iso) and anisotorpic (mu2_aniso) components.
 mu2 = mu2_iso + mu2_aniso.*xps.b_delta.^2.*(xps.b_eta.^2+3)/3;
 
-<<<<<<< HEAD
-% Signal equation based on the Laplace transform of the gamma distribution.
-s = sw.*(1 + xps.b.*mu2./d_iso).^(-1*(d_iso.^2./mu2));        
-=======
 % Singnal equation based on the laplace transform of the gamma distribution.
 s = sw.*(1 + xps.b.*mu2./d_iso).^(-1*(d_iso.^2./mu2));
 
 % Force signal to be real. This is necessary when allowing negative
 % variances.
 s = real(s);
->>>>>>> markus-nilsson/master
 

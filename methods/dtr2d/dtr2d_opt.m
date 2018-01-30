@@ -22,11 +22,10 @@ opt.dtr2d = msf_ensure_field(opt.dtr2d, 'dfuzz', .1);
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'r2fuzz', .1);
 
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_maps', ...
-    {'s0','s_fw','s_st','s_lt','s_pt','s_plt', 's_splt','s_residue',...
-    'miso','viso_n','maniso_n','vaniso_n','msaniso_n','vsaniso_n','mr2','vr2_n','ufa','fa','op'});
+    {'s0','f_srfd','f_frfd','f_frsd','f_srsd','f_mrsds','f_mrsdp', 'f_mrsdl','f_residue',...
+    'miso','viso_n','msaniso_n','vsaniso_n','mr2','vr2_n','cvisosaniso_n','cvisor2_n','cvsanisor2_n','ufa','fa','op'});
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_prefix', 'dtr2d');
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_cmaps',{'fa','cl','cp','ufa','ucl','ucp'});
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_ccol',{'t1x6','lambda33vec','lambda11vec','s1x6prim','s1x6prim','s1x6prim'});
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_ccolnorm',{'lambda33','mask','mask','slambda33prim','slambda33prim','slambda33prim'});
-opt.dtr2d = msf_ensure_field(opt.dtr2d, 'do_dtr2dpdf', 0);
 

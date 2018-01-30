@@ -21,8 +21,10 @@ dps.lambda33vec = zeros([sz(1) sz(2) sz(3) 3]);
 dtiparam = {'trace','iso','lambda33','lambda22','lambda11','lambdazz','lambdaxx','lambdayy','vlambda',...
     'delta','eta','s','p','l','fa','cs','cl','cp','cm'};
 udtiparam = {'udelta','ufa','ucs','ucl','ucp'};
-param = {dtiparam{:},udtiparam{:},'miso','viso','maniso','vaniso','msaniso','vsaniso','mr2','vr2','s_fw','s_st','s_lt','s_pt','s_plt',...
-    's_splt','s_residue'};
+param = {dtiparam{:},udtiparam{:},'miso','viso','maniso','vaniso','msaniso','vsaniso','mr2','vr2',...
+    'cvisosaniso','cvisor2','cvsanisor2',...
+    's_srfd','s_frfd','s_srsd','s_frsd','s_mrsds','s_mrsdp','s_mrsdl','s_residue',...
+    'f_srfd','f_frfd','f_srsd','f_frsd','f_mrsds','f_mrsdp','f_mrsdl','f_residue',};
 for nparam = 1:numel(param)
     eval(['dps.' param{nparam} ' = zeros([sz(1) sz(2) sz(3)]);']);
 end
@@ -41,34 +43,44 @@ for nk = 1:sz(3)
                     saniso_v = aniso_v.^2;
                     ratio_v = par./perp;
 
-                    ind_fw = all([iso_v > 2e-9, r2 < 2],2);
-                    ind_st = all([iso_v>1e-10, iso_v<2e-9, ratio_v > 1/3, ratio_v < 3, r2 > 5],2);
-                    ind_lt = all([iso_v>1e-10, iso_v<2e-9, ratio_v > 3, r2 > 5],2);
-                    ind_pt = all([iso_v>1e-10, iso_v<2e-9, ratio_v < 1/3, r2 > 5],2);
+                    ind_srfd = all([iso_v > 2e-9, r2 < 10],2);
+                    ind_frfd = all([iso_v > 2e-9, r2 > 10],2);
+                    ind_srsd = all([iso_v < 2e-9, r2 < 10],2);
+                    ind_frsd = all([iso_v < 2e-9, r2 > 29],2);
+                    ind_mrsds = all([iso_v>1e-10, iso_v<2e-9, ratio_v > 1/3, ratio_v < 3, r2 > 10, r2 < 29],2);
+                    ind_mrsdl = all([iso_v>1e-10, iso_v<2e-9, ratio_v > 3, r2 > 10, r2 < 29],2);
+                    ind_mrsdp = all([iso_v>1e-10, iso_v<2e-9, ratio_v < 1/3, r2 > 10, r2 < 29],2);
 
                     s0 = ones(1,n)*w;
-                    s_fw = ind_fw'*w;
-                    s_st = ind_st'*w;
-                    s_lt = ind_lt'*w;
-                    s_pt = ind_pt'*w;
+                    s_srfd = ind_srfd'*w;
+                    s_frfd = ind_frfd'*w;
+                    s_srsd = ind_srsd'*w;
+                    s_frsd = ind_frsd'*w;
+                    s_mrsds = ind_mrsds'*w;
+                    s_mrsdl = ind_mrsdl'*w;
+                    s_mrsdp = ind_mrsdp'*w;
                     
                     miso = iso_v'*w/s0;
                     viso = (iso_v-miso)'.^2*w/s0;
                     maniso = aniso_v'*w/s0;
                     vaniso = (aniso_v-maniso)'.^2*w/s0;
                     msaniso = saniso_v'*w/s0;
-                    vsaniso = (saniso_v-msaniso)'.^2*w/s0;
+                    vsaniso = (saniso_v./iso_v.^2*miso^2-msaniso)'.^2*w/s0;
                     mr2 = r2'*w/s0;
                     vr2 = (r2-mr2)'.^2*w/s0;
+                    cvisosaniso = ((iso_v-miso).*(saniso_v./iso_v.^2*miso^2-msaniso))'*w/s0;
+                    cvisor2 = ((iso_v-miso).*(r2-mr2))'*w/s0;
+                    cvsanisor2 = ((saniso_v-msaniso).*(r2-mr2))'*w/s0;
 
                     dps.s0(ni,nj,nk) = s0;
-                    dps.s_fw(ni,nj,nk) = s_fw;
-                    dps.s_st(ni,nj,nk) = s_st;
-                    dps.s_pt(ni,nj,nk) = s_pt;
-                    dps.s_lt(ni,nj,nk) = s_lt;
-                    dps.s_plt(ni,nj,nk) = s_lt+s_pt;
-                    dps.s_splt(ni,nj,nk) = s_st+s_lt+s_pt;
-                    dps.s_residue(ni,nj,nk) = s0-s_fw-s_st-s_lt-s_pt;
+                    dps.s_srfd(ni,nj,nk) = s_srfd;
+                    dps.s_frfd(ni,nj,nk) = s_frfd;
+                    dps.s_srsd(ni,nj,nk) = s_srsd;
+                    dps.s_frsd(ni,nj,nk) = s_frsd;
+                    dps.s_mrsds(ni,nj,nk) = s_mrsds;
+                    dps.s_mrsdl(ni,nj,nk) = s_mrsdl;
+                    dps.s_mrsdp(ni,nj,nk) = s_mrsdp;
+                    dps.s_residue(ni,nj,nk) = s0-s_srfd-s_frfd-s_srsd-s_frsd-s_mrsds-s_mrsdl-s_mrsdp;
                     dps.miso(ni,nj,nk) = miso;
                     dps.viso(ni,nj,nk) = viso;
                     dps.maniso(ni,nj,nk) = maniso;
@@ -77,6 +89,9 @@ for nk = 1:sz(3)
                     dps.vsaniso(ni,nj,nk) = vsaniso;
                     dps.mr2(ni,nj,nk) = mr2;
                     dps.vr2(ni,nj,nk) = vr2;
+                    dps.cvisosaniso(ni,nj,nk) = cvisosaniso;
+                    dps.cvisor2(ni,nj,nk) = cvisor2;
+                    dps.cvsanisor2(ni,nj,nk) = cvsanisor2;
 
                     [dtr2d_nx6,r2,w] = dtr2d_dist2nx6r2w(dtr2d);
                     dt1x6 = (dtr2d_nx6'*w)'/s0;
@@ -128,6 +143,32 @@ dps.vsaniso_n = dps.vsaniso./dps.miso.^4;
 dps.vsaniso_n(isnan(dps.vsaniso_n)) = 0;
 dps.vr2_n = dps.vr2./dps.mr2.^2;
 dps.vr2_n(isnan(dps.vr2_n)) = 0;
+dps.cvisosaniso_n = dps.cvisosaniso./dps.miso.^3;
+%dps.cvisosaniso_n = dps.cvisosaniso./(dps.viso.*dps.vsaniso);
+dps.cvisosaniso_n(isnan(dps.cvisosaniso_n)) = 0;
+dps.cvisor2_n = dps.cvisor2./(dps.miso.*dps.mr2);
+%dps.cvisor2_n = dps.cvisor2./(dps.viso.*dps.vr2);
+dps.cvisor2_n(isnan(dps.cvisor2_n)) = 0;
+dps.cvsanisor2_n = dps.cvsanisor2./(dps.miso.^2.*dps.mr2);
+%dps.cvsanisor2_n = dps.cvsanisor2./(dps.vr2.*dps.vsaniso);
+dps.cvsanisor2_n(isnan(dps.cvsanisor2_n)) = 0;
+
+dps.f_srfd = dps.s_srfd./dps.s0;
+dps.f_srfd(isnan(dps.f_srfd)) = 0;
+dps.f_frfd = dps.s_frfd./dps.s0;
+dps.f_frfd(isnan(dps.f_frfd)) = 0;
+dps.f_srsd = dps.s_srsd./dps.s0;
+dps.f_srsd(isnan(dps.f_srsd)) = 0;
+dps.f_frsd = dps.s_frsd./dps.s0;
+dps.f_frsd(isnan(dps.f_frsd)) = 0;
+dps.f_mrsds = dps.s_mrsds./dps.s0;
+dps.f_mrsds(isnan(dps.f_mrsds)) = 0;
+dps.f_mrsdl = dps.s_mrsdl./dps.s0;
+dps.f_mrsdl(isnan(dps.f_mrsdl)) = 0;
+dps.f_mrsdp = dps.s_mrsdp./dps.s0;
+dps.f_mrsdp(isnan(dps.f_mrsdp)) = 0;
+dps.f_residue = dps.s_residue./dps.s0;
+dps.f_residue(isnan(dps.f_residue)) = 0;
 
 %2nd moments of P(Deff)
 dps.mu2iso = dps.viso;
