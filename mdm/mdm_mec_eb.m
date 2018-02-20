@@ -56,7 +56,11 @@ end
 
 % Run coregistration
 s = s_target;
-s.nii_fn = mdm_coreg(s.nii_fn, ref_fn, p_fn, o_path, opt);
+[s.nii_fn, tpm_fn] = mdm_coreg(s.nii_fn, ref_fn, p_fn, o_path, opt);
+
+if (opt.mdm.mec.do_rotate_bvec)
+    s.xps = mdm_mec_rotate_bvec(s.xps, tpm_fn, p_fn);
+end
 
 mdm_xps_save(s.xps, mdm_xps_fn_from_nii_fn(s.nii_fn));
 

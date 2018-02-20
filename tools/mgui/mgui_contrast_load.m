@@ -16,10 +16,17 @@ end
 
 % Nifti files are in LPS (some, at least, check this!)
 % Matlab images are displayed as YX
-[I, header] = mdm_nii_read(filename);
+switch (lower(ext))
+    case '.dcm'
+        I = dicomread(filename);
+        header = mdm_nii_h_empty;
+        header.my_hdr.ori = 'LAS';
+    otherwise % assume nifti
+        [I, header] = mdm_nii_read(filename);
+        header.my_hdr.ori = mdm_nii_oricode(header);
+end
 I = double(I);
 
-header.my_hdr.ori = mdm_nii_oricode(header);
 
 [~,name] = fileparts(filename);
 header.my_hdr.protocol_name = name(max(find(name == '_', 2))+1:end);
