@@ -3,7 +3,7 @@ clear
 % Here are some examples of asymmetric diffusion encoding in a spin-echo
 % sequence. See the example cases to experiment with some common issues.
 
-example_nr = 4;
+example_nr = 5;
 
 switch example_nr
     case 1
@@ -31,6 +31,12 @@ switch example_nr
         wf_type    = 3; % DDE in x and z
         find_worst = 1; % no rotation
         
+    case 5
+        % If we start with DDE in the xz-plane, there will always be an
+        % error, and it can get even worse if we search for the worst fov
+        % or gvf rotation.
+        wf_type    = 3; % DDE in x and z
+        find_worst = 3; % no rotation
 end
 
 
