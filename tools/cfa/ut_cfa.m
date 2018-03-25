@@ -11,8 +11,7 @@ if (nargin < 1), fn = n_ut; return; end
 
 switch c_ut
     
-    case 1
-        % Test the core bias funnction for waveform that renders no error.
+    case 1 % Test the core bias funnction for waveform that renders no error.
         gwf = [
             0 1 1 1 1 1 0 0 0 1 1 1 1 1 0;
             0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
@@ -32,8 +31,7 @@ switch c_ut
         end
         
         
-    case 2
-        % Test the core bias funnction for waveform that renders no error.
+    case 2 % Test the core bias funnction for waveform that renders no error.
         gwf = [
             0 1 1 0 -1 -1 0 0 0 0 0 0  0  0 0;
             0 0 0 0  0  0 0 0 0 0 0 0  0  0 0;
@@ -53,8 +51,7 @@ switch c_ut
         end
         
         
-    case 3
-        % Check that cfa_apply_R_to_fov works
+    case 3 % Check that cfa_apply_R_to_fov works
         ips.o = rand(3);
         
         R = [0 1 0; 1 0 0; 0 0 1];
@@ -68,15 +65,14 @@ switch c_ut
         end
     
         
-    case 4
-        % Check that cfa_check_ips works
+    case 4 % Check that cfa_check_ips works
         
         ips = get_ips();
         cfa_check_ips(ips);
         
         
     otherwise
-        error('No such test is defined!');
+        error(['No such test is defined! (Requested test: ' num2str(c_ut) ')']);
         
 end
 
@@ -111,5 +107,4 @@ ips.r_xyz = [X(:) Y(:) Z(:)];           % position of all voxel centers [m]
 ips.T2s = 40e-3;                        % T2-star time of tissue [s]
 
 end
-
-
+s
