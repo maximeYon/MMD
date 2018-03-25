@@ -59,18 +59,20 @@ if opt.do_new_parfor
     
     siz = size(I);
     
-    I2 = reshape(I, prod(siz(1:3)), siz(4))';
-    M2 = reshape(M, prod(siz(1:3)),      1)';
+    % Expand 4D volume to 1+1D so that n x m is samples times voxels
+    I1 = reshape(I, prod(siz(1:3)), siz(4))';
+    M1 = reshape(M, prod(siz(1:3)),      1)';
+    I4 = zeros(n_param, prod(siz(1:3)));
     
-    rp = randperm(size(I2, 2));
+    % Find all non masked voxels
+    si = find((M1>0).*(~all(I1==0,1)));
+    I2 = I1(:,si);
     
-    I2 = I2(:,rp);
-    M2 = M2(:,rp);
-    
+    % Define size of blocks for each worker
     d = ceil(size(I2,2) / n_workers);
     
+    
     spmd
-        %     for i = 1:n_workers
         i = labindex;
         s = (i-1)*d+1;
         e = i*d;
@@ -79,27 +81,23 @@ if opt.do_new_parfor
         
         out = zeros(n_param, e-s+1);
         in  = I2(:, s:e);
-        msk = M2(1, s:e);
         
         for k = 1:size(out,2)
-            
-            if (msk(k) == 0), continue; end
-            if (all(in(:,k) == 0)), continue; end
             out(:, k) = f_fun(double(squeeze(in(:,k))));
-            
         end
     end
     
+    % Combine result from workers
     I3 = [];
-    
     for i = 1:n_workers
         I3 = cat(2, I3, out{i});
     end
     
-    % reverse permutation
-    I3(:,rp) = I3;
+    % Revert mask subsampling
+    I4(:,si) = I3;
     
-    p = reshape(I3', siz(1), siz(2), siz(3), n_param);
+    % Revert 1+1D to 4D transform so that we get "x, y, z, parameter" dimensions
+    p = reshape(I4', siz(1), siz(2), siz(3), n_param);
     
 else
     
