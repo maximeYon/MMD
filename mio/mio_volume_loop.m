@@ -59,6 +59,8 @@ if opt.do_new_parfor
     
     siz = size(I);
     
+    I2 = reshape(I, prod(siz(1:3)), siz(4))';
+    M2 = reshape(M, prod(siz(1:3)),      1)';
     
     rp = randperm(size(I2, 2));
     
@@ -97,6 +99,7 @@ if opt.do_new_parfor
     % reverse permutation
     I3(:,rp) = I3;
     
+    p = reshape(I3', siz(1), siz(2), siz(3), n_param);
     
 else
     
