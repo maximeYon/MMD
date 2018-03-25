@@ -11,7 +11,7 @@ function p = mio_volume_loop(fun, I, M, opt, S)
 %          supplementary data)
 %
 % I   - 4D matrix
-% 
+%
 % M   - 3D mask
 %
 % opt - option structure
@@ -35,7 +35,7 @@ if (~isempty(S))
     f_sup = @(i,j,k) squeeze(S(i,j,k,:));
 else
     f_fun = @(x,y) fun(x);
-    f_sup = @(i,j,k) []; 
+    f_sup = @(i,j,k) [];
 end
 
 % Init the output structure by fitting once to a voxel in the middle
@@ -54,37 +54,85 @@ end
 
 if (opt.mio.no_parfor), n_workers = 1; end
 
-% Loop over the data
-if (opt.verbose), fprintf('Starting the loop. Workers = %i\n', n_workers); end 
-for k = 1:size(I,3)
-    if (opt.verbose), fprintf('k=%3.0i', k); end
-    for j = 1:size(I,2)
+
+if opt.do_new_parfor
+    
+    siz = size(I);
+    
+    
+    rp = randperm(size(I2, 2));
+    
+    I2 = I2(:,rp);
+    M2 = M2(:,rp);
+    
+    d = ceil(size(I2,2) / n_workers);
+    
+    spmd
+        %     for i = 1:n_workers
+        i = labindex;
+        s = (i-1)*d+1;
+        e = i*d;
         
-        if (any(M(:,j,k)))            
-            if (n_workers == 1) % single core
-                for i = 1:size(I,1)
-                    if (M(i,j,k) == 0), continue; end
-                    if (all(I(i,j,k,:) == 0)), continue; end
-                    p(:,i,j,k) = f_fun(double(squeeze(I(i,j,k,:))), f_sup(i,j,k));
-                end
-                
-            else % multicore 
-                % tried to put the parfor in another loop structure, 
-                % but it did not improve performance much
-                parfor i = 1:size(I,1)
-                    if (M(i,j,k) == 0), continue; end
-                    if (all(I(i,j,k,:) == 0)), continue; end
-                    q = feval(f_sup,i,j,k);
-                    p(:,i,j,k) = f_fun(double(squeeze(I(i,j,k,:))), q);
+        if e > size(I2,2); e = size(I2,2); end
+        
+        out = zeros(n_param, e-s+1);
+        in  = I2(:, s:e);
+        msk = M2(1, s:e);
+        
+        for k = 1:size(out,2)
+            
+            if (msk(k) == 0), continue; end
+            if (all(in(:,k) == 0)), continue; end
+            out(:, k) = f_fun(double(squeeze(in(:,k))));
+            
+        end
+    end
+    
+    I3 = [];
+    
+    for i = 1:n_workers
+        I3 = cat(2, I3, out{i});
+    end
+    
+    % reverse permutation
+    I3(:,rp) = I3;
+    
+    
+else
+    
+    % Loop over the data
+    if (opt.verbose), fprintf('Starting the loop. Workers = %i\n', n_workers); end
+    for k = 1:size(I,3)
+        if (opt.verbose), fprintf('k=%3.0i', k); end
+        for j = 1:size(I,2)
+            
+            if (any(M(:,j,k)))
+                if (n_workers == 1) % single core
+                    for i = 1:size(I,1)
+                        if (M(i,j,k) == 0), continue; end
+                        if (all(I(i,j,k,:) == 0)), continue; end
+                        p(:,i,j,k) = f_fun(double(squeeze(I(i,j,k,:))), f_sup(i,j,k));
+                    end
+                    
+                else % multicore
+                    % tried to put the parfor in another loop structure,
+                    % but it did not improve performance much
+                    parfor i = 1:size(I,1)
+                        if (M(i,j,k) == 0), continue; end
+                        if (all(I(i,j,k,:) == 0)), continue; end
+                        q = feval(f_sup,i,j,k);
+                        p(:,i,j,k) = f_fun(double(squeeze(I(i,j,k,:))), q);
+                    end
                 end
             end
+            
+            % print a status report
+            if (any(M(:,j,k))), marker = 'o'; else marker = '.'; end
+            if ((mod(j,4) == 0) && opt.verbose), fprintf(marker); end
         end
-
-        % print a status report
-        if (any(M(:,j,k))), marker = 'o'; else marker = '.'; end
-        if ((mod(j,4) == 0) && opt.verbose), fprintf(marker); end
+        if (opt.verbose), disp(';'); end
     end
-    if (opt.verbose), disp(';'); end
+    
+    p = permute(p, [2 3 4 1]);
 end
 
-p = permute(p, [2 3 4 1]);
