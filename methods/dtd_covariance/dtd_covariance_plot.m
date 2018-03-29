@@ -4,63 +4,64 @@ function dtd_covariance_plot(S, xps, h, h2)
 if (nargin < 4), h2 = []; end
 
 opt = dtd_covariance_opt();
-[m,cond,n] = dtd_covariance_1d_data2fit(S, xps, opt);
-S_fit = dtd_codivide_1d_fit2data(m, xps);
+[m,~,n] = dtd_covariance_1d_data2fit(S, xps, opt);
+S_fit = dtd_covariance_1d_fit2data(m, xps);
 
 
-plot(h, S);
-title(h, num2str(n));
+% diffusion tensor
+dt_1x6 = m(2:7)' * 1e9;
+dps = tm_dt_to_dps(dt_1x6);
 
+% covariance tensor
+ct_1x21  = m(8:28)' * 1e18;
+dps = tm_ct_to_dps(ct_1x21, dps);
 
+plot(h, S, 'k.');
+hold(h, 'on');
+plot(h, S_fit, 'r-');
+xlim(h, [0 1+numel(S_fit)]);
+ylim(h, [0 max(max(S_fit), max(S)) * 1.1]);
+title(h, sprintf('MD = %1.2f, FA = %1.2f, \n MK_A = %1.2f, MK_I = %1.2f,\n  MEAS RANK = %i', ...
+    dps.MD, dps.FA, dps.MKa, dps.MKi, n));
 
 
 if (1)
     
     C = m(8:end) * 1e18;
     
-    [x,y,z] = sphere(80);
+    [x,y,z] = sphere(120);
     
     c = zeros(size(x));
     for i = 1:size(x,1)
         for j = 1:size(x,2)
             r = [x(i,j) y(i,j) z(i,j)];
             
-            r2 = tm_1x3_to_1x6(1,0,r);
-            
             r4 = tm_1x6_to_1x21(tm_1x3_to_1x6(1,0,r));
             r4 = r4 / sqrt(tm_inner(r4, r4));
             L1 = tm_inner(C, r4);
             
-            r4 = tm_1x6_to_1x21(tm_1x3_to_1x6(0,1,r));
-            r4 = r4 / sqrt(tm_inner(r4, r4));
-            L2 = tm_inner(C, r4);
-            
-
             L = L1;
             
             x(i,j) = x(i,j) * L;
             y(i,j) = y(i,j) * L;
             z(i,j) = z(i,j) * L;
             
-            c(i,j) = (L1 - L2);
+            c(i,j) = L;
             
         end
     end
     
-    min(c(:))
-    max(c(:))
+    surface(h2,x,z,y,c);
     
-    surface(h2,z,x,y,c);
-    
-    caxis(h2, [-0.5 0.5] );
+    caxis(h2, [0 1.5] );
     colormap(h2, fliplr(jet(100)));
     axis(h2, 'off')
     axis(h2, 'tight');
     axis(h2, 'equal');
     axis(h2, 'vis3d');
-    camlight left;
-    shading(h2, 'interp');
-%     rotate3d(h2, 'on');
+    camlight(h2, 0, 0);
+
     material([0.7 0.4 0.8 1]); 
+    shading(h2, 'interp');
 
 end
