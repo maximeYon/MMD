@@ -21,8 +21,8 @@ hold(h, 'on');
 plot(h, S_fit, 'r-');
 xlim(h, [0 1+numel(S_fit)]);
 ylim(h, [0 max(max(S_fit), max(S)) * 1.1]);
-title(h, sprintf('MD = %1.2f, FA = %1.2f, \n MK_A = %1.2f, MK_I = %1.2f,\n  MEAS RANK = %i', ...
-    dps.MD, dps.FA, dps.MKa, dps.MKi, n));
+title(h, sprintf('MD = %1.2f, FA = %1.2f\nMK_I = %1.2f, MK_A = %1.2f\n  MEAS RANK = %i', ...
+    dps.MD, dps.FA, dps.MKi, dps.MKa, n));
 
 
 if (1)
