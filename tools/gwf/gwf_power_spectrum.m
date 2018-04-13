@@ -1,4 +1,4 @@
-function [ps,f,df] = gwf_power_spectrum(gwf, rf, dt)
+function [ps,f,df] = gwf_power_spectrum(gwf, rf, dt, opt)
 % function [ps,f,df] = gwf_power_spectrum(gwf, rf, dt)
 %
 % Compute the encoding power spectrum from q(t) 
@@ -12,7 +12,11 @@ function [ps,f,df] = gwf_power_spectrum(gwf, rf, dt)
 % f  - frequency axis
 % df - frequency step
 
-q = gwf_to_q(gwf, rf, dt);
+if (nargin < 4), opt = []; end
+opt = gwf_opt(opt);
+
+
+q = gwf_to_q(gwf, rf, dt, opt);
 
 % zero fill before power computation
 tmp = q;

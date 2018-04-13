@@ -34,5 +34,5 @@ else
 end
 
 if (~msf_isfield(s.xps, 'b_eta'))
-    s.xps.b_eta = zeros(size(s.xps.n, 1));
+    s.xps.b_eta = zeros(s.xps.n, 1);
 end
