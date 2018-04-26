@@ -43,7 +43,6 @@ end
 f = @(d) round(size(I,d)/2);
 n_param = numel(f_fun(double(squeeze(I(f(1), f(2), f(3), :))),...
     f_sup(f(1), f(2), f(3))));
-p = zeros(n_param, size(I,1), size(I,2), size(I,3));
 
 try % start parpool outside this function to have it run in parfor mode
     tmp = gcp('nocreate');
@@ -52,88 +51,62 @@ catch
     n_workers = 1;
 end
 
-if (opt.mio.no_parfor), n_workers = 1; end
+% Expand 4D volume to 1+1D so that n x m is samples times voxels
+siz = size(I);
+I = reshape(I, prod(siz(1:3)), siz(4))';
+M = reshape(M, prod(siz(1:3)),      1)';
 
+% Find all non masked voxels
+si = find((M>0).*(~all(I==0,1)));
+I  = I(:,si);
+clear M
 
-if opt.do_new_parfor
+if opt.mio.no_parfor
     
-    siz = size(I);
+    out = zeros(n_param, size(I,2));
     
-    % Expand 4D volume to 1+1D so that n x m is samples times voxels
-    I1 = reshape(I, prod(siz(1:3)), siz(4))';
-    M1 = reshape(M, prod(siz(1:3)),      1)';
-    I4 = zeros(n_param, prod(siz(1:3)));
+    % Loop over voxels
+    for k = 1:size(I,2)
+        out(:, k) = f_fun(double( I(:,k) ));
+    end
     
-    % Find all non masked voxels
-    si = find((M1>0).*(~all(I1==0,1)));
-    I2 = I1(:,si);
+    % Combine result from workers (I is now a matrix of output paramters)
+    I = out;
+    clear out
+    
+else
+    
+    % Start parallel computing on all available workers
+    % Here we use SPMD (https://se.mathworks.com/help/distcomp/spmd.html)
+    % instead of parfor. Also works for a single worker.
     
     % Define size of blocks for each worker
-    d = ceil(size(I2,2) / n_workers);
-    
+    d = ceil(size(I,2) / n_workers);
     
     spmd
         i = labindex;
         s = (i-1)*d+1;
         e = i*d;
         
-        if e > size(I2,2); e = size(I2,2); end
+        if e > size(I,2); e = size(I,2); end
         
-        out = zeros(n_param, e-s+1);
-        in  = I2(:, s:e);
+        in  = I(:, s:e);
+        out = zeros(n_param, size(in,2));
         
-        for k = 1:size(out,2)
-            out(:, k) = f_fun(double(squeeze(in(:,k))));
+        % Loop over voxels
+        for k = 1:size(in,2)
+            out(:, k) = f_fun(double( in(:,k) ));
         end
     end
     
-    % Combine result from workers
-    I3 = [];
-    for i = 1:n_workers
-        I3 = cat(2, I3, out{i});
-    end
-    
-    % Revert mask subsampling
-    I4(:,si) = I3;
-    
-    % Revert 1+1D to 4D transform so that we get "x, y, z, parameter" dimensions
-    p = reshape(I4', siz(1), siz(2), siz(3), n_param);
-    
-else
-    
-    % Loop over the data
-    if (opt.verbose), fprintf('Starting the loop. Workers = %i\n', n_workers); end
-    for k = 1:size(I,3)
-        if (opt.verbose), fprintf('k=%3.0i', k); end
-        for j = 1:size(I,2)
-            
-            if (any(M(:,j,k)))
-                if (n_workers == 1) % single core
-                    for i = 1:size(I,1)
-                        if (M(i,j,k) == 0), continue; end
-                        if (all(I(i,j,k,:) == 0)), continue; end
-                        p(:,i,j,k) = f_fun(double(squeeze(I(i,j,k,:))), f_sup(i,j,k));
-                    end
-                    
-                else % multicore
-                    % tried to put the parfor in another loop structure,
-                    % but it did not improve performance much
-                    parfor i = 1:size(I,1)
-                        if (M(i,j,k) == 0), continue; end
-                        if (all(I(i,j,k,:) == 0)), continue; end
-                        q = feval(f_sup,i,j,k);
-                        p(:,i,j,k) = f_fun(double(squeeze(I(i,j,k,:))), q);
-                    end
-                end
-            end
-            
-            % print a status report
-            if (any(M(:,j,k))), marker = 'o'; else marker = '.'; end
-            if ((mod(j,4) == 0) && opt.verbose), fprintf(marker); end
-        end
-        if (opt.verbose), disp(';'); end
-    end
-    
-    p = permute(p, [2 3 4 1]);
+    % Combine result from workers (I is now a matrix of output paramters)
+    I = horzcat(out{:});
+    clear out
 end
 
+% Revert mask subsampling
+p = zeros(n_param, prod(siz(1:3)));
+p(:,si) = I;
+
+% Revert 1+1D to 4D transform so that we get "x, y, z, parameter" dimensions
+p = reshape(p', siz(1), siz(2), siz(3), n_param);
