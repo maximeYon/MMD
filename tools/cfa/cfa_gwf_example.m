@@ -1,7 +1,6 @@
 function [gwf, rf, dt] = cfa_gwf_example(mode)
-
-
-
+% function [gwf, rf, dt] = cfa_gwf_example(mode)
+% Container for some example waveforms in the CFA framework.
 
 switch mode
     case 1 % SE-SDE in x
