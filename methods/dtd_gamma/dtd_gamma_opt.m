@@ -26,7 +26,11 @@ opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'fit_iters', 1);
 
 % Number of random guesses to start from (keeping guess with smallest residual)
 % Not expensive
-opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'guess_iters', 20);
+opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'guess_iters', 50);
+
+% Decide if multiple series should be assumed to have different baseline
+% signal (s_ind has multiple unique values).
+opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'do_multiseries', 1);
 
 % Bounds for initial guess and fitting (not including relative signal for
 % multiple series. This is done in the data2fit function.
