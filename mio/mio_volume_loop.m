@@ -17,7 +17,7 @@ function p = mio_volume_loop(fun, I, M, opt, S)
 % opt - option structure
 %
 % S   - 4D supplementary data
-
+tic
 if (nargin < 3), error('all inputs required'); end
 if (nargin < 4), opt.present = 1; end
 if (nargin < 5), S = []; end
@@ -27,10 +27,10 @@ opt = mio_opt(opt);
 % Create functions w and w/o support information
 if (~isempty(S))
     f_fun = @(x,y) fun(x,y);
-    f_sup = @(i) S(:,i);
+    f_sup = @(K,i) K(:,i);
 else
     f_fun = @(x,y) fun(x);
-    f_sup = @(i) [];
+    f_sup = @(K,i) [];
 end
 
 
@@ -53,7 +53,7 @@ end
 % Init the output structure by fitting once to a voxel in the middle
 %  (note that the output will be permuted before returning)
 f = @(d) round(size(I,d)/2);
-n_param = numel(f_fun( I(:, f(2)), f_sup(f(2)) ));
+n_param = numel(f_fun( I(:, f(2)), f_sup(S, f(2)) ));
 
 
 % Assume single thread, but check if parallel computing is wanted.
@@ -75,7 +75,7 @@ if n_workers == 1
     out = zeros(n_param, size(I,2));
     
     for k = 1:size(I,2)
-        out(:,k) = f_fun( I(:,k), f_sup(k) );
+        out(:,k) = f_fun( I(:,k), f_sup(S,k) );
     end
     
 else
@@ -90,9 +90,9 @@ else
         I   = getLocalPart( codistributed(I) );
         S   = getLocalPart( codistributed(S) );
         out = zeros(n_param, size(I,2));  
-            f_sup(k)
+        
         for k = 1:size(I,2)
-            out(:,k) = f_fun( I(:,k), f_sup(k) );
+            out(:,k) = f_fun( I(:,k), f_sup(S,k) );
         end
     end
     out = horzcat(out{:});
@@ -106,3 +106,5 @@ p(:,si) = out;
 
 % Revert 2D to 4D transform so that we get "x, y, z, parameter" dimensions
 p = reshape(p', siz(1), siz(2), siz(3), n_param);
+
+toc
