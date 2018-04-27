@@ -33,13 +33,8 @@ else
     f_sup = @(i) [];
 end
 
-% Init the output structure by fitting once to a voxel in the middle
-%  (note that the output will be permuted before returning)
-f = @(d) round(size(I,d)/2);
-n_param = numel(f_fun(double(squeeze(I(f(1), f(2), f(3), :))),...
-    f_sup(f(1), f(2), f(3))));
 
-% Expand 4D volume to 1+1D so that n x m is samples times voxels
+% Expand 4D volume to 2D so that n x m is samples x voxels
 siz = size(I);
 I = reshape(I, prod(siz(1:3)), siz(4))';
 M = reshape(M, prod(siz(1:3)),      1)';
@@ -50,9 +45,15 @@ I  = double(I(:,si));
 
 if (~isempty(S))
     assert(all(siz==size(S)), 'S and I must be of equal size');
-    S = reshape(I, prod(siz(1:3)), siz(4))';
+    S = reshape(S, prod(siz(1:3)), siz(4))';
     S = double(S(:,si));
 end
+
+
+% Init the output structure by fitting once to a voxel in the middle
+%  (note that the output will be permuted before returning)
+f = @(d) round(size(I,d)/2);
+n_param = numel(f_fun( I(:, f(2)), f_sup(f(2)) ));
 
 
 % Assume single thread, but check if parallel computing is wanted.
@@ -87,8 +88,9 @@ else
     
     spmd (n_workers)
         I   = getLocalPart( codistributed(I) );
-        out = zeros(n_param, size(I,2));
-        
+        S   = getLocalPart( codistributed(S) );
+        out = zeros(n_param, size(I,2));  
+            f_sup(k)
         for k = 1:size(I,2)
             out(:,k) = f_fun( I(:,k), f_sup(k) );
         end
@@ -102,5 +104,5 @@ clear I
 p = zeros(n_param, prod(siz(1:3)));
 p(:,si) = out;
 
-% Revert 1+1D to 4D transform so that we get "x, y, z, parameter" dimensions
+% Revert 2D to 4D transform so that we get "x, y, z, parameter" dimensions
 p = reshape(p', siz(1), siz(2), siz(3), n_param);
