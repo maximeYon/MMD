@@ -44,65 +44,58 @@ f = @(d) round(size(I,d)/2);
 n_param = numel(f_fun(double(squeeze(I(f(1), f(2), f(3), :))),...
     f_sup(f(1), f(2), f(3))));
 
-try % start parpool outside this function to have it run in parfor mode
-    tmp = gcp('nocreate');
-    n_workers = tmp.NumWorkers;
-catch
-    n_workers = 1;
-end
-
 % Expand 4D volume to 1+1D so that n x m is samples times voxels
 siz = size(I);
 I = reshape(I, prod(siz(1:3)), siz(4))';
 M = reshape(M, prod(siz(1:3)),      1)';
 
-% Find all non masked voxels
-si = find((M>0).*(~all(I==0,1)));
-I  = I(:,si);
-clear M
+% Retain only non-masked-out voxels.
+si = find((M>0).*(~all(I==0,1))); clear M
+I  = double(I(:,si));
 
-if opt.mio.no_parfor
+% Assume single thread, but check if parallel computing is wanted.
+n_workers = 1;
+
+if ~opt.mio.no_parfor
+    try % start parpool outside this function to have it run in parfor mode
+        tmp = gcp('nocreate');
+        n_workers = tmp.NumWorkers;
+    catch
+        warning(['User requested parallel workers for mio_volume_loop but parpool is not active! '...
+            'Continuing with job on a single local worker!'])
+    end
+end
+
+
+if n_workers == 1
     
     out = zeros(n_param, size(I,2));
     
-    % Loop over voxels
     for k = 1:size(I,2)
-        out(:, k) = f_fun(double( I(:,k) ));
+        out(:,k) = f_fun( I(:,k) );
     end
-    
-    % Combine result from workers (I is now a matrix of output paramters)
     I = out;
-    clear out
     
 else
     
     % Start parallel computing on all available workers
     % Here we use SPMD (https://se.mathworks.com/help/distcomp/spmd.html)
-    % instead of parfor. Also works for a single worker.
+    % instead of parfor. Also works for a single worker. Zero workers execute
+    % the program locally. SPMD was introduced in version 2008b. Wrapped in
+    % "else" statemet to support users without parallel computing toolbox.
     
-    % Define size of blocks for each worker
-    d = ceil(size(I,2) / n_workers);
-    
-    spmd
-        i = labindex;
-        s = (i-1)*d+1;
-        e = i*d;
+    spmd (n_workers)
+        I = getLocalPart( codistributed(I) );
+        out = zeros(n_param, size(I,2));
         
-        if e > size(I,2); e = size(I,2); end
-        
-        in  = I(:, s:e);
-        out = zeros(n_param, size(in,2));
-        
-        % Loop over voxels
-        for k = 1:size(in,2)
-            out(:, k) = f_fun(double( in(:,k) ));
+        for k = 1:size(I,2)
+            out(:,k) = f_fun( I(:,k) );
         end
     end
-    
-    % Combine result from workers (I is now a matrix of output paramters)
     I = horzcat(out{:});
-    clear out
+    
 end
+clear out
 
 % Revert mask subsampling
 p = zeros(n_param, prod(siz(1:3)));
