@@ -1,4 +1,4 @@
-function k = cfa_maxwell_k_matrix(gwf, rf, dt, B0)
+function [k1, k0] = cfa_maxwell_k_matrix(gwf, rf, dt, B0)
 % function k = cfa_maxwell_k_matrix(gwf, rf, dt, B0)
 % 
 % k    - matrix that determines size of the effect of maxwell terms.
@@ -20,11 +20,17 @@ Gx = gwf(:,1);
 Gy = gwf(:,2);
 Gz = gwf(:,3);
 
-t = [
-       sum(Gz.*Gz.*rf),                     0,                      -2*sum(Gx.*Gz.*rf)  ;
-                     0,       sum(Gz.*Gz.*rf),                      -2*sum(Gy.*Gz.*rf)  ;
-    -2*sum(Gx.*Gz.*rf),    -2*sum(Gy.*Gz.*rf),    4*(sum(Gx.*Gx.*rf) + sum(Gy.*Gy.*rf)) ;
+
+t0 = [sum(Gx.*rf.*dt), sum(Gy.*rf.*dt), sum(Gz.*rf.*dt)]';
+
+
+t1 = [
+       sum(Gz.*Gz.*rf.*dt),                         0,                          -2*sum(Gx.*Gz.*rf.*dt)  ;
+                         0,       sum(Gz.*Gz.*rf.*dt),                          -2*sum(Gy.*Gz.*rf.*dt)  ;
+    -2*sum(Gx.*Gz.*rf.*dt),    -2*sum(Gy.*Gz.*rf.*dt),    4*(sum(Gx.*Gx.*rf.*dt) + sum(Gy.*Gy.*rf.*dt)) ;
     ];
 
-k = msf_const_gamma / 2 / pi * t / (4 * B0) * dt;
+k0 = msf_const_gamma / 2 / pi * t0;
+
+k1 = msf_const_gamma / 2 / pi * t1 / (4 * B0);
 

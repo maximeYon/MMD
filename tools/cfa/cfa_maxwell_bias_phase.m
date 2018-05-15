@@ -1,4 +1,4 @@
-function [c, k_p] = cfa_maxwell_bias_phase(k, v_p, r, T2star, p_vel)
+function [c, k_p] = cfa_maxwell_bias_phase(k, v_p, r, T2star, p_vel, k0)
 % function [c, k_p] = cfa_maxwell_bias_phase(k, v_p, r, T2star, p_vel)
 %
 % Baron et al., The effect of concomitant gradient fields on diffusion 
@@ -10,6 +10,10 @@ function [c, k_p] = cfa_maxwell_bias_phase(k, v_p, r, T2star, p_vel)
 % r      is nx3 position vector (location of center of voxels where origo is
 %        iso center.
 
+if nargin < 6 || isempty(k0)
+    k0 = [0 0 0]';
+end
+
 if isinf(T2star)
     c   = ones(size(r,1),1);
     k_p = zeros(size(r,1),1);
@@ -20,7 +24,7 @@ end
 v_p = v_p / sqrt(sum(v_p.^2));
 
 % Project k onto v_p and location
-k_p = v_p * k * r';
+k_p = v_p * (k * r' + k0);
 
 % Bias due to slice dephasing for tissue with single T2* time
 c =  exp(-abs(k_p) / (p_vel * T2star) );
