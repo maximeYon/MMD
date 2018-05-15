@@ -10,7 +10,7 @@ v_s = [0 0 1];                          % vector along slice normal direction
 
 ips.o   = [v_f; v_p; v_s];              % orientation matrix
 
-ips.fov = [.2 .3 .1];                   % fov size along FPS [m]
+ips.fov = [.2 .3 .4];                   % fov size along FPS [m]
 ips.res = [2 2 4] * 1e-3;               % spatial resolution in FPS [m] 
 ips.ipa = 2;                            % in-plane acceleration factor [1]
 ips.ecs = .65e-3;                       % echo spacing [s]
