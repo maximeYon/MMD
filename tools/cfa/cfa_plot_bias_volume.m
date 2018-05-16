@@ -5,6 +5,8 @@ function [ha, hp] = cfa_plot_bias_volume(c, ips, slices)
 % The color of the surface reflects the local signal error, defined by c.
 % The plotted planes are defiend in the cella array "slices".
 
+cfa_check_ips(ips);
+
 matrix = [
     round(ips.fov(1)/ips.res(1))
     round(ips.fov(2)/ips.res(2))

@@ -1,5 +1,5 @@
-function c = cfa_gwf_to_error_map(gwf, rf, dt, ips, find_mode)
-% function c = cfa_gwf_to_error_map(gwf, rf, dt, ips, find_mode)
+function cfa_plot_all(gwf, rf, dt, ips, find_mode)
+% function c = cfa_plot_all(gwf, rf, dt, ips, find_mode)
 
 if nargin < 4
     ips = cfa_ips_example();
@@ -8,6 +8,8 @@ end
 if nargin < 5
     find_mode = 0;
 end
+
+cfa_check_ips(ips);
 
 % Rotations of the FOV and the gwf are imortant and we can fing the worst
 % rotation by an fminsearch.
@@ -24,7 +26,7 @@ switch find_mode
         
 end
 
-% Calculate the bias field in the volume defined by ips.
+% Calculate the bias field in the voxels defined by ips.
 c = cfa_maxwell_bias(gwf, rf, dt, ips);
 
 % We can also calculate the bias field for arbitrary points in space by
@@ -37,13 +39,17 @@ cs = cfa_maxwell_bias(gwf, rf, dt, ips2);
 
 %% PLOT RELATIVE SIGNAL
 clf
-subplot(2,1,1)
+subplot(2,2,1)
 h1 = cfa_plot_bias_volume (c, ips);
 
-subplot(2,1,2)
-h2 = cfa_plot_bias_surface(cs, ips2);
+subplot(2,2,2)
+h2 = cfa_plot_bias_surface(cs, ips2.r_xyz);
 
 linkprop([h1, h2], {'CameraPosition','CameraUpVector'})
 colormap (flip(hot))
 set(gcf, 'color', 'w')
+
+subplot(2,1,2)
+cfa_plot_bias_signal(gwf, rf, dt, ips, 0)
+
 

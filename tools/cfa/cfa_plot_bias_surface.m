@@ -1,12 +1,12 @@
-function [ha, hp] = cfa_plot_bias_surface(c, ips)
+function [ha, hp] = cfa_plot_bias_surface(c, r_xyz)
 % function [ha, hp] = cfa_plot_bias_surface(c, ips)
 %
-% This funciton plots an elipsoid surface defiend by points in ips.r_xyz.
+% This funciton plots an elipsoid surface defiend by points in r_xyz.
 % The color of the surface reflects the local signal error, defined by c.
 
-x = ips.r_xyz(:,1);
-y = ips.r_xyz(:,2);
-z = ips.r_xyz(:,3);
+x = r_xyz(:,1);
+y = r_xyz(:,2);
+z = r_xyz(:,3);
 
 %Generate the surface as convex hull
 T = delaunayTriangulation(y,x,z);

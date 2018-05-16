@@ -3,7 +3,7 @@ clear
 % Here are some examples of asymmetric diffusion encoding in a spin-echo
 % sequence. See the example cases to experiment with some common issues.
 
-example_nr = 5;
+example_nr = 2;
 
 switch example_nr
     case 1
@@ -39,7 +39,6 @@ switch example_nr
         find_worst = 2; % find worst FOV rotation
 end
 
-
 % Fetch imaging parameter structure (ips), and gradient waveform (gwf)
 ips = cfa_ips_example();
 [gwf, rf, dt] = cfa_gwf_example(wf_type); % 1 is ST-SDE; 2 is ortho DDE in x & y; 3 is ortho DDE in x & z
@@ -47,7 +46,7 @@ ips = cfa_ips_example();
 % Rotations of the FOV and the gwf are imortant and we can fing the worst
 % rotation by an fminsearch.
 switch find_worst
-    case 0 % let it be
+    case 0 % do nothing
         
     case 1 % Find worst rotation of gwf
         R = cfa_find_worst_gwf_rot(gwf, rf, dt, ips, 1);
@@ -71,14 +70,7 @@ cs = cfa_maxwell_bias(gwf, rf, dt, ips2);
 
 
 %% PLOT RELATIVE SIGNAL
-clf
-subplot(2,1,1)
-h1 = cfa_plot_bias_volume (c, ips);
+cfa_plot_all(gwf, rf, dt, ips, 0)
 
-subplot(2,1,2)
-h2 = cfa_plot_bias_surface(cs, ips2);
 
-linkprop([h1, h2], {'CameraPosition','CameraUpVector'})
-colormap (flip(hot))
-set(gcf, 'color', 'w')
 

@@ -107,4 +107,3 @@ ips.r_xyz = [X(:) Y(:) Z(:)];           % position of all voxel centers [m]
 ips.T2s = 40e-3;                        % T2-star time of tissue [s]
 
 end
-s

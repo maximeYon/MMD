@@ -1,5 +1,5 @@
 function [c, c_s, c_p] = cfa_maxwell_bias(gwf, rf, dt, ips, do_k0)
-% function [c, c_s, c_p] = cfa_maxwell_bias(gwf, rf, dt, ips)
+% function [c, c_s, c_p] = cfa_maxwell_bias(gwf, rf, dt, ips, do_k0)
 %
 % gwf - gradient waveform of size n x 3
 % rf  - effect of rf, size 1 x 3
@@ -12,6 +12,8 @@ function [c, c_s, c_p] = cfa_maxwell_bias(gwf, rf, dt, ips, do_k0)
 if nargin < 5
     do_k0 = 1;
 end
+
+cfa_check_ips(ips);
 
 [k1, k0]   = cfa_maxwell_k_matrix(gwf, rf, dt, ips.B0);
 
