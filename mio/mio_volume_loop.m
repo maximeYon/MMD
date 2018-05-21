@@ -17,6 +17,7 @@ function p = mio_volume_loop(fun, I, M, opt, S)
 % opt - option structure
 %
 % S   - 4D supplementary data
+
 tic
 if (nargin < 3), error('all inputs required'); end
 if (nargin < 4), opt.present = 1; end
@@ -24,8 +25,21 @@ if (nargin < 5), S = []; end
 
 opt = mio_opt(opt);
 
-% Create functions w and w/o support information
+% Expand 4D volume to 2D so that n x m is samples x voxels
+siz = size(I);
+I   = reshape(I, prod(siz(1:3)), siz(4))';
+M   = reshape(M, prod(siz(1:3)),      1)';
+
+% Retain only non-masked-out voxels.
+si  = find((M>0).*(~all(I==0,1))); % clear M here?
+I   = double(I(:,si));
+
+% Prepare supplementary information and function handles
 if (~isempty(S))
+    assert(all(siz==size(S)), 'S and I must be of equal size');
+    S = reshape(S, prod(siz(1:3)), siz(4))';
+    S = double(S(:,si));
+    
     f_fun = @(x,y) fun(x,y);
     f_sup = @(K,i) K(:,i);
 else
@@ -34,70 +48,50 @@ else
 end
 
 
-% Expand 4D volume to 2D so that n x m is samples x voxels
-siz = size(I);
-I = reshape(I, prod(siz(1:3)), siz(4))';
-M = reshape(M, prod(siz(1:3)),      1)';
+% Find size of output by fitting to the first voxel
+n_param   = numel(f_fun( I(:, 1), f_sup(S, 1) ));
 
-% Retain only non-masked-out voxels.
-si = find((M>0).*(~all(I==0,1))); clear M
-I  = double(I(:,si));
+% Assume local job (0 workers), but check if external worker(s) are requested.
+n_workers = 0;
 
-if (~isempty(S))
-    assert(all(siz==size(S)), 'S and I must be of equal size');
-    S = reshape(S, prod(siz(1:3)), siz(4))';
-    S = double(S(:,si));
-end
-
-
-% Init the output structure by fitting once to a voxel in the middle
-%  (note that the output will be permuted before returning)
-f = @(d) round(size(I,d)/2);
-n_param = numel(f_fun( I(:, f(2)), f_sup(S, f(2)) ));
-
-
-% Assume single thread, but check if parallel computing is wanted.
-n_workers = 1;
+% Note 1: 0 workers runs the job locally, and 1 worker will run it in
+% spmd. These may look identical, but if the local worker, and spmd worker
+% are differnt physical processors there is a need for distinguishing them.
+% Note 2: We use parallel computing on all available workers using SPMD.
+% https://se.mathworks.com/help/distcomp/spmd.html
+% SPMD was introduced in Matlab 2008b. The function is wrapped in an
+% "else" statement to support users without parallel computing toolbox.
+% It is possible that spmd(0) will run the job locally even for users that
+% do not have parallel toolbox installed, hewver, this was not tested.
 
 if ~opt.mio.no_parfor
-    try % start parpool outside this function to have it run in parfor mode
+    try % start parpool outside this function to have it run in parallel mode
         tmp = gcp('nocreate');
         n_workers = tmp.NumWorkers;
     catch
-        warning(['User requested parallel workers for mio_volume_loop but parpool is not active! '...
-            'Continuing with job on a single local worker!'])
+        warning(['User requested parallel workers for mio_volume_loop but parpool ' ...
+            'is not active! Continuing with job on a single local worker!'])
     end
 end
 
 
-if n_workers == 1
+if n_workers == 0
     
-    out = zeros(n_param, size(I,2));
-    
-    for k = 1:size(I,2)
-        out(:,k) = f_fun( I(:,k), f_sup(S,k) );
-    end
+    % Perform fitting on the local machine using one thread.
+    out = mio_voxel_loop(f_fun, I, n_param, f_sup, S);
     
 else
     
-    % Start parallel computing on all available workers using SPMD:
-    % https://se.mathworks.com/help/distcomp/spmd.html
-    % Also works for ONE worker, and ZERO workers execute the program
-    % locally. SPMD was introduced in version Matlab V2008b. Wrapped
-    % in "else" to support users without parallel computing toolbox.
-    
-    spmd (n_workers)
+    % Perform fitting on parallel workers using SPMD.
+    spmd
         I   = getLocalPart( codistributed(I) );
         S   = getLocalPart( codistributed(S) );
-        out = zeros(n_param, size(I,2));  
-        
-        for k = 1:size(I,2)
-            out(:,k) = f_fun( I(:,k), f_sup(S,k) );
-        end
+        out = mio_voxel_loop(f_fun, I, n_param, f_sup, S);
     end
     out = horzcat(out{:});
     
 end
+
 clear I
 
 % Revert mask subsampling
@@ -107,4 +101,27 @@ p(:,si) = out;
 % Revert 2D to 4D transform so that we get "x, y, z, parameter" dimensions
 p = reshape(p', siz(1), siz(2), siz(3), n_param);
 
-toc
+
+if opt.verbose
+    ttime = toc;
+    disp(['Total fitting time = ' num2str(ttime/60, '%0.1f') ' min (' num2str(numel(si)/ttime, '%0.0f') ' voxels/s)'])
+end
+
+end
+
+
+function out = mio_voxel_loop(h_fun, in, n_p_o, h_sup, in_sup)
+% function out = mio_voxel_loop(h_fun, in, n_p_o, h_sup, in_sup)
+% Basic function for looping over 1D voxels in 1D.
+
+out = zeros(n_p_o, size(in,2));
+
+for i = 1:size(in,2)
+    out(:,i) = h_fun( in(:,i), h_sup(in_sup,i) );
+end
+
+end
+
+
+
+
