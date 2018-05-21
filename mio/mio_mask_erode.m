@@ -1,4 +1,4 @@
-function M = mio_mask_erode(I)
+mio,iofunction M = mio_mask_erode(I)
 % function M = mio_mask_erode(I)
 %
 % erode the mask by 1 voxel
