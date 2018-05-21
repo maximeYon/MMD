@@ -3,7 +3,7 @@ clear
 % Here are some examples of asymmetric diffusion encoding in a spin-echo
 % sequence. See the example cases to experiment with some common issues.
 
-example_nr = 2;
+example_nr = 6;
 
 switch example_nr
     case 1
@@ -37,11 +37,20 @@ switch example_nr
         % or gvf rotation.
         wf_type    = 3; % DDE in x and z
         find_worst = 2; % find worst FOV rotation
+        
+    case 6
+        % If we design LTE so that it uses all available encoding time in
+        % an assymetric spin echo, this will also be unbalanced by Maxwell
+        % terms.
+        wf_type = 4;
+        find_worst = 1;
 end
 
 % Fetch imaging parameter structure (ips), and gradient waveform (gwf)
 ips = cfa_ips_example();
 [gwf, rf, dt] = cfa_gwf_example(wf_type); % 1 is ST-SDE; 2 is ortho DDE in x & y; 3 is ortho DDE in x & z
+
+ips.T2 = 80e-3;
 
 % Rotations of the FOV and the gwf are imortant and we can fing the worst
 % rotation by an fminsearch.
@@ -70,7 +79,11 @@ cs = cfa_maxwell_bias(gwf, rf, dt, ips2);
 
 
 %% PLOT RELATIVE SIGNAL
+figure(1)
 cfa_plot_all(gwf, rf, dt, ips, 0)
+
+figure(2)
+gwf_plot_all(gwf, rf, dt)
 
 
 

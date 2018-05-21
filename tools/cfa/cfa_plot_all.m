@@ -1,4 +1,4 @@
-function cfa_plot_all(gwf, rf, dt, ips, find_mode)
+function [gwf, ips] = cfa_plot_all(gwf, rf, dt, ips, find_mode)
 % function c = cfa_plot_all(gwf, rf, dt, ips, find_mode)
 
 if nargin < 4

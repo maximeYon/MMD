@@ -39,6 +39,15 @@ end
 r_xyz     = [X(:) Y(:) Z(:)];           % position of all voxel centers [m]
 
 if ~all(size(r_xyz)==size(ips.r_xyz)) || ~all(r_xyz(:) == ips.r_xyz(:))
-    warning('Voxel positions are not congruent with FOV and resolution! This may be ok, but check it!')
+    warning('Voxel positions are not compatible with FOV and resolution! This may be ok, but check it!')
     % To update r_xyz from FOV and res, try calling ips = cfa_ips_set_xyz_from_fov_res(ips)
 end
+
+% Check k space velocity
+if ~all(ips.ipa/ips.fov(2)/ips.ecs == ips.kpv)
+    error('K-space velocity not compatible with iPAT, FOV and Echo spacing!')
+    % To update r_xyz from FOV and res, try calling ips = cfa_ips_set_xyz_from_fov_res(ips)
+end
+
+
+

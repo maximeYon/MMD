@@ -15,14 +15,12 @@ ips.res = [4 4 4] * 1e-3;               % spatial resolution in FPS [m]
 ips.ipa = 2;                            % in-plane acceleration factor [1]
 ips.ecs = .65e-3;                       % echo spacing [s]
 
-ips.kpv = ips.ipa/ips.fov(2)/ips.ecs;   % k-phase velocity [1/(s.m)]
-
-[X, Y, Z] = fov2xyz(ips.fov, ips.res); 
-ips.r_xyz = [X(:) Y(:) Z(:)];           % position of all voxel centers [m]
-
-
 % Not really imaging parameter -- but required for CFA
 ips.T2s = 40e-3;                        % T2-star time of tissue [s]
 
+% derived parameters
+ips = cfa_ips_update_derived_pars(ips);
 
 cfa_check_ips(ips);
+
+
