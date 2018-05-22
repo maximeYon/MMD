@@ -23,8 +23,21 @@ end
 
 % Run the analysis
 if (opt.do_data2fit)
+    if opt.do_bootstrap
+        msf_mkdir(fileparts(paths.ind_fn));
+        ind = (opt.dtd.ind_start-1) + round(rand([s.xps.n-(opt.dtd.ind_start-1),1])*(s.xps.n-(opt.dtd.ind_start-1)));
+        save(paths.ind_fn, 'ind');
+%         ind_fn = mdm_ind_save(ind, paths.ind_fn);
+%         load(paths.ind_fn)
+        opt.bootstrap.ind = ind;
+    end
     mdm_data2fit(@dtd_4d_data2fit, s, paths.mfs_fn, opt);
 end
+
+if (opt.do_datafit2chisq)
+    chisq_fn = mio_datafit2chisq(@dtd_1d_fit2data, s, paths.mfs_fn, paths.chisq_fn, opt);
+end
+
 if (opt.do_fit2param)
     mdm_fit2param(@dtd_4d_fit2param, paths.mfs_fn, paths.dps_fn, opt);
 end
@@ -36,7 +49,7 @@ end
 
 % Save dtd pdf   
 if (opt.do_m2pdf)
-    dtd_m2pdf(paths.dps_fn, paths.nii_path, opt);
+    dtd_m2pdf(paths, opt);
 end
 
 

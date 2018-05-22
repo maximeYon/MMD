@@ -1,0 +1,1 @@
+Gradient waveforms that can be used with Matt Budde’s shapedDwi_Epi ParaVision method available at https://github.com/mdbudde/PreclinicalNeuroMRI.
