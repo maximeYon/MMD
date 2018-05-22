@@ -39,7 +39,7 @@ function axh_v = dtd_dpsbin2maps(dps)
     axh_v = [axh_v; axh];
 
     im2d = squeeze(dps.mdiso(:,:,nk)).*mask2d;
-    clim = 1e-9*[-1 1];
+    clim = 1.2e-9*[-1 1];
     axh = axes('position',[left+1*dleft 1-(nbin+1)*dheight width height]);
     imagesc(im2d')
     set(axh,'CLim',clim)
@@ -60,14 +60,14 @@ function axh_v = dtd_dpsbin2maps(dps)
     axh_v = [axh_v; axh];
 
     im2d = squeeze(dps.vsqddelta(:,:,nk)).*mask2d;
-    clim = .2*[-1 1];
+    clim = .15*[-1 1];
     axh = axes('position',[left+4*dleft 1-(nbin+1)*dheight width height]);
     imagesc(im2d')
     set(axh,'CLim',clim)
     axh_v = [axh_v; axh];
 
     im2d = squeeze(dps.cvdisosqddelta(:,:,nk)).*mask2d;
-    clim = 2e-10*[-1 1];
+    clim = 1.5e-10*[-1 1];
     axh = axes('position',[left+5*dleft 1-(nbin+1)*dheight width height]);
     imagesc(im2d')
     set(axh,'CLim',clim)
