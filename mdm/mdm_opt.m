@@ -46,8 +46,16 @@ opt.mdm = msf_ensure_field(opt.mdm, 'mask_suffix', 'mask');
 opt.mdm = msf_ensure_field(opt.mdm, 'pa_suffix', 'pa');
 opt.mdm = msf_ensure_field(opt.mdm, 'txt_read_skip_comments', 0);
 
+% motion correction
+opt.mdm.mec.present = 1;
+
+% this needs to be validated for every data set
+opt.mdm.mec = msf_ensure_field(opt.mdm.mec, 'do_rotate_bvec', 0);
+
+% extrapolation-based motion correction
 opt.mdm.mec_eb.present = 1;
 opt.mdm.mec_eb = msf_ensure_field(opt.mdm.mec_eb, 'b_limit', 1.1e9);
+
 
 opt.mask.present = 1;
 
@@ -59,7 +67,7 @@ opt.mask = msf_ensure_field(opt.mask, 'do_overwrite', 0);
 
 % options for powder averaging
 opt.mdm.pa.present = 1;
-opt.mdm.pa = msf_ensure_field(opt.mdm.pa, 'db', 0.01e9);
+opt.mdm.pa = msf_ensure_field(opt.mdm.pa, 'db', 0.025e9);
 opt.mdm.pa = msf_ensure_field(opt.mdm.pa, 'db_delta2', 0.25);
 
 
