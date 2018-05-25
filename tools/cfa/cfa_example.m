@@ -67,16 +67,6 @@ switch find_worst
         
 end
 
-% Calculate the bias field in the volume defined by ips.
-c = cfa_maxwell_bias(gwf, rf, dt, ips);
-
-% We can also calculate the bias field for arbitrary points in space by
-% switching out ips.r_xyz for custom coordinates. For example, we can
-% calculate the bias on a surface (here an ellipsoid).
-ips2 = ips;
-ips2.r_xyz = cfa_ellipsoid_xyz_from_fov(ips);
-cs = cfa_maxwell_bias(gwf, rf, dt, ips2);
-
 
 %% PLOT RELATIVE SIGNAL
 figure(1)
