@@ -8,7 +8,7 @@
 
 % Define path for output folders
 %[run_path,run_name,run_ext] = fileparts(run_fn);
-run_path = cd;
+run_path = pwd;
 out_path = fullfile(run_path,'waveforms');
 
 
@@ -25,10 +25,10 @@ epsilon_down = .15; % Half-sine ramp down [0.1]
 % q-trajectory parameters
 % zeta: half aperture of q cone, see Topgaard. Microporous Mesoporous Mater. 178, 60 (2013).
 % http://dx.doi.org/10.1016/j.micromeso.2013.03.009
-%zeta = acos(1/sqrt(3)); out_fn = fullfile(out_path,'axde_sphere.gp'); %sphere
-%zeta = pi/2; out_fn = fullfile(out_path,'axde_plane.gp'); %plane
-%zeta = 0; out_fn = fullfile(out_path,'axde_stick.gp'); %stick
-zeta = acos(sqrt(2/3)); out_fn = fullfile(out_path,'axde_cigar.gp'); %cigar
+zeta = acos(1/sqrt(3)); out_fn = fullfile(out_path,'axde_sphere'); %sphere
+%zeta = pi/2; out_fn = fullfile(out_path,'axde_plane'); %plane
+%zeta = 0; out_fn = fullfile(out_path,'axde_stick'); %stick
+%zeta = acos(sqrt(2/3)); out_fn = fullfile(out_path,'axde_cigar'); %cigar
 
 % (theta,phi): Orientation of cone axis in lab frame
 theta = 0; phi = 0;
