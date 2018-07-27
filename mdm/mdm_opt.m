@@ -45,8 +45,16 @@ opt.mdm = msf_ensure_field(opt.mdm, 'mask_suffix', 'mask');
 opt.mdm = msf_ensure_field(opt.mdm, 'pa_suffix', 'pa');
 opt.mdm = msf_ensure_field(opt.mdm, 'txt_read_skip_comments', 0);
 
+% motion correction
+opt.mdm.mec.present = 1;
+
+% this needs to be validated for every data set
+opt.mdm.mec = msf_ensure_field(opt.mdm.mec, 'do_rotate_bvec', 0);
+
+% extrapolation-based motion correction
 opt.mdm.mec_eb.present = 1;
 opt.mdm.mec_eb = msf_ensure_field(opt.mdm.mec_eb, 'b_limit', 1.1e9);
+
 
 opt.mask.present = 1;
 
