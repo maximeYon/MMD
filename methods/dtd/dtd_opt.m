@@ -12,11 +12,7 @@ opt.dtd = msf_ensure_field(opt.dtd, 'dmin', 1e-11);
 opt.dtd = msf_ensure_field(opt.dtd, 'dmax', 5e-9);
 opt.dtd = msf_ensure_field(opt.dtd, 'n_in', 2e2); % n_in: Number of nodes in NNLS inversion. [100 - 1000]
 opt.dtd = msf_ensure_field(opt.dtd, 'n_out', 100);
-<<<<<<< HEAD
 opt.dtd = msf_ensure_field(opt.dtd, 'n_kill', 0);
-=======
-opt.dtd = msf_ensure_field(opt.dtd, 'n_kill', 1);
->>>>>>> master
 opt.dtd = msf_ensure_field(opt.dtd, 'n_proliferation', 20);
 opt.dtd = msf_ensure_field(opt.dtd, 'n_extinction', 20);
 opt.dtd = msf_ensure_field(opt.dtd, 'ofuzz', .1*2*pi);

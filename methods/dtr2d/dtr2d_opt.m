@@ -28,4 +28,8 @@ opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_prefix', 'dtr2d');
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_cmaps',{'fa','cl','cp','ufa','ucl','ucp'});
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_ccol',{'t1x6','lambda33vec','lambda11vec','s1x6prim','s1x6prim','s1x6prim'});
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'fig_ccolnorm',{'lambda33','mask','mask','slambda33prim','slambda33prim','slambda33prim'});
+opt.dtr2d = msf_ensure_field(opt.dtr2d, 'bin_disomax',[2e-9; 2e-9; opt.dtr2d.dmax]);
+opt.dtr2d = msf_ensure_field(opt.dtr2d, 'bin_disomin',[opt.dtr2d.dmin; opt.dtr2d.dmin; 2e-9]);
+opt.dtr2d = msf_ensure_field(opt.dtr2d, 'bin_dratiomax',[opt.dtr2d.dmax/opt.dtr2d.dmin; 3; opt.dtr2d.dmax/opt.dtr2d.dmin]);
+opt.dtr2d = msf_ensure_field(opt.dtr2d, 'bin_dratiomin',[3; opt.dtr2d.dmin/opt.dtr2d.dmax; opt.dtr2d.dmin/opt.dtr2d.dmax]);
 
