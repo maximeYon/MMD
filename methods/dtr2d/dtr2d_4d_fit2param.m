@@ -73,6 +73,7 @@ dtr2ds = struct('w',w,'dpar',dpar,'dperp',dperp,'theta',theta,'phi',phi,'diso',d
         dps.vsqddeltan = msf_notfinite2zero(dps.vsqddelta./dps.msqddelta.^2);
         dps.vr2n = msf_notfinite2zero(dps.vr2./dps.mr2.^2);
 
+
     end
 
 dps = dtr2ds2dps(dps, dtr2ds);
