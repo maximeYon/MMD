@@ -17,7 +17,7 @@ opt.dtd_covariance = msf_ensure_field(opt.dtd_covariance, ...
 
 % control which maps that are generated as nifti files
 opt.dtd_covariance = msf_ensure_field(opt.dtd_covariance, 'fig_maps', ...
-    {'s0','FA','C_MD', 'C_c', 'C_mu'});
+    {'s0','MD', 'ad', 'rd', 'FA', 'uFA', 'MKi', 'MKa', 'MKt', 'C_MD', 'C_c', 'C_mu'});
 
 opt.dtd_covariance = msf_ensure_field(opt.dtd_covariance, 'fig_prefix', 'dtd_covariance');
 
