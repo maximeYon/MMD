@@ -20,7 +20,7 @@ end
 
 
 % b-tensor and associated metrics
-xps = mdm_xps_from_bt(gwf_to_bt(gwf, rf, dt));
+xps = mdm_xps_from_bt(gwf_to_bt(gwf, rf, dt, opt));
 
 % Max gradient amplitude and slew rate 
 xps.slew_rate_max     = max(abs(diff(gwf, 1, 1)),[],1) / dt;
