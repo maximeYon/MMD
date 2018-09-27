@@ -41,7 +41,7 @@ b4 = tm_1x6_to_1x21(b2);
 
 % Check the size of the subspace -- and adjust it to enable estimation 
 % with insufficiently well sampled data
-n_rank = rank(b4' * b4);
+n_rank = rank(b4' * b4, 1e-4);
 
 if (n_rank < 21) && (opt.dtd_covariance.allow_subspace_estimation)
     
