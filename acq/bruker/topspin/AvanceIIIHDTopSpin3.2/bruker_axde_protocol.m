@@ -16,7 +16,7 @@ out_path = fullfile(run_path,'protocol');
 %out_path = '/opt/topspin3.5pl4/exp/stan/nmr/lists/gp/user';
 %out_path = '/opt/topspin3.2/exp/stan/nmr/lists/gp/user';
 
-framework_path = fileparts(fileparts(fileparts(run_path)));
+framework_path = fileparts(fileparts(fileparts(fileparts(run_path))));
 pa_path = fullfile(framework_path,'tools','uvec','repulsion_angles');
 
 % Define timing parameters relative to a total echo time = 1
