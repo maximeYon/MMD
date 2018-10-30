@@ -35,7 +35,7 @@ for i = 1:3
 end
 
 % Check that r_xyz is congruent with FOV and resolution
-[X, Y, Z] = fov2xyz(ips.fov, ips.res); 
+[X, Y, Z] = cfa_fov_to_xyz(ips.fov, ips.res); 
 r_xyz     = [X(:) Y(:) Z(:)];           % position of all voxel centers [m]
 
 if ~all(size(r_xyz)==size(ips.r_xyz)) || ~all(r_xyz(:) == ips.r_xyz(:))

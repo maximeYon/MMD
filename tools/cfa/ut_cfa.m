@@ -99,7 +99,7 @@ ips.ecs = .65e-3;                       % echo spacing [s]
 
 ips.kpv = ips.ipa/ips.fov(2)/ips.ecs;   % k-phase velocity [1/(s.m)]
 
-[X, Y, Z] = fov2xyz(ips.fov, ips.res);
+[X, Y, Z] = cfa_fov_to_xyz(ips.fov, ips.res);
 ips.r_xyz = [X(:) Y(:) Z(:)];           % position of all voxel centers [m]
 
 
