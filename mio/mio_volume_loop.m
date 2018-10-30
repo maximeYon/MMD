@@ -69,8 +69,10 @@ if ~opt.mio.no_parfor
         tmp = gcp('nocreate');
         n_workers = tmp.NumWorkers;
     catch
-        warning(['User requested parallel workers for mio_volume_loop but parpool ' ...
-            'is not active! Continuing with job on a single local worker!'])
+        if opt.verbose
+            warning(['User requested parallel workers for mio_volume_loop but parpool ' ...
+                'is not active! Continuing with job on a single local worker!'])
+        end
     end
 end
 
