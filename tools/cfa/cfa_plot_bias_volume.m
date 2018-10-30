@@ -34,9 +34,6 @@ turn_off_lines(hp)
 axis equal vis3d tight
 colorbar
 
-
-
-
 [min_s, ind] = min(c(:));
 [f_i, p_i, s_i] = ind2sub(size(c),ind);
 

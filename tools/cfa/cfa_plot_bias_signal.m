@@ -1,4 +1,4 @@
-function cfa_plot_bias_signal(gwf, rf, dt, ips, find_mode)
+function cfa_plot_bias_signal(gwf, rf, dt, ips, find_mode, do_k0)
 % function cfa_plot_bias_signal(gwf, rf, dt, ips, find_mode)
 
 if nargin < 4
@@ -7,6 +7,10 @@ end
 
 if nargin < 5
     find_mode = 0;
+end
+
+if nargin < 6
+    do_k0 = 1;
 end
 
 cfa_check_ips(ips);
@@ -26,7 +30,7 @@ switch find_mode
         
 end
 
-c = cfa_maxwell_bias(gwf, rf, dt, ips);
+c = cfa_maxwell_bias(gwf, rf, dt, ips, do_k0);
 
 [~, ind] = min(c(:));
 

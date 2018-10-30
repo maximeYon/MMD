@@ -3,7 +3,7 @@ clear
 % Here are some examples of asymmetric diffusion encoding in a spin-echo
 % sequence. See the example cases to experiment with some common issues.
 
-example_nr = 6;
+example_nr = 9;
 
 switch example_nr
     case 1
@@ -43,14 +43,30 @@ switch example_nr
         % an assymetric spin echo, this will also be unbalanced by Maxwell
         % terms.
         wf_type = 4;
-        find_worst = 1;
+        find_worst = 0;
+        
+    case 7
+        % Bipolar double spin-echo
+        wf_type = 5;
+        find_worst = 0;
+        
+    case 8
+        % Bipolar double spin-echo
+        wf_type = 6;
+        find_worst = 0;
+        
+    case 9
+        % Quadratic nulling in 1D ensures that there are no concomitant
+        % effects.
+        wf_type = 9;
+        find_worst = 2;
 end
+
 
 % Fetch imaging parameter structure (ips), and gradient waveform (gwf)
 ips = cfa_ips_example();
 [gwf, rf, dt] = cfa_gwf_example(wf_type); % 1 is ST-SDE; 2 is ortho DDE in x & y; 3 is ortho DDE in x & z
 
-ips.T2 = 80e-3;
 
 % Rotations of the FOV and the gwf are imortant and we can fing the worst
 % rotation by an fminsearch.
@@ -65,25 +81,25 @@ switch find_worst
         R = cfa_find_worst_fov_rot(gwf, rf, dt, ips, 1);
         ips = cfa_apply_R_to_fov(ips, R);
         
+    case 3 % random rotation of waveform
+        R = wf_create_random_rot_mat();
+        gwf = gwf * R;
+        
 end
-
-% Calculate the bias field in the volume defined by ips.
-c = cfa_maxwell_bias(gwf, rf, dt, ips);
-
-% We can also calculate the bias field for arbitrary points in space by
-% switching out ips.r_xyz for custom coordinates. For example, we can
-% calculate the bias on a surface (here an ellipsoid).
-ips2 = ips;
-ips2.r_xyz = cfa_ellipsoid_xyz_from_fov(ips);
-cs = cfa_maxwell_bias(gwf, rf, dt, ips2);
 
 
 %% PLOT RELATIVE SIGNAL
 figure(1)
-cfa_plot_all(gwf, rf, dt, ips, 0)
+gwf_plot_all(gwf, rf, dt);
 
 figure(2)
-gwf_plot_all(gwf, rf, dt)
+cfa_plot_all(gwf, rf, dt, ips, 0);
 
-
+% figure(3) % Online correction can fix the maxwell terms close to a single position per shot.
+% pos = [0 0 .1];
+% gwfc = cfa_gwf_to_corr_gwf(gwf, pos, ips.B0, 0);
+% ips2 = ips; ips2.r_xyz = pos;
+% cs = cfa_maxwell_bias(gwfc, rf, dt, ips2, 1);
+% h = cfa_plot_all(gwfc, rf, dt, ips, 0);
+% title(h(1), {['AF @ ' num2str(pos, '  %0.2f')]; [' = ' num2str(cs, '%0.2f')]})
 

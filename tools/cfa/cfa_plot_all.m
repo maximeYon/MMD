@@ -1,12 +1,16 @@
-function [gwf, ips] = cfa_plot_all(gwf, rf, dt, ips, find_mode)
+function h = cfa_plot_all(gwf, rf, dt, ips, find_mode, do_k0)
 % function c = cfa_plot_all(gwf, rf, dt, ips, find_mode)
 
-if nargin < 4
+if nargin < 4 || isempty(ips)
     ips = cfa_ips_example();
 end
 
 if nargin < 5
     find_mode = 0;
+end
+
+if nargin < 6
+    do_k0 = 1;
 end
 
 cfa_check_ips(ips);
@@ -27,29 +31,26 @@ switch find_mode
 end
 
 % Calculate the bias field in the voxels defined by ips.
-c = cfa_maxwell_bias(gwf, rf, dt, ips);
+c = cfa_maxwell_bias(gwf, rf, dt, ips, do_k0);
 
 % We can also calculate the bias field for arbitrary points in space by
 % switching out ips.r_xyz for custom coordinates. For example, we can
 % calculate the bias on a surface (here an ellipsoid).
 ips2 = ips;
 ips2.r_xyz = cfa_ellipsoid_xyz_from_fov(ips);
-cs = cfa_maxwell_bias(gwf, rf, dt, ips2);
+cs = cfa_maxwell_bias(gwf, rf, dt, ips2, do_k0);
 
 
 %% PLOT RELATIVE SIGNAL
 clf
-subplot(2,2,1)
-h1 = cfa_plot_bias_volume (c, ips);
+h(1) = subplot(2,2,1);
+cfa_plot_bias_volume (c, ips);
 
-subplot(2,2,2)
-h2 = cfa_plot_bias_surface(cs, ips2.r_xyz);
+h(2) = subplot(2,2,2);
+cfa_plot_bias_surface(cs, ips2.r_xyz);
 
-linkprop([h1, h2], {'CameraPosition','CameraUpVector'})
 colormap (flip(hot))
 set(gcf, 'color', 'w')
 
-subplot(2,1,2)
-cfa_plot_bias_signal(gwf, rf, dt, ips, 0)
-
-
+h(3) = subplot(2,1,2);
+cfa_plot_bias_signal(gwf, rf, dt, ips, 0, do_k0);
