@@ -1,6 +1,7 @@
 function dtd_covariance_plot(S, xps, h, h2)
 % function dtd_covariance_plot(S, xps, h, h2)
 
+if (nargin < 3), h  = gca; end
 if (nargin < 4), h2 = []; end
 
 opt = dtd_covariance_opt();
@@ -25,7 +26,7 @@ title(h, sprintf('MD = %1.2f, FA = %1.2f\nMK_I = %1.2f, MK_A = %1.2f\n  MEAS RAN
     dps.MD, dps.FA, dps.MKi, dps.MKa, n));
 
 
-if (1)
+if ~isempty(h2)
     
     C = m(8:end) * 1e18;
     
