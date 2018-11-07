@@ -107,11 +107,11 @@ switch (c_ut)
         end
         
         % check that the shear variance gets correctly estimated
-        x = abs(tm_inner(dtd_cov - dtd_cov_est, E_shear) / tm_inner(dtd_cov, E_bulk));
+        x = abs(tm_inner(dtd_cov - dtd_cov_est, E_shear) / tm_inner(dtd_cov, E_shear));
         x_tol = [8 2 2] * 1e-2; % we know there's an error for moderate b-values
         
         if (x > x_tol(c_ut))
-            error('%s, ut_dtd_covariance test %i, bulk estimate wrong', fn, c_ut);
+            error('%s, ut_dtd_covariance test %i, shear estimate wrong', fn, c_ut);
         end
         
 end
