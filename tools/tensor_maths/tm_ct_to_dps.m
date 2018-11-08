@@ -23,7 +23,7 @@ dps.V_MD   = f_reshape(tm_inner(ct , E_bulk), 1);       %< C ,   E_bulk>
 dps.V_iso  = f_reshape(tm_inner(ct , E_iso), 1);        %< C ,   E_iso>
 
 dps.V_MD1  = dps.V_MD  + dps.V_MD2; % V_MD2 comes from tm_dt_to_dps
-dps.V_iso1 = dps.V_iso + dps.V_MD2;
+dps.V_iso1 = dps.V_iso + dps.V_iso2;
 
 % ***** I.V_shear = I.V_shear1 - I.V_shear2 *******
 dps.V_shear  = f_reshape(tm_inner(ct, E_shear), 1);     %< C ,    E_shear>
