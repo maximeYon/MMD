@@ -18,13 +18,9 @@ if (iscell(gwf))
     return;
 end
 
-% Effective gradient waveform,  time, and other useful functions
-r = @(rf,n) repmat(rf, 1, n);
-
-if (isempty(rf)), rf = gwf_to_rf(gwf); end
 
 % b-tensor and associated metrics
-xps = mdm_xps_from_bt(gwf_to_bt(gwf, rf, dt));
+xps = mdm_xps_from_bt(gwf_to_bt(gwf, rf, dt, opt));
 
 % Max gradient amplitude and slew rate 
 xps.slew_rate_max     = max(abs(diff(gwf, 1, 1)),[],1) / dt;
@@ -45,9 +41,7 @@ xps.gwf_spectral_trace_rms_norm = ...
 
 
 % Maxwell index: This is a relative index
-M = tm_1x6_to_3x3( sum(tm_1x3_to_1x6(1, 0, gwf) .* r(rf, 6)) * dt );
-xps.maxwell_index = sqrt(trace(M * M)); % unit: (T/m)^2 s
-
+xps.maxwell_index = gwf_maxwell_index(gwf, rf, dt); % unit: (T/m)^2 s
 
 % Energy index
 xps.energy_index = sum(gwf(:).^2) * dt;
@@ -55,6 +49,7 @@ xps.energy_index = sum(gwf(:).^2) * dt;
 
 % Gradient moments
 [g_eff, t] = gwf_to_g_eff(gwf, rf, dt);
+r = @(rf,n) repmat(rf, 1, n);
 
 xps.k0 = msf_const_gamma(opt.gwf.nucleus) * sum( g_eff .* r(t.^0,3), 1 ) * dt;
 xps.k1 = msf_const_gamma(opt.gwf.nucleus) * sum( g_eff .* r(t.^1,3), 1 ) * dt;

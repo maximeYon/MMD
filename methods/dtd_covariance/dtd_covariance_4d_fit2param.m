@@ -4,7 +4,7 @@ function dps = dtd_covariance_4d_fit2param(mfs_fn, dps_fn, opt)
 % Compute dps (display parameters structure) from the mfs (model fit
 % structure) using functions tm_dt_to_dps and tm_ct_to_dps
 
-if (nargin < 2), mfs_fn = []; end
+if (nargin < 2), dfs_fn = []; end
 if (nargin < 3), opt    = []; end
 
 opt = mdm_opt(opt);
@@ -56,6 +56,9 @@ dps = tm_ct_to_dps(ct_1x21, dps, f);
 dps.MKi  = mio_min_max_cut(dps.MKi, 0.0, 4.0); 
 dps.MKa  = mio_min_max_cut(dps.MKa, 0.0, 4.0); 
 dps.MKt  = mio_min_max_cut(dps.MKt, 0.0, 4.0); 
+dps.MK   = mio_min_max_cut(dps.MK,  0.0, 4.0); 
+dps.MKad = mio_min_max_cut(dps.MKad, 0.0, 4.0); 
+dps.MKd  = mio_min_max_cut(dps.MKd, 0.0, 4.0); 
 
 
 if (~isempty(dps_fn))

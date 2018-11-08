@@ -1,4 +1,4 @@
-function msf_imagesc(I,d,k,c)
+function h = msf_imagesc(I,d,k,c)
 % function msf_imagesc(I,d,k,c)
 %
 % Displays a 2D slice through a 3D or 4D image volume I
@@ -29,8 +29,15 @@ if (is_color)
     
 else
     colormap(gray);
-    tmp = mio_3d_to_2d_slice(I(:,:,:,c),d,k);
+    try
+        tmp = mio_3d_to_2d_slice(I(:,:,:,c),d,k);
+    catch me
+        disp(sprintf('tried mio_3d_to_2d_slice(I(:,:,:,c),d,k) with c = %i, d = %i, k =  %i for size(I) = %s', ...
+            c, d, k, num2str(size(I))));
+        
+        error(me.message);
+    end
 end
 
-imagesc(tmp);
+h = imagesc(tmp);
 axis image off;

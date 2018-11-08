@@ -6,8 +6,8 @@ function m = dtd_gamma_1d_data2fit(signal, xps, opt, ind)
 
 if (nargin < 4), ind = ones(size(signal)) > 0; end
 
-if (isfield(xps, 's_ind'))
-    ns = max(xps.s_ind) - 1;
+if (isfield(xps, 's_ind') && opt.dtd_gamma.do_multiseries)
+    ns = numel(unique(xps.s_ind)) - 1;
 else
     ns = 0;
 end
