@@ -19,11 +19,11 @@ opt.dtd = msf_ensure_field(opt.dtd, 'ofuzz', .1*2*pi);
 opt.dtd = msf_ensure_field(opt.dtd, 'dfuzz', .1);
 
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_maps', ...
-    {'s0','miso','viso_n','msaniso_n','vsaniso_n','fa','ufa'});
+    {'s0','mdiso','vdison','msqddelta','vsqddelta'});
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_prefix', 'dtd');
-opt.dtd = msf_ensure_field(opt.dtd, 'fig_cmaps',{'fa','cl','cp','ufa','ufa'});
-opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccol',{'t1x6','lambda33vec','lambda11vec','s1x6prim','t1x6'});
-opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccolnorm',{'lambda33','mask','mask','slambda33prim','lambda33'});
+opt.dtd = msf_ensure_field(opt.dtd, 'fig_cmaps',{});
+opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccol',{});
+opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccolnorm',{});
 opt.dtd = msf_ensure_field(opt.dtd, 'bin_disomax',[opt.dtd.dmax; 10^-9.5; opt.dtd.dmax; opt.dtd.dmax]);
 opt.dtd = msf_ensure_field(opt.dtd, 'bin_disomin',[opt.dtd.dmin; opt.dtd.dmin; 10^-9.5; opt.dtd.dmin]);
 opt.dtd = msf_ensure_field(opt.dtd, 'bin_dratiomax',[opt.dtd.dmax/opt.dtd.dmin; 10^.5; 10^.5; 10^-.5]);

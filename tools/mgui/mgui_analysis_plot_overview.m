@@ -46,6 +46,9 @@ else
     end
     
     plot(h_top, x, S_plot, '-', 'color', col_gray);
+    if numel(S_plot) < 100
+        plot(h_top, x, S_plot, 'k.');
+    end
     %errorbar(h_top, x, S_plot, D_plot, 'k.', 'markersize', 8);
     
 %     if (isfield(xps, 'c_volume'))
