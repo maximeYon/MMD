@@ -16,6 +16,7 @@ function [m,cond,n_rank] = dtd_covariance_1d_data2fit(signal, xps, opt, ind)
 % The second output is the condition number of the matrix used in the
 % inversion
 
+if (nargin < 3), opt = dtd_covariance_opt; end
 if (nargin < 4), ind = ones(size(signal)) > 0; end
 
 % log S = X * B (B --> m, our model parameters)
@@ -41,7 +42,7 @@ b4 = tm_1x6_to_1x21(b2);
 
 % Check the size of the subspace -- and adjust it to enable estimation 
 % with insufficiently well sampled data
-n_rank = rank(b4' * b4);
+n_rank = rank(b4' * b4, 1e-4);
 
 if (n_rank < 21) && (opt.dtd_covariance.allow_subspace_estimation)
     
