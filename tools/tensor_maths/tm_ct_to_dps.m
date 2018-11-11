@@ -36,10 +36,10 @@ dps.C_mu    = 1.5 * dps.V_shear1 ./ max(dps.V_iso1, reg);
 dps.C_M     = 1.5 * dps.V_shear2 ./ max(dps.V_iso2, reg);
 dps.C_c     = dps.C_M ./ max(dps.C_mu, reg);
 
-% clamp selected measures between 0 and 1
-dps.C_mu  = mio_min_max_cut(dps.C_mu, 0, 1);
-dps.C_M   = mio_min_max_cut(dps.C_M, 0, 1);
-dps.C_c   = mio_min_max_cut(dps.C_c, 0, 1);
+% clamp selected measures between 0 and 2
+dps.C_mu  = mio_min_max_cut(dps.C_mu, 0, 2);
+dps.C_M   = mio_min_max_cut(dps.C_M, 0, 2);
+dps.C_c   = mio_min_max_cut(dps.C_c, 0, 2);
 
 % ********* Calculate kurtosis measures ************
 
