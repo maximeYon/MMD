@@ -5,6 +5,12 @@ if (nargin < 1), opt = []; end
 
 opt = mdm_opt(opt);
 
+% control fit ranges (legacy place in opt)
+opt = msf_ensure_field(opt, 'i_range', []);
+opt = msf_ensure_field(opt, 'j_range', []);
+opt = msf_ensure_field(opt, 'k_range', []);
+
+
 opt.mio.present = 1;
 
 opt.mio = msf_ensure_field(opt.mio, 'no_parfor', 0); 
@@ -28,4 +34,5 @@ opt.mask = msf_ensure_field(opt.mask, 'threshold', 0.1);
 opt.mio.pa.present = 1;
 opt.mio.pa = msf_ensure_field(opt.mio.pa, 'do_abs', 1);
 opt.mio.pa = msf_ensure_field(opt.mio.pa, 'method', 'ari');
+
 
