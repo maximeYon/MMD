@@ -16,7 +16,7 @@ if (nargin < 6), r_std = 0; end
 
 box_lw = 1;
 
-do_plot_box = 0;
+do_plot_box = 1;
 do_show_tensors = 1;
 
 % plot box
@@ -61,9 +61,10 @@ if (do_show_tensors)
 end
 
 caxis([-1 3]);
-% colormap(fliplr(jet(100)));
+colormap(fliplr(hot(100)));
 axis off tight equal vis3d;
-% camlight left;
-% shading interp;
+camlight left;
+shading interp;
 material([0.7 0.4 0.8 1]);
+campos([0.9 1.3 0.4] * n_tensor * 5)
 

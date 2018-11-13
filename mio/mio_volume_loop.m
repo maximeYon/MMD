@@ -18,7 +18,8 @@ function p = mio_volume_loop(fun, I, M, opt, S)
 %
 % S   - 4D supplementary data
 
-tic
+tic;
+
 if (nargin < 3), error('all inputs required'); end
 if (nargin < 4), opt.present = 1; end
 if (nargin < 5), S = []; end
@@ -94,7 +95,7 @@ else
     
 end
 
-clear I
+clear I;
 
 % Revert mask subsampling
 p = zeros(n_param, prod(siz(1:3)));
@@ -106,7 +107,8 @@ p = reshape(p', siz(1), siz(2), siz(3), n_param);
 
 if (opt.verbose)
     ttime = toc;
-    disp(['Total fitting time = ' num2str(ttime/60, '%0.1f') ' min (' num2str(numel(si)/ttime, '%0.0f') ' voxels/s)'])
+    disp(['Total fitting time = ' num2str(ttime/60, '%0.1f') ' min (' ...
+        num2str(numel(si)/ttime, '%0.0f') ' voxels/s)'])
 end
 
 end

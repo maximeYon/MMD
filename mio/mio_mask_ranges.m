@@ -10,6 +10,8 @@ if (nargin < 4) || (isempty(k_range)), k_range = 1:size(I,3); end
 M = zeros(size(I));
 M(i_range, j_range, k_range) = 1;
 
+M = M > 0;
+
 
 
 

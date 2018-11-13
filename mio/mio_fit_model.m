@@ -16,7 +16,7 @@ opt = mio_opt(opt);
 M      = mdm_mask_load(s, opt);
 
 % Control the ranges in which the fit will be applied
-M = M .* mio_mask_ranges(opt.i_range, opt.j_range, opt.k_range);
+M = (M > 0) .* mio_mask_ranges(M, opt.i_range, opt.j_range, opt.k_range);
 
 h.scl_slope = 1;
 h.scl_inter = 0;
