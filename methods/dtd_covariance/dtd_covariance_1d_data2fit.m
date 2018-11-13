@@ -2,8 +2,8 @@ function [m,cond,n_rank] = dtd_covariance_1d_data2fit(signal, xps, opt, ind)
 % function [m,cond,n_rank] = dtd_covariance_1d_data2fit(signal, xps, opt, ind)
 %
 % Diffusion tensor distribution (DTD) modeling using cumulant expansion:
-% This function calculates the first two terms of the cumulant expansion 
-% from Q-space trajectory (QTI) data. 
+% This function calculates the first two terms of the cumulant expansion
+% from Q-space trajectory (QTI) data.
 %
 % In the cumulant expansion
 % - The first term corresponds to the mean of the tensor distribution, a second order
@@ -15,6 +15,8 @@ function [m,cond,n_rank] = dtd_covariance_1d_data2fit(signal, xps, opt, ind)
 %
 % The second output is the condition number of the matrix used in the
 % inversion
+%
+% For details, see Westin et al (2016) NeuroImage 135
 
 if (nargin < 3), opt = dtd_covariance_opt; end
 if (nargin < 4), ind = ones(size(signal)) > 0; end
@@ -27,8 +29,7 @@ if (nargin < 4), ind = ones(size(signal)) > 0; end
 %
 % inv(X' * C' * C * X) * X' * C' * C * log S = B
 %
-% Compute this whole step for each iteration. It is slow, but use the
-% parallell toolbox if you are in a hurry
+% Compute this whole step for each iteration. 
 
 % Exclude data points with zero or negative values
 ind = ind & (signal > 0);
@@ -36,40 +37,16 @@ ind = ind & (signal > 0);
 % Setup regressors for diffusion tensor distribution (DTD) model
 b0 = ones(xps.n, 1);
 b0 = b0(ind);
-b2 = xps.bt(ind,:)      * 1e-9 ;   %SI unit conversion
+b2 = xps.bt(ind,:) * 1e-9 ;   %SI unit conversion
 b4 = tm_1x6_to_1x21(b2);
 
-
-% Check the size of the subspace -- and adjust it to enable estimation 
-% with insufficiently well sampled data
-n_rank = rank(b4' * b4, 1e-4);
-
-if (n_rank < 21) && (opt.dtd_covariance.allow_subspace_estimation)
-    
-    % Fit e.g. 16 parameters, in LTE+STE acquisitions
-    b4_tmp = b4;
-    b4_tmp(:, 4:6) = b4_tmp(:, 4:6) * 1e-1;  % critical for upscaling
-    [b4_eig_vec, b4_eigval] = eigs(b4_tmp' * b4_tmp, 21);
-
-    %ind_tmp = diag(abs(b4_eigval)) > 1e-8;
-    ind_tmp = (1:21) <= n_rank;
-
-    subspace_coord = b4_eig_vec(:,ind_tmp);
-
-elseif (n_rank == 21)
-
-    % Fit all parameters
-    subspace_coord = eye(21);
-
-else
-    error('Not enough data to do estimation');
-end
-
 % Setup regressors, potentially allow estimation in a subspace
+[subspace_coord,n_rank] = get_subspace_coord(b4, opt);
 X = [b0 -b2 1/2 * b4 * subspace_coord];
-    
+
+% Do the heteroscedasticity correction
 if (opt.dtd_covariance.do_heteroscedasticity_correction)
-    C2 = diag(signal(ind));
+    C2 = diag(signal(ind).^2);
 else
     C2 = 1;
 end
@@ -78,8 +55,8 @@ end
 tmp = (X' * C2 * X);
 cond = rcond(tmp);
 
-if (cond > 1e-10) 
- 
+if (cond > 1e-10)
+    
     % perform regression to estimate model parameters m
     m = tmp \ X' * C2 * real(log(signal(ind)));
     
@@ -88,8 +65,59 @@ if (cond > 1e-10)
     m(8:end) = m(8:end) * 1e-18;  % Convert back to SI units
     
     m(8 + (0:20)) = subspace_coord * m(8:end);
-        
+    
 else
     warning('rcond fail in dtd_covariance_1d_data2fit')
     m = zeros(1, 28)';
+end
+
+end
+
+
+function [s, n_rank] = get_subspace_coord(b4, opt)
+% function s = get_subspace_coord(b4, opt)
+% 
+% compute a subspace in which estimation can be done
+
+% use a previously computed value if possible for speedsup
+persistent p; 
+if ...
+        (~isempty(p)) && ...
+        numel(p.b4(:)) == numel(b4(:)) && ...
+        all(p.b4(:) == b4(:))
+    s = p.s; 
+    n_rank = p.n_rank;
+    return; 
+end
+
+
+% Check the size of the subspace -- and adjust it to enable estimation
+% with insufficiently well sampled data (e.g. LTE+STE only)
+% Some information will be missing, but MK_I and MK_A can be computed
+% anyway
+n_rank = rank(b4' * b4, 1e-4);
+
+if (n_rank < 21) && (opt.dtd_covariance.allow_subspace_estimation)
+    
+    % Fit e.g. 16 parameters, in LTE+STE acquisitions
+    b4_tmp = b4;
+    b4_tmp(:, 4:6) = b4_tmp(:, 4:6) * 1e-1;  % critical for upscaling
+    [b4_eig_vec, ~] = eigs(b4_tmp' * b4_tmp, 21);
+    
+    %ind_tmp = diag(abs(b4_eigval)) > 1e-8;
+    ind_tmp = (1:21) <= n_rank;
+    
+    s = b4_eig_vec(:,ind_tmp);
+    
+elseif (n_rank == 21)
+    s = eye(21); % Fit all parameters
+else
+    error('Not enough data to do estimation');
+end
+
+% Store results in the persistent variable (speeds up volume fitting)
+p.b4 = b4;
+p.s = s;
+p.n_rank = n_rank;
+
 end
