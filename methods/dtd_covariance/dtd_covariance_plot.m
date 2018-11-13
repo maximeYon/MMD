@@ -44,6 +44,14 @@ switch (c_case)
         else
             cmap = 0.7 * hsv(numel(b_delta_uni) + 2);
         end
+        
+        % Plot lines for the legend
+        hold(h, 'off');
+        for c = 1:numel(b_delta_uni)
+            col = mplot_b_shape_to_col(b_delta_uni(c));
+            semilogy(h, -1,2,'-', 'color', col, 'linewidth', 2); hold(h,'on');
+        end
+        
                        
                 
         for c = 1:numel(b_delta_uni)
@@ -53,9 +61,11 @@ switch (c_case)
             
             b = xps_pa.b(ind);
             
+            col = mplot_b_shape_to_col(b_delta_uni(c));
+            
             semilogy(h, b * 1e-9, S_pa(1,ind) / s0, 'o', ...
-                'markersize', 5, 'color', cmap(c,:), ...
-                'markerfacecolor', cmap(c,:)); 
+                'markersize', 5, 'color', col, ...
+                'markerfacecolor', col); 
             hold(h, 'on');
             
             % get a nice and smooth prediction
@@ -63,7 +73,7 @@ switch (c_case)
             b2 = linspace(0, max(xps.b(:)) * 1.05, 100);
             s2 = exp(polyval(p, b2));
             
-            semilogy(h, b2 * 1e-9, s2 / s0, '-', 'linewidth', 2, 'color', cmap(c,:));
+            semilogy(h, b2 * 1e-9, s2 / s0, '-', 'linewidth', 2, 'color', col);
   
             
             % plot the actual datapoints
@@ -72,7 +82,6 @@ switch (c_case)
                 ind2 = abs(xps.b_delta - b_delta_uni(c)) < opt.mdm.pa.db_delta2;
                 ind2 = ind2 & abs(xps.b - b(c_b)) < opt.mdm.pa.db;
                 
-
                 % see how well aligned it is with the primary direction
                 p = linspace(-1, 1, sum(ind2))';
                 p = p / 10;
@@ -81,8 +90,8 @@ switch (c_case)
                 sf = @(x) x(ind3);
                 
                 
-                plot(h, (b(c_b) * 1e-9 + p), sf(S(ind2)) / s0, 'k.', 'color', cmap(c,:));
-                plot(h, (b(c_b) * 1e-9 + p), sf(S_fit(ind2)) / s0, 'k-', 'color', cmap(c,:));
+                plot(h, (b(c_b) * 1e-9 + p), sf(S(ind2)) / s0, 'k.', 'color', col);
+                plot(h, (b(c_b) * 1e-9 + p), sf(S_fit(ind2)) / s0, 'k-', 'color', col);
                 
             end
             
@@ -90,7 +99,7 @@ switch (c_case)
         end
         
         xlim(h, [0 max(xps.b) * 1.1e-9]);
-        ylim(h, [0.05 1.1]);        
+        ylim(h, [0.03 1.1]);        
     
         
         set(h,...
@@ -98,7 +107,23 @@ switch (c_case)
             'TickLength',.02*[1 1], ...
             'FontSize',opt.mplot.fs, ...
             'LineWidth',opt.mplot.lw, ...
-            'Box','off')
+            'Box','off');
+        
+        xlabel(h, 'b [ms/um^2]', 'fontsize', opt.mplot.fs);
+        ylabel(h, 'Signal', 'fontsize', opt.mplot.fs);
+        
+        
+        l_str = cell(1,numel(b_delta_uni));
+        for c = 1:numel(b_delta_uni)
+            col = mplot_b_shape_to_col(b_delta_uni(c));
+            plot(h,10,10,'-', 'color', col, 'linewidth', 2);
+            hold(h, 'on');
+            l_str{c} = ['b_\Delta = ' num2str(b_delta_uni(c))];
+        end
+        legend(h, l_str, 'location', 'southwest');
+        legend(h, 'boxoff');
+        
+
         
     
     case 2 % old plot
@@ -111,8 +136,9 @@ switch (c_case)
 end
 
 
-title(h, sprintf('MD = %1.2f, FA = %1.2f\nMK_I = %1.2f, MK_A = %1.2f\n  MEAS RANK = %i', ...
-    dps.MD, dps.FA, dps.MKi, dps.MKa, n));
+title(h, sprintf(['MD = %1.2f, FA = %1.2f, uFA = %1.2f\n' ...
+    'MK_I = %1.2f, MK_A = %1.2f, MEAS RANK = %i'], ...
+    dps.MD, dps.FA, dps.uFA, dps.MKi, dps.MKa, n));
 
 
 if ~isempty(h2)
