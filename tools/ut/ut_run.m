@@ -51,13 +51,22 @@ end
 
 c_err = 0;
 
+
+% Basic information
+my_fprintf(fid, 'BASIC INFO\n');
+my_fprintf(fid, '---------------------------------\n');
+my_fprintf(fid, 'Matlab version: %s\n', version);
+my_fprintf(fid, 'Computer: %s\n', computer);
+my_fprintf(fid, '\n');
+
+
 for c = 1:numel(packages)
     
     
     d = dir(fullfile(rd, packages{c}, 'ut_*.m'));
     
     my_fprintf(fid, 'PACKAGE: %s (%i ut_*.m files)\n', packages{c}, numel(d));
-    my_fprintf(fid, '---------------------------------\n', packages{c});
+    my_fprintf(fid, '---------------------------------\n');
     
     
     for c_file = 1:numel(d)
