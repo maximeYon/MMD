@@ -46,11 +46,18 @@ dps.s0  = mfs.m(:,:,:,1);
 
 % diffusion tensor
 dt_1x6 = g(mfs.m(:,:,:,2:7), 6) * 1e9;
-dps   = tm_dt_to_dps(dt_1x6, dps, f);
+dps   = tm_dt_to_dps(dt_1x6, dps, f, 0.01);
 
 % covariance tensor
 ct_1x21  = g(mfs.m(:,:,:,8:28), 21) * 1e18;
-dps = tm_ct_to_dps(ct_1x21, dps, f);
+dps = tm_ct_to_dps(ct_1x21, dps, f, 0.1);
+
+
+% clamp C_x measures between -1 and 2
+dps.C_mu  = mio_min_max_cut(dps.C_mu, -1, 2);
+dps.C_M   = mio_min_max_cut(dps.C_M, -1, 2);
+dps.C_c   = mio_min_max_cut(dps.C_c, -1, 2);
+
 
 % Clamp kurtosis measures
 dps.MKi  = mio_min_max_cut(dps.MKi, -1.0, 4.0); 

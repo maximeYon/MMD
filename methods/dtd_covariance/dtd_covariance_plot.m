@@ -1,10 +1,11 @@
-function dtd_covariance_plot(S, xps, h, h2)
+function dtd_covariance_plot(S, xps, h, h2, opt)
 % function dtd_covariance_plot(S, xps, h, h2)
 
 if (nargin < 3), h  = gca; end
 if (nargin < 4), h2 = []; end
+if (nargin < 5), opt = []; end
 
-opt = dtd_covariance_opt();
+opt = dtd_covariance_opt(opt);
 opt = mplot_opt(opt);
 opt = mdm_opt(opt);
 
@@ -69,9 +70,9 @@ switch (c_case)
             hold(h, 'on');
             
             % get a nice and smooth prediction
-            p = polyfit(xps_pa.b(ind), log(S_pa(2,ind))', 2);
+            p = polyfit([0; xps_pa.b(ind) * 1e-9], log([(m(1)) S_pa(2,ind)])', 2);
             b2 = linspace(0, max(xps.b(:)) * 1.05, 100);
-            s2 = exp(polyval(p, b2));
+            s2 = exp(polyval(p, b2 * 1e-9));
             
             semilogy(h, b2 * 1e-9, s2 / s0, '-', 'linewidth', 2, 'color', col);
   
@@ -99,7 +100,12 @@ switch (c_case)
         end
         
         xlim(h, [0 max(xps.b) * 1.1e-9]);
-        ylim(h, [0.03 1.1]);        
+        
+        if (dps.MD > 2)
+            ylim(h, [0.005 1.1]);
+        else
+            ylim(h, [0.03 1.1]);
+        end
     
         
         set(h,...
@@ -144,6 +150,8 @@ title(h, sprintf(['MD = %1.2f, FA = %1.2f, uFA = %1.2f\n' ...
 if ~isempty(h2)
     
     C = m(8:end) * 1e18;
+    
+    C = C + tm_1x6_to_1x21(m(2:7)' * 1e9)';
     
     [x,y,z] = sphere(120);
     
