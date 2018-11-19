@@ -13,7 +13,7 @@ opt = msf_ensure_field(opt, 'k_range', []);
 
 opt.mio.present = 1;
 
-opt.mio = msf_ensure_field(opt.mio, 'do_parfor', 1); 
+opt.mio = msf_ensure_field(opt.mio, 'do_parfor', 0); 
 
 opt.mio.coreg.present = 1;
 opt.mio.coreg = msf_ensure_field(opt.mio.coreg, 'clear_header', 1);
