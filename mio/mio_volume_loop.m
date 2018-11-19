@@ -65,7 +65,7 @@ n_workers = 0;
 % It is possible that spmd(0) will run the job locally even for users that
 % do not have parallel toolbox installed, hewver, this was not tested.
 
-if ~opt.mio.no_parfor
+if (~opt.mio.no_parfor)
     try % start parpool outside this function to have it run in parallel mode
         tmp = gcp('nocreate');
         n_workers = tmp.NumWorkers;
@@ -78,7 +78,7 @@ if ~opt.mio.no_parfor
 end
 
 
-if n_workers == 0
+if (n_workers == 0)
     
     % Perform fitting on the local machine using one thread.
     out = mio_voxel_loop(f_fun, I, n_param, f_sup, S);
