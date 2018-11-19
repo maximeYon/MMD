@@ -65,12 +65,12 @@ n_workers = 0;
 % It is possible that spmd(0) will run the job locally even for users that
 % do not have parallel toolbox installed, hewver, this was not tested.
 
-if (~opt.mio.no_parfor)
+if (opt.mio.do_parfor)
     try % start parpool outside this function to have it run in parallel mode
         tmp = gcp('nocreate');
         n_workers = tmp.NumWorkers;
     catch
-        if opt.verbose
+        if (opt.verbose)
             warning(['User requested parallel workers for mio_volume_loop but parpool ' ...
                 'is not active! Continuing with job on a single local worker!'])
         end
