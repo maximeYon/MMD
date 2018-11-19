@@ -23,5 +23,6 @@ tmp = warning('query'); warning off; % probe without throwing warning
 warning(tmp);
 
 if (cond < 1e-10)
-    error('The b-tensors cannot form an overdetermined equation system');
+    error('The b-tensors cannot form an overdetermined equation system (cond = %s)', ...
+        num2str(cond));
 end
