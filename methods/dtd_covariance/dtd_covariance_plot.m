@@ -21,7 +21,7 @@ dps = dtd_covariance_1d_fit2param(m, [], opt);
 % plot with powder average, but also visualize the directions
 xps_pa = mdm_xps_pa(msf_rmfield(xps, 'c_volume'));
 
-opt.mio.pa.method = 'median'; % avoid some strange misrepresentations
+opt.mio.pa.method = 'ari'; % avoid some strange misrepresentations
 S_pa = squeeze(mio_pa(permute(cat(2, S, S_fit), [2 3 4 1]), xps, opt));
 
 
@@ -58,14 +58,19 @@ switch (c_case)
                 'markerfacecolor', col); 
             hold(h, 'on');
             
-            % get a nice and smooth prediction
-            p = polyfit([0; xps_pa.b(ind) * 1e-9], log([(m(1)) S_pa(2,ind)])', 2);
-            b2 = linspace(0, max(xps.b(:)) * 1.05, 100);
-            s2 = exp(polyval(p, b2 * 1e-9));
-            
-            semilogy(h, b2 * 1e-9, s2 / dps.s0, '-', 'linewidth', 2, 'color', col);
-            
-            
+            % predict a pa signal
+            if (1)
+                
+                b_pa = linspace(0, max(xps.b) * 1.05, 100);
+                signal_pa = zeros(size(b_pa));
+                for c_b = 1:numel(b_pa)
+                    bt_tmp = tm_tpars_to_1x6(b_pa(c_b), b_delta_uni(c), uvec_tricosa);
+                    xps_tmp = mdm_xps_from_bt(bt_tmp);
+                    signal_pa(c_b) = mean(dtd_covariance_1d_fit2data(m, xps_tmp));
+                end
+                
+                semilogy(h, b_pa * 1e-9, signal_pa / dps.s0, '-', 'linewidth', 2, 'color', col);
+            end
 
             
             % plot the actual datapoints

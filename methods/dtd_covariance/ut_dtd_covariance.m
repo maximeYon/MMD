@@ -192,8 +192,6 @@ switch (c_ut)
                 MKi_exp = 0.0;
                 MKi_tol = 0.15;
                 
-                
-                
         end
         
         % PROTOCOL DEFINITION: typical "clinical" protocol
@@ -221,7 +219,7 @@ switch (c_ut)
         m = dtd_covariance_1d_data2fit(s, xps, opt);
         
         % debugging by plotting
-        if (1) 
+        if (0) 
             dtd_covariance_plot(s, xps, gca, [], opt);
         end
         
