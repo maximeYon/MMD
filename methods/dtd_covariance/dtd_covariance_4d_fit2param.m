@@ -37,35 +37,12 @@ if (size(mfs.m, 4) == 4) % assume data was analyzed via the pa pipe
         
 end
 
-% init dps
+% compute display parameters
+dps = dtd_covariance_1d_fit2param(g(mfs.m, 28), f, opt);
+
+% fill in dps fields
 dps.nii_h = mfs.nii_h;
 dps.mask  = mfs.mask;
-
-% get data from input
-dps.s0  = mfs.m(:,:,:,1);
-
-% diffusion tensor
-dt_1x6 = g(mfs.m(:,:,:,2:7), 6) * 1e9;
-dps   = tm_dt_to_dps(dt_1x6, dps, f, 0.01);
-
-% covariance tensor
-ct_1x21  = g(mfs.m(:,:,:,8:28), 21) * 1e18;
-dps = tm_ct_to_dps(ct_1x21, dps, f, 0.1);
-
-
-% clamp C_x measures between -1 and 2
-dps.C_mu  = mio_min_max_cut(dps.C_mu, -1, 2);
-dps.C_M   = mio_min_max_cut(dps.C_M, -1, 2);
-dps.C_c   = mio_min_max_cut(dps.C_c, -1, 2);
-
-
-% Clamp kurtosis measures
-dps.MKi  = mio_min_max_cut(dps.MKi, -1.0, 4.0); 
-dps.MKa  = mio_min_max_cut(dps.MKa, -1.0, 4.0); 
-dps.MKt  = mio_min_max_cut(dps.MKt, 0.0, 4.0); 
-dps.MK   = mio_min_max_cut(dps.MK,  0.0, 4.0); 
-dps.MKad = mio_min_max_cut(dps.MKad, 0.0, 4.0); 
-dps.MKd  = mio_min_max_cut(dps.MKd, 0.0, 4.0); 
 
 
 if (~isempty(dps_fn))

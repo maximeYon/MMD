@@ -11,11 +11,10 @@ function dps = tm_ct_to_dps(ct, dps, f_reshape, reg)
 % output:
 % dps.(V_MD, V_iso, VM_MD1, V_iso1, V_shear, V_shear1, ...
 %        C_MD, C_mu, C_M, C_c, K_bulk, K_shear, MK, K_mu)
-%
 
 if (nargin < 2), dps = []; end
-if (nargin < 3), f_reshape = @(x,n) x; end
-if (nargin < 4), reg = 0; end
+if (nargin < 3) || (isempty(f_reshape)), f_reshape = @(x,n) x; end
+if (nargin < 4), reg = eps; end
 
 % fourth order tensor operators needed for the covariance calculations
 [E_bulk, E_shear, E_iso] = tm_1x21_iso();
@@ -32,14 +31,13 @@ dps.V_iso1 = dps.V_iso + dps.V_iso2;
 dps.V_shear  = f_reshape(tm_inner(ct, E_shear), 1);     %< C ,    E_shear>
 dps.V_shear1 = dps.V_shear + dps.V_shear2; % V_shear2 comes from tm_dt_to_dps
 
-% ********* Calculate normalized variance measures ************
+% ********* Normalized variance measures ************
 dps.C_MD    = dps.V_MD ./ max(dps.V_MD1,reg);
 dps.C_mu    = 1.5 * dps.V_shear1 ./ max(dps.V_iso1, reg);
 dps.C_M     = 1.5 * dps.V_shear2 ./ max(dps.V_iso2, reg);
 dps.C_c     = dps.C_M ./ max(dps.C_mu, reg);
 
-% ********* Calculate kurtosis measures ************
-
+% ********* Kurtosis measures ************
 % Naming these according to the dtd_gamma nomenclature
 dps.MKi  = 3 * dps.V_MD ./ max(dps.V_MD2, reg);           % 
 dps.MKa  = (6/5) * dps.V_shear1 ./ max(dps.V_MD2, reg);   % K_micro in Westin16

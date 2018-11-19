@@ -9,23 +9,20 @@ opt = dtd_covariance_opt(opt);
 opt = mplot_opt(opt);
 opt = mdm_opt(opt);
 
-[m,~,n] = dtd_covariance_1d_data2fit(S, xps, opt);
+% turn on regularization?
+opt.dtd_covariance.do_regularization = 1;
+
+% fit and produce fitted signal + display parameters
+[m,~,n_rank] = dtd_covariance_1d_data2fit(S, xps, opt);
 S_fit = dtd_covariance_1d_fit2data(m, xps);
+dps = dtd_covariance_1d_fit2param(m, [], opt);
 
-% s0
-s0 = m(1);
-
-% diffusion tensor
-dt_1x6 = m(2:7)' * 1e9;
-dps = tm_dt_to_dps(dt_1x6);
-
-% covariance tensor
-ct_1x21  = m(8:28)' * 1e18;
-dps = tm_ct_to_dps(ct_1x21, dps);
 
 % plot with powder average, but also visualize the directions
 xps_pa = mdm_xps_pa(msf_rmfield(xps, 'c_volume'));
-S_pa = squeeze(mio_pa(permute(cat(2, S, S_fit), [2 3 4 1]), xps));
+
+opt.mio.pa.method = 'median'; % avoid some strange misrepresentations
+S_pa = squeeze(mio_pa(permute(cat(2, S, S_fit), [2 3 4 1]), xps, opt));
 
 
 c_case = 1;
@@ -37,14 +34,6 @@ switch (c_case)
         b_delta_input = round(xps_pa.b_delta * 100) / 100;
         [b_delta_uni,~] = unique(b_delta_input);
         b_delta_uni = sort(b_delta_uni);
-        
-        
-        % plotting color scheme
-        if (numel(b_delta_uni) == 1)
-            cmap = [0 0 0];
-        else
-            cmap = 0.7 * hsv(numel(b_delta_uni) + 2);
-        end
         
         % Plot lines for the legend
         hold(h, 'off');
@@ -64,7 +53,7 @@ switch (c_case)
             
             col = mplot_b_shape_to_col(b_delta_uni(c));
             
-            semilogy(h, b * 1e-9, S_pa(1,ind) / s0, 'o', ...
+            semilogy(h, b * 1e-9, S_pa(1,ind) / dps.s0, 'o', ...
                 'markersize', 5, 'color', col, ...
                 'markerfacecolor', col); 
             hold(h, 'on');
@@ -74,8 +63,10 @@ switch (c_case)
             b2 = linspace(0, max(xps.b(:)) * 1.05, 100);
             s2 = exp(polyval(p, b2 * 1e-9));
             
-            semilogy(h, b2 * 1e-9, s2 / s0, '-', 'linewidth', 2, 'color', col);
-  
+            semilogy(h, b2 * 1e-9, s2 / dps.s0, '-', 'linewidth', 2, 'color', col);
+            
+            
+
             
             % plot the actual datapoints
             for c_b = 1:numel(b)
@@ -91,8 +82,8 @@ switch (c_case)
                 sf = @(x) x(ind3);
                 
                 
-                plot(h, (b(c_b) * 1e-9 + p), sf(S(ind2)) / s0, 'k.', 'color', col);
-                plot(h, (b(c_b) * 1e-9 + p), sf(S_fit(ind2)) / s0, 'k-', 'color', col);
+                plot(h, (b(c_b) * 1e-9 + p), sf(S(ind2)) / dps.s0, 'k.', 'color', col);
+                plot(h, (b(c_b) * 1e-9 + p), sf(S_fit(ind2)) / dps.s0, 'k-', 'color', col);
                 
             end
             
@@ -142,16 +133,20 @@ switch (c_case)
 end
 
 
-title(h, sprintf(['MD = %1.2f, FA = %1.2f, uFA = %1.2f\n' ...
-    'MK_I = %1.2f, MK_A = %1.2f, MEAS RANK = %i'], ...
-    dps.MD, dps.FA, dps.uFA, dps.MKi, dps.MKa, n));
+title(h, sprintf([...
+    'MD = %1.2f, FA = %1.2f, uFA = %1.2f\n' ...
+    'MK_I = %1.2f, MK_A = %1.2f\n' ...
+    'MEAS RANK = %i, REG FIT = %i'], ...
+    dps.MD, dps.FA, dps.uFA, ...
+    dps.MKi, dps.MKa, ...
+    n_rank, opt.dtd_covariance.do_regularization));
 
 
 if ~isempty(h2)
     
     C = m(8:end) * 1e18;
     
-    C = C + tm_1x6_to_1x21(m(2:7)' * 1e9)';
+    C = C + tm_1x6_to_1x21(m(2:7) * 1e9);
     
     [x,y,z] = sphere(120);
     

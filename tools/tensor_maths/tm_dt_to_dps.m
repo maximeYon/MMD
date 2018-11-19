@@ -11,8 +11,8 @@ function dps = tm_dt_to_dps(dt_1x6, dps, f_reshape, reg)
 % dps.(FA, MD, ad, rd, u, FA_col + V_MD2, V_iso2, V_shear2)
 
 if (nargin < 2), dps = []; end
-if (nargin < 3), f_reshape = @(x,n) x; end
-if (nargin < 4), reg = 0; end
+if (nargin < 3) || (isempty(f_reshape)), f_reshape = @(x,n) x; end
+if (nargin < 4), reg = eps; end
 
 % -------------------------------------------------------
 % compute the second moments of the mean diffusion tensor
@@ -28,15 +28,14 @@ dps.V_MD2    = f_reshape(tm_inner(dt2_1x21, E_bulk), 1); % < Dsol2, E_bulk>
 dps.V_iso2   = f_reshape(tm_inner(dt2_1x21, E_iso), 1);
 dps.V_shear2 = f_reshape(tm_inner(dt2_1x21, E_shear), 1); %< Dsol2, E_shear>
 
-
 % DTI parameters derived from the diffusion tensor 
-dps.MD     = mio_min_max_cut( f_reshape(tm_md(dt_1x6), 1), [0 40]);
-dps.FA     = mio_min_max_cut( f_reshape(tm_fa(max(dps.MD, reg), dps.V_shear2), 1), [0 10]);
+dps.MD     = f_reshape(tm_md(dt_1x6), 1);
+dps.FA     = f_reshape(tm_fa(max(dps.MD, reg), dps.V_shear2), 1);
 
 % Compute parameters using eigenvalues L and primary direction U
 [L,U]      = tm_1x6_eigvals(dt_1x6); 
-dps.ad     = mio_min_max_cut( f_reshape(real(L(:,1)), 1), [0 40]);
-dps.rd     = mio_min_max_cut( f_reshape(mean(real(L(:,2:3)),2), 1), [0 40]);
+dps.ad     = f_reshape(real(L(:,1)), 1);
+dps.rd     = f_reshape(mean(real(L(:,2:3)),2), 1);
 dps.u      = f_reshape(U,3);
 
 % Only compute colour FA if output is a 3D volume
