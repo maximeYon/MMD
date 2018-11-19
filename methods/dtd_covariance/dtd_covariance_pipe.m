@@ -20,7 +20,7 @@ paths = mdm_paths(paths, 'dtd_covariance');
 msf_log(['Starting ' mfilename], opt);
 
 % Check that the xps is proper
-dtd_covariance_check_xps(s.xps);
+dtd_covariance_check_xps(s.xps, opt);
 
 % Smooth and prepare mask
 if (opt.filter_sigma > 0)
