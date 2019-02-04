@@ -210,6 +210,8 @@ for ninc = 1:Ninc
     end
 end
 
+Itd1 = abs(Itd1);
+
 % make nifti headear
 h = mdm_nii_h_empty;
 sdim = size(Itd1);
