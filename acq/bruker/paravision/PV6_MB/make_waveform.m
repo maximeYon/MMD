@@ -13,7 +13,7 @@ out_path = fullfile(run_path,'waveforms');
 
 
 % Parameters for calculating b-values
-gmax = 100/100*3; % Max gradient [3 T/m]
+gmax = 100/100*1.4; % Max gradient [3 T/m]
 tau = 10e-3; % Waveform duration [10 ms]
 
 % Define timing parameters relative to a total echo time = 1
@@ -21,14 +21,17 @@ np = 1000; % Number of time intervals in waveform [1000]
 epsilon_up = .1; % Quarter-sine ramp up [0.1]
 plateau = 0; % Plateau [0]
 epsilon_down = .15; % Half-sine ramp down [0.1]
+Amid = 0;
+epsilon_mid = .15; % Half-sine ramp down [0.1]
 
 % q-trajectory parameters
 % zeta: half aperture of q cone, see Topgaard. Microporous Mesoporous Mater. 178, 60 (2013).
 % http://dx.doi.org/10.1016/j.micromeso.2013.03.009
-%zeta = acos(1/sqrt(3)); out_fn = fullfile(out_path,'axde_sphere.gp'); %sphere
-%zeta = pi/2; out_fn = fullfile(out_path,'axde_plane.gp'); %plane
-%zeta = 0; out_fn = fullfile(out_path,'axde_stick.gp'); %stick
-zeta = acos(sqrt(2/3)); out_fn = fullfile(out_path,'axde_cigar.gp'); %cigar
+deltapsi = 2*pi;
+zeta = acos(1/sqrt(3)); out_fn = fullfile(out_path,'axde_sphere'); %sphere
+zeta = pi/2; out_fn = fullfile(out_path,'axde_plane'); deltapsi = pi; Amid = 0; %plane
+zeta = 0; out_fn = fullfile(out_path,'axde_stick'); deltapsi = 2*pi; Amid = 0; %stick
+zeta = acos(sqrt(2/3)); out_fn = fullfile(out_path,'axde_cigar'); deltapsi = 2*pi; Amid = 0; %cigar
 
 % (theta,phi): Orientation of cone axis in lab frame
 theta = 0; phi = 0;
@@ -48,17 +51,23 @@ g_up = sin(t_epsilon_up);
 % Half-sine ramp down
 np_epsilon_down = round(epsilon_down/dt);
 t_epsilon_down = pi/2*linspace(-1,1,np_epsilon_down)';
-g_down = 1 - .5*(1+sin(t_epsilon_down));
+g_down = 1 - (1+Amid)*.5*(1+sin(t_epsilon_down));
 %figure(1), clf, plot(t_epsilon_down,g_down,'-'), return
+
+% Half-sine ramp mid
+np_epsilon_mid = round(epsilon_mid/dt);
+t_epsilon_mid = pi/2*linspace(-1,1,np_epsilon_mid)';
+g_mid = Amid*sin(t_epsilon_mid);
+%figure(1), clf, plot(t_epsilon_mid,g_mid,'-'), return
 
 % Plateau
 np_plateau = round(plateau/dt);
-np_inter = round(taured/dt)-2*(np_epsilon_up+np_plateau+np_epsilon_down);
+%np_inter = round(taured/dt)-2*(np_epsilon_up+np_plateau+np_epsilon_down);
+np_mid = round((round(taured/dt)-2*(np_epsilon_up+np_plateau+np_epsilon_down) - np_epsilon_mid)/2);
 
-ga = [g_up; ones(np_plateau,1); g_down; zeros(np_inter,1); g_down-1; -1*ones(np_plateau,1); -flipud(g_up)];
+ga = [g_up; ones(np_plateau,1); g_down; -Amid*ones(np_mid,1); g_mid;  Amid*ones(np_mid,1); g_down-1+Amid; -1*ones(np_plateau,1); -flipud(g_up)];
 %figure(1), clf, plot(t,ga,'-'), return
 
-deltapsi = 2*pi;
 psi0 = 0;
 b_delta = (3*cos(zeta).^2-1)/2; % normalized anisotropy of the b tensor
 
@@ -83,6 +92,7 @@ im_gr(2:(end-1)) = im_gr(2:(end-1)) - sum(im_gr)/(np-2);
 
 % Normalize waveform to the range -1 to +1
 gnorm = max(abs([ga(:); re_gr(:)+1i*im_gr(:)]));
+gnorm = max(ga);
 ga = ga/gnorm;
 re_gr = re_gr/gnorm;
 im_gr = im_gr/gnorm;
@@ -121,7 +131,7 @@ q = gamma*gmax*cumsum(ga*dt);
 b = sum(q.^2*dt);
 qmax = max(q);
 td = b/qmax^2;
-bfactor = b/gmax.^2;
+bfactor = b/gmax.^2./tau^3
 
 dgadt = gradient(gmax*ga/dt);
 dgrdt = gradient(gmax*abs(gr)/dt);
@@ -129,15 +139,37 @@ dre_grdt = gradient(gmax*re_gr/dt);
 dim_grdt = gradient(gmax*im_gr/dt);
 
 figure(1), clf
-subplot(2,1,1)
+subplot(2,2,1)
 %plot(t,gmax*re_gr,'r-',t,gmax*im_gr,'g-',t,gmax*ga,'b-',t,gmax*abs(gr),'k--')
 plot(t,gmax*gx,'r-',t,gmax*gy,'g-',t,gmax*gz,'b-')
 ylabel('g / Tm^-^1')
 title(['b = ' num2str(b/1e9,2) '\cdot10^9 sm^-^2   q = ' num2str(qmax/2/pi/1e6,2) '\cdot10^6 m^-^1'])
 
-subplot(2,1,2)
+subplot(2,2,2)
 plot(t,dre_grdt,'r-',t,dim_grdt,'g-',t,dgadt,'b-',t,dgrdt,'k--')
 xlabel('t / s'), ylabel('(dg/dt) / Tm^-^1s^-^1')
+
+subplot(2,2,3)
+plot(t,qx,'r-',t,qy,'g-',t,qz,'b-')
+ylabel('q / m^-^1')
+%title(['b = ' num2str(b/1e9,2) '\cdot10^9 sm^-^2   q = ' num2str(qmax/2/pi/1e6,2) '\cdot10^6 m^-^1'])
+
+si = 16*1024;
+Fx = fftshift(fft(qx,si));
+Fy = fftshift(fft(qy,si));
+Fz = fftshift(fft(qz,si));
+Fx2 = abs(Fx).^2;
+Fy2 = abs(Fy).^2;
+Fz2 = abs(Fz).^2;
+Fr2 = Fx2 + Fy2 + Fz2;
+
+swh = 1/dt;
+nu = swh*linspace(0,1,si); %frequency vector
+nu = nu - nu(si/2+1); %set the proper zero frequency
+subplot(2,2,4)
+plot(nu,Fx2,'r-',nu,Fy2,'g-',nu,Fz2,'b-',nu,Fr2,'k--')
+xlabel('\nu / s^-^1')
+set(gca,'XLim',1000*[-1 1])
 
 % Save waveforms in Bruker format
 [out_path,out_name,out_ext] = fileparts(out_fn);
@@ -186,3 +218,5 @@ fprintf(fid, formatspec, out_mat');
 
 fprintf(fid,'%s\n',['##END']);
 fclose(fid);
+
+max(abs([gx(:); gy(:); gz(:)]))

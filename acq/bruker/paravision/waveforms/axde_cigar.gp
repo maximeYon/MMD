@@ -3,8 +3,8 @@
 ##DATA TYPE= Shape Data
 ##ORIGIN= Bruker Analytik GmbH
 ##OWNER= <nmrsu>
-##DATE= 2018-07-27
-##TIME= 12:36:24
+##DATE= 2017-07-03
+##TIME= 13:13:58
 ##MINX= 0
 ##MAXX= 1
 ##MINY= 0

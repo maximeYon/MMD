@@ -96,10 +96,36 @@ bt.zz = 2*gamma^2*sum(F.z.*F.z*dt,1)';
 
 b = (bt.xx + bt.yy + bt.zz); % trace
 
+% Timing parameters
+tperacq = 15*NMRacqus.d22 + NMRacqus.vdT1 + 2e-6 + 20*NMRacqus.d32 + 4e-6*NMRacqus.p11 + ...
+    NMRacqus.d34 + NMRacqus.vdT2 + 2*NMRacqus.d3 + 2*NMRacqus.d4 + 1e-6*NMRacqus.p12 + ...
+    NMRacqus.d35 + NMRacqus.aq + NMRacqus.d11;
+indx = 1 + NMRacqus.nbl*(1:(NMRacqus.l2-1));
+tsatperacq = tperacq - (.5e-6*NMRacqus.p11+3*NMRacqus.d32+2*NMRacqus.d22+NMRacqus.d11);
+tperacq(indx) = tperacq(indx) + (NMRacqus.d22 + NMRacqus.d1);
+t0acq = [0; cumsum(tperacq(1:(td1-1)))];
+tT2W = .5e-6*NMRacqus.p11 + 7*NMRacqus.d32 + 2*NMRacqus.d22 + NMRacqus.vdT2 + NMRacqus.d34 + ...
+    2*NMRacqus.d3 + 2*NMRacqus.d4 + 1e-6*NMRacqus.p12 + NMRacqus.d35 + 0*NMRacqus.aq;
+tT1R = zeros(td1,1);
+
+Nslices = numel(unique(NMRacqus.fq1));
+NRDenc = td1/Nslices;
+[~,~,slice_ind] = unique(NMRacqus.fq1, 'rows');
+for nslice = 1:Nslices
+    indx = find(nslice == slice_ind);
+    tT1R(indx(1)) = 1/eps;
+    for n = 2:NRDenc
+        tT1R(indx(n)) = t0acq(indx(n)) - (t0acq(indx(n-1))+tsatperacq(indx(n-1))) + 5*NMRacqus.d22 + NMRacqus.vdT1(indx(n)) + ...
+            2e-6 + NMRacqus.d32 + .5e-6*NMRacqus.p11;
+    end
+end                 
+
 % Save as xps
 xps.b = b;
 xps.n = td1;
 xps.bt = [bt.xx bt.yy bt.zz sqrt(2)*[bt.xy bt.xz bt.yz]];
+%xps.te = tT2W;
+xps.te = NMRacqus.vdT2;
 
 % xps.gmx = G.x'; % Maybe save full gradient modulations in the future
 % xps.gmy = G.y';
@@ -107,6 +133,13 @@ xps.bt = [bt.xx bt.yy bt.zz sqrt(2)*[bt.xy bt.xz bt.yz]];
 
 xps_old = xps;
 xps = mdm_xps_calc_btpars(xps_old);
+
+if any(strcmp(NMRacqus.pulprog,{'SM_moacrare2drs'}))
+    ind = zeros(td1,1);
+    ind(1:NMRacqus.nbl:(1+td1-NMRacqus.nbl)) = 1;
+    xps = mdm_xps_subsample(xps, ind==1);
+end
+ 
 
 if (~isempty(xps_fn)), save(xps_fn,'xps'); end
 
