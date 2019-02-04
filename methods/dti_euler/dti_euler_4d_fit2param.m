@@ -72,6 +72,8 @@ for nk = 1:sz(3)
     end
 end
 
+mfs.md = mfs.iso;
+
 dps = mfs; clear mfs;
 
 if (~isempty(dps_fn)), mdm_dps_save(dps, dps.s, dps_fn, opt); end

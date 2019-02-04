@@ -39,3 +39,5 @@ movefile(xps_sub_fn,xps_fn);
 
 delete(nii_temp_fn);
 delete(xps_temp_fn);
+delete(fullfile(data_path,'NMRacqus.mat'))
+delete(fullfile(data_path,'NMRacqu2s.mat'))
