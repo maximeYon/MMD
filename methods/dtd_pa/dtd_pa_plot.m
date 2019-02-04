@@ -11,6 +11,8 @@ opt = mplot_opt(opt);
 opt.dtd.dmin = .2/max(xps.b);
 opt.dtd.dmax = 4e-9;
 
+S = abs(S);
+
 % Show signal and fit
 m = mplot_signal_and_fit(S, xps, @dtd_pa_1d_data2fit, @dtd_pa_1d_fit2data, axh, opt);
 

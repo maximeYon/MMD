@@ -13,6 +13,6 @@ a = 3*xps.b.*d_iso.*xps.b_delta.*d_delta + eps;
 s = s0.*exp(-xps.b.*d_iso).*exp(a/3).*...
     sqrt(pi)/2.*real(gammainc(a,1/2)./sqrt(a));
 
-indx = a < 100*eps;
+indx = abs(a) < 100*eps;
 s(indx) = s0 * exp(-xps.b(indx).*d_iso);
 

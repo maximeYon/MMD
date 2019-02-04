@@ -1,7 +1,7 @@
 function m = dtd_pake_1d_data2fit(signal, xps, opt, ind)
 % function m = dtd_pake_1d_data2fit(signal, xps, opt, ind)
 
-if (nargin < 4), ind = ones(size(signal)) > 0; end
+if (nargin < 4), ind = (signal > 0.1 * max(signal)); end
 
 unit_to_SI = [max(signal) 1e-9 1];
 
