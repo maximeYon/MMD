@@ -8,7 +8,9 @@ opt = dtd_opt(opt);
 opt = mplot_opt(opt);
 
 % Customize options
-opt.dtd.dmin = .2/max(xps.b);
+opt.dtd.dmin = .05/max(xps.b);
+
+S = abs(S);
 
 % Show signal and fit
 m = mplot_signal_and_fit(S, xps, @dtd_1d_data2fit, @dtd_1d_fit2data, axh, opt);

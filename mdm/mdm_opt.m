@@ -24,6 +24,7 @@ opt = msf_ensure_field(opt, 'xps_merge_clear_s_ind', 0);
 
 opt = msf_ensure_field(opt, 'xps_merge_rethrow_error', 1);
 opt = msf_ensure_field(opt, 'pa_rethrow_error', 1);
+opt = msf_ensure_field(opt, 'mdm_xps_throw_error', 1);
 
 opt = msf_ensure_field(opt, 'mdm_xps_throw_error', 1);
 

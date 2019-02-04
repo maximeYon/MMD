@@ -19,10 +19,9 @@ xps = msf_ensure_field(xps, 'n', size(S,2));
 
 x = 1:xps.n;
 MS = mean(S, 1)';
-
 hold(h_top, 'on');
 
-if (size(S, 1) < 50)
+if (size(S, 1) < 2)
     
     % Deal with complex signals
     if (any(~isreal(S(:))))
@@ -46,11 +45,14 @@ else
     end
     
     plot(h_top, x, S_plot, '-', 'color', col_gray);
-    errorbar(h_top, x, S_plot, D_plot, 'k.', 'markersize', 8);
-    
-    if (isfield(xps, 'c_volume'))
-        plot(h_top, x(xps.c_volume), S_plot(xps.c_volume), 'ko', 'markerfacecolor', 'red', 'markersize', 9);
+    if numel(S_plot) < 100
+        plot(h_top, x, S_plot, 'k.');
     end
+    %errorbar(h_top, x, S_plot, D_plot, 'k.', 'markersize', 8);
+    
+%     if (isfield(xps, 'c_volume'))
+%         plot(h_top, x(xps.c_volume), S_plot(xps.c_volume), 'ko', 'markerfacecolor', 'red', 'markersize', 9);
+%     end
     
 end
 

@@ -70,7 +70,7 @@ switch (opt.mplot.dtd_plot_type)
                 'LineWidth',.01, ...
                 'MarkerSize',ms(c),...
                 'Color',col,...
-                'MarkerFaceColor',col);
+                'MarkerFaceColor','none');
         end
         
     case 'population_contour'
@@ -134,8 +134,8 @@ set(h,...
 
 axis(h,'square');
 
-xlabel(h,'log \it{D}\rm_{iso} / m^2s^-^1','FontSize',opt.mplot.fs)
-ylabel(h,'log \it{D}\rm_{para} / \it{D}\rm_{perp}','FontSize',opt.mplot.fs)
+xlabel(h,'log_{10}(\it{D}\rm_{iso} / m^2s^-^1)','FontSize',opt.mplot.fs)
+ylabel(h,'log_{10}(\it{D}\rm_{A} / \it{D}\rm_{R})','FontSize',opt.mplot.fs)
 
 if (opt.mplot.dtd_col_mode > 0)
     title(h,'orientation, [RGB]=[xyz]_ ','FontSize',opt.mplot.fs,'FontWeight','normal')
