@@ -10,8 +10,8 @@ lw = 1;
 opt = mdm_opt();
 opt = dtr2d_opt(opt);
 
-opt.dtr2d.dmin = .1/max(xps.b);
-opt.dtr2d.r2min = .1/max(xps.te);
+opt.dtr2d.dmin = .2/max(xps.b);
+opt.dtr2d.r2min = .2/max(xps.te);
 opt.dtr2d.r2max = 2/min(xps.te);
 %opt.dtr2d
 
@@ -35,7 +35,9 @@ ymax = log10(ratiomax);
 zmin = log10(r2min);
 zmax = log10(r2max);
 
-[n,par,perp,theta,phi,r2,w] = dtr2d_dist2par(dtr2d_m2dtr2d(m));
+[n,dpar,dperp,theta,phi,r2,w] = dtr2d_dist2par(dtr2d_m2dtr2d(m));
+diso = (dpar+2*dperp)/3;
+dratio = dpar./dperp;
 s0 = sum(w);
 
 cla(axh);
@@ -46,6 +48,7 @@ axis(axh,'tight')
 set(axh,'XLim',xps.n*[-.1 1.1], 'YLim',s0*[-.1 1.1],...
     'Box','off','TickDir','out','TickLength',.02*[1 1],...
 'FontSize',fs,'LineWidth',lw)
+set(axh,'YLim',max([S_fit(:); S(:)])*[-.1 1.1])
 xlabel(axh,'Acq number','FontSize',fs)
 ylabel(axh,'Signal','FontSize',fs)
 
@@ -53,36 +56,27 @@ cla(axh2);
 hold(axh2, 'on');
 
 if n>0
-    xcos = cos(phi).*sin(theta);
-    ycos = sin(phi).*sin(theta);
-    zcos = cos(theta);
 
-    iso = tm_eigvals2iso([par perp perp]);
-    fa = tm_eigvals2fa([par perp perp]);
+    dist_d.x = log10(diso);
+    dist_d.y = log10(dratio);
+    dist_d.z = log10(r2);
+    dist_d.a = .5*w;
+    dist_d.r = abs(cos(phi).*sin(theta));
+    dist_d.g = abs(sin(phi).*sin(theta));
+    dist_d.b = abs(cos(theta));
+    dist_d.bright = (abs(squeeze(dpar)-squeeze(dperp))./max([squeeze(dpar) squeeze(dperp)],[],2)).^2;
+    
+    contourpars.Nx = 50; contourpars.Ny = contourpars.Nx; contourpars.Nz = contourpars.Nx; contourpars.Nlevels = 5;
+    axpars.xmin = -10; axpars.xmax = -8; axpars.ymin = -2; axpars.ymax = 2; axpars.zmin = -.5; axpars.zmax = 2; 
 
-    c.x = log10(iso);
-    c.y = log10(par./perp);
-    c.z = log10(r2) - log10(r2min)+log10(ratiomax);
-    c.ms = 5*ms*sqrt(w/s0);
-    c.bright = fa;
-    c.r = abs(xcos);
-    c.g = abs(ycos);
-    c.b = abs(zcos);
+    [hax,hscatter,hcontour] = dist_3d_scattercontourplot(axh2,dist_d,contourpars,axpars);
 
-    for nc = 1:n
-        h1 = plot(axh2,c.x(nc),c.y(nc),'o','LineWidth',.01);
-        h2 = plot(axh2,c.x(nc),c.z(nc),'o','LineWidth',.01);
-%        hold on
-        col = c.bright(nc)*[c.r(nc) c.g(nc) c.b(nc)];
-        set([h1; h2],'MarkerSize',c.ms(nc),'Color',col,'MarkerFaceColor',col)
-    end
+    set(axh2,'LineWidth',lw,'FontSize',fs)
+    set(axh2,'XTick',-11:.5:-8,'YTick',-2:1:2,'ZTick',0:.5:2,'XGrid','on','YGrid','on','ZGrid','on','Projection','perspective')
+
+    xlabel(axh2,'log_{10}(\itD\rm_{iso} / m^2s^-^1)','FontSize',fs)
+    ylabel(axh2,'log_{10}(\itD\rm_{A} / \itD\rm_{R})','FontSize',fs)
+    zlabel(axh2,'log_{10}(\it{R}\rm_2 / s^-^1)','FontSize',fs)
+    title(axh2,['orientation, [RGB]=[xyz]'],'FontSize',fs,'FontWeight','normal')
 end
-plot(axh2,[log10(dmin) log10(dmax)],log10(ratiomax)*[1 1],'k-','LineWidth',lw);
 
-set(axh2,'XLim',[xmin xmax], 'YLim',[ymin ymax+zmax-zmin],'YAxisLocation','right',...
-'XTick',[-11:.5:-8],'YTick',-2:.5:2,'TickDir','out','TickLength',.02*[1 1],...
-'FontSize',fs,'LineWidth',lw,'Box','on')
-axis(axh2,'square')
-xlabel(axh2,'size, log(\itD\rm_{iso} / m^2s^-^1)','FontSize',fs)
-ylabel(axh2,'shape, log(\itD\rm_{||} / \itD\rm_{\perp})    log(\it{R}\rm_2 / s^-^1)','FontSize',fs)
-title(axh2,['orientation, [RGB]=[xyz]'],'FontSize',fs,'FontWeight','normal')

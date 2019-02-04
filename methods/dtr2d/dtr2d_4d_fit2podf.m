@@ -44,7 +44,7 @@ run_path = mfilename('fullpath');
 framework_path = fileparts(fileparts(fileparts(run_path)));
 angles_path = fullfile(framework_path,'tools','uvec','repulsion_angles_tri');
 
-odf_s.n = 500; %250, 500, 1000, 3994, or 15970
+odf_s.n = 250; %250, 500, 1000, 3994, or 15970
 angles = load(fullfile(angles_path,num2str(odf_s.n)));
 odf_s.x = sin(angles.theta).*cos(angles.phi);
 odf_s.y = sin(angles.theta).*sin(angles.phi);
