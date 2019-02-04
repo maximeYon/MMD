@@ -13,8 +13,8 @@ out_path = fullfile(run_path,'waveforms');
 
 
 % Parameters for calculating b-values
-gmax = 100/100*1; % Max gradient [3 T/m]
-tau = 14e-3; % Waveform duration [10 ms]
+gmax = 100/100*1.4; % Max gradient [3 T/m]
+tau = 10e-3; % Waveform duration [10 ms]
 
 % Define timing parameters relative to a total echo time = 1
 np = 1000; % Number of time intervals in waveform [1000]
@@ -28,10 +28,10 @@ epsilon_mid = .15; % Half-sine ramp down [0.1]
 % zeta: half aperture of q cone, see Topgaard. Microporous Mesoporous Mater. 178, 60 (2013).
 % http://dx.doi.org/10.1016/j.micromeso.2013.03.009
 deltapsi = 2*pi;
-zeta = acos(1/sqrt(3)); out_fn = fullfile(out_path,'axde_sphere.gp'); %sphere
-%zeta = pi/2; out_fn = fullfile(out_path,'axde_plane.gp'); deltapsi = pi; Amid = .2; %plane
-%zeta = 0; out_fn = fullfile(out_path,'axde_stick.gp'); Amid = 0.63; %stick
-%zeta = acos(sqrt(2/3)); out_fn = fullfile(out_path,'axde_cigar.gp'); Amid = .4; epsilon_up = .2;%cigar
+zeta = acos(1/sqrt(3)); out_fn = fullfile(out_path,'axde_sphere'); %sphere
+zeta = pi/2; out_fn = fullfile(out_path,'axde_plane'); deltapsi = pi; Amid = 0; %plane
+zeta = 0; out_fn = fullfile(out_path,'axde_stick'); deltapsi = 2*pi; Amid = 0; %stick
+zeta = acos(sqrt(2/3)); out_fn = fullfile(out_path,'axde_cigar'); deltapsi = 2*pi; Amid = 0; %cigar
 
 % (theta,phi): Orientation of cone axis in lab frame
 theta = 0; phi = 0;
@@ -91,7 +91,7 @@ re_gr(2:(end-1)) = re_gr(2:(end-1)) - sum(re_gr)/(np-2);
 im_gr(2:(end-1)) = im_gr(2:(end-1)) - sum(im_gr)/(np-2);
 
 % Normalize waveform to the range -1 to +1
-%gnorm = max(abs([ga(:); re_gr(:)+1i*im_gr(:)]));
+gnorm = max(abs([ga(:); re_gr(:)+1i*im_gr(:)]));
 gnorm = max(ga);
 ga = ga/gnorm;
 re_gr = re_gr/gnorm;
@@ -218,3 +218,5 @@ fprintf(fid, formatspec, out_mat');
 
 fprintf(fid,'%s\n',['##END']);
 fclose(fid);
+
+max(abs([gx(:); gy(:); gz(:)]))
