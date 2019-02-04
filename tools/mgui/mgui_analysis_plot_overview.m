@@ -19,7 +19,6 @@ xps = msf_ensure_field(xps, 'n', size(S,2));
 
 x = 1:xps.n;
 MS = mean(S, 1)';
-
 hold(h_top, 'on');
 
 if (size(S, 1) < 2)

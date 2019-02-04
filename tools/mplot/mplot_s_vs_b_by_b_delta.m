@@ -82,8 +82,10 @@ end
 
 % Plot for legend
 hold(h, 'off');
-for c = 1:numel(b_delta_uni)
-    semilogy(h, -1,2,'-', 'color', cmap(c,:), 'linewidth', 2); hold(h,'on');
+Nlines = numel(b_delta_uni);
+for c = 1:Nlines
+    lw = 2*(Nlines-.5*(c-1))/Nlines;
+    semilogy(h, -1,2,'-', 'color', cmap(c,:), 'linewidth', lw); hold(h,'on');
 end
 
 for c = 1:numel(b_delta_uni)
@@ -135,24 +137,28 @@ for c = 1:numel(b_delta_uni)
         end
     end
     
+    ms = 10*(Nlines-.5*(c-1))/Nlines;
+    lw = 4*(Nlines-.9*(c-1))/Nlines;
+    
     semilogy(h, xps.b(ind2) * 1e-9, S(ind2) / sc, data_marker, 'color', cmap(c,:), ...
-        'markersize', 5, 'markerfacecolor', cmap(c,:), 'linewidth', 2);
+        'markersize', ms, 'markerfacecolor', 'none', 'linewidth', 1);
     
     hold(h, 'on');
     
-    semilogy(h, xps.b(ind3) * 1e-9, S(ind3) / sc, 'x', 'color', cmap(c,:), ...
-        'markersize', 10, 'markerfacecolor', cmap(c,:));
+%     semilogy(h, xps.b(ind3) * 1e-9, S(ind3) / sc, 'x', 'color', cmap(c,:), ...
+%         'markersize', 10, 'markerfacecolor', cmap(c,:));
     
-    semilogy(h, xps2.b * 1e-9, S_fit / sc, '-', 'color', cmap(c,:), 'linewidth', 2);
+    semilogy(h, xps2.b * 1e-9, S_fit / sc, '-', 'color', cmap(c,:), 'linewidth', lw);
 end
 
 axis(h, 'on');
 
 
 xlim(h, [0 max(xps2.b) * 1.1e-9]);
-ylim(h, [min(0.1, max(0.0001, 10^floor(log10(min(S(S(:) > 0) / sc))))) 1.1]);
+%ylim(h, [min(0.1, max(0.0001, 10^floor(log10(min(S(S(:) > 0) / sc))))) 1.1]);
+ylim(h, [.02 1.1]);
 
-xlabel(h, 'b [ms/um^2]', 'fontsize', opt.mplot.fs);
+xlabel(h, ['\itb\rm [ms/',char(181),'m^2]'], 'fontsize', opt.mplot.fs);
 ylabel(h, 'Signal', 'fontsize', opt.mplot.fs);
 
 
@@ -163,7 +169,7 @@ l_str = cell(1,numel(b_delta_uni));
 for c = 1:numel(b_delta_uni)
     plot(h,10,10,'-', 'color', cmap(c,:), 'linewidth', 2);
     hold(h, 'on');
-    l_str{c} = ['b_\Delta = ' num2str(b_delta_uni(c))];
+    l_str{c} = ['\itb\rm_\Delta = ' num2str(b_delta_uni(c))];
 end
 legend(h, l_str, 'location', 'northeast');
 legend(h, 'boxoff');

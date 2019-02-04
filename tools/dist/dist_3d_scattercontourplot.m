@@ -2,7 +2,7 @@ function [hax,hscatter,hcontour] = dist_3d_scattercontourplot(hax,dist_d,contour
 
 lw_contour = 1;
 lw_axes = 2;
-lw_plot = .5;
+lw_plot = 1;
 fs_axes = 15;
 
 x = dist_d.x(:); x(~isfinite(x)) = 0;
@@ -14,12 +14,13 @@ g = dist_d.g(:);
 b = dist_d.b(:);
 c = repmat(dist_d.bright(:),[1 3]).*[r g b];
 
+axes(hax)
 
 if ~isfield(axpars,'no_scatter')
-    hscatter = scatter3(x,y,z,a,c);
+    hscatter = scatter3(hax,x,y,z,a,c);
     set(hscatter,'LineWidth',lw_plot)
 else
-    hscatter = scatter3(0,0,0,eps,[1 1 1]);
+    hscatter = scatter3(hax,0,0,0,eps,[1 1 1]);
 end
 
 hold on
@@ -97,5 +98,5 @@ end
 axis([axpars.xmin axpars.xmax axpars.ymin axpars.ymax axpars.zmin axpars.zmax])
 view(30,30)
 set(hcontour,'Color',.5*[1 1 1])
-set(hax,'LineWidth',lw_axes,'FontSize',fs_axes)
+set(hax,'LineWidth',lw_axes,'FontSize',fs_axes,'Projection','perspective')
 axis(hax,'square')

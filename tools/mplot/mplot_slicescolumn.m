@@ -19,7 +19,7 @@ if isstruct(im3d)
         imagesc(im2d)
     end
     set(axh_v,'YDir','normal')
-    axis(axh_v,'equal','tight','off')
+    axis(axh_v,'tight','off')
     set(axh_v,'CLim',clim)   
 else
     sz = size(im3d);
@@ -34,7 +34,7 @@ else
         imagesc(im2d')
     end
     set(axh_v,'YDir','normal')
-    axis(axh_v,'equal','tight','off')
+    axis(axh_v,'tight','off')
     colormap('gray')
     set(axh_v,'CLim',clim)
 end
