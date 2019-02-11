@@ -7,7 +7,7 @@ opt = dtd_opt(opt);
 opt.dtd.ind_start = 1;
 
 opt.do_mask      = 0;
-opt.do_data2fit  = 1;.
+opt.do_data2fit  = 1;
 opt.do_bootstrap = 1;
 opt.do_datafit2chisq = 1;
 opt.do_fit2param = 1;
