@@ -1,11 +1,12 @@
-function dtd_covariance_plot(S, xps, h, h2)
+function dtd_covariance_plot(S, xps, axh, axh2)
 % function dtd_covariance_plot(S, xps, h, h2)
 
-if (nargin < 4), h2 = []; end
+if (nargin < 4), axh2 = []; end
 
 opt = dtd_covariance_opt();
-[m,~,n] = dtd_covariance_1d_data2fit(S, xps, opt);
-S_fit = dtd_covariance_1d_fit2data(m, xps);
+%[m,~,n] = dtd_covariance_1d_data2fit(S, xps, opt);
+%S_fit = dtd_covariance_1d_fit2data(m, xps);
+m = mplot_signal_and_fit(S, xps, @dtd_covariance_1d_data2fit, @dtd_covariance_1d_fit2data, axh, opt);
 
 
 % diffusion tensor
@@ -16,16 +17,24 @@ dps = tm_dt_to_dps(dt_1x6);
 ct_1x21  = m(8:28)' * 1e18;
 dps = tm_ct_to_dps(ct_1x21, dps);
 
-plot(h, S, 'k.');
-hold(h, 'on');
-plot(h, S_fit, 'r-');
-xlim(h, [0 1+numel(S_fit)]);
-ylim(h, [0 max(max(S_fit), max(S)) * 1.1]);
-title(h, sprintf('MD = %1.2f, FA = %1.2f\nMK_I = %1.2f, MK_A = %1.2f\n  MEAS RANK = %i', ...
-    dps.MD, dps.FA, dps.MKi, dps.MKa, n));
+% plot(h, S, 'k.');
+% hold(h, 'on');
+% plot(h, S_fit, 'r-');
+% xlim(h, [0 1+numel(S_fit)]);
+% ylim(h, [0 max(max(S_fit), max(S)) * 1.1]);
+% title(axh, sprintf('MD = %1.2f, FA = %1.2f\nMK_I = %1.2f, MK_A = %1.2f\n  MEAS RANK = %i', ...
+%     dps.MD, dps.FA, dps.MKi, dps.MKa, n));
 
+title(axh, sprintf('MD = %1.2f, FA = %1.2f\nMK_I = %1.2f, MK_A = %1.2f\n ', ...
+    dps.MD, dps.FA, dps.MKi, dps.MKa));
+title_str = {...
+    ['MD = ' num2str(dps.MD, 2) ' ',char(181),'m^2/ms   FA = ' num2str(dps.FA, 2) ]; ...
+    ['\mu_2^{iso}/MD^2 = ' num2str(dps.MKi/3, 2) '   \mu_2^{aniso}/MD^2 = ' num2str(dps.MKa/3, 2)]};
+    
+title(axh, title_str)
+axis(axh2,'off') 
 
-if (1)
+if (0)
     
     C = m(8:end) * 1e18;
     
@@ -51,17 +60,17 @@ if (1)
         end
     end
     
-    surface(h2,x,z,y,c);
+    surface(axh2,x,z,y,c);
     
-    caxis(h2, [0 1.5] );
-    colormap(h2, fliplr(jet(100)));
-    axis(h2, 'off')
-    axis(h2, 'tight');
-    axis(h2, 'equal');
-    axis(h2, 'vis3d');
-    camlight(h2, 0, 0);
+    caxis(axh2, [0 1.5] );
+    colormap(axh2, fliplr(jet(100)));
+    axis(axh2, 'off')
+    axis(axh2, 'tight');
+    axis(axh2, 'equal');
+    axis(axh2, 'vis3d');
+    camlight(axh2, 0, 0);
 
     material([0.7 0.4 0.8 1]); 
-    shading(h2, 'interp');
+    shading(axh2, 'interp');
 
 end
