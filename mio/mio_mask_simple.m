@@ -5,7 +5,7 @@ function M = mio_mask_simple(I, opt)
 % the fourth dimension
 
 % define the mask from the variation of the signal
-I_mean = nanmean(single(abs(I)), 4);
+I_mean = msf_nanmean(single(abs(I)), 4);
 I_mean = imfilter(I_mean, ones(5,5,1) / 5^2);
 
 I_V = zeros(size(I_mean));

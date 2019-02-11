@@ -138,7 +138,7 @@ f_plot(S, xps);
         
         hist(h_top, S);
         axis(h_top, 'on');
-        title(h_top, num2str(nanmean(S(:)'),3));
+        title(h_top, num2str(msf_nanmean(S(:)'),3));
         
     end
 
