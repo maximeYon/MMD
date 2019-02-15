@@ -1,5 +1,5 @@
-function odf = dtd_4d_fit2odf(mfs_fn, odf_fn, opt)
-% function odf = dtd_4d_fit2odf(mfs_fn, odf_fn, opt)
+function odf = dtd_4d_fit2odf(mfs_fn, opt)
+% function odf = dtd_4d_fit2odf(mfs_fn, opt)
 
 if (nargin < 2), dps_fn = []; end
 if (nargin < 3), opt = []; end
@@ -40,13 +40,13 @@ run_path = mfilename('fullpath');
 framework_path = fileparts(fileparts(fileparts(run_path)));
 angles_path = fullfile(framework_path,'tools','uvec','repulsion_angles_tri');
 
-odf_s.n = 3994; %1000, 3994, or 15970
+odf_s.n = opt.dtd.odf_nnodes;
 angles = load(fullfile(angles_path,num2str(odf_s.n)));
 odf_s.x = sin(angles.theta).*cos(angles.phi);
 odf_s.y = sin(angles.theta).*sin(angles.phi);
 odf_s.z = cos(angles.theta);
 odf_s.tri = angles.tri;
-ODindex = .05; %Watson distribution smoothing kernel
+ODindex = opt.dtd.odf_watsonkappa; %Watson distribution smoothing kernel
 odf_s.kappa = 1/tan(ODindex*pi/2);
 
     function odf_w = dtds2odf(odf_s, dtds)

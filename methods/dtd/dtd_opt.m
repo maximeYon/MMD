@@ -28,3 +28,6 @@ opt.dtd = msf_ensure_field(opt.dtd, 'bin_disomax',[opt.dtd.dmax; 10^-9.5; opt.dt
 opt.dtd = msf_ensure_field(opt.dtd, 'bin_disomin',[opt.dtd.dmin; opt.dtd.dmin; 10^-9.5; opt.dtd.dmin]);
 opt.dtd = msf_ensure_field(opt.dtd, 'bin_dratiomax',[opt.dtd.dmax/opt.dtd.dmin; 10^.5; 10^.5; 10^-1]);
 opt.dtd = msf_ensure_field(opt.dtd, 'bin_dratiomin',[10^.5; 10^-1; 10^-1; opt.dtd.dmin/opt.dtd.dmax]);
+
+opt.dtd = msf_ensure_field(opt.dtd, 'odf_nnodes', 1000); %250, 500, 1000, 3994, or 15970
+opt.dtd = msf_ensure_field(opt.dtd, 'odf_watsonkappa', 0.05);
