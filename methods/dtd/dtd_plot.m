@@ -8,7 +8,8 @@ opt = dtd_opt(opt);
 opt = mplot_opt(opt);
 
 % Customize options
-opt.dtd.dmin = .05/max(xps.b);
+opt.dtd.dmin = .02/max(xps.b);
+%[opt.dtd.dmin opt.dtd.dmax]
 
 S = abs(S);
 
