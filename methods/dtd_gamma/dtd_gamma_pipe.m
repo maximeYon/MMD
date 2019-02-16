@@ -36,7 +36,7 @@ end
 >>>>>>> master
 
 if (opt.dtd_gamma.do_pa)
-    s = mdm_s_powder_average(s, paths.nii_path, opt);
+    s = mdm_s_powder_average(s, fileparts(s.nii_fn), opt);
 end
 
 % Run the analysis

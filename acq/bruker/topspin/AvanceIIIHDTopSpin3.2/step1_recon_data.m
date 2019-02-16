@@ -9,7 +9,7 @@ rps.npix.phase      = rps.npix.read; % Number of pixels in phase dimension
 rps.shift_read      = -.25e-3; % Image shift in read dimension [m]
 
 %-------------------------------------------------
-data_path = cd;
+data_path = pwd;
 out_path  = fullfile(data_path, 'NII_XPS'); 
 
 msf_mkdir(out_path);

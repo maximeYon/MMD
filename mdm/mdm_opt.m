@@ -38,7 +38,7 @@ opt = msf_ensure_field(opt, 'do_param2nii', 1);
 opt = msf_ensure_field(opt, 'do_datafit2chisq', 0);
 
 opt = msf_ensure_field(opt, 'do_nii2pdf', 0);
-opt = msf_ensure_field(opt, 'do_m2pdf', 1);
+opt = msf_ensure_field(opt, 'do_m2pdf', 0);
 
 
 opt.mdm.present = 1;

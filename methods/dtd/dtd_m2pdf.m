@@ -4,6 +4,9 @@ function dtd_m2pdf(paths, opt)
 mfs = mdm_mfs_load(paths.mfs_fn);
 dps = mdm_dps_load(paths.dps_fn);
 sz = size(mfs.m);
+if ~isfield(paths,'pdf_path')
+    paths.pdf_path = paths.nii_path;
+end
 msf_mkdir(paths.pdf_path);
 
 figsize = 2*11*[1 1];
@@ -103,11 +106,11 @@ ymax = log10(ratiomax);
     end
 %end
 
-eval(['print ' paths.pdf_path '/dtd_2Dmap -loose -dpng -r600'])
+eval(['print ' paths.pdf_path '/dtd_array -loose -dpng -r600'])
 
 figure(2), clf
 set(gcf, 'PaperUnits','centimeters', 'PaperPosition', 1*[0 0 .5*figsize],'PaperSize', .5*figsize);
-axh2 = axes('position',[.01 .14 .85 .85]);
+axh2 = axes('position',[.02 .14 .84 .84]);
 hold on
 Nbin = numel(opt.dtd.bin_disomax);
 for nbin = 1:Nbin

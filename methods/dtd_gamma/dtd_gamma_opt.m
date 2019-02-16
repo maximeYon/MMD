@@ -16,7 +16,8 @@ opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'weight_sthresh', .07);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'weight_wthresh', 2);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'weight_mdthresh', 1e-9);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'fig_maps', ...
-    {'s0','MD', 'MKi', 'MKa', 'MKt', 'ufa', 'miso', 'viso_n', 'msaniso_n'});
+    {'s0','md', 'mu2iso_n', 'mu2aniso_n'});
+%     {'s0','MD', 'MKi', 'MKa', 'MKt', 'ufa', 'miso', 'viso_n', 'msaniso_n'});
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'fig_prefix', 'dtd_gamma');
 
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'fit_iters', 1);
