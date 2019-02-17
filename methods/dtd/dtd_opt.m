@@ -19,7 +19,7 @@ opt.dtd = msf_ensure_field(opt.dtd, 'ofuzz', .1*2*pi);
 opt.dtd = msf_ensure_field(opt.dtd, 'dfuzz', .1);
 
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_maps', ...
-    {'s0','mdiso','vdison','msqddelta','vsqddelta','cvdisosqddelta'});
+    {'s0','mdiso','vdison','msddelta','vsddelta','cvdisosddelta'});
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_prefix', 'dtd');
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_cmaps',{});
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccol',{});

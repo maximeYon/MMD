@@ -11,7 +11,7 @@ opt = mdm_opt(opt);
 %mfs = mdm_mfs_load(mfs_fn);
 
 % Hack to allow mgui to access this function
-if isstring(mfs_fn)
+if ischar(mfs_fn)
     dps = mdm_mfs_load(mfs_fn);
 else
     m = mfs_fn;
