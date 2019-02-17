@@ -41,6 +41,7 @@ dps.C_mu  = mio_min_max_cut(dps.C_mu, 0, 1);
 dps.C_M   = mio_min_max_cut(dps.C_M, 0, 1);
 dps.C_c   = mio_min_max_cut(dps.C_c, 0, 1);
 
+
 % ********* Calculate kurtosis measures ************
 
 % Naming these according to the dtd_gamma nomenclature
@@ -55,5 +56,7 @@ dps.MKd  = dps.MKa - dps.MKad;                  % conventional kurtosis
 
 dps.S_I = sqrt(dps.V_MD .* (dps.V_MD > 0));
 dps.S_A = sqrt(dps.V_shear1 .* (dps.V_shear1 > 0));
+
+
 
 

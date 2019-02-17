@@ -4,14 +4,32 @@ function dtd_covariance_plot(S, xps, axh, axh2)
 if (nargin < 4), axh2 = []; end
 
 opt = dtd_covariance_opt();
-%[m,~,n] = dtd_covariance_1d_data2fit(S, xps, opt);
-%S_fit = dtd_covariance_1d_fit2data(m, xps);
+opt = dtd_opt(opt);
+opt = mplot_opt(opt);
+
 m = mplot_signal_and_fit(S, xps, @dtd_covariance_1d_data2fit, @dtd_covariance_1d_fit2data, axh, opt);
 
+% Get dps from dtd_covariance_4d_fit2param
+mfs.m = zeros(1,1,1,numel(m)); mfs.m(1,1,1,:) = m;
+dps = dtd_covariance_4d_fit2param(mfs.m);
+
+% Plot the tensor distribution
+[dtd_1x6,w] = dtd_dist2nx6w(dtd_m2dtd([1 1e-13 1e-13 0 0 1])); %dummy distribution to get axes
+mplot_dtd(dtd_1x6, w, opt.dtd.dmin, opt.dtd.dmax, axh2, opt);
+mplot_dtd_addstats(dps, axh2, opt);
+mplot_dtd_addtitle(dps, axh2, opt);
+
+
+
+
+
+return
+[m,~,n] = dtd_covariance_1d_data2fit(S, xps, opt);
+S_fit = dtd_covariance_1d_fit2data(m, xps);
 
 % diffusion tensor
 dt_1x6 = m(2:7)' * 1e9;
-dps = tm_dt_to_dps(dt_1x6);
+dps = tm_dt_to_dps(dt_1x6)
 
 % covariance tensor
 ct_1x21  = m(8:28)' * 1e18;

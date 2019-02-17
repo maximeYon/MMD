@@ -10,10 +10,18 @@ S_fit = f_fit2data(m, xps)';
 % Clear, plot, and configure 
 cla(h); hold(h, 'off');
 
-plot(h,1:xps.n,S,    'ko','MarkerSize',round(opt.mplot.ms*1.5), 'MarkerFaceColor', 'none');
+if isfield(xps,'theta')
+    xps_array = [round(xps.b,-7), round(xps.b_delta,1), xps.theta/pi*180, xps.phi/pi*180];
+    [xps_array_sort, ind_sort] = sortrows(xps_array,[1 2 3 4]);
+else
+    xps_array = [round(xps.b,-7), round(xps.b_delta,1)];
+    [xps_array_sort, ind_sort] = sortrows(xps_array,[1 2]);
+end
+
+plot(h,1:xps.n,S(ind_sort),    'ro','MarkerSize',round(opt.mplot.ms*.5), 'MarkerFaceColor', 'none');
 hold(h, 'on');
 %plot(h,1:xps.n,S_fit,'ro','MarkerSize',round(opt.mplot.ms*1.0), 'MarkerFaceColor', 'red');
-plot(h,1:xps.n,S_fit,'rx','MarkerSize',round(opt.mplot.ms*1.0));
+plot(h,1:xps.n,S_fit(ind_sort),'k.','MarkerSize',round(opt.mplot.ms*1.0));
 hold(h, 'off');
 
 axis(h,'tight');
