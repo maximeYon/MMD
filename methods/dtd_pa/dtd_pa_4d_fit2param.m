@@ -103,6 +103,8 @@ dps.MKa = 3 * 4/5*dps.msdanison;
 dps.ufa_old = real(sqrt(3/2) * sqrt(1./(dps.mdiso.^2./dps.Vl+1))); % Lasic (2014)
 dps.ufa     = real(sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.vdiso + dps.mdiso.^2) )); % Szczepankiewicz (2016)
 
+dps.signaniso = sign(dps.maniso_n);
+
 if (~isempty(dps_fn)), mdm_dps_save(dps, dps.s, dps_fn, opt); end
 
 

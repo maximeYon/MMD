@@ -52,6 +52,8 @@ dtds = struct('w',w,'dpar',dpar,'dperp',dperp,'theta',theta,'phi',phi,'diso',dis
 
         %Means
         dps.mdiso = msf_notfinite2zero(sum(dtds.diso.*dtds.w,4)./dps.s0);
+        dps.mdaniso = msf_notfinite2zero(sum(dtds.daniso.*dtds.w,4)./dps.s0);
+        dps.mddelta = msf_notfinite2zero(sum(dtds.ddelta.*dtds.w,4)./dps.s0);
         dps.msdaniso = msf_notfinite2zero(sum(dtds.sdaniso.*dtds.w,4)./dps.s0);
         dps.msddelta = msf_notfinite2zero(sum(dtds.sddelta.*dtds.w,4)./dps.s0);
         dps.mdxx = msf_notfinite2zero(sum(dtds.dxx.*dtds.w,4)./dps.s0);
@@ -72,6 +74,7 @@ dtds = struct('w',w,'dpar',dpar,'dperp',dperp,'theta',theta,'phi',phi,'diso',dis
         dps.cvdisosddelta = msf_notfinite2zero(sum((dtds.diso-repmat(dps.mdiso,[1 1 1 nn])).*(dtds.sddelta-repmat(dps.msddelta,[1 1 1 nn])).*dtds.w,4)./dps.s0);
 
         %Normalized measures
+        dps.mdanison = msf_notfinite2zero(dps.mdaniso./dps.mdiso);
         dps.msdanison = msf_notfinite2zero(dps.msdaniso./dps.mdiso.^2);
         dps.vdison = msf_notfinite2zero(dps.vdiso./dps.mdiso.^2);
         dps.vsdanison = msf_notfinite2zero(dps.vsdaniso./dps.msdaniso.^2);
@@ -85,7 +88,8 @@ dtds = struct('w',w,'dpar',dpar,'dperp',dperp,'theta',theta,'phi',phi,'diso',dis
         % sqrt of negative variances.
         dps.ufa_old = real(sqrt(3/2) * sqrt(1./(dps.mdiso.^2./dps.Vl+1))); % Lasic (2014)
         dps.ufa     = real(sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.vdiso + dps.mdiso.^2) )); % Szczepankiewicz (2016)
-
+        
+        dps.signaniso = sign(dps.mdanison);
     end
 
 dps = dtds2dps(dps, dtds);

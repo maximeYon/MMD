@@ -37,6 +37,8 @@ dps.msdanison = dps.msdaniso./dps.mdiso.^2;
 dps.MKi = 3 * dps.vdison; % Multiply by 3 to get kurtosis
 dps.MKa = 3 * 4/5*dps.msdanison;
 
+dps.signaniso = sign(dps.ddelta);
+
 if (~isempty(dps_fn)), mdm_dps_save(dps, dps.s, dps_fn, opt); end
 
 
