@@ -73,6 +73,8 @@ dps.MKd  = mio_min_max_cut(dps.MKd, 0.0, 4.0);
 % FA and uFA
 dps.ufa = sqrt(dps.C_mu);
 dps.fa = sqrt(dps.C_M);
+dps.uFA = dps.ufa;
+dps.FA = dps.fa;
 
 % Naming according to size-shape nomenclature
 dps.mdiso = dps.MD*1e-9; % mean size
