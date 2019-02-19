@@ -1,9 +1,10 @@
-function dtd_plot(S, xps, axh, axh2)
+function dtd_plot(S, xps, axh, axh2, opt)
 % function dtd_plot(S, xps, axh, axh2)
 
+if (nargin < 5), opt = []; end
 if (nargin < 4), axh2 = []; end
 
-opt = mdm_opt();
+opt = mdm_opt(opt);
 opt = dtd_opt(opt);
 opt = mplot_opt(opt);
 

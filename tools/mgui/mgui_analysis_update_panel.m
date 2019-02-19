@@ -11,6 +11,7 @@ EG.roi = msf_ensure_field(EG.roi, 'xps', []);
 h_top    = EG.handles.h_analysis_top_axes;
 h_bottom = EG.handles.h_analysis_bottom_axes;
 h_popup  = EG.handles.h_analysis_popup;
+h_terminology_popup  = EG.handles.h_analysis_terminology_popup;
 
 
 % repopulate the model selection dropdown
@@ -78,6 +79,23 @@ end
 
 c_method = get(h_popup, 'value');
 
+% Terminology
+% Populate popup
+terminology_names = mplot_terminology_names();
+set(h_terminology_popup, 'String', terminology_names);
+
+% Get current selection
+terminology_s = get(h_terminology_popup, 'String');
+terminology_c = get(h_terminology_popup, 'Value');
+try
+    terminology_current_selection = terminology_s{terminology_c};
+catch
+    terminology_current_selection = {};
+end
+
+terminology_str = terminology_current_selection;
+opt = mdm_opt();
+opt.mplot.terminology = terminology_str;
 
 % connect plot function to method
 switch (c_method)
@@ -95,7 +113,7 @@ switch (c_method)
         
     otherwise % run custom plot scripts
         f_plot = @(S,xps) mgui_analysis_plot(method_name{c_method}, ...
-            S, xps, h_top, h_bottom);
+            S, xps, h_top, h_bottom, opt);
 end
 
 

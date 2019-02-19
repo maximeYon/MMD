@@ -5,7 +5,15 @@ if (nargin < 2), dps_fn = []; end
 if (nargin < 3), opt = []; end
 
 opt = mdm_opt(opt);
-dps = mdm_mfs_load(mfs_fn);
+%dps = mdm_mfs_load(mfs_fn);
+
+% Hack to allow mgui to access this function
+if ischar(mfs_fn)
+    dps = mdm_mfs_load(mfs_fn);
+else
+    m = mfs_fn;
+    dps.m = m; dps.nii_h = []; dps.mask = ones(size(m,1),size(m,2),size(m,3));
+end
 
 % create parameter maps and save them
 sz = size(dps.m);
@@ -26,7 +34,7 @@ for nk = 1:sz(3)
                 if n > 0
                     s0 = ones(1,n)*w;
                     iso_v = (par + 2*perp)/3;
-                    aniso_v = par - perp;
+                    aniso_v = (par - perp)/3;
                     saniso_v = aniso_v.^2;
 
                     miso = iso_v'*w/s0;
@@ -79,6 +87,21 @@ dps.mu2iso = dps.viso;
 dps.mu2aniso = 4/5*dps.msaniso;
 
 dps.mdelta = dps.maniso_n/3;
+
+dps.mdiso = dps.miso;
+dps.vdiso = dps.viso;
+dps.msdaniso = dps.msaniso;
+dps.vdison = dps.viso_n;
+dps.msdanison = dps.msaniso_n;
+
+dps.Vl = 5/2 * 4/5*dps.msdaniso;
+dps.MKi = 3 * dps.vdison; % Multiply by 3 to get kurtosis
+dps.MKa = 3 * 4/5*dps.msdanison;
+
+% Calculate uFA. Take real component to avoid complex values due to
+% sqrt of negative variances.
+dps.ufa_old = real(sqrt(3/2) * sqrt(1./(dps.mdiso.^2./dps.Vl+1))); % Lasic (2014)
+dps.ufa     = real(sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.vdiso + dps.mdiso.^2) )); % Szczepankiewicz (2016)
 
 if (~isempty(dps_fn)), mdm_dps_save(dps, dps.s, dps_fn, opt); end
 

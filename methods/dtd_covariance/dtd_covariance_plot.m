@@ -1,9 +1,10 @@
-function dtd_covariance_plot(S, xps, axh, axh2)
+function dtd_covariance_plot(S, xps, axh, axh2, opt)
 % function dtd_covariance_plot(S, xps, h, h2)
 
 if (nargin < 4), axh2 = []; end
 
-opt = dtd_covariance_opt();
+opt = mdm_opt(opt);
+opt = dtd_covariance_opt(opt);
 opt = dtd_opt(opt);
 opt = mplot_opt(opt);
 

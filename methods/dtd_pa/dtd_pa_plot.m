@@ -1,25 +1,38 @@
-function dtd_pa_plot(S, xps, axh, axh2)
+function dtd_pa_plot(S, xps, axh, axh2, opt)
 % function dtd_plot(S, xps, axh, axh2)
 
+if (nargin < 5), opt = []; end
 if (nargin < 4), axh2 = []; end
 
-opt = mdm_opt();
+opt = mdm_opt(opt);
 opt = dtd_pa_opt(opt);
+opt = dtd_opt(opt);
 opt = mplot_opt(opt);
 
 % Customize options
-opt.dtd.dmin = .2/max(xps.b);
-opt.dtd.dmax = 4e-9;
+opt.dtd_pa.dmin = .02/max(xps.b);
+%opt.dtd.dmax = 4e-9;
+opt.mplot.dtd_col_mode = 0;
 
-S = abs(S);
+if any(~isreal(S(:)))
+    S = abs(S);
+end
 
 % Show signal and fit
-m = mplot_signal_and_fit(S, xps, @dtd_pa_1d_data2fit, @dtd_pa_1d_fit2data, axh, opt);
+m = mplot_s_vs_b_by_b_delta(S, xps, ...
+    @dtd_pa_1d_data2fit, @dtd_pa_1d_fit2data, opt, axh);
+
+% m = mplot_signal_and_fit(S, xps, @dtd_pa_1d_data2fit, @dtd_pa_1d_fit2data, axh, opt);
+
+% Get dps from dtd_pa_4d_fit2param
+mfs.m = zeros(1,1,1,numel(m)); mfs.m(1,1,1,:) = m;
+dps = dtd_pa_4d_fit2param(mfs.m);
 
 % Plot the tensor distribution
 [dtd_1x6,w] = dtd_pa_dtd_to_t1x6(m);
-mplot_dtd(dtd_1x6, w, opt.dtd.dmin, opt.dtd.dmax, axh2, opt);
-    
+mplot_dtd(dtd_1x6, w, opt.dtd_pa.dmin, opt.dtd_pa.dmax, axh2, opt);
+mplot_dtd_addstats(dps, axh2, opt);
+mplot_dtd_addtitle(dps, axh2, opt);    
 
 
 
