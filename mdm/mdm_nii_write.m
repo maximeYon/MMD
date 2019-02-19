@@ -114,7 +114,6 @@ end
 
 % gzip the temporary file
 if (~isempty(folder_gz))
-    msf_mkdir(folder_gz);
     gzip(tmp_nii_fn, folder_gz);
     delete(tmp_nii_fn);
     rmdir(tmp_path,'s');
@@ -167,7 +166,7 @@ end
             case 'complex_single'
                 h.datatype = 32;
                 h.bitpix = 64;
-            case 'complex_double'
+            case 'complex_double';
                 h.datatype = 1792;
                 h.bitpix = 128;
             otherwise

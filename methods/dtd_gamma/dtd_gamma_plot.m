@@ -1,9 +1,8 @@
 function dtd_gamma_plot(S, xps, axh, axh2, opt)
 % function dtd_gamma_plot(S, xps, h, h2)
 
-if (nargin < 3), axh  = gca; end
-if (nargin < 4), axh2 = []; end
 if (nargin < 5), opt = []; end
+if (nargin < 4), axh2 = []; end
 
 opt = mdm_opt(opt);
 opt = dtd_gamma_opt(opt);

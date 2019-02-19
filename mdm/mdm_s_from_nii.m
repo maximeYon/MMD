@@ -1,8 +1,5 @@
 function s = mdm_s_from_nii(nii_fn, b_delta)
-% function s = mdm_s_from_nii(nii_fn, b_delta)
-%
-% nii_fn  -- nifti file name
-% b_delta -- force xps to be constructed with this filename
+% function s = mdm_s_from_nii(nii_fn)
 %
 % converts a nii_fn to an input structure with two fields
 %

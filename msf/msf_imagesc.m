@@ -1,4 +1,4 @@
-function h = msf_imagesc(I,d,k,c)
+function msf_imagesc(I,d,k,c)
 % function msf_imagesc(I,d,k,c)
 %
 % Displays a 2D slice through a 3D or 4D image volume I
@@ -39,5 +39,5 @@ else
     end
 end
 
-h = imagesc(tmp);
+imagesc(tmp);
 axis image off;

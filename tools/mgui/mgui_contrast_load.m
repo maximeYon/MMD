@@ -1,4 +1,4 @@
-function [I, header, filename, ext, xps, xps_fn] = mgui_contrast_load(EG)
+function [I, header, filename, ext, xps] = mgui_contrast_load(EG)
 % function [I, header, filename, ext, xps] = mgui_contrast_load(EG)
 %
 % Return the image volume and filename based on the select struct
@@ -12,10 +12,6 @@ filename = EG.browse.filename;
 % Search for .gz files if the orignal file is not present
 if (~exist(filename, 'file') && exist([filename '.gz'], 'file'))
     filename = [filename '.gz'];
-end
-
-if (~exist(filename, 'file'))
-    error('File does not exist: %s', filename);
 end
 
 % Nifti files are in LPS (some, at least, check this!)
@@ -59,28 +55,29 @@ if (isfield(header.my_hdr, 'ref_scale') && ...
     I = I / header.my_hdr.ref_scale;
 end
 
+% Check if there is an xps-file available
+xps_filename = mdm_xps_fn_from_nii_fn(filename);
+if (exist(xps_filename, 'file'))
+    xps = mdm_xps_load(xps_filename);
+else
+    xps = [];
+end
 
-
-% Get xps: Check if there is some file that could provide info for the xps
-for c_attempt = 1:4
-    switch (c_attempt)
-        case 1
-            xps_fn = mdm_xps_fn_from_nii_fn(filename);
-            fn = @(x) mdm_xps_load(x);
-        case 2
-            xps_fn = mdm_fn_nii2gdir(filename);
-            fn = @(x) mdm_xps_from_gdir(x);
-        case 3
-            [xps_fn, bvec_fn] = mdm_fn_nii2bvalbvec(filename);  
-            fn = @(x) mdm_xps_from_bval_bvec(x, bvec_fn);
-        case 4            
-            xps_fn = mdm_xps_fn_from_nii_fn(filename);
-            xps.n = size(I,4);
-    end
+% If there's no xps, check for gdir
+if (isempty(xps))
+    gdir_filename = mdm_fn_nii2gdir(filename);
     
-    if (exist(xps_fn, 'file'))
-        xps = fn(xps_fn); 
-        break; 
+    if (exist(gdir_filename, 'file'))
+        xps = mdm_xps_from_gdir(gdir_filename);
+    end
+end
+
+% If it is still empty, check for bval bvec
+if (isempty(xps))
+    [tmpa,tmpb] = mdm_fn_nii2bvalbvec(filename);
+    
+    if (exist(tmpa, 'file') && exist(tmpb,'file'))
+        xps = mdm_xps_from_bval_bvec(tmpa,tmpb);
     end
 end
 
@@ -94,3 +91,5 @@ if (do_flip) && (isfield(header, 'my_hdr') && (isfield(header.my_hdr,'ori')))
     end
 end
 
+
+end

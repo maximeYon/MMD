@@ -3,8 +3,6 @@ Multidimensional Diffusion MRI analysis framework (MD-MRI)
 
 Authors:
 Markus Nilsson
-Filip Szczepankiewicz
-Björn Lampinen
 Daniel Topgaard
 Samo Lasic
 Carl-Fredrik Westin

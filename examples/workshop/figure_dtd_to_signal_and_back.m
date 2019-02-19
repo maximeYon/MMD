@@ -65,13 +65,12 @@ opt.mplot.fs = 14;
 dmin = 10^(-10.5);
 dmax = 10^(-8.5);
 
-c_case = 3;
+c_case = 1;
 switch (c_case)
     case 1 % Underlying DTD
         mplot_dtd(dt, [], dmin, dmax, gca, opt);
     
     case 2 % Signal and fit
-        opt = dtd_opt();
         mplot_signal_and_fit(S, xps, @dtd_1d_data2fit, @dtd_1d_fit2data, gca, opt);
         
     case 3 % Fitted distribution

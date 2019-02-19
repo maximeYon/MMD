@@ -3,7 +3,7 @@ function fn = ut_mdm(c_ut)
 %
 % Run unit tests on the files in this package
 
-if (nargin == 0), fn = 7; return; end
+if (nargin == 0), fn = 5; return; end
 
 
 switch (c_ut)
@@ -199,43 +199,4 @@ switch (c_ut)
         end        
         
         
-    case 6
-        fn = 'mdm_gwf_read.m, mdm_gwf_write.m';
-        
-        % define gradient waveform
-        g0 = cat(1, zeros(1,3), ones(10,3), zeros(1,3));
-        
-        % write gwf
-        gwf_fn = fullfile(msf_tmp_path(), 'gwf.txt');
-        
-        mdm_gwf_write(g0, gwf_fn);
-        
-        g1 = mdm_gwf_read(gwf_fn);
-        
-        % delete files
-        msf_delete(gwf_fn);
-        rmdir(fileparts(gwf_fn));
-        
-        if ...
-                (size(g0,1) ~= size(g1,1)) || ...
-                (size(g0,2) ~= size(g1,2)) || ...
-                (any( abs(g1(:) - g0(:)) > eps))
-            error('%s, ut_mdm test %i, read/write error', fn, c_ut);
-        end     
-        
-    case 7
-        fn = 'mdm_xps_info.m';
-        
-        gwf = zeros(100,3);
-        rf = cat(1, ones(50,1), -ones(50,1));
-        dt = 1e-3;
-        
-        xps = gwf_to_pars(gwf, rf, dt);
-        
-        msg = mdm_xps_info(xps);
-        
-        if (isempty(msg))
-            error('%s, ut_mdm test %i, no msg generated', fn, c_ut);
-        end
-            
 end

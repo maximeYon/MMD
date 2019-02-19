@@ -1,4 +1,4 @@
-function [m, cond] = dti_lls_1d_data2fit(signal, xps, opt, ind)
+function m = dti_lls_1d_data2fit(signal, xps, opt, ind)
 % function m = dti_lls_1d_data2fit(signal, xps, opt, ind)
 
 if (nargin < 4), ind = ones(size(signal)) > 0; end
@@ -21,23 +21,19 @@ end
 X  = [ones(sum(ind), 1) -xps.bt(ind,:) * 1e-9];
 
 if (opt.dti_lls.do_heteroscedasticity_correction)
-    C2 = diag(signal(ind).^2);
+    C2 = diag(signal(ind));
 else
     C2 = 1;
 end
 
 tmp = (X' * C2 * X);
 
-cond = rcond(tmp);
-
-if (cond > 1e-10) % some small number
+if (rcond(tmp) > 1e-10) % some small number
     
     m = tmp \ X' * C2 * real(log(signal(ind)));
     
     m(1) = exp(m(1));
     m(2:7) = m(2:7) * 1e-9;
-    
-    m = m';
     
 else
     m = zeros(1,7);

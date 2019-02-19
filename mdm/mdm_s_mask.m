@@ -15,11 +15,6 @@ opt = mdm_opt(opt);
 
 msf_log(['Starting ' mfilename], opt);    
 
-if (~opt.do_mask)
-    s = msf_rmfield(s, 'mask_fn');
-    msf_log(sprintf('-> Returning without masking, opt.do_mask = %i', opt.do_mask), opt);    
-    return;
-end
 
 % construct the filename
 if (~isfield(s,'mask_fn'))
@@ -31,15 +26,14 @@ end
 % masks from outside
 do_overwrite = opt.do_overwrite && opt.mask.do_overwrite;
 if (exist(s.mask_fn, 'file') && (~do_overwrite))
-    msf_log(['Skipping, output file already exists: ' s.mask_fn], opt); 
-    msf_log(sprintf(' (opt.do_overwrite = %i, opt.mask.do_overwrite = %i)', ...
-        opt.do_overwrite, opt.mask.do_overwrite), opt);
-    return;
+    disp(['Skipping, output file already exists: ' s.mask_fn]); return;
 end
 
 % write the mask, don't care if we overwrite anything
-[I,h] = mdm_nii_read(s.nii_fn);
-if (any(imag(I(:)) ~= 0)), I = abs(I); end
-M = mask_fun(I, opt);
-msf_mkdir(fileparts(s.mask_fn));
-mdm_nii_write(uint8(M), s.mask_fn, h);
+if (opt.do_mask)
+    [I,h] = mdm_nii_read(s.nii_fn);
+    if (any(imag(I(:)) ~= 0)), I = abs(I); end
+    M = mask_fun(I, opt);
+    msf_mkdir(fileparts(s.mask_fn));
+    mdm_nii_write(uint8(M), s.mask_fn, h);
+end

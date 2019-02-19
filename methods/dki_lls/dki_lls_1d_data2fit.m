@@ -16,7 +16,7 @@ b4 = tm_1x3_to_1x15(xps.u(ind,:)) .* repmat(xps.b(ind).^2 * 1e-18, 1, 15);
 X = [b0 -b2 1/2 * b4];
     
 if (opt.dki_lls.do_heteroscedasticity_correction)
-    C2 = diag(signal(ind).^2);
+    C2 = diag(signal(ind));
 else
     C2 = 1;
 end
@@ -34,7 +34,6 @@ if (cond > 1e-10) % some small number
     m(2:7)  = m(2:7)  * 1e-9;   % Convert back to SI units
     m(8:22) = m(8:22) * 1e-18;  % Convert back to SI units
         
-    m = m';
 else
     warning('rcond fail in dki_lls_1d_data2fit')
     m = zeros(1, 22);

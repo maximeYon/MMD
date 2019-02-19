@@ -28,10 +28,23 @@ xps = msf_ensure_field(xps, 'b_eta', zeros(size(xps.b_delta)));
 
 
 % This is for powder averaged data... so make it powder averaged if needed
-[S,xps] = mdm_powder_average_1d(S, xps);
+xps_pa = mdm_xps_pa(msf_rmfield(xps, 'c_volume'));
+
+if (xps_pa.n ~= xps.n)
+    if (isfield(xps,'c_volume'))
+        c_volume = xps.c_volume;
+        xps = rmfield(xps, 'c_volume');
+    else
+        c_volume = [];
+    end
+    
+    [S,xps] = mdm_powder_average_1d(S, xps);
+    
+    xps.c_volume = c_volume;
+end
 
 % fit function
-if (nargin < 8) || (numel(ind) ~= numel(S))
+if (nargin < 8)
     ind = ones(size(S)) == 1;
 end
 
@@ -80,9 +93,6 @@ for c = 1:numel(b_delta_uni)
     ind2 = b_delta_input == b_delta_uni(c);
     
     ind3 = ind2 & (~ind);
-    
-    col = mplot_b_shape_to_col(b_delta_uni(c));
-
     
     % Construct a fitted signal
     clear xps2;
@@ -157,8 +167,7 @@ ylabel(h, 'Signal', 'fontsize', opt.mplot.fs);
 
 l_str = cell(1,numel(b_delta_uni));
 for c = 1:numel(b_delta_uni)
-    col = mplot_b_shape_to_col(b_delta_uni(c));    
-    plot(h,10,10,'-', 'color', col, 'linewidth', 2);
+    plot(h,10,10,'-', 'color', cmap(c,:), 'linewidth', 2);
     hold(h, 'on');
     l_str{c} = ['\itb\rm_\Delta = ' num2str(b_delta_uni(c))];
 end
