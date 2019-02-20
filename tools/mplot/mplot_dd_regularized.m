@@ -26,7 +26,7 @@ cla(h); hold(h, 'on');
 log_D = log10(D);
 [D_sorted, D_order] = sort(log_D);
 log_dmin = round(min(log_D),1)-0.1;
-log_dmax = round(max(log_D),1)+0.2;
+log_dmax = round(max(log_D),1)+0.1;
 
 max_PD = 0;
 

@@ -6,7 +6,9 @@ function opt = ilt_regularized_opt(opt)
 opt.ilt_regularized.present = 1;
 
 opt.ilt_regularized = msf_ensure_field(opt.ilt_regularized, 'tmp', 1); 
-opt.ilt_regularized = msf_ensure_field(opt.ilt_regularized, 'sample_number_D', 100); 
+opt.ilt_regularized = msf_ensure_field(opt.ilt_regularized, 'dmin', 1e-11);
+opt.ilt_regularized = msf_ensure_field(opt.ilt_regularized, 'dmax', 5e-9);
+opt.ilt_regularized = msf_ensure_field(opt.ilt_regularized, 'sample_number_D', 50); 
 opt.ilt_regularized = msf_ensure_field(opt.ilt_regularized, 'smooth_mode', 4); 
 opt.ilt_regularized = msf_ensure_field(opt.ilt_regularized, 'lsq_opts', ...
     optimoptions('lsqcurvefit', 'display', 'off','MaxFunEvals',1e3));
