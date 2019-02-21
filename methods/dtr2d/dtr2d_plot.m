@@ -1,13 +1,15 @@
-function dtr2d_plot(S, xps, axh, axh2)
+function dtr2d_plot(S, xps, axh, axh2, opt)
 % function dtr2d_plot(S, xps, axh, axh2)
 
 if (nargin < 4), axh2 = []; end
+if (nargin < 5), opt = []; end
 
 ms = 5;
 fs = 10;
 lw = 1;
 
-opt = mdm_opt();
+opt = mdm_opt(opt);
+opt = dtd_opt(opt);
 opt = dtr2d_opt(opt);
 
 opt.dtr2d.dmin = .2/max(xps.b);

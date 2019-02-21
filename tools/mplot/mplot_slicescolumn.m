@@ -35,7 +35,7 @@ else
     end
     set(axh_v,'YDir','normal')
     axis(axh_v,'tight','off')
-    colormap('gray')
+    for n = 1:numel(axh_v), colormap(axh_v(n),gray(64)), end
     set(axh_v,'CLim',clim)
 end
 
