@@ -4,11 +4,21 @@ function dps = dtd_covariance_4d_fit2param(mfs_fn, dps_fn, opt)
 % Compute dps (display parameters structure) from the mfs (model fit
 % structure) using functions tm_dt_to_dps and tm_ct_to_dps
 
-if (nargin < 2), mfs_fn = []; end
+if (nargin < 2), dps_fn = []; end
 if (nargin < 3), opt    = []; end
 
 opt = mdm_opt(opt);
-mfs = mdm_mfs_load(mfs_fn);
+%mfs = mdm_mfs_load(mfs_fn);
+
+% Hack to allow mgui to access this function
+if ischar(mfs_fn)
+    dps = mdm_mfs_load(mfs_fn);
+else
+    m = mfs_fn;
+    dps.m = m; dps.nii_h = []; dps.mask = [];
+end
+mfs = dps;
+
 sz  = msf_size(mfs.m(:,:,:,1), 3);
 
 % reshape help functions
@@ -60,6 +70,17 @@ dps.MK   = mio_min_max_cut(dps.MK,  0.0, 4.0);
 dps.MKad = mio_min_max_cut(dps.MKad, 0.0, 4.0); 
 dps.MKd  = mio_min_max_cut(dps.MKd, 0.0, 4.0); 
 
+% FA and uFA
+dps.ufa = sqrt(dps.C_mu);
+dps.fa = sqrt(dps.C_M);
+dps.uFA = dps.ufa;
+dps.FA = dps.fa;
+
+% Naming according to size-shape nomenclature
+dps.mdiso = dps.MD*1e-9; % mean size
+dps.msdanison = dps.MKa/3*5/4; % normalized mean-square shape
+dps.vdison = dps.C_MD; % normalized variance size
+dps.vdiso = dps.C_MD.*(dps.MD*1e-9)^2; % variance size
 
 if (~isempty(dps_fn))
     mdm_dps_save(dps, mfs.s, dps_fn, opt);

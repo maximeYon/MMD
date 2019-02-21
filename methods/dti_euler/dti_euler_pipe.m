@@ -20,6 +20,7 @@ msf_log(['Starting ' mfilename], opt);
 % Prepare mask
 if (opt.do_mask)
     s = mdm_s_mask(s, @mio_mask_threshold, [], opt);
+    %s = mdm_s_mask(s, @mio_mask_simple, [], opt)
 end
 
 % Fit and derive parameters

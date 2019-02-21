@@ -1,6 +1,7 @@
-function dti_euler_plot(S, xps, axh, axh2)
+function dti_euler_plot(S, xps, axh, axh2, opt)
 % function dti_euler_plot(S, xps, axh, axh2)
 
+if (nargin < 5), opt = []; end
 if (nargin < 4), axh2 = []; end
 
 opt = mdm_opt();

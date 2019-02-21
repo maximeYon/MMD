@@ -11,7 +11,7 @@ opt.dtd = msf_ensure_field(opt.dtd, 'ind_start', 1);
 opt.dtd = msf_ensure_field(opt.dtd, 'dmin', 1e-11);
 opt.dtd = msf_ensure_field(opt.dtd, 'dmax', 5e-9);
 opt.dtd = msf_ensure_field(opt.dtd, 'n_in', 1e2); % n_in: Number of nodes in NNLS inversion. [100 - 1000]
-opt.dtd = msf_ensure_field(opt.dtd, 'n_out', 20);
+opt.dtd = msf_ensure_field(opt.dtd, 'n_out', 50);
 opt.dtd = msf_ensure_field(opt.dtd, 'n_kill', 0);
 opt.dtd = msf_ensure_field(opt.dtd, 'n_proliferation', 20);
 opt.dtd = msf_ensure_field(opt.dtd, 'n_extinction', 20);
@@ -19,7 +19,7 @@ opt.dtd = msf_ensure_field(opt.dtd, 'ofuzz', .1*2*pi);
 opt.dtd = msf_ensure_field(opt.dtd, 'dfuzz', .1);
 
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_maps', ...
-    {'s0','mdiso','vdison','msqddelta','vsqddelta'});
+    {'s0','mdiso','vdison','msddelta','vsddelta','cvdisosddelta'});
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_prefix', 'dtd');
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_cmaps',{});
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccol',{});

@@ -1,4 +1,4 @@
-function mgui_analysis_plot(model_name, S, xps, h_top, h_bottom)
+function mgui_analysis_plot(model_name, S, xps, h_top, h_bottom, opt)
 % function mgui_analysis_plot(model_name, S, xps, h_top, h_bottom)
 
 
@@ -19,7 +19,7 @@ MS = mean(S, 1)';
 if (exist([plot_fun_name '.m'], 'file'))
     try % standard plot function
 
-        feval(plot_fun_name, MS, xps, h_top, h_bottom);
+        feval(plot_fun_name, MS, xps, h_top, h_bottom, opt);
         return;
         
     catch me
