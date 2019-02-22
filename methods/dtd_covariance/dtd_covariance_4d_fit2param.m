@@ -76,11 +76,11 @@ dps.fa = sqrt(dps.C_M);
 dps.uFA = dps.ufa;
 dps.FA = dps.fa;
 
-% Naming according to size-shape nomenclature
+% Naming according to size-shape terminology
 dps.mdiso = dps.MD*1e-9; % mean size
 dps.msdanison = dps.MKa/3*5/4; % normalized mean-square shape
 dps.vdison = dps.C_MD; % normalized variance size
-dps.vdiso = dps.C_MD.*(dps.MD*1e-9)^2; % variance size
+dps.vdiso = dps.C_MD.*(dps.MD*1e-9).^2; % variance size
 
 if (~isempty(dps_fn))
     mdm_dps_save(dps, mfs.s, dps_fn, opt);
