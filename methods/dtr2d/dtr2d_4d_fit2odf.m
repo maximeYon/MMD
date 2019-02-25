@@ -31,26 +31,26 @@ end
 diso = (dpar + 2*dperp)/3;
 daniso = (dpar - dperp)/3;
 ddelta = msf_notfinite2zero(daniso./diso);
-sqdaniso = daniso.^2;
-sqddelta = msf_notfinite2zero(sqdaniso./diso.^2);
+sdaniso = daniso.^2;
+sddelta = msf_notfinite2zero(sdaniso./diso.^2);
 dratio = msf_notfinite2zero(dpar./dperp);
 [dxx,dyy,dzz,dxy,dxz,dyz] = dtd_pars2elements(dpar,dperp,theta,phi);
 
 dtds = struct('w',w,'dpar',dpar,'dperp',dperp,'theta',theta,'phi',phi,'diso',diso,'daniso',daniso,'ddelta',ddelta,...
-    'sqdaniso',sqdaniso,'sqddelta',sqddelta,'dratio',dratio,'dxx',dxx,'dyy',dyy,'dzz',dzz,'dxy',dxy,'dxz',dxz,'dyz',dyz);
+    'sdaniso',sdaniso,'sddelta',sddelta,'dratio',dratio,'dxx',dxx,'dyy',dyy,'dzz',dzz,'dxy',dxy,'dxz',dxz,'dyz',dyz);
 
 %ODF nodes
 run_path = mfilename('fullpath');
 framework_path = fileparts(fileparts(fileparts(run_path)));
 angles_path = fullfile(framework_path,'tools','uvec','repulsion_angles_tri');
 
-odf_s.n = 250; %250, 500, 1000, 3994, or 15970
+odf_s.n = opt.dtr2d.odf_nnodes;
 angles = load(fullfile(angles_path,num2str(odf_s.n)));
 odf_s.x = sin(angles.theta).*cos(angles.phi);
 odf_s.y = sin(angles.theta).*sin(angles.phi);
 odf_s.z = cos(angles.theta);
 odf_s.tri = angles.tri;
-ODindex = .05; %Watson distribution smoothing kernel
+ODindex = opt.dtr2d.odf_watsonkappa; %Watson distribution smoothing kernel
 odf_s.kappa = 1/tan(ODindex*pi/2);
 
     function odf_w = dtds2odf(odf_s, dtds)

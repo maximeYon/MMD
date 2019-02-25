@@ -27,13 +27,9 @@ paths = mdm_paths(paths, 'dtd_gamma');
 msf_log(['Starting ' mfilename], opt);
 
 % Prepare: mask and powder average
-<<<<<<< HEAD
-s = mdm_s_mask(s, @mio_mask_threshold, paths.nii_path, opt);
-=======
 if (opt.do_mask)
     s = mdm_s_mask(s, @mio_mask_threshold, paths.nii_path, opt);
 end
->>>>>>> master
 
 if (opt.dtd_gamma.do_pa)
     s = mdm_s_powder_average(s, fileparts(s.nii_fn), opt);

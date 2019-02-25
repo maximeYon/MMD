@@ -18,15 +18,15 @@ opt.dti_euler = msf_ensure_field(opt.dti_euler, 'weight_wthresh', 2);
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_prefix', 'dti_euler');
 
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_maps', ...
-    {'s0','md'});
+    {'s0','md','fa'});
 
-opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_cmaps',    {'fa'});
-opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccol',     {'t1x6'});
-opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccolnorm', {'lambda33'});
+% opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_cmaps',    {'fa'});
+% opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccol',     {'t1x6'});
+% opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccolnorm', {'lambda33'});
 
-% opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_cmaps',    {'fa',      'cl',         'cp'});
-% opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccol',     {'t1x6',    'lambda33vec','lambda11vec'});
-% opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccolnorm', {'lambda33','mask',       'mask'});
+opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_cmaps',    {'fa',      'cl',         'cp'});
+opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccol',     {'t1x6',    'lambda33vec','lambda11vec'});
+opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccolnorm', {'lambda33','mask',       'mask'});
 
 % to produce standard fa-color map, this would be the way:
 % opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_cmaps',{'fa'});

@@ -33,3 +33,5 @@ opt.dtr2d = msf_ensure_field(opt.dtr2d, 'bin_disomin',[opt.dtr2d.dmin; opt.dtr2d
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'bin_dratiomax',[opt.dtr2d.dmax/opt.dtr2d.dmin; 3; opt.dtr2d.dmax/opt.dtr2d.dmin]);
 opt.dtr2d = msf_ensure_field(opt.dtr2d, 'bin_dratiomin',[3; opt.dtr2d.dmin/opt.dtr2d.dmax; opt.dtr2d.dmin/opt.dtr2d.dmax]);
 
+opt.dtr2d = msf_ensure_field(opt.dtr2d, 'odf_nnodes', 1000); %250, 500, 1000, 3994, or 15970
+opt.dtr2d = msf_ensure_field(opt.dtr2d, 'odf_watsonkappa', 0.05);

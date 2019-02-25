@@ -6,7 +6,16 @@ if (nargin < 3), opt = []; end
 
 opt = mdm_opt(opt);
 opt = dtr2d_opt(opt);
-dps = mdm_mfs_load(mfs_fn);
+%dps = mdm_mfs_load(mfs_fn);
+
+% Hack to allow mgui to access this function
+if ischar(mfs_fn)
+    dps = mdm_mfs_load(mfs_fn);
+else
+    m = mfs_fn;
+    dps.m = m;
+end
+
 
 % create parameter maps and save them
 
@@ -29,13 +38,13 @@ w = m(:,:,:,circshift(ind,5,1));
 diso = (dpar + 2*dperp)/3;
 daniso = (dpar - dperp)/3;
 ddelta = msf_notfinite2zero(daniso./diso);
-sqdaniso = daniso.^2;
-sqddelta = msf_notfinite2zero(sqdaniso./diso.^2);
+sdaniso = daniso.^2;
+sddelta = msf_notfinite2zero(sdaniso./diso.^2);
 dratio = msf_notfinite2zero(dpar./dperp);
 [dxx,dyy,dzz,dxy,dxz,dyz] = dtr2d_pars2elements(dpar,dperp,theta,phi);
 
 dtr2ds = struct('w',w,'dpar',dpar,'dperp',dperp,'theta',theta,'phi',phi,'diso',diso,'daniso',daniso,'ddelta',ddelta,...
-    'sqdaniso',sqdaniso,'sqddelta',sqddelta,'dratio',dratio,'dxx',dxx,'dyy',dyy,'dzz',dzz,'dxy',dxy,'dxz',dxz,'dyz',dyz,'r2',r2);
+    'sdaniso',sdaniso,'sddelta',sddelta,'dratio',dratio,'dxx',dxx,'dyy',dyy,'dzz',dzz,'dxy',dxy,'dxz',dxz,'dyz',dyz,'r2',r2);
 
 
     function dps = dtr2ds2dps(dps, dtr2ds)
@@ -45,8 +54,9 @@ dtr2ds = struct('w',w,'dpar',dpar,'dperp',dperp,'theta',theta,'phi',phi,'diso',d
 
         %Means
         dps.mdiso = msf_notfinite2zero(sum(dtr2ds.diso.*dtr2ds.w,4)./dps.s0);
-        dps.msqdaniso = msf_notfinite2zero(sum(dtr2ds.sqdaniso.*dtr2ds.w,4)./dps.s0);
-        dps.msqddelta = msf_notfinite2zero(sum(dtr2ds.sqddelta.*dtr2ds.w,4)./dps.s0);
+        dps.mdaniso = msf_notfinite2zero(sum(dtr2ds.daniso.*dtr2ds.w,4)./dps.s0);
+        dps.msdaniso = msf_notfinite2zero(sum(dtr2ds.sdaniso.*dtr2ds.w,4)./dps.s0);
+        dps.msddelta = msf_notfinite2zero(sum(dtr2ds.sddelta.*dtr2ds.w,4)./dps.s0);
         dps.mdxx = msf_notfinite2zero(sum(dtr2ds.dxx.*dtr2ds.w,4)./dps.s0);
         dps.mdyy = msf_notfinite2zero(sum(dtr2ds.dyy.*dtr2ds.w,4)./dps.s0);
         dps.mdzz = msf_notfinite2zero(sum(dtr2ds.dzz.*dtr2ds.w,4)./dps.s0);
@@ -57,23 +67,35 @@ dtr2ds = struct('w',w,'dpar',dpar,'dperp',dperp,'theta',theta,'phi',phi,'diso',d
 
         %Variances
         dps.vdiso = msf_notfinite2zero(sum((dtr2ds.diso-repmat(dps.mdiso,[1 1 1 nn])).^2.*dtr2ds.w,4)./dps.s0);
-        dps.vsqdaniso = msf_notfinite2zero(sum((dtr2ds.sqdaniso-repmat(dps.msqdaniso,[1 1 1 nn])).^2.*dtr2ds.w,4)./dps.s0);
-        dps.vsqddelta = msf_notfinite2zero(sum((dtr2ds.sqddelta-repmat(dps.msqddelta,[1 1 1 nn])).^2.*dtr2ds.w,4)./dps.s0);
+        dps.vsdaniso = msf_notfinite2zero(sum((dtr2ds.sdaniso-repmat(dps.msdaniso,[1 1 1 nn])).^2.*dtr2ds.w,4)./dps.s0);
+        dps.vsddelta = msf_notfinite2zero(sum((dtr2ds.sddelta-repmat(dps.msddelta,[1 1 1 nn])).^2.*dtr2ds.w,4)./dps.s0);
         dps.vr2 = msf_notfinite2zero(sum((dtr2ds.r2-repmat(dps.mr2,[1 1 1 nn])).^2.*dtr2ds.w,4)./dps.s0);
 
         %Covariances
-        dps.cvdisosqdaniso = msf_notfinite2zero(sum((dtr2ds.diso-repmat(dps.mdiso,[1 1 1 nn])).*(dtr2ds.sqdaniso-repmat(dps.msqdaniso,[1 1 1 nn])).*dtr2ds.w,4)./dps.s0);
-        dps.cvdisosqddelta = msf_notfinite2zero(sum((dtr2ds.diso-repmat(dps.mdiso,[1 1 1 nn])).*(dtr2ds.sqddelta-repmat(dps.msqddelta,[1 1 1 nn])).*dtr2ds.w,4)./dps.s0);
+        dps.cvdisosdaniso = msf_notfinite2zero(sum((dtr2ds.diso-repmat(dps.mdiso,[1 1 1 nn])).*(dtr2ds.sdaniso-repmat(dps.msdaniso,[1 1 1 nn])).*dtr2ds.w,4)./dps.s0);
+        dps.cvdisosddelta = msf_notfinite2zero(sum((dtr2ds.diso-repmat(dps.mdiso,[1 1 1 nn])).*(dtr2ds.sddelta-repmat(dps.msddelta,[1 1 1 nn])).*dtr2ds.w,4)./dps.s0);
         dps.cvdisor2 = msf_notfinite2zero(sum((dtr2ds.diso-repmat(dps.mdiso,[1 1 1 nn])).*(dtr2ds.r2-repmat(dps.mr2,[1 1 1 nn])).*dtr2ds.w,4)./dps.s0);
-        dps.cvsqddeltar2 = msf_notfinite2zero(sum((dtr2ds.r2-repmat(dps.mr2,[1 1 1 nn])).*(dtr2ds.sqddelta-repmat(dps.msqddelta,[1 1 1 nn])).*dtr2ds.w,4)./dps.s0);
+        dps.cvsddeltar2 = msf_notfinite2zero(sum((dtr2ds.r2-repmat(dps.mr2,[1 1 1 nn])).*(dtr2ds.sddelta-repmat(dps.msddelta,[1 1 1 nn])).*dtr2ds.w,4)./dps.s0);
 
         %Normalized measures
+        dps.mdanison = msf_notfinite2zero(dps.mdaniso./dps.mdiso);
+        dps.msdanison = msf_notfinite2zero(dps.msdaniso./dps.mdiso.^2);
         dps.vdison = msf_notfinite2zero(dps.vdiso./dps.mdiso.^2);
-        dps.vsqdanison = msf_notfinite2zero(dps.vsqdaniso./dps.msqdaniso.^2);
-        dps.vsqddeltan = msf_notfinite2zero(dps.vsqddelta./dps.msqddelta.^2);
+        dps.vsdanison = msf_notfinite2zero(dps.vsdaniso./dps.msdaniso.^2);
+        dps.vsddeltan = msf_notfinite2zero(dps.vsddelta./dps.msddelta.^2);
         dps.vr2n = msf_notfinite2zero(dps.vr2./dps.mr2.^2);
 
 
+        dps.Vl = 5/2 * 4/5*dps.msdaniso;
+        dps.MKi = 3 * dps.vdison; % Multiply by 3 to get kurtosis
+        dps.MKa = 3 * 4/5*dps.msdanison;
+
+        % Calculate uFA. Take real component to avoid complex values due to
+        % sqrt of negative variances.
+        dps.ufa_old = real(sqrt(3/2) * sqrt(1./(dps.mdiso.^2./dps.Vl+1))); % Lasic (2014)
+        dps.ufa     = real(sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.vdiso + dps.mdiso.^2) )); % Szczepankiewicz (2016)
+        
+        dps.signaniso = sign(dps.mdanison);
     end
 
 dps = dtr2ds2dps(dps, dtr2ds);
