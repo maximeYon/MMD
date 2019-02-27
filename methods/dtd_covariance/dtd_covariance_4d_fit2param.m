@@ -8,6 +8,7 @@ if (nargin < 2), dps_fn = []; end
 if (nargin < 3), opt    = []; end
 
 opt = mdm_opt(opt);
+opt = dtd_covariance_opt(opt);
 %mfs = mdm_mfs_load(mfs_fn);
 
 % Hack to allow mgui to access this function

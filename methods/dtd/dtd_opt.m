@@ -13,21 +13,24 @@ opt.dtd = msf_ensure_field(opt.dtd, 'dmax', 5e-9);
 opt.dtd = msf_ensure_field(opt.dtd, 'n_in', 1e2); % n_in: Number of nodes in NNLS inversion. [100 - 1000]
 opt.dtd = msf_ensure_field(opt.dtd, 'n_out', 50);
 opt.dtd = msf_ensure_field(opt.dtd, 'n_kill', 0);
-opt.dtd = msf_ensure_field(opt.dtd, 'n_proliferation', 20);
-opt.dtd = msf_ensure_field(opt.dtd, 'n_extinction', 20);
+opt.dtd = msf_ensure_field(opt.dtd, 'n_proliferation', 10);
+opt.dtd = msf_ensure_field(opt.dtd, 'n_extinction', 10);
 opt.dtd = msf_ensure_field(opt.dtd, 'ofuzz', .1*2*pi);
 opt.dtd = msf_ensure_field(opt.dtd, 'dfuzz', .1);
 
 opt.dtd = msf_ensure_field(opt.dtd, 'fig_maps', ...
     {'s0','mdiso','vdison','msddelta','vsddelta','cvdisosddelta'});
-opt.dtd = msf_ensure_field(opt.dtd, 'fig_prefix', 'dtd');
-opt.dtd = msf_ensure_field(opt.dtd, 'fig_cmaps',{});
-opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccol',{});
-opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccolnorm',{});
+opt.dtd = msf_ensure_field(opt.dtd, 'fig_prefix', 'dtd_4d');
+opt.dtd = msf_ensure_field(opt.dtd, 'fig_cmaps',    {'FA'});
+opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccol',     {'t1x6'});
+opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccolnorm', {'maxmdii'});
+% opt.dtd = msf_ensure_field(opt.dtd, 'fig_cmaps',{});
+% opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccol',{});
+% opt.dtd = msf_ensure_field(opt.dtd, 'fig_ccolnorm',{});
 opt.dtd = msf_ensure_field(opt.dtd, 'bin_disomax',[opt.dtd.dmax; 10^-9.5; opt.dtd.dmax; opt.dtd.dmax]);
 opt.dtd = msf_ensure_field(opt.dtd, 'bin_disomin',[opt.dtd.dmin; opt.dtd.dmin; 10^-9.5; opt.dtd.dmin]);
 opt.dtd = msf_ensure_field(opt.dtd, 'bin_dratiomax',[opt.dtd.dmax/opt.dtd.dmin; 10^.5; 10^.5; 10^-1]);
 opt.dtd = msf_ensure_field(opt.dtd, 'bin_dratiomin',[10^.5; 10^-1; 10^-1; opt.dtd.dmin/opt.dtd.dmax]);
 
-opt.dtd = msf_ensure_field(opt.dtd, 'odf_nnodes', 1000); %250, 500, 1000, 3994, or 15970
+opt.dtd = msf_ensure_field(opt.dtd, 'odf_nnodes', 250); %250, 500, 1000, 3994, or 15970
 opt.dtd = msf_ensure_field(opt.dtd, 'odf_watsonkappa', 0.05);

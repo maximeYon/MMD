@@ -9,7 +9,7 @@ function axh = mplot_dtd_addtitle(dps, axh, opt)
                 ['variance "size": \mu_2^{iso}/MD^2 = ' num2str(dps.vdison, 2)]
                 ['root-mean-square "shape":  ',char(181),'FA = ' num2str(dps.ufa, 2)]
             };
-        case 'Szcz15'    
+        case 'Szczepankiewicz15'    
             title_str2 = {...
                 ['mean "size": MD = ' num2str(dps.mdiso/1e-9, 2) '\cdot10^{-9} m^2/s'];
                 ['mean-square "shape": \itV\rm_a/MD^2 = ' num2str(4/5*dps.msdanison, 2)];
@@ -23,7 +23,7 @@ function axh = mplot_dtd_addtitle(dps, axh, opt)
                 ['variance "size": C_{MD} = ' num2str(dps.vdison, 2)]
                 ['root-mean-square "shape":  ',char(181),'FA = ' num2str(dps.ufa, 2)]
             };
-        case 'Szcz16 "DIVIDE"'    
+        case 'Szczepankiewicz16 "DIVIDE"'    
             title_str2 = {...
                 ['mean "size": MD = ' num2str(dps.mdiso/1e-9, 2) '\cdot10^{-9} m^2/s'];
                 ['mean-square "shape": MK_a = ' num2str(dps.MKa, 2)];

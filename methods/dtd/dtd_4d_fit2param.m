@@ -16,6 +16,12 @@ else
     dps.m = m;
 end
 
+sz  = msf_size(dps.m(:,:,:,1), 3);
+
+% reshape help functions
+g_reshape = @(a,n) reshape(a, prod(sz(1:3)), n);
+f_reshape = @(a,n) reshape(a, sz(1), sz(2), sz(3), n);
+
 % create parameter maps and save them
 
 m = dps.m;
@@ -62,7 +68,9 @@ dtds = struct('w',w,'dpar',dpar,'dperp',dperp,'theta',theta,'phi',phi,'diso',dis
         dps.mdxy = msf_notfinite2zero(sum(dtds.dxy.*dtds.w,4)./dps.s0);
         dps.mdxz = msf_notfinite2zero(sum(dtds.dxz.*dtds.w,4)./dps.s0);
         dps.mdyz = msf_notfinite2zero(sum(dtds.dyz.*dtds.w,4)./dps.s0);
-        dps.t1x6 = [dps.mdxx dps.mdyy dps.mdzz sqrt(2)*[dps.mdxy dps.mdxz dps.mdyz]];
+        dps.t1x6 = cat(4, dps.mdxx, dps.mdyy, dps.mdzz, sqrt(2)*dps.mdxy, sqrt(2)*dps.mdxz, sqrt(2)*dps.mdyz);
+        dps.maxmdii = max(cat(4, dps.mdxx, dps.mdyy, dps.mdzz),[],4);
+        dps = tm_dt_to_dps(reshape(dps.t1x6,[prod(sz(1:3)) 6]), dps, f_reshape);
 
         %Variances
         dps.vdiso = msf_notfinite2zero(sum((dtds.diso-repmat(dps.mdiso,[1 1 1 nn])).^2.*dtds.w,4)./dps.s0);
@@ -88,6 +96,8 @@ dtds = struct('w',w,'dpar',dpar,'dperp',dperp,'theta',theta,'phi',phi,'diso',dis
         % sqrt of negative variances.
         dps.ufa_old = real(sqrt(3/2) * sqrt(1./(dps.mdiso.^2./dps.Vl+1))); % Lasic (2014)
         dps.ufa     = real(sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.vdiso + dps.mdiso.^2) )); % Szczepankiewicz (2016)
+        dps.uFA = dps.ufa;
+        dps.MD = dps.mdiso*1e9;
         
         dps.signaniso = sign(dps.mdanison);
     end
