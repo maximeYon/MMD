@@ -16,7 +16,7 @@ opt = mplot_opt(opt);
 opt.dtr2d.dmin = .05/max(xps.b);
 opt.dtr2d.r2min = .2/max(xps.te);
 opt.dtr2d.r2max = 3/min(xps.te);
-opt.dtr2d
+%opt.dtr2d
 
 S = abs(S);
 
