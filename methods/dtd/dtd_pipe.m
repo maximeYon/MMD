@@ -55,10 +55,7 @@ if (opt.do_param2nii)
     fn = mdm_param2nii(paths.dps_fn, paths.nii_path, opt.dtd, opt);
 end
 
-% Save dtd pdf   
-if (opt.do_m2pdf)
-    dtd_m2pdf(paths, opt);
-end
+
 
 
 
