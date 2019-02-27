@@ -23,7 +23,11 @@ msf_log(['Starting ' mfilename], opt);
 dtd_covariance_check_xps(s.xps, opt);
 
 % Smooth and prepare mask
+<<<<<<< HEAD
 %s = mdm_s_smooth(s, opt.filter_sigma, paths.nii_path, opt);
+=======
+s = mdm_s_smooth(s, opt.filter_sigma, paths.nii_path, opt);
+>>>>>>> parent of accfb79... Revert "Merge remote-tracking branch 'markus-nilsson/master'"
 s = mdm_s_mask(s, @mio_mask_threshold, paths.nii_path, opt);
 
 % Fit and derive parameters
