@@ -57,6 +57,7 @@ dps.msdanison = dps.msdaniso./dps.mdiso.^2;
 % sqrt of negative variances.
 dps.ufa_old = real(sqrt(3/2) * sqrt(1./(dps.MD.^2./dps.Vl+1))); % Lasic (2014)
 dps.ufa     = real(sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.Vi + dps.MD.^2) )); % Szczepankiewicz (2016)
+dps.uFA = dps.ufa;
 
 for i = 5:size(dps.m, 4)
     nam = ['s' num2str(i-4)];

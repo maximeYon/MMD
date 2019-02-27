@@ -2,10 +2,10 @@ function axh_v = dtd_dpsbins2maps(figh,dps,plim)
 
 if nargin < 3
     plim.mdiso = 1.2e-9*[0 1];
-    plim.msqddelta = 1*[0 1];
+    plim.msddelta = 1*[0 1];
     plim.vdiso = 2.5e-19*[0 1];
-    plim.vsqddelta = .15*[0 1];
-    plim.cvdisosqddelta = 1.5e-10*[-1 1];
+    plim.vsddelta = .15*[0 1];
+    plim.cvdisosddelta = 1.5e-10*[-1 1];
 end
 
 figure(figh)
@@ -59,8 +59,8 @@ function axh_v = dtd_dpsbin2maps(dps)
     set(axh,'CLim',clim)
     axh_v = [axh_v; axh];
 
-    im2d = squeeze(dps.msqddelta(:,:,nk)).*mask2d;
-    clim = max(plim.msqddelta)*[-1 1];
+    im2d = squeeze(dps.msddelta(:,:,nk)).*mask2d;
+    clim = max(plim.msddelta)*[-1 1];
     axh = axes('position',[left+2*dleft 1-(nbin+1)*dheight width height]);
     imagesc(im2d')
     set(axh,'CLim',clim)
@@ -73,15 +73,15 @@ function axh_v = dtd_dpsbin2maps(dps)
     set(axh,'CLim',clim)
     axh_v = [axh_v; axh];
 
-    im2d = squeeze(dps.vsqddelta(:,:,nk)).*mask2d;
-    clim = max(plim.vsqddelta)*[-1 1];
+    im2d = squeeze(dps.vsddelta(:,:,nk)).*mask2d;
+    clim = max(plim.vsddelta)*[-1 1];
     axh = axes('position',[left+4*dleft 1-(nbin+1)*dheight width height]);
     imagesc(im2d')
     set(axh,'CLim',clim)
     axh_v = [axh_v; axh];
 
-    im2d = squeeze(dps.cvdisosqddelta(:,:,nk)).*mask2d;
-    clim = max(plim.cvdisosqddelta)*[-1 1];
+    im2d = squeeze(dps.cvdisosddelta(:,:,nk)).*mask2d;
+    clim = max(plim.cvdisosddelta)*[-1 1];
     axh = axes('position',[left+5*dleft 1-(nbin+1)*dheight width height]);
     imagesc(im2d')
     set(axh,'CLim',clim)

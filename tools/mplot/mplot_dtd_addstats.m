@@ -7,7 +7,7 @@ x = log10(dps.mdiso);
 y = log10((1+2*sqrt(dps.msdanison))/(1-sqrt(dps.msdanison)));
 if ~isreal(y)
     y = abs(y);
-    if y > log10(opt.dtd.dmax/opt.dtd.dmin);
+    if any([y > log10(opt.dtd.dmax/opt.dtd.dmin) dps.msdanison > 1]);
         y = log10(opt.dtd.dmax/opt.dtd.dmin);
     end
 end
