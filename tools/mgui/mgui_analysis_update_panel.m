@@ -119,6 +119,6 @@ opt = mdm_opt();
 opt.mplot.terminology = terminology_str;
 
 mgui_analysis_plot(current_method, ...
-    S, EG.roi.xps, EG.analysis.xps_fn, [h_top, h_bottom], EG.roi.c_volume);
+    S, EG.roi.xps, EG.analysis.xps_fn, [h_top, h_bottom], EG.roi.c_volume, opt);
 
 
