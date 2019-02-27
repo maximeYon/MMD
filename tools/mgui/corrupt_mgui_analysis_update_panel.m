@@ -59,6 +59,39 @@ if (~strcmp(EG.analysis.xps_fn, EG.roi.xps_fn))
             method_name{end+1} = d(c).name;
         end
     end
+end
+
+% make sure the selection and the determined method is consistent
+if (value > -1)
+    set(h_popup, 'value', value);
+end
+
+if (get(h_popup, 'value') > numel(str))
+    set(h_popup, 'value', 1);
+end
+
+c_method = get(h_popup, 'value');
+
+% Terminology
+% Populate popup
+terminology_names = mplot_terminology_names();
+set(h_terminology_popup, 'String', terminology_names);
+
+% Get current selection
+terminology_s = get(h_terminology_popup, 'String');
+terminology_c = get(h_terminology_popup, 'Value');
+try
+    terminology_current_selection = terminology_s{terminology_c};
+catch
+    terminology_current_selection = {};
+end
+
+terminology_str = terminology_current_selection;
+opt = mdm_opt();
+opt.mplot.terminology = terminology_str;
+
+% connect plot function to method
+switch (c_method)
     
     set(h_popup, 'String', str);
     
@@ -100,25 +133,5 @@ else
     S = [];
 end
 
-% Terminology
-% Populate popup
-terminology_names = mplot_terminology_names();
-set(h_terminology_popup, 'String', terminology_names);
-
-% Get current selection
-terminology_s = get(h_terminology_popup, 'String');
-terminology_c = get(h_terminology_popup, 'Value');
-try
-    terminology_current_selection = terminology_s{terminology_c};
-catch
-    terminology_current_selection = {};
-end
-
-terminology_str = terminology_current_selection;
-opt = mdm_opt();
-opt.mplot.terminology = terminology_str;
-
 mgui_analysis_plot(current_method, ...
     S, EG.roi.xps, EG.analysis.xps_fn, [h_top, h_bottom], EG.roi.c_volume);
-
-
