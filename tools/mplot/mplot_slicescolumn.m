@@ -30,12 +30,12 @@ else
         im2d = im3d(:,:,k);
         bottom = position.dbottom*(k-1);
         axh = axes('position',[position.left bottom position.width position.height]);
-        axh_v = [axh_v; axh];
         imagesc(im2d')
+        colormap(axh,gray(64))
+        axh_v = [axh_v; axh];
     end
     set(axh_v,'YDir','normal')
     axis(axh_v,'tight','off')
-    for n = 1:numel(axh_v), colormap(axh_v(n),gray(64)), end
     set(axh_v,'CLim',clim)
 end
 
