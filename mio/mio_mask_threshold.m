@@ -30,6 +30,6 @@ I0 = mean(I(:,:,:,ind),4);
 
 M = single(I0) > (threshold * single(quantile(I0(:),0.99)));
 
-M = mio_mask_fill(M);
-M = mio_mask_keep_largest(M);
+%M = mio_mask_fill(M);
+%M = mio_mask_keep_largest(M);
 
