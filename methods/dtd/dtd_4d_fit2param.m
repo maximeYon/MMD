@@ -83,14 +83,14 @@ dtds = struct('w',w,'dpar',dpar,'dperp',dperp,'theta',theta,'phi',phi,'diso',dis
 
         %Normalized measures
         dps.mdanison = msf_notfinite2zero(dps.mdaniso./dps.mdiso);
-        dps.msdanison = msf_notfinite2zero(dps.msdaniso./dps.mdiso.^2);
-        dps.vdison = msf_notfinite2zero(dps.vdiso./dps.mdiso.^2);
+        dps.nmsdaniso = msf_notfinite2zero(dps.msdaniso./dps.mdiso.^2);
+        dps.nvdiso = msf_notfinite2zero(dps.vdiso./dps.mdiso.^2);
         dps.vsdanison = msf_notfinite2zero(dps.vsdaniso./dps.msdaniso.^2);
         dps.vsddeltan = msf_notfinite2zero(dps.vsddelta./dps.msddelta.^2);
         
         dps.Vl = 5/2 * 4/5*dps.msdaniso;
-        dps.MKi = 3 * dps.vdison; % Multiply by 3 to get kurtosis
-        dps.MKa = 3 * 4/5*dps.msdanison;
+        dps.MKi = 3 * dps.nvdiso; % Multiply by 3 to get kurtosis
+        dps.MKa = 3 * 4/5*dps.nmsdaniso;
 
         % Calculate uFA. Take real component to avoid complex values due to
         % sqrt of negative variances.

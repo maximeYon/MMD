@@ -93,9 +93,21 @@ dps.FA = dps.fa;
 
 % Naming according to size-shape terminology
 dps.mdiso = dps.MD*1e-9; % mean size
-dps.msdanison = dps.MKa/3*5/4; % normalized mean-square shape
-dps.vdison = dps.C_MD; % normalized variance size
+dps.nmsdaniso = dps.MKa/3*5/4; % normalized mean-square shape
+dps.nvdiso = dps.C_MD; % normalized variance size
 dps.vdiso = dps.C_MD.*(dps.MD*1e-9).^2; % variance size
+
+% clamp measures to avoid extreme values to take precedence in averages
+if (opt.dtd_covariance.do_clamping)    
+    dps.MD    = mio_min_max_cut(dps.MD, 0, 4);
+    dps.mdiso    = mio_min_max_cut(dps.mdiso, 0, 4e-9);
+    dps.nmsdaniso    = mio_min_max_cut(dps.nmsdaniso, 0, 1);
+    dps.nvdiso    = mio_min_max_cut(dps.nvdiso, 0, 1);    
+end
+
+dps.size = dps.mdiso;
+dps.shape = dps.nmsdaniso;
+dps.sizeheterogeneity = dps.nvdiso;    
 
 if (~isempty(dps_fn))
     mdm_dps_save(dps, mfs.s, dps_fn, opt);

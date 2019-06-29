@@ -50,8 +50,12 @@ dps.mu2anison = dps.mu2aniso./dps.mdiso.^2;
 
 dps.vdiso = dps.mu2iso;  % Variance of isotropic diffusivities, see Eqs. (48) and (69)
 dps.msdaniso = 5/4*dps.mu2aniso;  % Mean-square anisotropic diffusivity, see Eqs. (50) and (69)
-dps.vdison = dps.vdiso./dps.mdiso.^2; % Normalized
-dps.msdanison = dps.msdaniso./dps.mdiso.^2;
+dps.nvdiso = dps.vdiso./dps.mdiso.^2; % Normalized
+dps.nmsdaniso = dps.msdaniso./dps.mdiso.^2;
+
+dps.size = dps.mdiso;
+dps.shape = dps.nmsdaniso;
+dps.sizeheterogeneity = dps.nvdiso;    
 
 % Calculate uFA. Take real component to avoid complex values due to
 % sqrt of negative variances.

@@ -17,7 +17,6 @@ opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'weight_wthresh', 2);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'weight_mdthresh', 1e-9);
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'fig_maps', ...
     {'s0','MD', 'mu2ison', 'mu2anison', 'uFA'});
-%     {'s0','MD', 'MKi', 'MKa', 'MKt', 'ufa', 'miso', 'viso_n', 'msaniso_n'});
 opt.dtd_gamma = msf_ensure_field(opt.dtd_gamma, 'fig_prefix', 'dtd_gamma');
 
 % Number of identical fitting repetitions (keeping smallest residual)
