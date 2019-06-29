@@ -16,10 +16,16 @@ fun_check       = [method_name '_check_xps'];
 % convenient format for the models
 MS = mean(S, 2);
 
-for c_attempt = 1:9
+for c_attempt = 0:9
     
     try
         switch (c_attempt)
+            
+            case 0
+                if strcmp(method_name,'Overview')
+                    mgui_analysis_plot_message(h(2), ...
+                        '');
+                end
             
             case 1 % no signal -> show standard message
                 if (numel(S) == 0)

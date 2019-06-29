@@ -4,16 +4,16 @@ function axh = mplot_dtd_addstats(dps, axh, opt)
 
 hold(axh,'on')
 x = log10(dps.mdiso);
-y = log10((1+2*sqrt(dps.msdanison))/(1-sqrt(dps.msdanison)));
+y = log10((1+2*sqrt(dps.nmsdaniso))/(1-sqrt(dps.nmsdaniso)));
 if ~isreal(y)
     y = abs(y);
-    if any([y > log10(opt.dtd.dmax/opt.dtd.dmin) dps.msdanison > 1]);
+    if any([y > log10(opt.dtd.dmax/opt.dtd.dmin) dps.nmsdaniso > 1]);
         y = log10(opt.dtd.dmax/opt.dtd.dmin);
     end
 end
 if isfield(dps,'signaniso')
     if dps.signaniso < 0
-        y = log10((1-2*sqrt(dps.msdanison))/(1+sqrt(dps.msdanison)));
+        y = log10((1-2*sqrt(dps.nmsdaniso))/(1+sqrt(dps.nmsdaniso)));
     end
     if ~isreal(y)
         y = -log10(opt.dtd.dmax/opt.dtd.dmin);
