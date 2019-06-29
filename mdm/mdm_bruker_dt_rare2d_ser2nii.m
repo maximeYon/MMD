@@ -220,6 +220,6 @@ h.pixdim(2:4) = [resolution.i resolution.j resolution.slice];
 h.xyzt_units = 'SI';
 
 % write nifti image and header
-mdm_nii_write(Itd1, nii_fn, h, 0)
+mdm_nii_write(Itd1, nii_fn, h, 0);
 
 

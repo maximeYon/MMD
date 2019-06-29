@@ -23,7 +23,7 @@ opt.(x) = msf_ensure_field(opt.(x), 'do_dki', 0);
 
 % control which maps that are generated as nifti files
 opt.(x) = msf_ensure_field(opt.(x), 'fig_maps', ...
-    {'s0','MD', 'ad', 'rd', 'FA', 'uFA', 'MKi', 'MKa', 'MKt', 'C_MD', 'C_c', 'C_mu', 'C_M'});
+    {'s0','MD', 'C_MD', 'C_c', 'C_mu', 'C_M', 'uFA'});
 
 opt.(x) = msf_ensure_field(opt.(x), 'fig_prefix', 'dtd_covariance');
 

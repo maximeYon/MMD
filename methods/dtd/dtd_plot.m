@@ -22,7 +22,7 @@ m = mplot_signal_and_fit(S, xps, @dtd_1d_data2fit, @dtd_1d_fit2data, axh, opt);
 mfs.m = zeros(1,1,1,numel(m)); mfs.m(1,1,1,:) = m;
 dps = dtd_4d_fit2param(mfs.m);
 
-fa = tm_fa(dps.t1x6);
+%fa = tm_fa(dps.t1x6);
 
 % Plot the tensor distribution
 [dtd_1x6,w] = dtd_dist2nx6w(dtd_m2dtd(m));

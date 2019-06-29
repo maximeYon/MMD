@@ -106,7 +106,7 @@ ymax = log10(ratiomax);
     end
 %end
 
-eval(['print ' paths.pdf_path '/dtd_array -loose -dpng -r600'])
+eval(['print ' paths.pdf_path '/Figure4_DTDarray -loose -dpng -r600'])
 
 figure(2), clf
 set(gcf, 'PaperUnits','centimeters', 'PaperPosition', 1*[0 0 .5*figsize],'PaperSize', .5*figsize);
@@ -171,7 +171,7 @@ axis square
 %ylabel('log(\itD\rm_{||} / \itD\rm_{\perp})','FontSize',fs)
 
 
-eval(['print ' paths.pdf_path '/dtd_global -loose -dpng -r1200'])
+eval(['print ' paths.pdf_path '/Figure4_DTDglobal -loose -dpng -r1200'])
 
 % ptot = sum(sum(sum(p,1),2),3);
 % z = reshape(ptot,[nx ny]);

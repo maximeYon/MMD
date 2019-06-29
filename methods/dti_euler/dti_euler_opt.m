@@ -18,11 +18,11 @@ opt.dti_euler = msf_ensure_field(opt.dti_euler, 'weight_wthresh', 2);
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_prefix', 'dti_euler');
 
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_maps', ...
-    {'s0','md','fa'});
+    {'s0','MD'});
 
-% opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_cmaps',    {'fa'});
-% opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccol',     {'t1x6'});
-% opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccolnorm', {'lambda33'});
+opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_cmaps',    {'FA'});
+opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccol',     {'t1x6'});
+opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccolnorm', {'lambda33'});
 
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_cmaps',    {'fa',      'cl',         'cp'});
 opt.dti_euler = msf_ensure_field(opt.dti_euler, 'fig_ccol',     {'t1x6',    'lambda33vec','lambda11vec'});

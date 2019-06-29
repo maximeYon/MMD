@@ -72,7 +72,8 @@ for nk = 1:sz(3)
     end
 end
 
-mfs.md = mfs.iso;
+mfs.MD = mfs.iso*1e9;
+mfs.FA = mfs.fa;
 
 dps = mfs; clear mfs;
 
