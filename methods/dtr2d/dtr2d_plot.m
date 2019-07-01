@@ -16,7 +16,7 @@ opt = mplot_opt(opt);
 opt.dtr2d.dmin = .05/max(xps.b);
 opt.dtr2d.r2min = .2/max(xps.te);
 opt.dtr2d.r2max = 3/min(xps.te);
-%opt.dtr2d
+opt.dtr2d.r2max
 
 S = abs(S);
 
@@ -61,6 +61,7 @@ ylabel(axh,'Signal','FontSize',fs)
 
 cla(axh2);
 hold(axh2, 'on');
+axis(axh2,'on')
 
 if n>0
 
@@ -77,14 +78,15 @@ if n>0
     axpars.xmin = log10(dmin)-.2; axpars.xmax = log10(dmax)+.2; axpars.ymin = log10(ratiomin)-.2; axpars.ymax = log10(ratiomax)+.2; axpars.zmin = log10(r2min)-.2; axpars.zmax = log10(r2max)+.2; 
 
     [hax,hscatter,hcontour] = dist_3d_scattercontourplot(axh2,dist_d,contourpars,axpars);
-
+    
     set(axh2,'LineWidth',lw,'FontSize',fs)
     set(axh2,'XTick',-11:.5:-8,'YTick',-2:1:2,'ZTick',0:.5:2,'XGrid','on','YGrid','on','ZGrid','on','Projection','perspective')
 
-    xlabel(axh2,{'log_{10}(\itD\rm_{iso} / m^2s^-^1)'; '"size"'},'FontSize',fs)
-    ylabel(axh2,{'log_{10}(\itD\rm_{A} / \itD\rm_{R})'; '"shape"'},'FontSize',fs)
+    xlabel(axh2,{'log_{10}(\itD\rm_{iso} / m^2s^-^1)'; '"size"'},'FontSize',fs) 
+    ylabel(axh2,{'log_{10}(\itD\rm_{A} / \itD\rm_{R})'; '"shape"'},'FontSize',fs);
     zlabel(axh2,'log_{10}(\it{R}\rm_2 / s^-^1)','FontSize',fs)
-    title(axh2,['orientation, [RGB]=[xyz]'],'FontSize',fs,'FontWeight','normal')
+    title(axh2,['orientation, [RGB]=[xyz]'],'FontSize',fs,'FontWeight','normal');
+    
 end
 
-mplot_dtr2d_addtitle(dps, axh2, opt);
+axh2 = mplot_dtr2d_addtitle(dps, axh2, opt);

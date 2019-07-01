@@ -2,7 +2,7 @@ function axh = mplot_dtr2d_addtitle(dps, axh, opt)
 % function axh = mplot_dtr2d_addtitle(dps, axh, opt)
 %
     switch opt.mplot.terminology
-        case 'lasic14'    
+        case 'Lasic14'    
             title_str2 = {...
                 ['mean \itR\rm_2: ' num2str(dps.mr2, 2) ' s^{-1}'];
                 ['mean "size": MD = ' num2str(dps.mdiso/1e-9, 2) '\cdot10^{-9} m^2/s'];
@@ -10,7 +10,7 @@ function axh = mplot_dtr2d_addtitle(dps, axh, opt)
                 ['variance "size": \mu_2^{iso}/MD^2 = ' num2str(dps.vdison, 2)]
                 ['root-mean-square "shape":  ',char(181),'FA = ' num2str(dps.ufa, 2)]
             };
-        case 'szcz15'    
+        case 'Szczepankiewicz15'    
             title_str2 = {...
                 ['mean \itR\rm_2: ' num2str(dps.mr2, 2) ' s^{-1}'];
                 ['mean "size": MD = ' num2str(dps.mdiso/1e-9, 2) '\cdot10^{-9} m^2/s'];
@@ -18,7 +18,7 @@ function axh = mplot_dtr2d_addtitle(dps, axh, opt)
                 ['variance "size": \itV\rm_i/MD^2 = ' num2str(dps.vdison, 2)]
                 ['root-mean-square "shape":  ',char(181),'FA = ' num2str(dps.ufa, 2)]
             };
-        case 'westin16'    
+        case 'Westin16 "QTI"'    
             title_str2 = {...
                 ['mean \itR\rm_2: ' num2str(dps.mr2, 2) ' s^{-1}'];
                 ['mean "size": MD = ' num2str(dps.mdiso/1e-9, 2) '\cdot10^{-9} m^2/s'];
@@ -26,7 +26,7 @@ function axh = mplot_dtr2d_addtitle(dps, axh, opt)
                 ['variance "size": C_{MD} = ' num2str(dps.vdison, 2)]
                 ['root-mean-square "shape":  ',char(181),'FA = ' num2str(dps.ufa, 2)]
             };
-        case 'szcz16'    
+        case 'Szczepankiewicz16 "DIVIDE"'    
             title_str2 = {...
                 ['mean \itR\rm_2: ' num2str(dps.mr2, 2) ' s^{-1}'];
                 ['mean "size": MD = ' num2str(dps.mdiso/1e-9, 2) '\cdot10^{-9} m^2/s'];
@@ -34,7 +34,7 @@ function axh = mplot_dtr2d_addtitle(dps, axh, opt)
                 ['variance "size": MK_i = ' num2str(dps.MKi, 2)]
                 ['root-mean-square "shape":  ',char(181),'FA = ' num2str(dps.ufa, 2)]
             };
-        case 'topgaard19'    
+        case 'Topgaard19'    
             title_str2 = {...
                 ['mean \itR\rm_2: ' num2str(dps.mr2, 2) ' s^{-1}'];
                 ['mean "size": E[\itD\rm_{iso}] = ' num2str(dps.mdiso/1e-9, 2) '\cdot10^{-9} m^2/s'];
@@ -44,7 +44,6 @@ function axh = mplot_dtr2d_addtitle(dps, axh, opt)
         otherwise
             title_str2 = {};
     end
-
     title(axh, title_str2,'FontSize',opt.mplot.fs,'FontWeight','normal')
 
 end
