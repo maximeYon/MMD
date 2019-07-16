@@ -10,7 +10,7 @@ mfs = mdm_mfs_load(mfs_fn);
 
 % create parameter maps and save them
 
-m = mfs.m;
+m = single(mfs.m);
 sz = size(m);
 
 ind = false(sz(4),1);

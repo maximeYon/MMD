@@ -16,9 +16,17 @@ opt = dtd_opt(opt);
 paths = mdm_paths(paths);
 msf_log(['Starting ' mfilename], opt);
 
-% Prepare: mask etc
+% Check that the xps is proper
+dtd_check_xps(s.xps, opt);
+
+% Prepare mask
 if (opt.do_mask)
     s = mdm_s_mask(s, @mio_mask_threshold, [], opt);
+end
+
+% Smooth data
+if (opt.filter_sigma > 0)
+    s = mdm_s_smooth(s, opt.filter_sigma, fileparts(s.nii_fn), opt);
 end
 
 % Run the analysis
@@ -47,10 +55,7 @@ if (opt.do_param2nii)
     fn = mdm_param2nii(paths.dps_fn, paths.nii_path, opt.dtd, opt);
 end
 
-% Save dtd pdf   
-if (opt.do_m2pdf)
-    dtd_m2pdf(paths, opt);
-end
+
 
 
 

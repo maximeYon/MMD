@@ -20,19 +20,28 @@ paths = mdm_paths(paths, 'dtd_covariance');
 msf_log(['Starting ' mfilename], opt);
 
 % Check that the xps is proper
-dtd_covariance_check_xps(s.xps);
+dtd_covariance_check_xps(s.xps, opt);
 
-% Smooth and prepare mask
-if (opt.filter_sigma > 0)
-    s = mdm_smooth(s, opt.filter_sigma, paths.nii_path, opt);
+% Prepare mask
+if (opt.do_mask)
+    s = mdm_s_mask(s, @mio_mask_threshold, [], opt);
 end
 
-s = mdm_s_mask(s, @mio_mask_threshold, paths.nii_path, opt);
+% Smooth data
+if (opt.filter_sigma > 0)
+    s = mdm_s_smooth(s, opt.filter_sigma, fileparts(s.nii_fn), opt);
+end
 
 % Fit and derive parameters
-mdm_data2fit(@dtd_covariance_4d_data2fit, s, paths.mfs_fn, opt);
-mdm_fit2param(@dtd_covariance_4d_fit2param, paths.mfs_fn, paths.dps_fn, opt);
+if (opt.do_data2fit)
+    mdm_data2fit(@dtd_covariance_4d_data2fit, s, paths.mfs_fn, opt);
+end
+if (opt.do_fit2param)
+    mdm_fit2param(@dtd_covariance_4d_fit2param, paths.mfs_fn, paths.dps_fn, opt);
+end
 
-% Save niftis
-fn = mdm_param2nii(paths.dps_fn, paths.nii_path, opt.dtd_covariance, opt); 
+% Save nifti parameter maps    
+if (opt.do_param2nii)
+    fn = mdm_param2nii(paths.dps_fn, paths.nii_path, opt.dtd_covariance, opt); 
+end
 

@@ -84,7 +84,6 @@ h_analysis = uipanel(...
 pix_pos.analysis = get(h_analysis, 'Position');
 
 
-
 % Local setups
 EG = mgui_browse_setup_gui(EG, h_select);
 EG = mgui_roi_setup_gui(EG, h_roi);

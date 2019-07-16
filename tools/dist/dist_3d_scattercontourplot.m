@@ -37,7 +37,7 @@ dist_s.ysigma = 2*abs(dist_s.y(2) - dist_s.y(1));
 
 dist_s = dist_2d_discrete2smooth(dist_d,dist_s);
 
-C = contourc(dist_s.x,dist_s.y,dist_s.w',contourpars.Nlevels);
+C = contourc(double(dist_s.x),double(dist_s.y),double(dist_s.w'),contourpars.Nlevels);
 hcontour = [];
 count = 1;
 while count < length(C)
@@ -61,7 +61,7 @@ dist_s.ysigma = 2*abs(dist_s.y(2) - dist_s.y(1));
 
 dist_s = dist_2d_discrete2smooth(dist_d,dist_s);
 
-C = contourc(dist_s.x,dist_s.y,dist_s.w',contourpars.Nlevels);
+C = contourc(double(dist_s.x),double(dist_s.y),double(dist_s.w'),contourpars.Nlevels);
 count = 1;
 while count < length(C)
     numxy = C(2,count);
@@ -84,7 +84,7 @@ dist_s.ysigma = 2*abs(dist_s.y(2) - dist_s.y(1));
 
 dist_s = dist_2d_discrete2smooth(dist_d,dist_s);
 
-C = contourc(dist_s.x,dist_s.y,dist_s.w',contourpars.Nlevels);
+C = contourc(double(dist_s.x),double(dist_s.y),double(dist_s.w'),contourpars.Nlevels);
 count = 1;
 while count < length(C)
     numxy = C(2,count);

@@ -27,7 +27,7 @@ unit_to_SI = [max(signal) 1e-9 1];
 
 % first fit constrained to oblates -0.5<d_delta<0
 % guesses and bounds
-m_guess   = [max(signal)   1e-9  -0.25];
+m_guess   = [max(signal)   1e-9  -0.49];
 m_lb      = [0             1e-11 -0.49];
 m_ub      = [2*max(signal) 3.5e-9  -0.001];
 

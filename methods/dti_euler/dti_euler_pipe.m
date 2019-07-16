@@ -22,6 +22,11 @@ if (opt.do_mask)
     s = mdm_s_mask(s, @mio_mask_threshold, [], opt);
 end
 
+% Smooth data
+if (opt.filter_sigma > 0)
+    s = mdm_s_smooth(s, opt.filter_sigma, fileparts(s.nii_fn), opt);
+end
+
 % Fit and derive parameters
 if (opt.do_data2fit)
     mdm_data2fit(@dti_euler_4d_data2fit, s, paths.mfs_fn, opt);
