@@ -1,7 +1,6 @@
 function out_path = mdm_bruker_spen2nii_xps(data_path, out_path, rps, opt)
 % function out_path = mdm_bruker_spen2nii_xps(data_path, out_path, rps, opt)
 %
-% Recon images acquired with Bruker pulse sequence DT_axderare2d.
 %
 % Works in progress
 

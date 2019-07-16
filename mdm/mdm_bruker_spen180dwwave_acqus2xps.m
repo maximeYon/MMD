@@ -1,8 +1,8 @@
 function xps = mdm_bruker_spen180dwwave_acqus2xps(data_path, xps_fn)
-% function xps = mdm_bruker_dt_axderare2d_acqus2xps(data_path, xps_fn)
+% function xps = mdm_bruker_spen180dwwave_acqus2xps(data_path, xps_fn)
 %
-% Calculation of b-tensors for the Bruker pulse program DT_axderare2d
-% as used in Topgaard, Phys. Chem. Chem. Phys., 2016.
+% Calculation of b-tensors for gradient waveforms 
+% from Topgaard, Phys. Chem. Chem. Phys., 2016.
 % http://dx.doi.org/10.1039/c5cp07251d
 %
 % data_path: directory for gradient text files
@@ -92,12 +92,14 @@ xps.bt = zeros(td1,6);
 xps.u = uvec;
 xps.theta = acos(uvec(:,3));
 xps.phi = atan2(uvec(:,2),uvec(:,1));
+shapes = cell(DwNShapes,1);
 
 for nShape = 1:DwNShapes
     ind = (1:(td1pershape)) + (nShape-1)*td1pershape;
     eval(['G.a = DWGS' num2str(nShape-1) 'R;'])
     eval(['G.b = DWGS' num2str(nShape-1) 'P;'])
     eval(['G.c = DWGS' num2str(nShape-1) 'S;'])
+    shapes{nShape,1} = [G.a G.b G.c];
     Ndt = numel(G.a);
     dt = DwGradDur/Ndt;
     if Ndt > 1
@@ -190,5 +192,8 @@ end
 % ha = plot(1:xps.n,xps.te,'ro');
 % ylabel('TE')
 
-if (~isempty(xps_fn)), save(xps_fn,'xps'); end
+if (~isempty(xps_fn))
+    save(xps_fn,'xps');
+    save(fullfile(fileparts(xps_fn),'shapes'),'shapes');    
+end
 
