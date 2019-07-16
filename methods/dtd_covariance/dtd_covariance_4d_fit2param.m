@@ -105,6 +105,7 @@ if (opt.dtd_covariance.do_clamping)
     dps.nvdiso    = mio_min_max_cut(dps.nvdiso, 0, 1);    
 end
 
+
 dps.size = dps.mdiso;
 dps.shape = dps.nmsdaniso;
 dps.sizeheterogeneity = dps.nvdiso;    

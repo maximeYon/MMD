@@ -18,7 +18,7 @@ end
 % create parameter maps and save them
 sz = size(dps.m);
 udtiparam = {'udelta','ucs','ucp','ucl','ufa'};
-param = {udtiparam{:},'s0','miso','viso','maniso','vaniso','msaniso','vsaniso'};
+param = {udtiparam{:},'s0','mdiso','vdiso','mdaniso','vdaniso','msdaniso','vsdaniso'};
 for nparam = 1:numel(param)
     eval(['dps.' param{nparam} ' = zeros([sz(1) sz(2) sz(3)]);']);
 end
@@ -37,20 +37,20 @@ for nk = 1:sz(3)
                     aniso_v = (par - perp)/3;
                     saniso_v = aniso_v.^2;
 
-                    miso = iso_v'*w/s0;
-                    viso = (iso_v-miso)'.^2*w/s0;
-                    maniso = aniso_v'*w/s0;
-                    vaniso = (aniso_v-maniso)'.^2*w/s0;
-                    msaniso = saniso_v'*w/s0;
-                    vsaniso = (saniso_v-msaniso)'.^2*w/s0;
+                    mdiso = iso_v'*w/s0;
+                    vdiso = (iso_v-mdiso)'.^2*w/s0;
+                    mdaniso = aniso_v'*w/s0;
+                    vdaniso = (aniso_v-mdaniso)'.^2*w/s0;
+                    msdaniso = saniso_v'*w/s0;
+                    vsdaniso = (saniso_v-msdaniso)'.^2*w/s0;
 
                     dps.s0(ni,nj,nk) = s0;
-                    dps.miso(ni,nj,nk) = miso;
-                    dps.viso(ni,nj,nk) = viso;
-                    dps.maniso(ni,nj,nk) = maniso;
-                    dps.vaniso(ni,nj,nk) = vaniso;
-                    dps.msaniso(ni,nj,nk) = msaniso;
-                    dps.vsaniso(ni,nj,nk) = vsaniso;
+                    dps.mdiso(ni,nj,nk) = mdiso;
+                    dps.vdiso(ni,nj,nk) = vdiso;
+                    dps.mdaniso(ni,nj,nk) = mdaniso;
+                    dps.vdaniso(ni,nj,nk) = vdaniso;
+                    dps.msdaniso(ni,nj,nk) = msdaniso;
+                    dps.vsdaniso(ni,nj,nk) = vsdaniso;
 
                     udtd = [par'; perp'; zeros(n,1)'; zeros(n,1)'; w'];
                     udtd = [n; udtd(:)];
@@ -71,39 +71,39 @@ for nk = 1:sz(3)
 end
 
 %normalized parameters
-dps.viso_n = dps.viso./dps.miso.^2;
-dps.viso_n(isnan(dps.viso_n)) = 0;
-dps.maniso_n = dps.maniso./dps.miso;
-dps.maniso_n(isnan(dps.maniso_n)) = 0;
-dps.vaniso_n = dps.vaniso./dps.miso.^2;
-dps.vaniso_n(isnan(dps.vaniso_n)) = 0;
-dps.msaniso_n = dps.msaniso./dps.miso.^2;
-dps.msaniso_n(isnan(dps.msaniso_n)) = 0;
-dps.vsaniso_n = dps.vsaniso./dps.miso.^4;
-dps.vsaniso_n(isnan(dps.vsaniso_n)) = 0;
+dps.nvdiso = dps.vdiso./dps.mdiso.^2;
+dps.nvdiso(isnan(dps.nvdiso)) = 0;
+dps.nmdaniso = dps.mdaniso./dps.mdiso;
+dps.nmdaniso(isnan(dps.nmdaniso)) = 0;
+dps.nvdaniso = dps.vdaniso./dps.mdiso.^2;
+dps.nvdaniso(isnan(dps.nvdaniso)) = 0;
+dps.nmsdaniso = dps.msdaniso./dps.mdiso.^2;
+dps.nmsdaniso(isnan(dps.nmsdaniso)) = 0;
+dps.nvsdaniso = dps.vsdaniso./dps.mdiso.^4;
+dps.nvsdaniso(isnan(dps.nvsdaniso)) = 0;
 
 %2nd moments of P(Deff)
-dps.mu2iso = dps.viso;
-dps.mu2aniso = 4/5*dps.msaniso;
+dps.mu2iso = dps.vdiso;
+dps.mu2aniso = 4/5*dps.msdaniso;
 
-dps.mdelta = dps.maniso_n/3;
+dps.mdelta = dps.nmdaniso/3;
 
-dps.mdiso = dps.miso;
-dps.vdiso = dps.viso;
-dps.msdaniso = dps.msaniso;
-dps.vdison = dps.viso_n;
-dps.msdanison = dps.msaniso_n;
+dps.mdiso = dps.mdiso;
+dps.vdiso = dps.vdiso;
+dps.msdaniso = dps.msdaniso;
+dps.nvdiso = dps.nvdiso;
+dps.nmsdaniso = dps.nmsdaniso;
 
 dps.Vl = 5/2 * 4/5*dps.msdaniso;
-dps.MKi = 3 * dps.vdison; % Multiply by 3 to get kurtosis
-dps.MKa = 3 * 4/5*dps.msdanison;
+dps.MKi = 3 * dps.nvdiso; % Multiply by 3 to get kurtosis
+dps.MKa = 3 * 4/5*dps.nmsdaniso;
 
 % Calculate uFA. Take real component to avoid complex values due to
 % sqrt of negative variances.
 dps.ufa_old = real(sqrt(3/2) * sqrt(1./(dps.mdiso.^2./dps.Vl+1))); % Lasic (2014)
 dps.ufa     = real(sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.vdiso + dps.mdiso.^2) )); % Szczepankiewicz (2016)
 
-dps.signaniso = sign(dps.maniso_n);
+dps.signaniso = sign(dps.nmdaniso);
 
 if (~isempty(dps_fn)), mdm_dps_save(dps, dps.s, dps_fn, opt); end
 
