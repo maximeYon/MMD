@@ -9,7 +9,7 @@ x = 'dtd_covariance'; % for shortening
 
 opt.(x) = msf_ensure_field(opt.(x), 'do_heteroscedasticity_correction', 1);
 opt.(x) = msf_ensure_field(opt.(x), 'do_regularization', 0);
-opt.(x) = msf_ensure_field(opt.(x), 'do_clamping', 1);
+opt.(x) = msf_ensure_field(opt.(x), 'do_clamping', 0);
 opt.(x) = msf_ensure_field(opt.(x), 'do_extra_fit', 0);
 opt.(x) = msf_ensure_field(opt.(x), 'do_post_fit_masking', 0);
 opt.(x) = msf_ensure_field(opt.(x), 'allow_subspace_estimation', 1);
