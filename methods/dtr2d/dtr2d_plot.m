@@ -16,7 +16,7 @@ opt = mplot_opt(opt);
 opt.dtr2d.dmin = .05/max(xps.b);
 opt.dtr2d.r2min = .2/max(xps.te);
 opt.dtr2d.r2max = 3/min(xps.te);
-opt.dtr2d.r2max
+%opt.dtr2d.r2max
 
 S = abs(S);
 
@@ -33,7 +33,7 @@ dmax = opt.dtr2d.dmax;
 ratiomin = dmin/dmax;
 ratiomax = dmax/dmin;
 r2min = opt.dtr2d.r2min;
-r2max = opt.dtr2d.r2max;
+r2max = opt.dtr2d.r2max
 
 xmin = log10(dmin);
 xmax = log10(dmax);
@@ -49,7 +49,7 @@ s0 = sum(w);
 
 cla(axh);
 hold(axh, 'off');
-h1 = plot(axh,1:xps.n,S,'o',1:xps.n,S_fit,'.');
+h1 = plot(axh,1:xps.n,S,'ro',1:xps.n,S_fit,'k.');
 set(h1,'MarkerSize',ms,'LineWidth',lw)
 axis(axh,'tight')
 set(axh,'XLim',xps.n*[-.1 1.1], 'YLim',s0*[-.1 1.1],...
@@ -68,7 +68,7 @@ if n>0
     dist_d.x = log10(diso);
     dist_d.y = log10(dratio);
     dist_d.z = log10(r2);
-    dist_d.a = .5*w;
+    dist_d.a = 10*w;
     dist_d.r = abs(cos(phi).*sin(theta));
     dist_d.g = abs(sin(phi).*sin(theta));
     dist_d.b = abs(cos(theta));
