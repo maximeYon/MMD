@@ -1,5 +1,5 @@
-function xps = mdm_bruker_dwepiwave_acqus2xps(data_path, xps_fn)
-% function xps = mdm_bruker_dwepiwave_acqus2xps(data_path, xps_fn)
+function res = mdm_bruker_dwepiwave_acqus2xps(data_path, xps_fn)
+% function res = mdm_bruker_dwepiwave_acqus2xps(data_path, xps_fn)
 %
 % Calculation of b-tensors for gradient waveforms 
 % from Topgaard, Phys. Chem. Chem. Phys., 2016.
@@ -11,41 +11,41 @@ function xps = mdm_bruker_dwepiwave_acqus2xps(data_path, xps_fn)
 if (nargin < 2), xps_fn = []; end
 
 % Read PV parameters
-data_path_pv = [data_path '/'];
 
-if ~strcmp(ReadPVParam(data_path_pv, 'PULPROG'),lower('<rFOV_DWEpiWavev1_04.ppg>')), return, end
+if ~strcmp(mdm_bruker_readpvparam(data_path, 'PULPROG'),lower('<rFOV_DWEpiWavev1_04.ppg>')), res = 0; return, end
+if ~strcmp(mdm_bruker_readpvparam(data_path, 'ACQ_pipe_status'),lower('Wrapup')), res = 0; return, end
 
-DwGradDur = ReadPVParam(data_path_pv, 'DwGradDur')*1e-3 ; 
-DwGradTsep = ReadPVParam(data_path_pv, 'DwGradTsep')*1e-3 ;     
-DwDelay1 = ReadPVParam(data_path_pv, 'DwDelay1')*1e-3 ;   
-DwDelay2 = ReadPVParam(data_path_pv, 'DwDelay2')*1e-3 ;   
-DwNB0 = ReadPVParam(data_path_pv, 'DwNB0') ;
-DwNDirs = ReadPVParam(data_path_pv, 'DwNDirs') ;
-DwNAmplitudes = ReadPVParam(data_path_pv, 'DwNAmplitudes') ;
-DwNShapes = ReadPVParam(data_path_pv, 'DwNShapes') ;
-DwDir = ReadPVParam(data_path_pv, 'DwDir') ;
-DwGradAmpG = ReadPVParam(data_path_pv, 'DwGradAmpG') ;
-DwLoopOrder = ReadPVParam(data_path_pv, 'DwLoopOrder') ;
-DwGradShapeArray = ReadPVParam(data_path_pv, 'DwGradShapeArray') ;
-DwGradShapeStrArr = ReadPVParam(data_path_pv, 'DwGradShapeStrArr') ;
-PVM_GradCalConst = ReadPVParam(data_path_pv, 'PVM_GradCalConst') ;
-EchoTime=ReadPVParam(data_path_pv, 'EchoTime')*1e-3 ;
-RefSliceGrad = ReadPVParam(data_path_pv, 'RefSliceGrad') ;
-%RefPul = ReadPVParam(data_path_pv, 'RefPul') ;
-SliceSpoilerDur = ReadPVParam(data_path_pv, 'SliceSpoilerDur')*1e-3 ;
-SliceSpoilerAmp = ReadPVParam(data_path_pv, 'SliceSpoilerAmp') ;
-SliceSpoilerDir = ReadPVParam(data_path_pv, 'SliceSpoilerDir') ; %Seems not to be used. Scope shows DW dirs rotate with slice. 
-ACQ_grad_matrix = ReadPVParam(data_path_pv, 'ACQ_grad_matrix') ;    
+DwGradDur = mdm_bruker_readpvparam(data_path, 'DwGradDur')*1e-3 ; 
+DwGradTsep = mdm_bruker_readpvparam(data_path, 'DwGradTsep')*1e-3 ;     
+DwDelay1 = mdm_bruker_readpvparam(data_path, 'DwDelay1')*1e-3 ;   
+DwDelay2 = mdm_bruker_readpvparam(data_path, 'DwDelay2')*1e-3 ;   
+DwNB0 = mdm_bruker_readpvparam(data_path, 'DwNB0') ;
+DwNDirs = mdm_bruker_readpvparam(data_path, 'DwNDirs') ;
+DwNAmplitudes = mdm_bruker_readpvparam(data_path, 'DwNAmplitudes') ;
+DwNShapes = mdm_bruker_readpvparam(data_path, 'DwNShapes') ;
+DwDir = mdm_bruker_readpvparam(data_path, 'DwDir') ;
+DwGradAmpG = mdm_bruker_readpvparam(data_path, 'DwGradAmpG') ;
+DwLoopOrder = mdm_bruker_readpvparam(data_path, 'DwLoopOrder') ;
+DwGradShapeArray = mdm_bruker_readpvparam(data_path, 'DwGradShapeArray') ;
+DwGradShapeStrArr = mdm_bruker_readpvparam(data_path, 'DwGradShapeStrArr') ;
+PVM_GradCalConst = mdm_bruker_readpvparam(data_path, 'PVM_GradCalConst') ;
+EchoTime=mdm_bruker_readpvparam(data_path, 'EchoTime')*1e-3 ;
+RefSliceGrad = mdm_bruker_readpvparam(data_path, 'RefSliceGrad') ;
+%RefPul = mdm_bruker_readpvparam(data_path, 'RefPul') ;
+SliceSpoilerDur = mdm_bruker_readpvparam(data_path, 'SliceSpoilerDur')*1e-3 ;
+SliceSpoilerAmp = mdm_bruker_readpvparam(data_path, 'SliceSpoilerAmp') ;
+SliceSpoilerDir = mdm_bruker_readpvparam(data_path, 'SliceSpoilerDir') ; %Seems not to be used. Scope shows DW dirs rotate with slice. 
+ACQ_grad_matrix = mdm_bruker_readpvparam(data_path, 'ACQ_grad_matrix') ;    
 
 for nShape = 1:DwNShapes
     parnamR = ['DWGS' num2str(nShape-1) 'R'];
-    parvalR = ReadPVParam(data_path_pv, parnamR)' ;
+    parvalR = mdm_bruker_readpvparam(data_path, parnamR)' ;
     eval([parnamR ' = parvalR;'])
     parnamP = ['DWGS' num2str(nShape-1) 'P'];
-    parvalP = ReadPVParam(data_path_pv, parnamP)' ;
+    parvalP = mdm_bruker_readpvparam(data_path, parnamP)' ;
     eval([parnamP ' = parvalP;'])
     parnamS = ['DWGS' num2str(nShape-1) 'S'];
-    parvalS = ReadPVParam(data_path_pv, parnamS)' ;
+    parvalS = mdm_bruker_readpvparam(data_path, parnamS)' ;
     eval([parnamS ' = parvalS;'])
     %figure(1), clf, plot(1:numel(parvalR),parvalR,'r-', 1:numel(parvalP),parvalP,'g-', 1:numel(parvalS),parvalS,'b-'), pause(1)
 end
@@ -53,15 +53,15 @@ end
 % Read gradient ramps
 % ramp.xa etc maps gradient modulations (a,b,c) to channels (x,y,z)
 % Normalized from -1 to +1
-ramp.xa = ReadPVParam(data_path_pv, 'DwGAmpRot00')' ;
-ramp.xb = ReadPVParam(data_path_pv, 'DwGAmpRot01')' ;
-ramp.xc = ReadPVParam(data_path_pv, 'DwGAmpRot02')' ;
-ramp.ya = ReadPVParam(data_path_pv, 'DwGAmpRot10')' ;
-ramp.yb = ReadPVParam(data_path_pv, 'DwGAmpRot11')' ;
-ramp.yc = ReadPVParam(data_path_pv, 'DwGAmpRot12')' ;
-ramp.za = ReadPVParam(data_path_pv, 'DwGAmpRot20')' ;
-ramp.zb = ReadPVParam(data_path_pv, 'DwGAmpRot21')' ;
-ramp.zc = ReadPVParam(data_path_pv, 'DwGAmpRot22')' ;
+ramp.xa = mdm_bruker_readpvparam(data_path, 'DwGAmpRot00')' ;
+ramp.xb = mdm_bruker_readpvparam(data_path, 'DwGAmpRot01')' ;
+ramp.xc = mdm_bruker_readpvparam(data_path, 'DwGAmpRot02')' ;
+ramp.ya = mdm_bruker_readpvparam(data_path, 'DwGAmpRot10')' ;
+ramp.yb = mdm_bruker_readpvparam(data_path, 'DwGAmpRot11')' ;
+ramp.yc = mdm_bruker_readpvparam(data_path, 'DwGAmpRot12')' ;
+ramp.za = mdm_bruker_readpvparam(data_path, 'DwGAmpRot20')' ;
+ramp.zb = mdm_bruker_readpvparam(data_path, 'DwGAmpRot21')' ;
+ramp.zc = mdm_bruker_readpvparam(data_path, 'DwGAmpRot22')' ;
 
 td1 = numel(ramp.xa);
 
@@ -195,5 +195,7 @@ xps = mdm_xps_calc_btpars(xps);
 if (~isempty(xps_fn))
     msf_mkdir(fileparts(xps_fn));
     save(xps_fn,'xps');
-    save(fullfile(fileparts(xps_fn),'shapes'),'shapes');    
+    %save(fullfile(fileparts(xps_fn),'shapes'),'shapes');    
 end
+
+res = 1;
