@@ -1,5 +1,5 @@
-function nii_fn = mdm_bruker_dwepiwave_2dseq2nii(data_path, nii_fn, rps)
-% function mdm_bruker_dwepiwave_2dseq2nii(data_path, nii_fn, rps)
+function res = mdm_bruker_dwepiwave_2dseq2nii(data_path, nii_fn, rps)
+% function res = mdm_bruker_dwepiwave_2dseq2nii(data_path, nii_fn, rps)
 %
 % Converting EPI images to nifti
 % Image resolution in field n.pixdim in nifti header
@@ -10,13 +10,18 @@ function nii_fn = mdm_bruker_dwepiwave_2dseq2nii(data_path, nii_fn, rps)
 
 if nargin < 3, rps.denoising = 0; end
 
-data_path_pv = [data_path '/'];
-
-if ~strcmp(ReadPVParam(data_path_pv, 'PULPROG'),lower('<rFOV_DWEpiWavev1_04.ppg>')), return, end
+if ~strcmp(mdm_bruker_readpvparam(data_path, 'PULPROG'),lower('<rFOV_DWEpiWavev1_04.ppg>')), res = 0; return, end
+if ~strcmp(mdm_bruker_readpvparam(data_path, 'ACQ_pipe_status'),lower('Wrapup')), res = 0; return, end
 
 in_path = fullfile(data_path,'pdata','1');
 
-imageObj = ImageDataObject(in_path);
+try
+    imageObj = ImageDataObject(in_path);
+catch
+    res = 0;
+    return
+end
+
 data = imageObj.data;
 
 sz = size(data);
@@ -46,8 +51,8 @@ if rps.denoising == 1
     data = dataFinale;
 end
 
-PVM_SpatResol=ReadPVParam(data_path_pv, 'PVM_SpatResol') ;
-PVM_SliceThick=ReadPVParam(data_path_pv, 'PVM_SliceThick') ;
+PVM_SpatResol=mdm_bruker_readpvparam(data_path, 'PVM_SpatResol') ;
+PVM_SliceThick=mdm_bruker_readpvparam(data_path, 'PVM_SliceThick') ;
 
 % make nifti headear
 h = mdm_nii_h_empty;
@@ -62,5 +67,5 @@ if (~isempty(nii_fn))
     mdm_nii_write(data, nii_fn, h, 0);  
 end
 
-
+res = 1;
 
