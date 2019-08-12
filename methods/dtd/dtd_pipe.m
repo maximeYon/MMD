@@ -40,6 +40,10 @@ if (opt.do_data2fit)
         opt.bootstrap.ind = ind;
     end
     mdm_data2fit(@dtd_4d_data2fit, s, paths.mfs_fn, opt);
+    %Convert mfs.m to single to save disk space
+    mfs = mdm_mfs_load(paths.mfs_fn);
+    mfs.m = single(mfs.m);
+    save(paths.mfs_fn, 'mfs');
 end
 
 if (opt.do_datafit2chisq)

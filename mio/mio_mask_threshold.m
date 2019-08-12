@@ -1,5 +1,5 @@
 function M = mio_mask_threshold(I, opt, threshold, ind)
-% function M = mio_mask_threshold(I, opt, threshold)
+% function M = mio_mask_threshold(I, opt, threshold, ind)
 %
 % Masks an image by 
 % 1. Thresholding the b0 image

@@ -1,4 +1,4 @@
-function [xx,yy,zz,xy,xz,yz] = dtr2d_pars2elements(par,perp,theta,phi)
+function [xx,yy,zz,xy,xz,yz] = dtd_pars2elements(par,perp,theta,phi)
 
 xcos = cos(phi).*sin(theta);
 ycos = sin(phi).*sin(theta);

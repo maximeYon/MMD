@@ -5,7 +5,7 @@ function axh = mplot_discretedist2smoothhistogram_boxstats(dist_d, axh, opt)
 if (nargin < 2), axhh = gca; end
 if (nargin < 3), opt = []; end
 
-opt = mplot_opt();
+opt = mplot_opt(opt);
 
 dist_s = dist_1d_discrete2boxplotpars(dist_d);
 wmax = max(dist_s.w);
