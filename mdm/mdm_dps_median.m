@@ -17,7 +17,7 @@ for c = 1:numel(f)
         for cbin = 1:numel(bs_dps{1}.(f{c}))
             fbin = fieldnames(bs_dps{1}.(f{c}){cbin});
             for cfbin = 1:numel(fbin)
-                if (size(bs_dps{1}.(f{c}){cbin}.(fbin{cfbin}), 1) == sz(1) && numel(bs_dps{1}.(f{c}){cbin}.(fbin{cfbin}))<4) 
+                if (size(bs_dps{1}.(f{c}){cbin}.(fbin{cfbin}), 1) == sz(1) && ndims(bs_dps{1}.(f{c}){cbin}.(fbin{cfbin}))<4) 
                     ind_bs = find(~cellfun('isempty',bs_dps));
                     ptemp = zeros(sz(1),sz(2),sz(3),numel(ind_bs));
                     for nbs = 1:numel(ind_bs)
@@ -28,7 +28,7 @@ for c = 1:numel(f)
             end                   
         end
 
-    elseif (size(bs_dps{1}.(f{c}), 1) == sz(1) && numel(bs_dps{1}.(f{c}))<4) 
+    elseif (size(bs_dps{1}.(f{c}), 1) == sz(1) && ndims(bs_dps{1}.(f{c}))<4) 
         ind_bs = find(~cellfun('isempty',bs_dps));
         ptemp = zeros(sz(1),sz(2),sz(3),numel(ind_bs));
         for nbs = 1:numel(ind_bs)
