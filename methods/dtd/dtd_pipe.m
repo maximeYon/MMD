@@ -35,8 +35,8 @@ if (opt.do_data2fit)
         msf_mkdir(fileparts(paths.ind_fn));
         ind = (opt.dtd.ind_start-0) + round(rand([s.xps.n-(opt.dtd.ind_start-1),1])*(s.xps.n-(opt.dtd.ind_start-0)));
         save(paths.ind_fn, 'ind');
-%         ind_fn = mdm_ind_save(ind, paths.ind_fn);
-%         load(paths.ind_fn)
+        ind_fn = mdm_ind_save(ind, paths.ind_fn);
+        load(paths.ind_fn)
         opt.bootstrap.ind = ind;
     end
     mdm_data2fit(@dtd_4d_data2fit, s, paths.mfs_fn, opt);
