@@ -7,6 +7,7 @@ opt.dtd.present = 1;
 
 opt.dtd = msf_ensure_field(opt.dtd, 'tmp', 1); 
 opt.dtd = msf_ensure_field(opt.dtd, 'do_plot', 0);
+opt.dtd = msf_ensure_field(opt.dtd, 'do_bootstrap', 0);
 opt.dtd = msf_ensure_field(opt.dtd, 'ind_start', 1);
 opt.dtd = msf_ensure_field(opt.dtd, 'dmin', 1e-11);
 opt.dtd = msf_ensure_field(opt.dtd, 'dmax', 5e-9);
