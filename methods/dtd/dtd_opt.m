@@ -22,7 +22,7 @@ opt.(method) = msf_ensure_field(opt.(method), 'dfuzz', .1);
 
 opt.(method) = msf_ensure_field(opt.(method), 'fig_maps', ...
     {'s0','mdiso','msddelta','vdiso','vsddelta'});
-opt.(method) = msf_ensure_field(opt.(method), 'fig_prefix', 'dtr2d');
+opt.(method) = msf_ensure_field(opt.(method), 'fig_prefix', 'dtd');
 opt.(method) = msf_ensure_field(opt.(method), 'fig_cmaps',{'fa','cl','cp','ufa','ucl','ucp'});
 opt.(method) = msf_ensure_field(opt.(method), 'fig_ccol',{'t1x6','lambda33vec','lambda11vec','s1x6prim','s1x6prim','s1x6prim'});
 opt.(method) = msf_ensure_field(opt.(method), 'fig_ccolnorm',{'lambda33','mask','mask','slambda33prim','slambda33prim','slambda33prim'});
