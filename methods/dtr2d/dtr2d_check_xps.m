@@ -1,5 +1,5 @@
-function dtr2d_check_xps(xps)
-% function dtr2d_check_xps(xps)
+function dtr2d_check_xps(xps, opt)
+% function dtr2d_check_xps(xps, opt)
 % 
 % checks that all required fields are found in the xps
 
