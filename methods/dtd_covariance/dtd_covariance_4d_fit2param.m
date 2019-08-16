@@ -112,8 +112,3 @@ dps.varsize = dps.nvdiso;
 if (~isempty(dps_fn))
     mdm_dps_save(dps, mfs.s, dps_fn, opt);
 end
-
-
-
-
-
