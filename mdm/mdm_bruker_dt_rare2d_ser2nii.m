@@ -28,7 +28,11 @@ tdim.tot = td/2*td1;
 
 %%read time domain data and pick out relevant signal points
 fid = fopen([data_path '/ser'],'r','ieee-le');
-Std1 = fread(fid,[2,tdim.tot],'long')';
+if any(strcmp(NMRacqus.pulprog,{'DT_axderare2d','SM_moacrare2drs'}))
+    Std1 = fread(fid,[2,tdim.tot],'long')';
+elseif any(strcmp(NMRacqus.pulprog,{'DT_axderare2d_av4'}))
+    Std1 = fread(fid,[2,tdim.tot],'float64')';
+end
 Std1 = Std1(:,1) + 1i*Std1(:,2);
 fclose(fid);
 
