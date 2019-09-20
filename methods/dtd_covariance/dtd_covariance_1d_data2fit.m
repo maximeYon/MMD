@@ -34,6 +34,7 @@ if (nargin < 4), ind = ones(size(signal)) > 0; end
 % Exclude data points with zero or negative values
 ind = ind & (signal > 0);
 signal = signal(ind); 
+%signal(signal == 0) = eps;
 
 if (numel(signal) == 0)
     warning('no non-zero signals supplied'); 
@@ -71,6 +72,9 @@ end
 
 
 % perform regression to estimate model parameters m
+% logsignal = real(log(signal));
+% logsignal(~isfinite(logsignal)) = 0;
+% m = tmp \ X' * C2 * logsignal;
 m = tmp \ X' * C2 * real(log(signal));
 
 % redo with updated C2 and with regularization
@@ -94,6 +98,7 @@ if (opt.dtd_covariance.do_regularization)
     b4_2 = cat(1, b4_2, eye(21));
     
     % regression target: desired value of target elements is zero
+%    rt = cat(1, logsignal, zeros(1+6+21, 1));
     rt = cat(1, real(log(signal)), zeros(1+6+21, 1));
 
     % new regressors
