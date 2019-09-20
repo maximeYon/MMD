@@ -21,11 +21,11 @@ opt.(method) = msf_ensure_field(opt.(method), 'ofuzz', .1*2*pi);
 opt.(method) = msf_ensure_field(opt.(method), 'dfuzz', .1);
 
 opt.(method) = msf_ensure_field(opt.(method), 'fig_maps', ...
-    {'s0','mdiso','msddelta','vdiso','vsddelta'});
+    {'s0','mdiso','msddelta','vdiso'});
 opt.(method) = msf_ensure_field(opt.(method), 'fig_prefix', 'dtd');
-opt.(method) = msf_ensure_field(opt.(method), 'fig_cmaps',{'fa','cl','cp','ufa','ucl','ucp'});
-opt.(method) = msf_ensure_field(opt.(method), 'fig_ccol',{'t1x6','lambda33vec','lambda11vec','s1x6prim','s1x6prim','s1x6prim'});
-opt.(method) = msf_ensure_field(opt.(method), 'fig_ccolnorm',{'lambda33','mask','mask','slambda33prim','slambda33prim','slambda33prim'});
+opt.(method) = msf_ensure_field(opt.(method), 'fig_cmaps',{});
+opt.(method) = msf_ensure_field(opt.(method), 'fig_ccol',{});
+opt.(method) = msf_ensure_field(opt.(method), 'fig_ccolnorm',{});
 
 opt.(method) = msf_ensure_field(opt.(method), 'bin_disomin',[0 0 2]*1e-9);
 opt.(method) = msf_ensure_field(opt.(method), 'bin_disomax',[2 2 5]*1e-9);
