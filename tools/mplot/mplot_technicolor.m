@@ -11,6 +11,10 @@ if strcmp(method,'dtr2d')
     plotfields.gray = {'s0';'mdiso';'msddelta';'mr2';'vdiso';'vsddelta';'vr2'};
     plotfields.hotcold = {'cvdisosddelta';'cvdisor2';'cvsddeltar2'};
     plotfields.bin = {'mdiso';'msddelta';'mr2'};
+elseif strcmp(method,'dtr1d')
+    plotfields.gray = {'s0';'mdiso';'msddelta';'mr1';'vdiso';'vsddelta';'vr1'};
+    plotfields.hotcold = {'cvdisosddelta';'cvdisor1';'cvsddeltar1'};
+    plotfields.bin = {'mdiso';'msddelta';'mr1'};
 elseif strcmp(method,'dtd')
     plotfields.gray = {'s0';'mdiso';'msddelta';'vdiso';'vsddelta'};
     plotfields.hotcold = {'cvdisosddelta'};

@@ -38,6 +38,14 @@ if strcmp(method,'dtr2d')
     xlabel('E[R_2] / s^{-1}')
     xlim = clim.mr2 + .05*abs(diff(clim.mr2))*[-1 1];
     set(gca,'XLim',xlim)
+elseif strcmp(method,'dtr1d')
+    left = left+dleft;
+    dist_d.x = dps.mr1(:);
+    axh = axes('position',[left bottom width height]);
+    axh = mplot_discretedist2smoothhistogram_boxstats(dist_d, axh, opt);
+    xlabel('E[R_1] / s^{-1}')
+    xlim = clim.mr1 + .05*abs(diff(clim.mr1))*[-1 1];
+    set(gca,'XLim',xlim)
 end
 
 papersize = 17.5*[1 1/3];
