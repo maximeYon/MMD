@@ -32,7 +32,7 @@ if (nargin < 4), ind = ones(size(signal)) > 0; end
 % Compute this whole step for each iteration. 
 
 % Exclude data points with zero or negative values
-ind = ind & (signal > 0);
+%ind = ind & (signal > 0); %logsignal modification
 signal = signal(ind); 
 %signal(signal == 0) = eps;
 
@@ -72,10 +72,10 @@ end
 
 
 % perform regression to estimate model parameters m
-% logsignal = real(log(signal));
-% logsignal(~isfinite(logsignal)) = 0;
-% m = tmp \ X' * C2 * logsignal;
-m = tmp \ X' * C2 * real(log(signal));
+logsignal = real(log(signal)); %logsignal modification
+logsignal(~isfinite(logsignal)) = 0; %logsignal modification
+m = tmp \ X' * C2 * logsignal; %logsignal modification
+%m = tmp \ X' * C2 * real(log(signal)); %logsignal modification
 
 % redo with updated C2 and with regularization
 if (opt.dtd_covariance.do_regularization)
