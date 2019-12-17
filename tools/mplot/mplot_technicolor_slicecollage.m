@@ -137,7 +137,11 @@ for nk = 1:sz(3)
     axh_v = [axh_v; axh];
     map_count = map_count+1;
 
-    set(axh_v,'YDir','normal')
+    if strcmp(mdm_nii_oricode(dps.nii_h),'LPS')
+        set(axh_v,'YDir','reverse')
+    else
+        set(axh_v,'YDir','normal')
+    end
     axis(axh_v,'tight','off')
 
     set(gcf, 'PaperUnits','centimeters','PaperPosition', [0 0 papersize],'PaperSize', papersize); 

@@ -54,6 +54,12 @@ for nk = 1:sz(3) %nk = [2 6 11];
         position.left = position.left + dleft;
         axh_v = mplot_slicescolumn(mask(:,:,nk).*im3d(:,:,nk),position,clim.(plotfields.gray{c}));
         for n = 1:numel(axh_v), colormap(axh_v(n),gray(64)), end
+        if strcmp(mdm_nii_oricode(dps.nii_h),'LPS')
+            set(axh_v,'YDir','reverse')
+        else
+            set(axh_v,'YDir','normal')
+        end
+
         set(gcf, 'PaperUnits','centimeters','PaperPosition', [0 0 papersize],'PaperSize', papersize); 
         fig_fn = fullfile(slices_path,num2str(nk),plotfields.gray{c});
         print(fig_fn,'-loose','-dpdf')
@@ -65,6 +71,12 @@ for nk = 1:sz(3) %nk = [2 6 11];
         position.left = position.left + dleft;
         axh_v = mplot_slicescolumn(mask(:,:,nk).*im3d(:,:,nk),position,clim.(plotfields.hotcold{c}));
         for n = 1:numel(axh_v), colormap(axh_v(n),mplot_cmaphotcold(64)), end
+        if strcmp(mdm_nii_oricode(dps.nii_h),'LPS')
+            set(axh_v,'YDir','reverse')
+        else
+            set(axh_v,'YDir','normal')
+        end
+        
         set(gcf, 'PaperUnits','centimeters','PaperPosition', [0 0 papersize],'PaperSize', papersize); 
         fig_fn = fullfile(slices_path,num2str(nk),plotfields.hotcold{c});
         print(fig_fn,'-loose','-dpdf')
@@ -80,6 +92,12 @@ for nk = 1:sz(3) %nk = [2 6 11];
             im3d.bright = mask(:,:,nk).*dps.bin{nbin}.f(:,:,nk);
             position.left = position.left + dleft;
             axh_v = mplot_slicescolumn(im3d,position,[0 1]);
+            if strcmp(mdm_nii_oricode(dps.nii_h),'LPS')
+                set(axh_v,'YDir','reverse')
+            else
+                set(axh_v,'YDir','normal')
+            end
+            
             set(gcf, 'PaperUnits','centimeters','PaperPosition', [0 0 papersize],'PaperSize', papersize); 
             fig_fn = fullfile(slices_path,num2str(nk),[plotfields.bin{c} num2str(nbin)]);
             print(fig_fn,'-loose','-dpdf')
@@ -96,6 +114,12 @@ for nk = 1:sz(3) %nk = [2 6 11];
             im3d.bright = mask(:,:,nk).*dps.bin{nbin}.f(:,:,nk);
             position.left = position.left + dleft;
             axh_v = mplot_slicescolumn(im3d,position,[0 1]);
+            if strcmp(mdm_nii_oricode(dps.nii_h),'LPS')
+                set(axh_v,'YDir','reverse')
+            else
+                set(axh_v,'YDir','normal')
+            end
+            
             set(gcf, 'PaperUnits','centimeters','PaperPosition', [0 0 papersize],'PaperSize', papersize); 
             fig_fn = fullfile(slices_path,num2str(nk),['mdii' num2str(nbin)]);
             print(fig_fn,'-loose','-dpdf')
@@ -110,7 +134,13 @@ for nk = 1:sz(3) %nk = [2 6 11];
         climRGB = [0 1];
         position.left = position.left + dleft;
         axh_v = mplot_slicescolumn(im3d,position,climRGB);
-        set(gcf, 'PaperUnits','centimeters','PaperPosition', [0 0 papersize],'PaperSize', papersize); 
+        if strcmp(mdm_nii_oricode(dps.nii_h),'LPS')
+            set(axh_v,'YDir','reverse')
+        else
+            set(axh_v,'YDir','normal')
+        end
+        
+        set(gcf, 'PaperUnits','centimeters','PaperPosition', [0 0 papersize],'PaperSize', papersize);
         fig_fn = fullfile(slices_path,num2str(nk),'fractionsRGB');
         print(fig_fn,'-loose','-dpdf')
     end

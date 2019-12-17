@@ -40,11 +40,14 @@ position.left = -dleft;
 
 mask = dps.s0 > clim.mask_threshold*smax;
 
+axh_v_tot = [];
+
 for c = 1:numel(plotfields.gray)
     im3d = dps.( plotfields.gray{c});
     position.left = position.left + dleft;
     axh_v = mplot_slicescolumn(mask(:,:,nk).*im3d(:,:,nk),position,clim.(plotfields.gray{c}));
     for n = 1:numel(axh_v), colormap(axh_v(n),gray(64)), end
+    axh_v_tot = [axh_v_tot; axh_v];
 end
 
 for c = 1:numel(plotfields.hotcold)
@@ -52,6 +55,7 @@ for c = 1:numel(plotfields.hotcold)
     position.left = position.left + dleft;
     axh_v = mplot_slicescolumn(mask(:,:,nk).*im3d(:,:,nk),position,clim.(plotfields.hotcold{c}));
     for n = 1:numel(axh_v), colormap(axh_v(n),mplot_cmaphotcold(64)), end
+    axh_v_tot = [axh_v_tot; axh_v];
 end
 
 for c = 1:numel(plotfields.bin)
@@ -63,6 +67,7 @@ for c = 1:numel(plotfields.bin)
         im3d.bright = mask(:,:,nk).*dps.bin{nbin}.f(:,:,nk);
         position.left = position.left + dleft;
         axh_v = mplot_slicescolumn(im3d,position,[0 1]);
+        axh_v_tot = [axh_v_tot; axh_v];
     end
 end
 
@@ -74,6 +79,7 @@ for nbin = 1:numel(dps.bin)
     im3d.bright = mask(:,:,nk).*dps.bin{nbin}.f(:,:,nk);
     position.left = position.left + dleft;
     axh_v = mplot_slicescolumn(im3d,position,[0 1]);
+    axh_v_tot = [axh_v_tot; axh_v];
 end
 
 clear im3d
@@ -84,6 +90,13 @@ im3d.bright = mask(:,:,nk).*(dps.bin{1}.f(:,:,nk) + dps.bin{2}.f(:,:,nk) + dps.b
 clim = [0 1];
 position.left = position.left + dleft;
 axh_v = mplot_slicescolumn(im3d,position,clim);
+axh_v_tot = [axh_v_tot; axh_v];
+
+if strcmp(mdm_nii_oricode(dps.nii_h),'LPS')
+    set(axh_v_tot,'YDir','reverse')
+else
+    set(axh_v_tot,'YDir','normal')
+end
 
 set(gcf, 'PaperUnits','centimeters','PaperPosition', [0 0 papersize],'PaperSize', papersize); 
 
