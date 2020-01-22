@@ -7,14 +7,13 @@
 % Output in the format for Matthew Budde's code for Bruker pv6.0.1 
 
 % Define path for output folders
-%[run_path,run_name,run_ext] = fileparts(run_fn);
-run_path = cd;
+run_path = fileparts(mfilename('fullpath'));
 out_path = fullfile(run_path,'waveforms');
 
 
 % Parameters for calculating b-values
-gmax = 100/100*3; % Max gradient [3 T/m]
-tau = 10e-3; % Waveform duration [10 ms]
+gmax = 100/100*0.66; % Max gradient [3 T/m]
+tau = 17e-3; % Waveform duration [10 ms]
 
 % Define timing parameters relative to a total echo time = 1
 np = 1000; % Number of time intervals in waveform [1000]
@@ -25,10 +24,10 @@ epsilon_down = .15; % Half-sine ramp down [0.1]
 % q-trajectory parameters
 % zeta: half aperture of q cone, see Topgaard. Microporous Mesoporous Mater. 178, 60 (2013).
 % http://dx.doi.org/10.1016/j.micromeso.2013.03.009
-%zeta = acos(1/sqrt(3)); out_fn = fullfile(out_path,'axde_sphere.gp'); %sphere
-%zeta = pi/2; out_fn = fullfile(out_path,'axde_plane.gp'); %plane
-%zeta = 0; out_fn = fullfile(out_path,'axde_stick.gp'); %stick
-zeta = acos(sqrt(2/3)); out_fn = fullfile(out_path,'axde_cigar.gp'); %cigar
+zeta = acos(1/sqrt(3)); out_fn = fullfile(out_path,'axde_sphere.gp'); %sphere
+% zeta = pi/2; out_fn = fullfile(out_path,'axde_plane.gp'); %plane
+% zeta = 0; out_fn = fullfile(out_path,'axde_stick.gp'); %stick
+% zeta = acos(sqrt(2/3)); out_fn = fullfile(out_path,'axde_cigar.gp'); %cigar
 
 % (theta,phi): Orientation of cone axis in lab frame
 theta = 0; phi = 0;
@@ -129,15 +128,37 @@ dre_grdt = gradient(gmax*re_gr/dt);
 dim_grdt = gradient(gmax*im_gr/dt);
 
 figure(1), clf
-subplot(2,1,1)
+subplot(2,2,1)
 %plot(t,gmax*re_gr,'r-',t,gmax*im_gr,'g-',t,gmax*ga,'b-',t,gmax*abs(gr),'k--')
 plot(t,gmax*gx,'r-',t,gmax*gy,'g-',t,gmax*gz,'b-')
 ylabel('g / Tm^-^1')
 title(['b = ' num2str(b/1e9,2) '\cdot10^9 sm^-^2   q = ' num2str(qmax/2/pi/1e6,2) '\cdot10^6 m^-^1'])
 
-subplot(2,1,2)
+subplot(2,2,2)
 plot(t,dre_grdt,'r-',t,dim_grdt,'g-',t,dgadt,'b-',t,dgrdt,'k--')
 xlabel('t / s'), ylabel('(dg/dt) / Tm^-^1s^-^1')
+
+subplot(2,2,3)
+plot(t,qx,'r-',t,qy,'g-',t,qz,'b-')
+ylabel('q / m^-^1')
+%title(['b = ' num2str(b/1e9,2) '\cdot10^9 sm^-^2   q = ' num2str(qmax/2/pi/1e6,2) '\cdot10^6 m^-^1'])
+
+si = 16*1024;
+Fx = fftshift(fft(qx,si));
+Fy = fftshift(fft(qy,si));
+Fz = fftshift(fft(qz,si));
+Fx2 = abs(Fx).^2;
+Fy2 = abs(Fy).^2;
+Fz2 = abs(Fz).^2;
+Fr2 = Fx2 + Fy2 + Fz2;
+
+swh = 1/dt;
+nu = swh*linspace(0,1,si); %frequency vector
+nu = nu - nu(si/2+1); %set the proper zero frequency
+subplot(2,2,4)
+plot(nu,Fx2,'r-',nu,Fy2,'g-',nu,Fz2,'b-',nu,Fr2,'k--')
+xlabel('\nu / s^-^1')
+set(gca,'XLim',1000*[-1 1])
 
 % Save waveforms in Bruker format
 [out_path,out_name,out_ext] = fileparts(out_fn);
@@ -186,3 +207,5 @@ fprintf(fid, formatspec, out_mat');
 
 fprintf(fid,'%s\n',['##END']);
 fclose(fid);
+
+max(sqrt(gx(:).^2+gy(:).^2+gz(:).^2))
