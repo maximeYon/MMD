@@ -10,13 +10,13 @@ function res = mdm_bruker_dwepiwave_2dseq2nii(data_path, nii_fn, rps)
 
 if nargin < 3, rps.denoising = 0; end
 
-if ~strcmp(mdm_bruker_readpvparam(data_path, 'PULPROG'),lower('<rFOV_DWEpiWavev1_04.ppg>')), res = 0; return, end
+if ~any(strcmp(mdm_bruker_readpvparam(data_path, 'PULPROG'),{lower('<rFOV_DWEpiWavev1_04.ppg>'); lower('<mcw_DWEpiWavev7.ppg>')})), res = 0; return, end
 if ~strcmp(mdm_bruker_readpvparam(data_path, 'ACQ_pipe_status'),lower('Wrapup')), res = 0; return, end
 
 in_path = fullfile(data_path,'pdata','1');
 
 try
-    imageObj = ImageDataObject(in_path);
+    imageObj = ImageDataObject(in_path); %Script from Bruker's pvmatlab toolbox
 catch
     res = 0;
     return

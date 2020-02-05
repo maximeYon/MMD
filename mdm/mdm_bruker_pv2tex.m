@@ -38,7 +38,7 @@ for nexp = 1:length(expno)
 
     fprintf(fid,'%s',['\noindent \textbf{' num2str(expno(nexp)) ')} ']);
 
-    if nexp > 1 && strcmp(mdm_bruker_readpvparam(expno_path, 'pulprog'), lower('<rfov_dwepiwavev1_04.ppg>'))
+    if nexp > 1 && any(strcmp(mdm_bruker_readpvparam(data_path, 'PULPROG'),{lower('<rFOV_DWEpiWavev1_04.ppg>'); lower('<mcw_DWEpiWavev7.ppg>')}))
         old_PVM_EpiTrajAdjkx = mdm_bruker_readpvparam(old_expno_path, 'PVM_EpiTrajAdjkx');
         PVM_EpiTrajAdjkx = mdm_bruker_readpvparam(expno_path, 'PVM_EpiTrajAdjkx');
         old_rg = mdm_bruker_readpvparam(old_expno_path, 'rg');
@@ -50,7 +50,7 @@ for nexp = 1:length(expno)
         end        
     end
     
-    ParaToList = {'pulprog','EchoTime','DwNAmplitudes','DwGradShapeStrArr','DwNDirs','DwGradDur','rg'};
+    ParaToList = {'pulprog','EchoTime','DwLoopOrder','DwNAmplitudes','DwGradShapeStrArr','DwGradShapeStrArr1','DwGradShapeStrArr2','DwNDirs','DwGradDur','DwGradDur1','DwGradDur2','DwGradTsep','rg'};
     for npara = 1:length(ParaToList)
         ParaVal = mdm_bruker_readpvparam(expno_path, ParaToList{npara});
         if exist('old_expno_path')
