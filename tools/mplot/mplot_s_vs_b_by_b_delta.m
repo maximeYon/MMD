@@ -145,8 +145,8 @@ axis(h, 'on');
 
 
 xlim(h, [0 max(xps2.b) * 1.1e-9]);
-%ylim(h, [min(0.1, max(0.0001, 10^floor(log10(min(S(S(:) > 0) / sc))))) 1.1]);
-ylim(h, [.02 1.1]);
+ylim(h, [min(0.1, max(0.0001, 10^floor(log10(min(S(S(:) > 0) / sc))))) 1.1]);
+%ylim(h, [.02 1.1]);
 
 xlabel(h, ['\itb\rm [ms/',char(181),'m^2]'], 'fontsize', opt.mplot.fs);
 ylabel(h, 'Signal', 'fontsize', opt.mplot.fs);

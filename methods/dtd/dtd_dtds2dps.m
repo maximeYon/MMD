@@ -5,6 +5,9 @@ function dps = dtd_dtds2dps(dps, dtds)
 nn = size(dtds.w,4);
 
 dps.s0 = sum(dtds.w,4);
+dps.s1000 = msf_notfinite2zero(sum(exp(-1e9*dtds.diso).*dtds.w,4));
+dps.s2000 = msf_notfinite2zero(sum(exp(-2e9*dtds.diso).*dtds.w,4));
+dps.s3000 = msf_notfinite2zero(sum(exp(-3e9*dtds.diso).*dtds.w,4));
 
 %Means
 dps.mdiso = msf_notfinite2zero(sum(dtds.diso.*dtds.w,4)./dps.s0);

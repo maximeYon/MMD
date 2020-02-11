@@ -6,18 +6,18 @@ function mplot_technicolor_nii(method, dps, o_path, clim, opt)
 smax = max(dps.s0(:));
 clim.s0 = smax*clim.s0;
 
+%dtd
+plotfields.gray = {'s0';'s1000';'s2000';'s3000';'mdiso';'msddelta';'vdiso';'vsddelta';'nmsdaniso';'nvdiso'};
+plotfields.hotcold = {'cvdisosddelta'};
+plotfields.bin = {'mdiso';'msddelta'};
 if strcmp(method,'dtr2d')
-    plotfields.gray = {'s0';'mdiso';'msddelta';'mr2';'vdiso';'vsddelta';'vr2'};
-    plotfields.hotcold = {'cvdisosddelta';'cvdisor2';'cvsddeltar2'};
-    plotfields.bin = {'mdiso';'msddelta';'mr2'};
+    plotfields.gray = {plotfields.gray;'mr2';'vr2'};
+    plotfields.hotcold = {plotfields.hotcold;'cvdisor2';'cvsddeltar2'};
+    plotfields.bin = {plotfields.bin;'mr2'};
 elseif strcmp(method,'dtr1d')
-    plotfields.gray = {'s0';'mdiso';'msddelta';'mr1';'vdiso';'vsddelta';'vr1'};
-    plotfields.hotcold = {'cvdisosddelta';'cvdisor1';'cvsddeltar1'};
-    plotfields.bin = {'mdiso';'msddelta';'mr1'};
-elseif strcmp(method,'dtd')
-    plotfields.gray = {'s0';'mdiso';'msddelta';'vdiso';'vsddelta'};
-    plotfields.hotcold = {'cvdisosddelta'};
-    plotfields.bin = {'mdiso';'msddelta'};
+    plotfields.gray = {plotfields.gray;'mr1';'vr1'};
+    plotfields.hotcold = {plotfields.hotcold;'cvdisor1';'cvsddeltar1'};
+    plotfields.bin = {plotfields.bin;'mr1'};
 end
 
 sz = ones(1,3);

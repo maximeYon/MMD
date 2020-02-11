@@ -1,6 +1,6 @@
 function mgui_analysis_plot_histogram(h, S)
 % function mgui_analysis_plot_histogram(h, S)
-
+%S'
 hold(h, 'off'); 
 hist(h, S);
 tmp = S(~isnan(S(:)));
