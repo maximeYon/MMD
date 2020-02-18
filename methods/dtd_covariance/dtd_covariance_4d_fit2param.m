@@ -101,7 +101,7 @@ dps.vdiso = dps.C_MD.*(dps.MD*1e-9).^2; % variance size
 if (opt.dtd_covariance.do_clamping)    
     dps.MD    = mio_min_max_cut(dps.MD, [0 4]);
     dps.mdiso    = mio_min_max_cut(dps.mdiso, [0 4e-9]);
-    dps.nmsdaniso    = mio_min_max_cut(dps.nmsdaniso, [0 1]);
+    dps.nmsdaniso    = mio_min_max_cut(dps.nmsdaniso, [0 1.5]);
     dps.nvdiso    = mio_min_max_cut(dps.nvdiso, [0 1]);    
 end
 
