@@ -6,6 +6,7 @@ figure(1), clf
 
 smax = max(dps.s0(:));
 clim.s0 = smax*clim.s0;
+clim.s2000 = max(dps.s2000(:))*clim.s2000;
 
 if strcmp(method,'dtr2d')
     plotfields.gray = {'s0';'mdiso';'msddelta';'mr2';'vdiso';'vsddelta';'vr2'};
@@ -16,7 +17,7 @@ elseif strcmp(method,'dtr1d')
     plotfields.hotcold = {'cvdisosddelta';'cvdisor1';'cvsddeltar1'};
     plotfields.bin = {'mdiso';'msddelta';'mr1'};
 elseif strcmp(method,'dtd')
-    plotfields.gray = {'s0';'mdiso';'msddelta';'vdiso';'vsddelta'};
+    plotfields.gray = {'s0';'s2000';'mdiso';'msddelta';'vdiso';'vsddelta'};
     plotfields.hotcold = {'cvdisosddelta'};
     plotfields.bin = {'mdiso';'msddelta'};
 end
@@ -43,18 +44,18 @@ mask = dps.s0 > clim.mask_threshold*smax;
 axh_v_tot = [];
 
 for c = 1:numel(plotfields.gray)
-    im3d = dps.( plotfields.gray{c});
+    im3d = double(dps.( plotfields.gray{c}));
     position.left = position.left + dleft;
     axh_v = mplot_slicescolumn(mask(:,:,nk).*im3d(:,:,nk),position,clim.(plotfields.gray{c}));
-    for n = 1:numel(axh_v), colormap(axh_v(n),gray(64)), end
+    for n = 1:numel(axh_v), colormap(axh_v(n),gray(256)), end
     axh_v_tot = [axh_v_tot; axh_v];
 end
 
 for c = 1:numel(plotfields.hotcold)
-    im3d = dps.( plotfields.hotcold{c});
+    im3d = double(dps.( plotfields.hotcold{c}));
     position.left = position.left + dleft;
     axh_v = mplot_slicescolumn(mask(:,:,nk).*im3d(:,:,nk),position,clim.(plotfields.hotcold{c}));
-    for n = 1:numel(axh_v), colormap(axh_v(n),mplot_cmaphotcold(64)), end
+    for n = 1:numel(axh_v), colormap(axh_v(n),mplot_cmaphotcold(128)), end
     axh_v_tot = [axh_v_tot; axh_v];
 end
 

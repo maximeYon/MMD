@@ -2,10 +2,10 @@ function mplot_technicolor_slicecollage(method, dps, slices_path, clim)
 % function mplot_technicolor_slicecollage(method, dps, slices_path, clim)
 
 %Plot parameter maps
-figure(1), clf
 
 smax = max(dps.s0(:));
 clim.s0 = smax*clim.s0;
+clim.s2000 = max(dps.s2000(:))*clim.s2000;
 mask = dps.s0 > clim.mask_threshold*smax;
 
 sz = ones(1,3);
@@ -23,7 +23,7 @@ elseif strcmp(method,'dtr1d')
     plotfields.hotcold = {'cvdisosddelta';'cvdisor1';'cvsddeltar1'};
     plotfields.bin = {'mdiso';'msddelta';'mr1'};
 elseif strcmp(method,'dtd')
-    plotfields.gray = {'s0';'mdiso';'msddelta';'vdiso';'vsddelta'};
+    plotfields.gray = {'s0';'s2000';'mdiso';'msddelta';'vdiso';'vsddelta'};
     plotfields.hotcold = {'cvdisosddelta'};
     plotfields.bin = {'mdiso';'msddelta'};
     Nparams = numel(plotfields.gray) + numel(plotfields.hotcold) + numel(dps.bin)*numel(plotfields.bin) + 4;
@@ -35,38 +35,40 @@ elseif strcmp(method,'dtd')
     position.height = 1.01*dbottom; 
     position.width = 1.01*dleft;
     
-    position.left_v =   [0 5 6 5 6 5.5 1.5 1.5 1.5 2.5 2.5 2.5 3.5 3.5 3.5 0]/7;
-    position.bottom_v = [2 2 2 1 1 0 2 1 0 2 1 0 2 1 0 0]/3;
+    position.left_v =   [0 0 5 6 5 6 5.5 1.5 1.5 1.5 2.5 2.5 2.5 3.5 3.5 3.5 0]/7;
+    position.bottom_v = [2 1 2 2 1 1 0 2 1 0 2 1 0 2 1 0 0]/3;
 end
 
 
 msf_mkdir(fullfile(slices_path));
 %msf_mkdir(fullfile(slices_path,'matfigs'));
 for nk = 1:sz(3)
+% for nk = 2
+    figure(1), clf
     map_count = 1;
     axh_v = [];
     for c = 1:numel(plotfields.gray)
-        im3d = dps.(plotfields.gray{c});
+        im3d = double(dps.(plotfields.gray{c}));
         im2d = mask(:,:,nk).*im3d(:,:,nk);
         position.left = position.left_v(map_count);
         position.bottom = position.bottom_v(map_count);
         axh = axes('position',[position.left position.bottom position.width position.height]);
         imagesc(im2d')
-        colormap(axh,gray(64))
+        colormap(axh,gray(256))
         set(axh,'CLim',clim.(plotfields.gray{c}))
         axh_v = [axh_v; axh];
         map_count = map_count+1;
     end
 
     for c = 1:numel(plotfields.hotcold)
-        im3d = dps.(plotfields.hotcold{c});
+        im3d = double(dps.(plotfields.hotcold{c}));
         im2d = mask(:,:,nk).*im3d(:,:,nk);
         position.left = position.left_v(map_count);
         position.bottom = position.bottom_v(map_count);
         axh = axes('position',[position.left position.bottom position.width position.height]);
 
         imagesc(im2d')
-        colormap(axh,mplot_cmaphotcold(64))
+        colormap(axh,mplot_cmaphotcold(128))
         set(axh,'CLim',clim.(plotfields.hotcold{c}))   
         axh_v = [axh_v; axh];
         map_count = map_count+1;
@@ -147,5 +149,6 @@ for nk = 1:sz(3)
     set(gcf, 'PaperUnits','centimeters','PaperPosition', [0 0 papersize],'PaperSize', papersize); 
     fig_name = ['slice' num2str(nk)];
     print(fullfile(slices_path,fig_name),'-loose','-dpdf')
+    %print(fullfile(slices_path,fig_name),'-loose','-dpng')
     %savefig(gcf,fullfile(slices_path,fig_name),'compact')
 end
