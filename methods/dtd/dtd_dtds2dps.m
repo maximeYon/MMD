@@ -1,5 +1,10 @@
-function dps = dtd_dtds2dps(dps, dtds)
+function dps = dtd_dtds2dps(dps, dtds, opt)
 % function dps = dtd_dtds2dps(dps, dtds)
+
+if nargin < 3
+    opt = mdm_opt();
+    opt = dtd_opt(opt);
+end
 
 %Per-voxel statistical measures
 nn = size(dtds.w,4);
@@ -48,3 +53,10 @@ dps.ufa_old = real(sqrt(3/2) * sqrt(1./(dps.mdiso.^2./dps.Vl+1))); % Lasic (2014
 dps.ufa     = real(sqrt(3/2) * sqrt( dps.Vl ./ (dps.Vl + dps.vdiso + dps.mdiso.^2) )); % Szczepankiewicz (2016)
 
 dps.signaniso = sign(dps.nmdaniso);
+
+% clamp measures to avoid extreme values
+if (opt.dtd.do_clamping)    
+    dps.nmsdaniso    = mio_min_max_cut(dps.nmsdaniso, [0 1.5]);
+    dps.nvdiso    = mio_min_max_cut(dps.nvdiso, [0 1]);    
+end
+
