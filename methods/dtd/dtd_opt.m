@@ -26,6 +26,7 @@ opt.(method) = msf_ensure_field(opt.(method), 'fig_prefix', 'dtd');
 opt.(method) = msf_ensure_field(opt.(method), 'fig_cmaps',{});
 opt.(method) = msf_ensure_field(opt.(method), 'fig_ccol',{});
 opt.(method) = msf_ensure_field(opt.(method), 'fig_ccolnorm',{});
+opt.(method) = msf_ensure_field(opt.(method), 'do_clamping',1);
 
 opt.(method) = msf_ensure_field(opt.(method), 'bin_disomin',[0 0 2]*1e-9);
 opt.(method) = msf_ensure_field(opt.(method), 'bin_disomax',[2 2 5]*1e-9);
