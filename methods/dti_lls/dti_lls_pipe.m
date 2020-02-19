@@ -7,7 +7,7 @@ function fn = dti_lls_pipe(s, paths, opt)
 %            opt.mask.thresh = 0.1, you may want to adjust it 
 %            
 %
-% fn    - a cell arary with filenames to generated nii files
+% fn    - a cell array with filenames to generated nii files
 
 if (nargin < 2), paths = fileparts(s.nii_fn); end
 if (nargin < 3), opt.present = 1; end
