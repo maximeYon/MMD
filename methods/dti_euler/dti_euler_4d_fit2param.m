@@ -74,6 +74,7 @@ end
 
 mfs.MD = mfs.iso*1e9;
 mfs.FA = mfs.fa;
+mfs.u = mfs.lambda33vec; % Max eigenvector
 
 dps = mfs; clear mfs;
 

@@ -35,7 +35,7 @@ weight = ones(xps.n,1);
 % S0, D eigenvalues, Euler angles
 m_guess   = [max(signal(:))   1e-9*[1 1 1] 2*pi*[1 1 1]];
 m_lb      = [0                1e-11*[1 1 1]     [0 0 0]];
-m_ub      = [2*max(signal(:)) 3e-9*[1 1 1] 4*pi*[1 1 1]];
+m_ub      = [2*max(signal(:)) 4e-9*[1 1 1] 4*pi*[1 1 1]];
                 
 t_guess   = m_guess./unit_to_SI;
 t_lb      = m_lb./unit_to_SI;
