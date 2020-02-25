@@ -1,5 +1,5 @@
-function mplot_globalstats(method, dps, fig_fn, clim)
-% function mplot_globalstats(method, dps, fig_fn, clim)
+function mplot_globalstats(method, dps, fig_fn, clim, opt)
+% function mplot_globalstats(method, dps, fig_fn, clim, opt)
 
 %Plot parameter maps
 figure(2), clf

@@ -1,5 +1,5 @@
-function mplot_technicolor_slicecollage(method, dps, slices_path, clim)
-% function mplot_technicolor_slicecollage(method, dps, slices_path, clim)
+function mplot_technicolor_slicecollage(method, dps, slices_path, clim, opt)
+% function mplot_technicolor_slicecollage(method, dps, slices_path, clim, opt)
 
 %Plot parameter maps
 

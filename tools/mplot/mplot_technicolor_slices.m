@@ -1,5 +1,5 @@
-function mplot_technicolor_slices(method, dps, slices_path, clim)
-% function mplot_technicolor_slices(method, dps, slices_path, clim)
+function mplot_technicolor_slices(method, dps, slices_path, clim, opt)
+% function mplot_technicolor_slices(method, dps, slices_path, clim, opt)
 
 %Plot parameter maps
 figure(1), clf

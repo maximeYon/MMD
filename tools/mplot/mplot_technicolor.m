@@ -1,5 +1,5 @@
-function mplot_technicolor(method, dps, fig_fn, clim)
-% function mplot_technicolor(method, dps, fig_fn, clim)
+function mplot_technicolor(method, dps, fig_fn, clim, opt)
+% function mplot_technicolor(method, dps, fig_fn, clim, opt)
 
 %Plot parameter maps
 figure(1), clf
