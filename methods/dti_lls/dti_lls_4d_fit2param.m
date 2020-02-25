@@ -42,6 +42,9 @@ end
 
 dps.fa_col = permute(255 * abs(dps.u) .* repmat(dps.fa, [1 1 1 3]), [4 1 2 3]);
 
+dps.FA  = dps.fa;
+dps.MD  = dps.md;
+
 
 if (~isempty(dps_fn))
     mdm_dps_save(dps, mfs.s, dps_fn, opt);
