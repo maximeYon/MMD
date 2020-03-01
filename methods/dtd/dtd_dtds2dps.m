@@ -15,32 +15,32 @@ dps.s2000 = msf_notfinite2zero(sum(exp(-2e9*dtds.diso).*dtds.w,4));
 dps.s3000 = msf_notfinite2zero(sum(exp(-3e9*dtds.diso).*dtds.w,4));
 
 %Means
-dps.mdiso = msf_notfinite2zero(sum(dtds.diso.*dtds.w,4)./dps.s0);
-dps.mdaniso = msf_notfinite2zero(sum(dtds.daniso.*dtds.w,4)./dps.s0);
-dps.msdaniso = msf_notfinite2zero(sum(dtds.sdaniso.*dtds.w,4)./dps.s0);
-dps.msddelta = msf_notfinite2zero(sum(dtds.sddelta.*dtds.w,4)./dps.s0);
-dps.mdxx = msf_notfinite2zero(sum(dtds.dxx.*dtds.w,4)./dps.s0);
-dps.mdyy = msf_notfinite2zero(sum(dtds.dyy.*dtds.w,4)./dps.s0);
-dps.mdzz = msf_notfinite2zero(sum(dtds.dzz.*dtds.w,4)./dps.s0);
-dps.mdxy = msf_notfinite2zero(sum(dtds.dxy.*dtds.w,4)./dps.s0);
-dps.mdxz = msf_notfinite2zero(sum(dtds.dxz.*dtds.w,4)./dps.s0);
-dps.mdyz = msf_notfinite2zero(sum(dtds.dyz.*dtds.w,4)./dps.s0);
+dps.mdiso = sum(dtds.diso.*dtds.w,4)./dps.s0;
+dps.mdaniso = sum(dtds.daniso.*dtds.w,4)./dps.s0;
+dps.msdaniso = sum(dtds.sdaniso.*dtds.w,4)./dps.s0;
+dps.msddelta = sum(dtds.sddelta.*dtds.w,4)./dps.s0;
+dps.mdxx = sum(dtds.dxx.*dtds.w,4)./dps.s0;
+dps.mdyy = sum(dtds.dyy.*dtds.w,4)./dps.s0;
+dps.mdzz = sum(dtds.dzz.*dtds.w,4)./dps.s0;
+dps.mdxy = sum(dtds.dxy.*dtds.w,4)./dps.s0;
+dps.mdxz = sum(dtds.dxz.*dtds.w,4)./dps.s0;
+dps.mdyz = sum(dtds.dyz.*dtds.w,4)./dps.s0;
 
 %Variances
-dps.vdiso = msf_notfinite2zero(sum((dtds.diso-repmat(dps.mdiso,[1 1 1 nn])).^2.*dtds.w,4)./dps.s0);
-dps.vsdaniso = msf_notfinite2zero(sum((dtds.sdaniso-repmat(dps.msdaniso,[1 1 1 nn])).^2.*dtds.w,4)./dps.s0);
-dps.vsddelta = msf_notfinite2zero(sum((dtds.sddelta-repmat(dps.msddelta,[1 1 1 nn])).^2.*dtds.w,4)./dps.s0);
+dps.vdiso = sum((dtds.diso-repmat(dps.mdiso,[1 1 1 nn])).^2.*dtds.w,4)./dps.s0;
+dps.vsdaniso = sum((dtds.sdaniso-repmat(dps.msdaniso,[1 1 1 nn])).^2.*dtds.w,4)./dps.s0;
+dps.vsddelta = sum((dtds.sddelta-repmat(dps.msddelta,[1 1 1 nn])).^2.*dtds.w,4)./dps.s0;
 
 %Covariances
-dps.cvdisosdaniso = msf_notfinite2zero(sum((dtds.diso-repmat(dps.mdiso,[1 1 1 nn])).*(dtds.sdaniso-repmat(dps.msdaniso,[1 1 1 nn])).*dtds.w,4)./dps.s0);
-dps.cvdisosddelta = msf_notfinite2zero(sum((dtds.diso-repmat(dps.mdiso,[1 1 1 nn])).*(dtds.sddelta-repmat(dps.msddelta,[1 1 1 nn])).*dtds.w,4)./dps.s0);
+dps.cvdisosdaniso = sum((dtds.diso-repmat(dps.mdiso,[1 1 1 nn])).*(dtds.sdaniso-repmat(dps.msdaniso,[1 1 1 nn])).*dtds.w,4)./dps.s0;
+dps.cvdisosddelta = sum((dtds.diso-repmat(dps.mdiso,[1 1 1 nn])).*(dtds.sddelta-repmat(dps.msddelta,[1 1 1 nn])).*dtds.w,4)./dps.s0;
 
 %Normalized measures
-dps.nmdaniso = msf_notfinite2zero(dps.mdaniso./dps.mdiso);
-dps.nmsdaniso = msf_notfinite2zero(dps.msdaniso./dps.mdiso.^2);
-dps.nvdiso = msf_notfinite2zero(dps.vdiso./dps.mdiso.^2);
-dps.nvsdaniso = msf_notfinite2zero(dps.vsdaniso./dps.msdaniso.^2);
-dps.nvsddelta = msf_notfinite2zero(dps.vsddelta./dps.msddelta.^2);
+dps.nmdaniso = dps.mdaniso./dps.mdiso;
+dps.nmsdaniso = dps.msdaniso./dps.mdiso.^2;
+dps.nvdiso = dps.vdiso./dps.mdiso.^2;
+dps.nvsdaniso = dps.vsdaniso./dps.msdaniso.^2;
+dps.nvsddelta = dps.vsddelta./dps.msddelta.^2;
 
 
 dps.Vl = 5/2 * 4/5*dps.msdaniso;

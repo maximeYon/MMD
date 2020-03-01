@@ -28,7 +28,7 @@ for c = 1:numel(f)
                     for nbs = 1:numel(ind_bs)
                         ptemp(:,:,:,nbs) = bs_dps{ind_bs(nbs)}.(f{c}){cbin}.(fbin{cfbin});
                     end
-                    median_dps.(f{c}){cbin}.(fbin{cfbin}) = median(ptemp,4);
+                    median_dps.(f{c}){cbin}.(fbin{cfbin}) = msf_notfinite2zero(nanmedian(ptemp,4));
                 end
             end                   
         end
@@ -38,7 +38,7 @@ for c = 1:numel(f)
         for nbs = 1:numel(ind_bs)
             ptemp(:,:,:,nbs) = bs_dps{ind_bs(nbs)}.(f{c});
         end
-        median_dps.(f{c}) = median(ptemp,4);
+        median_dps.(f{c}) = msf_notfinite2zero(nanmedian(ptemp,4));
     end
 end
 
