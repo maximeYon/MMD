@@ -11,13 +11,17 @@ plotfields.gray = {'s0';'s1000';'s2000';'s3000';'mdiso';'msddelta';'vdiso';'vsdd
 plotfields.hotcold = {'cvdisosddelta'};
 plotfields.bin = {'mdiso';'msddelta'};
 if strcmp(method,'dtr2d')
-    plotfields.gray = {plotfields.gray;'mr2';'vr2'};
-    plotfields.hotcold = {plotfields.hotcold;'cvdisor2';'cvsddeltar2'};
-    plotfields.bin = {plotfields.bin;'mr2'};
+    plotfields.gray{1+numel(plotfields.gray)} = 'mr2';
+    plotfields.gray{1+numel(plotfields.gray)} = 'vr2';
+    plotfields.hotcold{1+numel(plotfields.hotcold)} = 'cvdisor2';
+    plotfields.hotcold{1+numel(plotfields.hotcold)} = 'cvsddeltar2';
+    plotfields.bin{1+numel(plotfields.bin)} = 'mr2';
 elseif strcmp(method,'dtr1d')
-    plotfields.gray = {plotfields.gray;'mr1';'vr1'};
-    plotfields.hotcold = {plotfields.hotcold;'cvdisor1';'cvsddeltar1'};
-    plotfields.bin = {plotfields.bin;'mr1'};
+    plotfields.gray{1+numel(plotfields.gray)} = 'mr1';
+    plotfields.gray{1+numel(plotfields.gray)} = 'vr1';
+    plotfields.hotcold{1+numel(plotfields.hotcold)} = 'cvdisor1';
+    plotfields.hotcold{1+numel(plotfields.hotcold)} = 'cvsddeltar1';
+    plotfields.bin{1+numel(plotfields.bin)} = 'mr1';
 end
 
 sz = ones(1,3);
@@ -40,7 +44,7 @@ position.left = -dleft;
 mask = dps.s0 > clim.mask_threshold*smax;
 
 for c = 1:numel(plotfields.gray)
-    tmp_fn = fullfile(o_path, [method '_' plotfields.gray{c} opt.nii_ext]);
+    tmp_fn = fullfile(o_path, [method '_' plotfields.gray{c} opt.nii_ext]); 
     im3d = mask.*dps.(plotfields.gray{c});
     nii_fn = mdm_nii_write(im3d, tmp_fn, dps.nii_h, 0);
 end

@@ -33,7 +33,7 @@ dmax = opt.dtr2d.dmax;
 ratiomin = dmin/dmax;
 ratiomax = dmax/dmin;
 r2min = opt.dtr2d.r2min;
-r2max = opt.dtr2d.r2max
+r2max = opt.dtr2d.r2max;
 
 xmin = log10(dmin);
 xmax = log10(dmax);
@@ -68,7 +68,7 @@ if n>0
     dist_d.x = log10(diso);
     dist_d.y = log10(dratio);
     dist_d.z = log10(r2);
-    dist_d.a = 10*w;
+    dist_d.a = 2*w;
     dist_d.r = abs(cos(phi).*sin(theta));
     dist_d.g = abs(sin(phi).*sin(theta));
     dist_d.b = abs(cos(theta));
