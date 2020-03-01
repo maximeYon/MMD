@@ -69,5 +69,14 @@ for i = 5:size(dps.m, 4)
     dps.(nam) = dps.m(:,:,:,i);
 end
 
+% clamp measures to avoid extreme values to take precedence in averages
+if (opt.dtd_gamma.do_clamping)
+    
+    dps.MD    = mio_min_max_cut(dps.MD, 0, 4);
+    dps.nvdiso  = mio_min_max_cut(dps.nvdiso, 0, 1.2);
+    dps.nmsdaniso  = mio_min_max_cut(dps.nmsdaniso, 0, 1.2);
+    
+end
+
 
 if (~isempty(dps_fn)), mdm_dps_save(dps, dps.s, dps_fn, opt); end
