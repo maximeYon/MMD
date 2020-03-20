@@ -38,7 +38,7 @@ for nexp = 1:length(expno)
 
     fprintf(fid,'%s',['\noindent \textbf{' num2str(expno(nexp)) ')} ']);
 
-    if nexp > 1 && any(strcmp(mdm_bruker_readpvparam(data_path, 'PULPROG'),{lower('<rFOV_DWEpiWavev1_04.ppg>'); lower('<mcw_DWEpiWavev7.ppg>')}))
+    if nexp > 1 && any(strcmp(mdm_bruker_readpvparam(expno_path, 'PULPROG'),{lower('<rFOV_DWEpiWavev1_04.ppg>'); lower('<mcw_DWEpiWavev7.ppg>')}))
         old_PVM_EpiTrajAdjkx = mdm_bruker_readpvparam(old_expno_path, 'PVM_EpiTrajAdjkx');
         PVM_EpiTrajAdjkx = mdm_bruker_readpvparam(expno_path, 'PVM_EpiTrajAdjkx');
         old_rg = mdm_bruker_readpvparam(old_expno_path, 'rg');

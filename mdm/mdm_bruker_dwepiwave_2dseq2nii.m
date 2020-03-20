@@ -60,6 +60,7 @@ sdim = size(data);
 h.pixdim(1+(1:length(sdim))) = sdim;
 h.pixdim(2:4) = [PVM_SpatResol PVM_SliceThick];
 h.xyzt_units = 'SI';
+h.datatype = 16; %single precision
 
 % write nifti image and header
 if (~isempty(nii_fn))

@@ -33,6 +33,7 @@ if any(strcmp(mdm_bruker_readpvparam(data_path, 'PULPROG'),{lower('<rFOV_DWEpiWa
     DwGradShapeStrArr = mdm_bruker_readpvparam(data_path, 'DwGradShapeStrArr') ;
     PVM_GradCalConst = mdm_bruker_readpvparam(data_path, 'PVM_GradCalConst') ;
     EchoTime=mdm_bruker_readpvparam(data_path, 'EchoTime')*1e-3 ;
+    PVM_RepetitionTime=mdm_bruker_readpvparam(data_path, 'PVM_RepetitionTime')*1e-3 ;
     RefSliceGrad = mdm_bruker_readpvparam(data_path, 'RefSliceGrad') ;
     %RefPul = mdm_bruker_readpvparam(data_path, 'RefPul') ;
     SliceSpoilerDur = mdm_bruker_readpvparam(data_path, 'SliceSpoilerDur')*1e-3 ;
@@ -177,9 +178,12 @@ if any(strcmp(mdm_bruker_readpvparam(data_path, 'PULPROG'),{lower('<rFOV_DWEpiWa
             %xps.u(ind,:) = [zeros(DwNB0,3); repmat(DwDir,[DwNAmplitudes 1])];
         end
     end
-
+    
     xps.te = EchoTime*ones(td1,1);
-    xps = mdm_xps_calc_btpars(xps);
+    xps.tr = PVM_RepetitionTime*ones(td1,1);
+    xps_temp = mdm_xps_calc_btpars(xps);
+    xps.b_delta = xps_temp.b_delta;
+    xps.b_eta = xps_temp.b_eta;
 
     % figure(2), clf
     % subplot(2,1,1)
@@ -222,6 +226,7 @@ elseif any(strcmp(mdm_bruker_readpvparam(data_path, 'PULPROG'),{lower('<mcw_DWEp
     DwGradShapeStrArr1 = mdm_bruker_readpvparam(data_path, 'DwGradShapeStrArr1') ;
     PVM_GradCalConst = mdm_bruker_readpvparam(data_path, 'PVM_GradCalConst') ;
     EchoTime=mdm_bruker_readpvparam(data_path, 'EchoTime')*1e-3 ;
+    PVM_RepetitionTime=mdm_bruker_readpvparam(data_path, 'PVM_RepetitionTime')*1e-3 ;
     RefSliceGrad = mdm_bruker_readpvparam(data_path, 'RefSliceGrad') ;
     %RefPul = mdm_bruker_readpvparam(data_path, 'RefPul') ;
     SliceSpoilerDur = mdm_bruker_readpvparam(data_path, 'SliceSpoilerDur')*1e-3 ;
@@ -388,7 +393,10 @@ elseif any(strcmp(mdm_bruker_readpvparam(data_path, 'PULPROG'),{lower('<mcw_DWEp
     end
 
     xps.te = EchoTime*ones(td1,1);
-    xps = mdm_xps_calc_btpars(xps);
+    xps.tr = PVM_RepetitionTime*ones(td1,1);
+    xps_temp = mdm_xps_calc_btpars(xps);
+    xps.b_delta = xps_temp.b_delta;
+    xps.b_eta = xps_temp.b_eta;
 
     % figure(2), clf
     % subplot(2,1,1)

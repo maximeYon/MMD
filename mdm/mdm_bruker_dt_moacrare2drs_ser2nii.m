@@ -1,5 +1,5 @@
-function mdm_bruker_dt_rare2d_ser2nii(data_path, nii_fn, rps)
-% function mdm_bruker_dt_rare2d_ser2nii(data_path, nii_fn, rps)
+function mdm_bruker_dt_moacrare2drs_ser2nii(data_path, nii_fn, rps)
+% function mdm_bruker_dt_moacrare2drs_ser2nii(data_path, nii_fn, rps)
 %
 % image reconstruction from Bruker DT_**rare2d pulse programs
 % saves complex image as nifti file
@@ -187,10 +187,11 @@ resolution.i = r.i(2) - r.i(1);
 resolution.j = r.j(2) - r.j(1);
 
 Ninc = td1/nbl;
-Itd1 = zeros(nudim.i,nudim.j,nbl,Ninc);
-for ninc = 1:Ninc
-    for nslice = 1:nbl
-        ntd1 = (ninc-1)*nbl + nslice;
+Itd1 = zeros(nudim.i,nudim.j,1,td1);
+% for ninc = 1:Ninc
+%     for nslice = 1:nbl
+%         ntd1 = (ninc-1)*nbl + nslice;
+for ntd1 = 1:td1
         S = Std1(:,ntd1);
         S = fft(S,td/2,1);
         S = zeroshiftfun.*S;
@@ -210,9 +211,9 @@ for ninc = 1:Ninc
             I = [zeros(nudim.i,Nzeros.j/2) I zeros(nudim.i,Nzeros.j/2)];
         end
         I = fftshift(fft(ifftshift(I,2),[],2),2);
-        Itd1(:,:,nslice,ninc) = I;
+        Itd1(:,:,1,ntd1) = I;
         %figure(1), clf, imagesc(abs(I)'), set(gca,'YDir','normal'), axis square, title([num2str(ntd1) ' (' num2str(td1) ')']), pause(.1)
-    end
+%     end
 end
 
 Itd1 = abs(Itd1);
@@ -225,6 +226,6 @@ h.pixdim(2:4) = [resolution.i resolution.j resolution.slice];
 h.xyzt_units = 'SI';
 
 % write nifti image and header
-mdm_nii_write(Itd1, nii_fn, h, 0);
+mdm_nii_write(single(Itd1), nii_fn, h, 0);
 
 
