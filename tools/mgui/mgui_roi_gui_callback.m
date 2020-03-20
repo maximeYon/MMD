@@ -80,7 +80,7 @@ if (nargin >= 1)
                     
                 case {'l', 'L'}
                     [tmp_name, tmp_path] = uigetfile(...
-                        {'.nii;*.nii.gz', 'NIFTI'}, 'Load ROI', ...
+                        {'*.nii;*.nii.gz', 'NIFTI'}, 'Load ROI', ...
                         EG.browse.path);
                     roi_filename = fullfile(tmp_path, tmp_name);
                     
@@ -105,7 +105,7 @@ if (nargin >= 1)
                                 end
                             else
                                 k = 1;
-                                l = 0.1
+                                l = 0.1;
                             end
                             
                             I_roi = (I_roi > (k - l)) & (I_roi < (k + l));

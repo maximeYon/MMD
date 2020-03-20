@@ -4,7 +4,7 @@ function EG = mgui_analysis_update_panel(EG, varargin)
 % currently, we don't separate reload and update
 % if (nargin < 2), do_reload = 1; end;
 % if (nargin < 3), do_update = 1; end
-
+ 
 EG.roi = msf_ensure_field(EG.roi, 'xps', []);
 
 % get handles
@@ -30,7 +30,7 @@ if (~strcmp(EG.analysis.xps_fn, EG.roi.xps_fn))
 
     % Check which methods that are available
     d = dir(fullfile(fileparts(mfilename('fullpath')), '..', '..','methods'));
-    
+
     % Set default method
     str = {'Overview'};
     method_name = {'Overview'};
@@ -51,7 +51,7 @@ if (~strcmp(EG.analysis.xps_fn, EG.roi.xps_fn))
                 % to the method name
                 str{end+1} = [ d(c).name ' (x)'];
                 
-                if (1)
+                if (0)
                     disp(me.message);
                 end
             end

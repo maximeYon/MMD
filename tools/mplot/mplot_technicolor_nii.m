@@ -7,7 +7,7 @@ smax = max(dps.s0(:));
 clim.s0 = smax*clim.s0;
 
 %dtd
-plotfields.gray = {'s0';'s1000';'s2000';'s3000';'mdiso';'msddelta';'vdiso';'vsddelta';'nmsdaniso';'nvdiso'};
+plotfields.gray = {'s0';'s1000';'s2000';'mdiso';'msddelta';'vdiso';'vsddelta';'nmsdaniso';'nvdiso';'MD';'FA'};
 plotfields.hotcold = {'cvdisosddelta'};
 plotfields.bin = {'mdiso';'msddelta'};
 if strcmp(method,'dtr2d')
@@ -22,6 +22,17 @@ elseif strcmp(method,'dtr1d')
     plotfields.hotcold{1+numel(plotfields.hotcold)} = 'cvdisor1';
     plotfields.hotcold{1+numel(plotfields.hotcold)} = 'cvsddeltar1';
     plotfields.bin{1+numel(plotfields.bin)} = 'mr1';
+elseif strcmp(method,'dtr1r2d')
+    plotfields.gray{1+numel(plotfields.gray)} = 'mr1';
+    plotfields.gray{1+numel(plotfields.gray)} = 'vr1';
+    plotfields.hotcold{1+numel(plotfields.hotcold)} = 'cvdisor1';
+    plotfields.hotcold{1+numel(plotfields.hotcold)} = 'cvsddeltar1';
+    plotfields.bin{1+numel(plotfields.bin)} = 'mr1';
+    plotfields.gray{1+numel(plotfields.gray)} = 'mr2';
+    plotfields.gray{1+numel(plotfields.gray)} = 'vr2';
+    plotfields.hotcold{1+numel(plotfields.hotcold)} = 'cvdisor2';
+    plotfields.hotcold{1+numel(plotfields.hotcold)} = 'cvsddeltar2';
+    plotfields.bin{1+numel(plotfields.bin)} = 'mr2';
 end
 
 sz = ones(1,3);
@@ -159,4 +170,28 @@ I( I(:) < 0 ) = 0;
 mdm_nii_write(255*I, tmp_fn, dps.nii_h, 1);
 
 
+
+% Standard FA DEC
+tmp_fn = fullfile(o_path, [method '_FA_u_rgb' opt.nii_ext]);
+
+clear im3d
+im3d.r = abs(dps.u(:,:,:,1));
+im3d.g = abs(dps.u(:,:,:,2));
+im3d.b = abs(dps.u(:,:,:,3));
+c_norm = mask;
+
+im3d.bright = dps.FA;
+
+I = zeros([3 msf_size(im3d.r,3)]);
+I(1,:,:,:) = im3d.bright .* im3d.r ./c_norm;
+I(2,:,:,:) = im3d.bright .* im3d.g ./c_norm;
+I(3,:,:,:) = im3d.bright .* im3d.b ./c_norm;
+
+I(isnan(I)) = 0;
+I(isinf(I)) = 0;
+
+I( I(:) > 1 ) = 1;
+I( I(:) < 0 ) = 0;
+
+mdm_nii_write(255*I, tmp_fn, dps.nii_h, 1);
 

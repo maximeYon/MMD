@@ -15,7 +15,7 @@ EG.roi.ref = mgui_gui_volume_create_ref(EG.roi_volume_tags, 'roi', 'I', ...
 
 % Load image
 if (do_reload)
-    
+   
     % Save old EG.roi structure
     mgui_roi_old = EG.roi;
     
@@ -98,6 +98,21 @@ if (do_reload)
             end
     end
     
+    % -----------------start DT 20200315----------------------
+    % Replaced 'centre_on_roi' feature with command window
+    % output of ROI center coordinates to facilitate inspection of ROI on
+    % multiple parameter maps.
+    switch (slice_mode)
+        
+        case 'centre_on_roi'
+            
+            % We know ROI is present from check above
+            EG.roi.c_slice_save = mgui_misc_roi_centre(EG.roi.I_roi);
+            disp(['ROI center ' num2str(EG.roi.c_slice_save)])
+            slice_mode = 'retain_slice';
+    end
+    % -----------------end DT 20200315----------------------
+    
     % Execute position update
     switch (slice_mode)
         
@@ -105,10 +120,10 @@ if (do_reload)
             
             % We know ROI is present from check above
             EG.roi.c_slice_save = mgui_misc_roi_centre(EG.roi.I_roi);
-            
+
             % Set dimension
             EG.roi.c_dim = mgui_misc_roi_dim(EG.roi.I_roi, EG.roi.n_voxels);
-            
+           
             % For DS
             if (isfield(mgui_roi_old,'c_dim'))
                 EG.roi.c_dim = mgui_roi_old.c_dim;
@@ -250,7 +265,6 @@ if (do_reload)
 end
 
 if (do_redraw_image)
-    
     % we need to recalculate this quite often since the ROI can be changed
     % in quite some different ways -- or, identify these and make the code
     % quicker that way
@@ -446,6 +460,6 @@ if (do_redraw_image)
     
     % this should probably not go here, but...
     EG.roi.is_updated = 0;
-    
+   
 end
 

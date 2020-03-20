@@ -1,12 +1,32 @@
-function mplot_technicolor(method, dps, fig_fn, clim, opt)
+function axh_v_tot = mplot_technicolor(method, dps, fig_fn, clim, opt)
 % function mplot_technicolor(method, dps, fig_fn, clim, opt)
+
+if nargin < 5
+    opt = mdm_opt();
+end
+
+sz = ones(1,3);
+sz_temp = size(dps.s0);
+sz(1:numel(sz_temp)) = sz_temp;
+
+if isfield(opt,'k_range')
+    nk = opt.k_range;
+else
+    nk = 1:sz(3); 
+end
 
 %Plot parameter maps
 figure(1), clf
 
-smax = max(dps.s0(:));
+s0_nk = dps.s0(:,:,nk);
+s2000_nk = dps.s2000(:,:,nk);
+% smax = max(dps.s0(:,:,nk),[],'all');
+% smax = quantile(s0_nk(isfinite(s0_nk)),.99,'all');
+smax = quantile(s0_nk(s0_nk>0),.999,'all');
 clim.s0 = smax*clim.s0;
-clim.s2000 = max(dps.s2000(:))*clim.s2000;
+% clim.s2000 = max(dps.s2000(:,:,nk),[],'all')*clim.s2000;
+% clim.s2000 = quantile(s2000_nk(isfinite(s0_nk)),.99,'all')*clim.s2000;
+clim.s2000 = quantile(s2000_nk(s0_nk>0),.999,'all')*clim.s2000;
 
 if strcmp(method,'dtr2d')
     plotfields.gray = {'s0';'s2000';'mdiso';'msddelta';'mr2';'vdiso';'vsddelta';'vr2'};
@@ -22,13 +42,9 @@ elseif strcmp(method,'dtd')
     plotfields.bin = {'mdiso';'msddelta'};
 end
 
-sz = ones(1,3);
-sz_temp = size(dps.s0);
-sz(1:numel(sz_temp)) = sz_temp;
 pixaspect = dps.nii_h.pixdim(3)/dps.nii_h.pixdim(2);
 imaspect = sz(2)/sz(1);
 
-nk = 1:sz(3); %nk = [2 6 11];
 Nslices = numel(nk);
 Nparams = numel(plotfields.gray) + numel(plotfields.hotcold) + numel(dps.bin)*numel(plotfields.bin) + 4;
 papersize = 3*[Nparams Nslices*pixaspect*imaspect];
@@ -97,6 +113,13 @@ if strcmp(mdm_nii_oricode(dps.nii_h),'LPS')
     set(axh_v_tot,'YDir','reverse')
 else
     set(axh_v_tot,'YDir','normal')
+end
+
+if isfield(opt,'roiplot')
+    if isfield(opt.roiplot,'case_name')
+        th_case = text(axh_v_tot(1),1,sz(2),opt.roiplot.case_name);
+        set(th_case,'Color',[1 1 .999],'VerticalAlignment','top','FontSize',8)
+    end
 end
 
 set(gcf, 'PaperUnits','centimeters','PaperPosition', [0 0 papersize],'PaperSize', papersize); 

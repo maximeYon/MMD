@@ -101,7 +101,8 @@ if (nargin >= 1)
     end
     
     % Display info
-    disp(['Action took ' num2str(toc(t_start))]);
+    % DT 20200315. Disabled this annoying message
+%     disp(['Action took ' num2str(toc(t_start))]);
     
     % Remove sender handle to avoid confusion
     EG.hSender = [];

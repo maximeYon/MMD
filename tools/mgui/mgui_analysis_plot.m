@@ -38,6 +38,8 @@ for c_attempt = 0:9
                 
                 if (size(S,1) == 1) % one volume only --> histogram
                     mgui_analysis_plot_histogram(h(1), S);
+                elseif (size(S,1) == 3) % DT 20200315. Three volumes  --> rgb histogram
+                    mgui_analysis_plot_histogram_rgb(h(1), S);
                 else
                     mgui_analysis_plot_signal(h(1), S, [], c_volume);
                 end
