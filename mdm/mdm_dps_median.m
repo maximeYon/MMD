@@ -42,3 +42,17 @@ for c = 1:numel(f)
     end
 end
 
+% Difficult to take median of vectors so the main eigenvector u is
+% calculated from the median diffusion tensor elements mdij
+if isfield(median_dps,'mdxx')
+    % reshape help functions
+    sz_reshape  = msf_size(median_dps.s0, 3); 
+    g_reshape = @(a,n) reshape(a, prod(sz_reshape(1:3)), n);
+    f_reshape = @(a,n) reshape(a, sz_reshape(1), sz_reshape(2), sz_reshape(3), n);
+    
+    %Voigt format [xx, yy, zz, sqrt(2)*xy, sqrt(2)*xz, sqrt(2)*xz]
+    dt_1x6 = cat(4,median_dps.mdxx,median_dps.mdyy,median_dps.mdzz,sqrt(2)*median_dps.mdxy,sqrt(2)*median_dps.mdxz,sqrt(2)*median_dps.mdyz);
+    temp_dps = tm_dt_to_dps(g_reshape(dt_1x6, 6)*1e9, median_dps, f_reshape, 0.0001);
+    median_dps.u = temp_dps.u;
+end
+

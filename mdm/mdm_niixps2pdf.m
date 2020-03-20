@@ -4,7 +4,8 @@ function mdm_niixps2pdf(s, opt)
 % Input: s structure with fields s.nii_fn and s.xps
 % Output: matlab figure and pdf file saved in same directory as s.nii_fn
 
-xps = s.xps;
+xps_fn = mdm_fn_nii2xps(s.nii_fn);
+xps = mdm_xps_load(xps_fn);
 [I,~] = mdm_nii_read(s.nii_fn);
 signal = squeeze(sum(sum(sum(I,1),2),3));
 signal = signal/max(signal);
@@ -24,6 +25,19 @@ width = .85;
 bottom = .08;
 dbottom = (1-bottom)/7;
 height = dbottom - .02;
+
+if ~isfield(xps,'u')
+    if isfield(xps,'theta')
+        xps.u = zeros(xps.n,3);
+        xps.u(:,1) = sin(xps.theta).*cos(xps.phi);
+        xps.u(:,2) = sin(xps.theta).*sin(xps.phi);
+        xps.u(:,3) = cos(xps.theta);
+    end
+end
+if ~isfield(xps,'tr')
+    xps.tr = xps.ts;
+end
+
 
 axh_s = axes('position',[left bottom+6*dbottom width height]);
 ph_s = plot(1:xps.n,signal,'.');
@@ -50,10 +64,10 @@ set(axh_bd,'YLim',[-.55 1.05])
 set(axh_btheta,'YLim',180*[-.05 1.05])    
 set(axh_bphi,'YLim',180*[-1.05 1.05])    
 set(axh_te,'YLim',max(xps.te)*[-.05 1.05])    
-set(axh_tr,'YLim',max(xps.tr)*[-.05 1.05]) 
+set(axh_tr,'YLim',max(xps.tr(xps.tr<20))*[-.05 1.05]) 
 
 ylabel(axh_s,'signal')
-ylabel(axh_b,'b / 10^9 m^2s^{-1}')
+ylabel(axh_b,'b / 10^9 sm^{-2}')
 ylabel(axh_bd,'b_\Delta')
 ylabel(axh_btheta,'\Theta / º')
 ylabel(axh_bphi,'\Phi / º')
