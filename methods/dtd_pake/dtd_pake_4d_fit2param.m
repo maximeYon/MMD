@@ -31,11 +31,11 @@ dps.cmu             = dps.ufa.^2;
 dps.mdiso = dps.diso;  % Mean-square anisotropic diffusivity, see Eqs. (50) and (69)
 dps.vdiso = zeros(size(dps.s0));  % Variance of isotropic diffusivities, see Eqs. (48) and (69)
 dps.msdaniso = (dps.diso.*dps.ddelta).^2;  % Mean-square anisotropic diffusivity, see Eqs. (50) and (69)
-dps.vdison = dps.vdiso./dps.mdiso.^2; % Normalized
-dps.msdanison = dps.msdaniso./dps.mdiso.^2;
+dps.nvdiso = dps.vdiso./dps.mdiso.^2; % Normalized
+dps.nmsdaniso = dps.msdaniso./dps.mdiso.^2;
 
-dps.MKi = 3 * dps.vdison; % Multiply by 3 to get kurtosis
-dps.MKa = 3 * 4/5*dps.msdanison;
+dps.MKi = 3 * dps.nvdiso; % Multiply by 3 to get kurtosis
+dps.MKa = 3 * 4/5*dps.nmsdaniso;
 
 dps.signaniso = sign(dps.ddelta);
 

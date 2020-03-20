@@ -60,3 +60,10 @@ if (opt.dtd.do_clamping)
     dps.nvdiso    = mio_min_max_cut(dps.nvdiso, [0 1]);    
 end
 
+% Standard voxel-average diffusion tensor parameters MD, FA, etc
+sz_reshape  = msf_size(dps.s0, 3); % reshape help functions
+g_reshape = @(a,n) reshape(a, prod(sz_reshape(1:3)), n);
+f_reshape = @(a,n) reshape(a, sz_reshape(1), sz_reshape(2), sz_reshape(3), n);
+dt_1x6 = cat(4,dps.mdxx,dps.mdyy,dps.mdzz,sqrt(2)*dps.mdxy,sqrt(2)*dps.mdxz,sqrt(2)*dps.mdyz); %Voigt format [xx, yy, zz, sqrt(2)*xy, sqrt(2)*xz, sqrt(2)*xz]
+dps = tm_dt_to_dps(g_reshape(dt_1x6, 6)*1e9, dps, f_reshape, 0.0001);
+

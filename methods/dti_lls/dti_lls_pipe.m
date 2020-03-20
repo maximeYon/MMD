@@ -40,6 +40,8 @@ end
 % Save nifti parameter maps    
 if (opt.do_param2nii)
     fn = mdm_param2nii(paths.dps_fn, paths.nii_path, opt.dti_lls, opt); 
+else
+    fn = {};
 end
 
 

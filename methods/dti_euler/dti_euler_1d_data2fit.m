@@ -3,6 +3,8 @@ function m = dti_euler_1d_data2fit(signal, xps, opt, ind)
 
 if (nargin < 4), ind = ones(size(signal)) > 0; end
 
+signal = abs(signal);
+
 unit_to_SI = [max(signal(:)) 1e-9*[1 1 1] 2*pi*[1 1 1]];
 
     function m = t2m(t) % convert local params to outside format

@@ -17,7 +17,7 @@ opt.(x) = msf_ensure_field(opt.(x), 'do_pa_weight', 1);
 opt.(x) = msf_ensure_field(opt.(x), 'weight_sthresh', .07);
 opt.(x) = msf_ensure_field(opt.(x), 'weight_wthresh', 2);
 opt.(x) = msf_ensure_field(opt.(x), 'weight_mdthresh', 1e-9);
-opt.(x) = msf_ensure_field(opt.(x), 'do_clamping', 0);
+opt.(x) = msf_ensure_field(opt.(x), 'do_clamping', 1);
 opt.(x) = msf_ensure_field(opt.(x), 'fig_maps', ...
     {'s0','MD', 'mu2ison', 'mu2anison', 'uFA'});
 opt.(x) = msf_ensure_field(opt.(x), 'fig_prefix', 'dtd_gamma');

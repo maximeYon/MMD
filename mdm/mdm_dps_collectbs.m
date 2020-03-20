@@ -15,6 +15,8 @@ parfor nbs = 1:numel(bsno)
             bs_dps{nbs} = dtr2d_4d_fit2param(m, [], opt);
         elseif strcmp(method,'dtr1d')
             bs_dps{nbs} = dtr1d_4d_fit2param(m, [], opt);
+        elseif strcmp(method,'dtr1r2d')
+            bs_dps{nbs} = dtr1r2d_4d_fit2param(m, [], opt);
         elseif strcmp(method,'dtd')
             bs_dps{nbs} = dtd_4d_fit2param(m, [], opt);
         end
