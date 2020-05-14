@@ -77,7 +77,13 @@ if (opt.dtd_gamma.do_clamping)
     dps.nvdiso  = mio_min_max_cut(dps.nvdiso, 0, 1.2);
     dps.nmsdaniso  = mio_min_max_cut(dps.nmsdaniso, 0, 1.2);
     
+    dps.MKa  = mio_min_max_cut(dps.MKa, 0, 3);
+    dps.MKi  = mio_min_max_cut(dps.MKi, 0, 3);
+    dps.MKt  = mio_min_max_cut(dps.MKt, 0, 3);
 end
 
+% Signal equation based on the Laplace transform of the gamma distribution.
+dps.s1000 = real(msf_notfinite2zero(dps.s0.*(1 + 1e9.*dps.mu2iso./dps.mdiso).^(-1*(dps.mdiso.^2./dps.mu2iso))));
+dps.s2000 = real(msf_notfinite2zero(dps.s0.*(1 + 2e9.*dps.mu2iso./dps.mdiso).^(-1*(dps.mdiso.^2./dps.mu2iso))));
 
 if (~isempty(dps_fn)), mdm_dps_save(dps, dps.s, dps_fn, opt); end

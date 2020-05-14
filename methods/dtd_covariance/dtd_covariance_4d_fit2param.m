@@ -106,9 +106,10 @@ if (opt.dtd_covariance.do_clamping)
     dps.vdiso    = mio_min_max_cut(dps.vdiso, [0 2e-18]);    
 end
 
-dps.size = dps.mdiso;
-dps.meanshape = dps.nmsdaniso;
-dps.varsize = dps.nvdiso;   
+b1000 = 1e9;
+dps.s1000 = real(msf_notfinite2zero(dps.s0 .* exp(-b1000 * dps.mdiso + b1000^2 * dps.mdiso.^2.*dps.MKi/6)));
+b2000 = 2e9;
+dps.s2000 = real(msf_notfinite2zero(dps.s0 .* exp(-b2000 * dps.mdiso + b2000^2 * dps.mdiso.^2.*dps.MKi/6)));
 
 if (~isempty(dps_fn))
     mdm_dps_save(dps, mfs.s, dps_fn, opt);

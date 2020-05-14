@@ -14,6 +14,8 @@ sz(1:numel(sz_temp)) = sz_temp;
 pixaspect = dps.nii_h.pixdim(3)/dps.nii_h.pixdim(2);
 imaspect = sz(2)/sz(1);
 
+Nbins = min([numel(dps.bin) 3]);
+
 if strcmp(method,'dtr2d')
     plotfields.gray = {'s0';'mdiso';'msddelta';'mr2';'vdiso';'vsddelta';'vr2'};
     plotfields.hotcold = {'cvdisosddelta';'cvdisor2';'cvsddeltar2'};
@@ -77,7 +79,7 @@ for nk = 1:sz(3)
 
     
     for c = 1:numel(plotfields.bin)
-        for nbin = 1:numel(dps.bin)
+        for nbin = 1:Nbins
             clear im3d
             cind = (dps.bin{nbin}.(plotfields.bin{c})-min(clim.(plotfields.bin{c})))...
                 /(max(clim.(plotfields.bin{c}))-min(clim.(plotfields.bin{c})));
@@ -99,7 +101,7 @@ for nk = 1:sz(3)
         end
     end
 
-    for nbin = 1:numel(dps.bin)
+    for nbin = 1:Nbins
         clear im3d
         im3d.r = dps.bin{nbin}.mdxx;
         im3d.g = dps.bin{nbin}.mdyy;

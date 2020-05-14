@@ -28,6 +28,8 @@ clim.s0 = smax*clim.s0;
 % clim.s2000 = quantile(s2000_nk(isfinite(s0_nk)),.99,'all')*clim.s2000;
 clim.s2000 = quantile(s2000_nk(s0_nk>0),.999,'all')*clim.s2000;
 
+Nbins = min([numel(dps.bin) 3]);
+
 if strcmp(method,'dtr2d')
     plotfields.gray = {'s0';'s2000';'mdiso';'msddelta';'mr2';'vdiso';'vsddelta';'vr2'};
     plotfields.hotcold = {'cvdisosddelta';'cvdisor2';'cvsddeltar2'};
@@ -46,7 +48,7 @@ pixaspect = dps.nii_h.pixdim(3)/dps.nii_h.pixdim(2);
 imaspect = sz(2)/sz(1);
 
 Nslices = numel(nk);
-Nparams = numel(plotfields.gray) + numel(plotfields.hotcold) + numel(dps.bin)*numel(plotfields.bin) + 4;
+Nparams = numel(plotfields.gray) + numel(plotfields.hotcold) + Nbins*numel(plotfields.bin) + 4;
 papersize = 3*[Nparams Nslices*pixaspect*imaspect];
 position.dbottom = 1/Nslices;
 dleft = 1/Nparams;
@@ -76,7 +78,7 @@ for c = 1:numel(plotfields.hotcold)
 end
 
 for c = 1:numel(plotfields.bin)
-    for nbin = 1:numel(dps.bin)
+    for nbin = 1:Nbins
         clear im3d
         cind = (dps.bin{nbin}.(plotfields.bin{c})(:,:,nk)-min(clim.(plotfields.bin{c})))...
             /(max(clim.(plotfields.bin{c}))-min(clim.(plotfields.bin{c})));
@@ -88,7 +90,7 @@ for c = 1:numel(plotfields.bin)
     end
 end
 
-for nbin = 1:numel(dps.bin)
+for nbin = 1:Nbins
     clear im3d
     im3d.r = dps.bin{nbin}.mdxx(:,:,nk);
     im3d.g = dps.bin{nbin}.mdyy(:,:,nk);

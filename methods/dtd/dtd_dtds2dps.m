@@ -9,10 +9,15 @@ end
 %Per-voxel statistical measures
 nn = size(dtds.w,4);
 
+%Diffusion-weighted signals
 dps.s0 = sum(dtds.w,4);
 dps.s1000 = msf_notfinite2zero(sum(exp(-1e9*dtds.diso).*dtds.w,4));
 dps.s2000 = msf_notfinite2zero(sum(exp(-2e9*dtds.diso).*dtds.w,4));
 dps.s3000 = msf_notfinite2zero(sum(exp(-3e9*dtds.diso).*dtds.w,4));
+
+%For comparison with EUSOBI consensus ADC, see https://doi.org/10.1007/s00330-019-06510-3
+dps.s800 = msf_notfinite2zero(sum(exp(-0.8e9*dtds.diso).*dtds.w,4));
+dps.adc800 = msf_notfinite2zero((log(dps.s0) - log(dps.s800))./ 0.8e9)/1e-9;
 
 %Means
 dps.mdiso = sum(dtds.diso.*dtds.w,4)./dps.s0;

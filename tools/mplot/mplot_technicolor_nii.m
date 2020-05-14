@@ -7,7 +7,7 @@ smax = max(dps.s0(:));
 clim.s0 = smax*clim.s0;
 
 %dtd
-plotfields.gray = {'s0';'s1000';'s2000';'mdiso';'msddelta';'vdiso';'vsddelta';'nmsdaniso';'nvdiso';'MD';'FA'};
+plotfields.gray = {'s0';'s800';'s2000';'adc800';'mdiso';'msddelta';'vdiso';'vsddelta';'nmsdaniso';'nvdiso';'MD';'FA'};
 plotfields.hotcold = {'cvdisosddelta'};
 plotfields.bin = {'mdiso';'msddelta'};
 if strcmp(method,'dtr2d')
@@ -86,7 +86,12 @@ for c = 1:numel(plotfields.hotcold)
     I( I(:) > 1 ) = 1;
     I( I(:) < 0 ) = 0;
 
-    mdm_nii_write(255*I, tmp_fn, dps.nii_h, 1);    
+    mdm_nii_write(255*I, tmp_fn, dps.nii_h, 1); 
+    
+    
+    tmp_fn = fullfile(o_path, [method '_' plotfields.hotcold{c} '_gray' opt.nii_ext]);
+    im3d = mask.*dps.(plotfields.hotcold{c});
+    nii_fn = mdm_nii_write(im3d, tmp_fn, dps.nii_h, 0);
 end
 
 for c = 1:numel(plotfields.bin)
@@ -111,6 +116,12 @@ for c = 1:numel(plotfields.bin)
         I( I(:) < 0 ) = 0;
     
         mdm_nii_write(255*I, tmp_fn, dps.nii_h, 1);
+
+        tmp_fn = fullfile(o_path, [method '_' plotfields.bin{c} '_bin' num2str(nbin) '_gray' opt.nii_ext]);
+        
+        clear im3d
+        im3d = mask.*dps.bin{nbin}.(plotfields.bin{c});
+        nii_fn = mdm_nii_write(im3d, tmp_fn, dps.nii_h, 0);        
     end
 end
 
