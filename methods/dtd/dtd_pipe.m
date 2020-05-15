@@ -34,7 +34,7 @@ if (opt.do_data2fit)
     if opt.do_bootstrap
         msf_mkdir(fileparts(paths.ind_fn));
         ind = (opt.dtd.ind_start-0) + round(rand([s.xps.n-(opt.dtd.ind_start-1),1])*(s.xps.n-(opt.dtd.ind_start-0)));
-        save(paths.ind_fn, 'ind');
+%         save(paths.ind_fn, 'ind');
 %         ind_fn = mdm_ind_save(ind, paths.ind_fn);
 %         load(paths.ind_fn)
         opt.bootstrap.ind = ind;
@@ -44,6 +44,9 @@ if (opt.do_data2fit)
     mfs = mdm_mfs_load(paths.mfs_fn);
     mfs.m = single(mfs.m);
     save(paths.mfs_fn, 'mfs');
+    if opt.do_bootstrap
+        save(paths.ind_fn, 'ind');
+    end
 end
 
 if (opt.do_datafit2chisq)
