@@ -3,6 +3,7 @@ function res = mdm_bruker_dwepiwave_2dseq2nii(data_path, nii_fn, rps)
 %
 % Converting EPI images to nifti
 % Image resolution in field n.pixdim in nifti header
+% Relies on Bruker's pvmatlab toolbox
 %
 % data_path: folder where the Bruker ser file is located
 % nii_fn: nifti file name (including complete path and extension)
@@ -19,6 +20,7 @@ try
     imageObj = ImageDataObject(in_path); %Script from Bruker's pvmatlab toolbox
 catch
     res = 0;
+    warning('Conversion of image data failed. Check that the Bruker pvmatlab toolbox is in the Matlab serach path!')
     return
 end
 
