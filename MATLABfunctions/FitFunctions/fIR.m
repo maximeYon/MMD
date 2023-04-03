@@ -1,0 +1,1 @@
+function Y = fIR(Pin,Xin,Pnorm,Xnorm,Ynorm)Pin = Pin.*Pnorm;Xin = Xin*Xnorm;Y0 = Pin(1);R1 = Pin(2);A = Pin(3);Y = Y0.*(1 - A*exp(-Xin.*R1));Y = Y/Ynorm;

@@ -1,0 +1,1 @@
+function Y = fexpgammamu2(Pin,Xin,P,Pnorm,Xnorm,Ynorm);if nargin == 3    Pnorm = ones(size(Pin));    Xnorm = 1;    Ynorm = 1;endPin = Pin.*Pnorm;Xin = Xin*Xnorm;Y0 = P.S0;D = P.mD;mu2 = Pin(1);sigma = sqrt(mu2);Y = Y0.*((1 + Xin.*(sigma.^2)./D).^(-1*(D./sigma).^2));Y = Y/Ynorm;

@@ -1,0 +1,3 @@
+https://github.com/NYU-DiffusionMRI/DESIGNER/blob/master/utils/mpdenoise_sj.py
+
+Ades-Aron et al. NeuroImage 183: 532-543 (2018)

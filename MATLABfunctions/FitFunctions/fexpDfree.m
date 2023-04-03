@@ -1,0 +1,1 @@
+function Y = fexp(Pin,Xin,Pnorm,Xnorm,Ynorm);Pin = Pin.*Pnorm;Xin = Xin*Xnorm;Y0 = Pin(1);D = Pin(2);ff = Pin(3)/(Y0+Pin(3));Db = 2.3e-9;Y = Y0.*((1-ff)*exp( - D.*Xin) + ff*exp( - Db.*Xin));Y = Y/Ynorm;if ff>0.2|ff<0, Y = Y*10; endif D>Db|D<0, Y = Y*10; end

@@ -1,0 +1,1 @@
+function Y = fexpBL(Pin,Xin,Pnorm,Xnorm,Ynorm);Pin = Pin.*Pnorm;Xin = Xin*Xnorm;Y0 = Pin(1);D = Pin(2);A = Pin(3);Y = Y0.*exp( - D.*Xin) + A;Y = Y/Ynorm;

@@ -1,0 +1,1 @@
+function Y = fSGPplane(Pin,Xin,Pnorm,Xnorm,Ynorm,D,DELTA);Pin = Pin.*Pnorm;q = Xin*Xnorm;Y0 = Pin(1);a = Pin(2);N = 100;n = 1:N;[qarray, narray] = ndgrid(q,n);S = exp(-narray.^2*pi^2*D*DELTA/a^2).*(1-(-1).^narray.*cos(2*pi*qarray*a))./((2*pi*qarray*a).^2-(narray*pi).^2).^2;E = 2*(1-cos(2*pi*q*a))./(2*pi*q*a).^2 + 4*(2*pi*q*a).^2.*sum(S,2);Y = E*Y0/Ynorm;

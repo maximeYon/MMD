@@ -1,0 +1,1 @@
+function Y = fexpgamma_AxSym(Pin,Xin,Pnorm,Xnorm,Ynorm,Xin2)Pin = Pin.*Pnorm;Xin = Xin*Xnorm;bDelta = Xin2;Y0 = Pin(1);D = Pin(2);sigma_iso = Pin(3);sigma_aniso = Pin(4);sigma = sigma_iso + sigma_aniso.*bDelta;Y = Y0.*((1 + Xin.*(sigma.^2)./D).^(-1*(D./sigma).^2));Y = Y./Ynorm;Y = real(Y);
