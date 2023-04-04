@@ -8,7 +8,7 @@ addpath(genpath([home_path filesep 'MATLABfunctions']));
 addpath('supplementary_functions');
 
 % Define full paths to the nifti files to be analyzed
-data_path = 'human_sample_fresh1\36';
+data_path = '20230404_152243_rat_brain_exvivo3_ncoil_1_3\12';
 mdd_path = 'pdata_mdd';
 
 %% options
@@ -29,9 +29,9 @@ end
 
 %% Load xps & select images for b0 map calculation
 load([nii_fns{1} filesep 'data_xps.mat']);
-b0_indice = (xps.b==min(xps.b));%sum(b0_indice)
-longTR_indice = (xps.tr>=2);%sum(longTR_indice)
-shortTE_indice = (xps.te<=(min(xps.te)*3)); %sum(shortTE_indice)
+b0_indice = (round(xps.b/10^5)==min(round(xps.b/10^5)));%sum(b0_indice)
+longTR_indice = (xps.tr>=0.8);%sum(longTR_indice)
+shortTE_indice = (xps.te<=(min(xps.te)*5)); %sum(shortTE_indice)
 selected_indices = b0_indice.*longTR_indice.*shortTE_indice;
 
 %% Open nifti data
@@ -60,8 +60,15 @@ dataDown = flip(dataDown,2);
 Phase1Offset = ReadPV360Param(data_path_pv, 'PVM_SPackArrPhase1Offset');
 FoV = ReadPV360Param(data_path_pv, 'PVM_Fov');
 Matrix = ReadPV360Param(data_path_pv, 'PVM_Matrix');
+SpatDim = ReadPV360Param(data_path_pv, 'PVM_SpatDimEnum');
+NSlices = ReadPV360Param(data_path_pv, 'NSlices');
 if Phase1Offset ~=0
     pixel_shift = zeros(size(Matrix));
+    if ~strcmp(SpatDim,'<3d>')
+    if NSlices ~=1
+        pixel_shift = [pixel_shift 0];
+    end
+    end
     pixel_shift(1,2) = (2*Phase1Offset)/FoV(1,2)*Matrix(1,2); % times 2 since it is applied in the wrong direction in PV processing
     for ind = 1:size(dataDown,4)
         dataDown(:,:,:,ind)=abs(fineshift(dataDown(:,:,:,ind),pixel_shift));
@@ -69,12 +76,14 @@ if Phase1Offset ~=0
 end
 
 %% repmat if single slice
-SpatDim = ReadPV360Param(data_path_pv, 'PVM_SpatDimEnum');
-NSlices = ReadPV360Param(data_path_pv, 'NSlices');
 if ~strcmp(SpatDim,'<3d>')
-    if NSlices ==1
-        dataUp = repmat(dataUp,1,1,6,1);
+    if NSlices < 10
+        dataUp = reshape(dataUp,size(dataUp,1),size(dataUp,2),1,size(dataUp,3),size(dataUp,4));
+        dataUp = repmat(dataUp,1,1,6,1,1);
+        dataUp = reshape(dataUp,size(dataUp,1),size(dataUp,2),size(dataUp,3)*size(dataUp,4),size(dataUp,5));
+        dataDown = reshape(dataDown,size(dataDown,1),size(dataDown,2),1,size(dataDown,3),size(dataDown,4));
         dataDown = repmat(dataDown,1,1,6,1);
+        dataDown = reshape(dataDown,size(dataDown,1),size(dataDown,2),size(dataDown,3)*size(dataDown,4),size(dataDown,5));
     end
 end
 
@@ -135,9 +144,10 @@ data_corrb0 = niftiread([my_path_NIFTI 'RefImgCorr.nii.gz']);
 field_map = niftiread([my_path_NIFTI 'fsl_fieldcoef.nii.gz']);
 
 if ~strcmp(SpatDim,'<3d>')
-    if NSlices ==1
-        data_corrb0 = data_corrb0(:,:,3,:);
-        field_map = field_map(:,:,3,:);
+    if NSlices < 10
+        Pos_slice = 3:6:size(data_corrb0,3);
+        data_corrb0 = data_corrb0(:,:,Pos_slice,:);
+        field_map = field_map(:,:,Pos_slice,:);
     end
 end
 % size(field_map)
@@ -181,17 +191,18 @@ toc
 %% Open Corrected nifti data
 data_corr = niftiread([my_path_NIFTI 'ImgCorrTopUp.nii.gz']);
 if ~strcmp(SpatDim,'<3d>')
-    if NSlices ==1
-        data_corr = data_corr(:,:,3,:);
-        dataUp = dataUp(:,:,3,:);
-        dataDown = dataDown(:,:,3,:);
+    if NSlices < 10
+        Pos_slice = 3:6:size(data_corrb0,3);
+        data_corr = data_corr(:,:,Pos_slice,:);
+        dataUp = dataUp(:,:,Pos_slice,:);
+        dataDown = dataDown(:,:,Pos_slice,:);
     end
 end
 
 %% display Original and corrected images
 if Display ==1
     figure(3)
-    for nrep = 1:min([size(data_corr,4) 10])
+    for nrep = 1:min([size(data_corr,4) 30])
         subplot(2,2,1)
         imagesc(squeeze(dataUp(:,:,scliceN,nrep)))
         axis image
@@ -211,7 +222,7 @@ if Display ==1
         title(['Corrected image n°' num2str(nrep)]);
         colormap gray
         drawnow
-        pause(0.1)
+        pause(1)
     end
 end
 
