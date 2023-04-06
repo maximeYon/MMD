@@ -1,0 +1,1 @@
+function g = mdm_bruker_grad_read(fn)% function g = mdm_bruker_grad_read(fn)% % Read Bruker gradient shape file.% fn:   file name % g:    column vector with gradient valuesfid = fopen(fn,'rt');tline = fgetl(fid);while strcmp('##',tline(1:2)) %skip header    tline = fgetl(fid);endg = [str2num(tline); fscanf(fid,'%f')]; %read gradient valuesfclose(fid);
