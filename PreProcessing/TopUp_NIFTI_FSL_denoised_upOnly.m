@@ -8,8 +8,8 @@ addpath(genpath([home_path filesep 'MATLABfunctions']));
 addpath('supplementary_functions');
 
 % Define full paths to the nifti files to be analyzed
-data_path_b0 = 'invivoRat2_thirdAcq\14';
-data_path = 'invivoRat2_thirdAcq\13';
+data_path_b0 = 'invivoRat3_third_scan\32';
+data_path = 'invivoRat3_third_scan\31';
 mdd_path = 'pdata_mdd';
 
 %% options
@@ -65,8 +65,15 @@ dataDown = flip(dataDown,2);
 Phase1Offset = ReadPV360Param(data_path_pv, 'PVM_SPackArrPhase1Offset');
 FoV = ReadPV360Param(data_path_pv, 'PVM_Fov');
 Matrix = ReadPV360Param(data_path_pv, 'PVM_Matrix');
+SpatDim = ReadPV360Param(data_path_pv, 'PVM_SpatDimEnum');
+NSlices = ReadPV360Param(data_path_pv, 'NSlices');
 if Phase1Offset ~=0
     pixel_shift = zeros(size(Matrix));
+    if ~strcmp(SpatDim,'<3d>')
+    if NSlices ~=1
+        pixel_shift = [pixel_shift 0];
+    end
+    end
     pixel_shift(1,2) = (2*Phase1Offset)/FoV(1,2)*Matrix(1,2); % times 2 since it is applied in the wrong direction in PV processing
     for ind = 1:size(dataDown,4)
         dataDown(:,:,:,ind)=abs(fineshift(dataDown(:,:,:,ind),pixel_shift));
@@ -259,7 +266,7 @@ end
 
 if Display ==1
     figure(4)
-    for nrep = 1:size(data_corr_full,4)
+    for nrep = 1:max([size(data_corr_full,4) 30])
         clims = [0 max(max(data_corr_full(:,:,scliceN,nrep)))];
         subplot(1,2,1)
         imagesc(squeeze(datafullUp(:,:,scliceN,nrep)),clims)
