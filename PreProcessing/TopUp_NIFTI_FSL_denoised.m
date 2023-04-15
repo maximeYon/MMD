@@ -8,7 +8,7 @@ addpath(genpath([home_path filesep 'MATLABfunctions']));
 addpath('supplementary_functions');
 
 % Define full paths to the nifti files to be analyzed
-data_path = '20230404_152243_rat_brain_exvivo3_ncoil_1_3\12';
+data_path = 'invivoRat4_3run\6';
 mdd_path = 'pdata_mdd';
 
 %% options
@@ -30,9 +30,10 @@ end
 %% Load xps & select images for b0 map calculation
 load([nii_fns{1} filesep 'data_xps.mat']);
 b0_indice = (round(xps.b/10^5)==min(round(xps.b/10^5)));%sum(b0_indice)
-longTR_indice = (xps.tr>=0.8);%sum(longTR_indice)
-shortTE_indice = (xps.te<=(min(xps.te)*5)); %sum(shortTE_indice)
+longTR_indice = (xps.tr>=2);%sum(longTR_indice)
+shortTE_indice = (xps.te<=(min(xps.te)*2.5)); %sum(shortTE_indice)
 selected_indices = b0_indice.*longTR_indice.*shortTE_indice;
+disp(['Number of b0 selected = ' num2str(sum(selected_indices))]);
 
 %% Open nifti data
 dataUp = niftiread([nii_fns{1} filesep 'dataUp.nii.gz']);
@@ -192,7 +193,7 @@ toc
 data_corr = niftiread([my_path_NIFTI 'ImgCorrTopUp.nii.gz']);
 if ~strcmp(SpatDim,'<3d>')
     if NSlices < 10
-        Pos_slice = 3:6:size(data_corrb0,3);
+        Pos_slice = 3:6:size(data_corr,3);
         data_corr = data_corr(:,:,Pos_slice,:);
         dataUp = dataUp(:,:,Pos_slice,:);
         dataDown = dataDown(:,:,Pos_slice,:);

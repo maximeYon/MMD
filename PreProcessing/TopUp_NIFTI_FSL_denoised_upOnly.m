@@ -8,8 +8,8 @@ addpath(genpath([home_path filesep 'MATLABfunctions']));
 addpath('supplementary_functions');
 
 % Define full paths to the nifti files to be analyzed
-data_path_b0 = 'invivoRat3_third_scan\32';
-data_path = 'invivoRat3_third_scan\31';
+data_path_b0 = 'invivoRat4_3run\9';
+data_path = 'invivoRat4_3run\8';
 mdd_path = 'pdata_mdd';
 
 %% options
@@ -266,7 +266,7 @@ end
 
 if Display ==1
     figure(4)
-    for nrep = 1:max([size(data_corr_full,4) 30])
+    for nrep = 1:min([size(data_corr_full,4) 30])
         clims = [0 max(max(data_corr_full(:,:,scliceN,nrep)))];
         subplot(1,2,1)
         imagesc(squeeze(datafullUp(:,:,scliceN,nrep)),clims)
