@@ -17,12 +17,15 @@ data = imageObj.data;
 
 % Size in various dimensions needs to be verified.
 sz = size(data);
-if numel(sz) == 6
+if numel(sz) == 7
+    data = permute(data,[1 2 3 4 5 7 6]);
+     data = reshape(data,[sz(1), sz(2), sz(5), sz(6)*sz(7)]);   
+elseif numel(sz) == 6
     data = reshape(data,[sz(1), sz(2), sz(5), sz(6)]);
 elseif numel(sz) == 2
     data = reshape(data,[sz(1), sz(2), 1, 1]);
 else
-    data = reshape(data,[sz(1), sz(2), sz(3), sz(4)*sz(5)]);
+    data = reshape(data,[sz(1), sz(2), sz(3), sz(4)*sz(5)*sz(6)*sz(7)]);
 end
 data = flipdim(data,2);
 data = flipdim(data,1);

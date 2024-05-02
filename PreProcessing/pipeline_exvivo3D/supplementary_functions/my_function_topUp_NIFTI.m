@@ -1,10 +1,12 @@
-function my_topUp_EPI_NIFTI(data_path)
+function my_function_topUp_NIFTI(data_path)
 %% Top UP processing NIFTI dataset via FSL
 % options
 Display = 1;
 
 %% get parameters from Paravision
-data_path_pv = [data_path filesep];
+data_path_pv = split(data_path,filesep);
+data_path_pv = join(data_path_pv(1:end-2,1),filesep,1); data_path_pv = data_path_pv{1};
+data_path_pv = [data_path_pv filesep];
 isTopUp = ReadPV360Param(data_path_pv, 'TopUpYesNo');
 if ~strcmp(isTopUp,'yes')
     disp('Not Top Up data');
@@ -12,9 +14,11 @@ if ~strcmp(isTopUp,'yes')
 end
 
 %% Load xps & select images for b0 map calculation
-DwEffBval = ReadPV360Param(data_path_pv, 'PVM_DwEffBval');
-b0_indice = (round(DwEffBval)==min(round(DwEffBval)));
-selected_indices = b0_indice;
+load([data_path filesep 'data_xps.mat']);
+b0_indice = (round(xps.b/10^5)==min(round(xps.b/10^5)));%sum(b0_indice)
+longTR_indice = (xps.tr>= max(xps.tr)/2);%sum(longTR_indice)
+shortTE_indice = (xps.te<=(min(xps.te)*3)); %sum(shortTE_indice)
+selected_indices = b0_indice.*longTR_indice.*shortTE_indice;
 disp(['Number of b0 selected = ' num2str(sum(selected_indices))]);
 
 %% Open nifti data
@@ -25,7 +29,7 @@ dataDown = niftiread([data_path filesep 'dataDown.nii.gz']);
 %% reshape to Read phase slice rep
 % Assume Read is the largest number
 permuteYes = 0;
-if size(dataUp,2)>size(dataUp,1)
+if size(dataUp,2)>=size(dataUp,1)
     dataUp = permute(dataUp,[2 1 3 4]);
     dataDown = permute(dataDown,[2 1 3 4]);
     permuteYes = 1;
@@ -48,50 +52,15 @@ NSlices = ReadPV360Param(data_path_pv, 'NSlices');
 if Phase1Offset ~=0
     pixel_shift = zeros(size(Matrix));
     if ~strcmp(SpatDim,'<3d>')
-        if NSlices ~=1
-            pixel_shift = [pixel_shift 0];
-        end
+    if NSlices ~=1
+        pixel_shift = [pixel_shift 0];
+    end
     end
     pixel_shift(1,2) = (2*Phase1Offset)/FoV(1,2)*Matrix(1,2); % times 2 since it is applied in the wrong direction in PV processing
     for ind = 1:size(dataDown,4)
         dataDown(:,:,:,ind)=abs(fineshift(dataDown(:,:,:,ind),pixel_shift));
     end
 end
-
-%% Correct main shift between Up and Down
-% due to gradient inbalance?
-
-Slice_disp = round(size(dataUp,3)/2);
-% figure(10)
-% subplot(2,1,1)
-% imagesc(squeeze(sum(dataUp(:,:,Slice_disp,:),4)));
-% subplot(2,1,2) % flip back down data
-% % imagesc(flip(squeeze(sum(dataDown(:,:,Slice_disp,:),4)),2));
-% imagesc(flip(squeeze(sum(dataDown_corr(:,:,Slice_disp,:),4)),2));
-% colormap gray
-
-% get sum of images
-imgSUp = squeeze(sum(dataUp(:,:,Slice_disp,(selected_indices==1)),4));
-imgSDown = flip(squeeze(sum(dataDown(:,:,Slice_disp,(selected_indices==1)),4)),2);
-
-% get motion field
-[optimizer,metric] = imregconfig("multimodal");
-tform = imregtform(imgSDown,imgSUp,"translation",optimizer,metric);
-displacement = tform.T(3,1);
-
-% limit to translation in phase and inverse it to compensate the flip
-my_T = [1 0 0; 0 1 0;0 0 1];
-my_T(3,1) = displacement;
-my_tform = affine2d(my_T);
-
-% Apply 1D translation to all images
-dataDown_corr = zeros(size(dataDown));
-for ind_img = 1:size(dataDown,4)
-    for ind_slice = 1:size(dataDown,3)
-        dataDown_corr(:,:,ind_slice,ind_img) = abs(fineshift(dataDown(:,:,ind_slice,ind_img),my_tform.T(3,[2 1])));
-    end
-end
-dataDown =single(dataDown_corr);
 
 %% repmat if single slice
 if ~strcmp(SpatDim,'<3d>')
@@ -146,7 +115,7 @@ my_save_NIFTI_fakePixsize(dataUp,data_path_pv,[my_path_NIFTI 'dataUpFliped.nii.g
 disp('Performing Field map calculation')
 tic;
 Nimages_b0map = size(datab0,4)/2;
-[~, result] = my_FSL_TopUp_FieldMap([my_path_NIFTI 'RefImg.nii.gz'], [my_path_NIFTI 'RefImgCorr.nii.gz'],Nimages_b0map);
+[~, result] = my_function_FSL_TopUp_FieldMap([my_path_NIFTI 'RefImg.nii.gz'], [my_path_NIFTI 'RefImgCorr.nii.gz'],Nimages_b0map);
 if isempty(result)
     disp('Success')
 else
@@ -171,6 +140,7 @@ end
 % display
 if Display ==1
     figure(2)
+    set(gcf,'color','w','Position',[553  85  498  759])
     subplot(2,2,1)
     imagesc(squeeze(datab0(:,:,scliceN,1)))
     axis image
@@ -191,11 +161,12 @@ if Display ==1
     colormap gray
     drawnow
 end
+saveas(gcf,[my_path_NIFTI filesep 'topup.jpeg'])
 
 %% perform FSL Top Up calculation of the entire image serie
 disp('Performing Top Up correction on the image serie')
 tic;
-[~, result] = my_FSL_TopUp_Apply([my_path_NIFTI 'dataUpFliped.nii.gz'], [my_path_NIFTI 'dataDownFliped.nii.gz'],[my_path_NIFTI 'fsl'], [my_path_NIFTI 'ImgCorrTopUp.nii.gz']);
+[~, result] = my_function_FSL_TopUp_Apply([my_path_NIFTI 'dataUpFliped.nii.gz'], [my_path_NIFTI 'dataDownFliped.nii.gz'],[my_path_NIFTI 'fsl'], [my_path_NIFTI 'ImgCorrTopUp.nii.gz']);
 if isempty(result)
     disp('Success')
 else
@@ -257,6 +228,7 @@ delete([my_path_NIFTI 'dataUpFliped.nii.gz']);
 delete([my_path_NIFTI 'dataDownFliped.nii.gz']);
 
 close all;
+
 end
 
 function my_save_NIFTI_fakePixsize(data,data_path_pv,nii_fn)

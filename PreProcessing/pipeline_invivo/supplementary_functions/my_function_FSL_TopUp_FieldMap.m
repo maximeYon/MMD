@@ -1,4 +1,4 @@
-function [status, result] = my_FSL_TopUp_FieldMap(nii_fn_in, nii_fn_out,Nimages_b0map)
+function [status, result] = my_function_FSL_TopUp_FieldMap(nii_fn_in, nii_fn_out,Nimages_b0map)
 % https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/topup/TopupUsersGuide
 % 
 % This function requires that FSL is installed on your computer. 
@@ -16,7 +16,7 @@ end
 
 %% add FSL parameter txt file
 data_path_pv = split(nii_fn_in,filesep);
-data_path_pv = join(data_path_pv(1:end-1),filesep,1);
+data_path_pv = join(data_path_pv(1:end-3),filesep,1);
 data_path_pv = data_path_pv{1};
 EpiModuleTime=ReadPV360Param([data_path_pv filesep], 'PVM_EpiModuleTime')*1e-3 ;
 PVM_NRepetitions=Nimages_b0map*2;
@@ -79,7 +79,7 @@ end
 % cmd = [cmd ' --verbose']; % output
 
 %% test paralelized
-cmd = [cmd ' --nthr=''32''']; 
+cmd = [cmd ' --nthr=''24''']; 
 
 if ispc == 1 % Suppose a WSL installation
     cmd = [cmd '"'];
@@ -108,12 +108,8 @@ my_cnf = ...
 '# 	FWHM (in mm) of gaussian smoothing kernel, default 8';...
 '--fwhm=8,6,4,3,3,2,1,0,0';...
 '# 	Max # of non-linear iterations, default 5';...
-%'--miter=5,5,5,5,8,30,30,50,50';...notworking
-%'--miter=5,5,5,5,8,15,15,30,30';... OG
-%'--miter=5,5,5,5,5,10,10,20,20' %FSL it is working nice
-'--miter=5,5,5,5,5,8,8,15,15' % less iter works fine but not perfect in data.nii.gz
-%'--miter=5,5,5,5,5,5,5,5,10' % even iter less it works fine but not perfect in data.nii.gz
-%'--miter=5,5,5,5,5,2,3,4,5' % way less even iter less it works fine but not perfect in data.nii.gz
+'--miter=5,5,5,5,5,8,8,15,15';...
+% '--miter=5,5,5,5,8,15,15,30,30';...
 '# Weight of regularisation, default depending on --ssqlambda and --regmod switches. See user documentation.';...
 '--lambda=0.005,0.001,0.0001,0.000015,0.00000005,0.000000005,0.0000000005,0.000000000005,0.0000000000001';...
 '# If set (=1), lambda is weighted by current ssq, default 1';...

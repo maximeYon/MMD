@@ -1,4 +1,4 @@
-function NewMask = my_create_mask_clustering(Mask_path)
+function NewMask = my_function_mask_clustering(Mask_path)
 %% my manual edit mask
 % Mask_path = 'C:\Users\User\Mon_Drive\Matlab\ProcessingPV360\data\ON-81-mbti-pilot-3d\16\pdata_mdd\nii_xps';
 
@@ -13,7 +13,8 @@ data = reshape(data,size(data,1)*size(data,2)*size(data,3),size(data,4));
 data = data./mean(data);
 
 %% perfom clustering
-Ncluster = 12; % 7 for 3D
+Ncluster = 7; % 12 for 3D
+
 
 opts = statset('Display','final','MaxIter',200);
 GMModel = fitgmdist(data,Ncluster,'regularization',0.01,'Replicates',1,'Options',opts);

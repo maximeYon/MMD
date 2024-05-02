@@ -54,7 +54,7 @@ x = 0:Fov(1,2)/(size(ADC,1)-1):Fov(1,2);
 clim_Diso = [0 0.001];
 clim_FA = [0 1];
 figure(100)
-set(gcf,'color','k')
+set(gcf,'color','k','Position',[663.4,49.8,1274.4,1020.8])
 for ind_s = 1:n_slice
     subplot(3,size(ADC,3),ind_s)
     imagesc(x,y,flip(abs(squeeze(ADC(:,:,ind_s)))',2),clim_Diso)

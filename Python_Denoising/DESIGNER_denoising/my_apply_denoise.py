@@ -13,9 +13,9 @@ import os
 import shutil
 import denoise as mpden
 
-my_home_path = "C:/Users/Administrateur/Mon_Drive/Matlab/ProcessingPV360/data/"
-# my_home_path = "C:/Users/User/Mon_Drive/Matlab/ProcessingPV360/data/"
-my_data_path =  "invivoRat3/21/pdata_mdd"
+#my_home_path = "C:/Users/Administrateur/Mon_Drive/Matlab/ProcessingPV360/data/"
+my_home_path = "C:/Users/User/Mon_Drive/Matlab/ProcessingPV360/data/"
+my_data_path =  "EPI_RARE_MSME/15/pdata_mdd"
 
 if not os.path.exists(my_home_path + my_data_path + "/nii_xps/orig"):
     os.makedirs(my_home_path + my_data_path + "/nii_xps/orig")
@@ -25,7 +25,7 @@ nii = ni.load(my_home_path + my_data_path + "/nii_xps/orig/data.nii.gz")
 dwi = np.array(nii.dataobj)
 
 # for 2D
-Signal, Sigma,Nparameters = mpden.denoise(dwi, kernel=[20,20,1],patchsize=125,shrinkage='frobenius')
+Signal, Sigma,Nparameters = mpden.denoise(dwi, kernel=[15,15,1],patchsize=125,shrinkage='frobenius')
 # for 3D
 #Signal, Sigma,Nparameters = mpden.denoise(dwi, kernel=[7,7,7],patchsize=125,shrinkage='frobenius')
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun 15 10:50:01 2022
+Created on 24/04/2023
 
 @author: Maxime Yon
 
@@ -10,18 +10,13 @@ Created on Wed Jun 15 10:50:01 2022
 import nibabel as ni 
 import numpy as np
 import os
-import shutil
 import denoise as mpden
 
 # my_home_path = "C:/Users/Administrateur/Mon_Drive/Matlab/ProcessingPV360/data/"
 my_home_path = "C:/Users/User/Mon_Drive/Matlab/ProcessingPV360/data/"
-my_data_path =  "EPI_RARE/78/pdata_mdd"
+my_data_path =  "EPI_RARE_MSME/16"
 
-if not os.path.exists(my_home_path + my_data_path + "/nii_xps/orig"):
-    os.makedirs(my_home_path + my_data_path + "/nii_xps/orig")
-    shutil.move(my_home_path + my_data_path + "/nii_xps/data.nii.gz", my_home_path + my_data_path + "/nii_xps/orig/data.nii.gz")
-
-nii = ni.load(my_home_path + my_data_path + "/nii_xps/orig/data.nii.gz")
+nii = ni.load(my_home_path + my_data_path + "/pdata_mdd/nii_xps/data.nii.gz")
 dwi = np.array(nii.dataobj)
 nrep = dwi.shape[3]; "dimensions start from 0"
 
@@ -41,15 +36,13 @@ nioutup.header.set_data_dtype(np.float32)
 nioutdown = ni.Nifti1Image(Signaldown, nii.affine, nii.header)
 nioutdown.header.set_data_dtype(np.float32)
 
-if not os.path.exists(my_home_path + my_data_path + "/nii_xps/denoised"):
-    os.makedirs(my_home_path + my_data_path + "/nii_xps/denoised")
+if not os.path.exists(my_home_path + my_data_path + "/pdata_mdd/nii_xps/denoised"):
+    os.makedirs(my_home_path + my_data_path + "/pdata_mdd/nii_xps/denoised")
 
-ni.save(nioutup,  my_home_path + my_data_path + "/nii_xps/denoised/dataUp.nii.gz")
+ni.save(nioutup,  my_home_path + my_data_path + "/pdata_mdd/nii_xps/denoised/dataUp.nii.gz")
 nii.header["dim"][0] = 3
 nii.header["dim"][4] = 1
 
-ni.save(nioutdown,  my_home_path + my_data_path + "/nii_xps/denoised/dataDown.nii.gz")
+ni.save(nioutdown,  my_home_path + my_data_path + "/pdata_mdd/nii_xps/denoised/dataDown.nii.gz")
 nii.header["dim"][0] = 3
 nii.header["dim"][4] = 1
-
-
