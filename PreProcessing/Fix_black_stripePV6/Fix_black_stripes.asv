@@ -1,0 +1,18 @@
+%% Fix Reco Overflow error
+clearvars; close all; clc;
+
+%% Define paths
+pathData = 'C:\Users\User\Mon_Drive\Matlab\ProcessingPV360\data\ON-79-mtbi-pilot-run02\9\pdata\1\';
+
+%% open VisuCoreDataSlope and get value
+[visu_pars,~]=readBrukerParamFile([pathData 'visu_pars']);
+% % Display
+% figure(1)
+% plot(visu_pars.VisuCoreDataSlope)
+
+VisuCoreDataSlopeVal = median(visu_pars.VisuCoreDataSlope);
+New_VisuCoreDataSlope = repmat(VisuCoreDataSlopeVal,1,size(visu_pars.VisuCoreDataSlope,2));
+%% Fix value
+modify_visu_pars(pathData,'VisuCoreDataSlope',New_VisuCoreDataSlope);
+
+
