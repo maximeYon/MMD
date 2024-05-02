@@ -25,7 +25,7 @@ dataDown = niftiread([data_path filesep 'dataDown.nii.gz']);
 %% reshape to Read phase slice rep
 % Assume Read is the largest number
 permuteYes = 0;
-if size(dataUp,2)>size(dataUp,1)
+if size(dataUp,2)>=size(dataUp,1)
     dataUp = permute(dataUp,[2 1 3 4]);
     dataDown = permute(dataDown,[2 1 3 4]);
     permuteYes = 1;
@@ -48,50 +48,15 @@ NSlices = ReadPV360Param(data_path_pv, 'NSlices');
 if Phase1Offset ~=0
     pixel_shift = zeros(size(Matrix));
     if ~strcmp(SpatDim,'<3d>')
-        if NSlices ~=1
-            pixel_shift = [pixel_shift 0];
-        end
+    if NSlices ~=1
+        pixel_shift = [pixel_shift 0];
+    end
     end
     pixel_shift(1,2) = (2*Phase1Offset)/FoV(1,2)*Matrix(1,2); % times 2 since it is applied in the wrong direction in PV processing
     for ind = 1:size(dataDown,4)
         dataDown(:,:,:,ind)=abs(fineshift(dataDown(:,:,:,ind),pixel_shift));
     end
 end
-
-%% Correct main shift between Up and Down
-% due to gradient inbalance?
-
-Slice_disp = round(size(dataUp,3)/2);
-% figure(10)
-% subplot(2,1,1)
-% imagesc(squeeze(sum(dataUp(:,:,Slice_disp,:),4)));
-% subplot(2,1,2) % flip back down data
-% % imagesc(flip(squeeze(sum(dataDown(:,:,Slice_disp,:),4)),2));
-% imagesc(flip(squeeze(sum(dataDown_corr(:,:,Slice_disp,:),4)),2));
-% colormap gray
-
-% get sum of images
-imgSUp = squeeze(sum(dataUp(:,:,Slice_disp,(selected_indices==1)),4));
-imgSDown = flip(squeeze(sum(dataDown(:,:,Slice_disp,(selected_indices==1)),4)),2);
-
-% get motion field
-[optimizer,metric] = imregconfig("multimodal");
-tform = imregtform(imgSDown,imgSUp,"translation",optimizer,metric);
-displacement = tform.T(3,1);
-
-% limit to translation in phase and inverse it to compensate the flip
-my_T = [1 0 0; 0 1 0;0 0 1];
-my_T(3,1) = displacement;
-my_tform = affine2d(my_T);
-
-% Apply 1D translation to all images
-dataDown_corr = zeros(size(dataDown));
-for ind_img = 1:size(dataDown,4)
-    for ind_slice = 1:size(dataDown,3)
-        dataDown_corr(:,:,ind_slice,ind_img) = abs(fineshift(dataDown(:,:,ind_slice,ind_img),my_tform.T(3,[2 1])));
-    end
-end
-dataDown =single(dataDown_corr);
 
 %% repmat if single slice
 if ~strcmp(SpatDim,'<3d>')
@@ -256,7 +221,6 @@ delete([my_path_NIFTI 'RefImg.topup_log']);
 delete([my_path_NIFTI 'dataUpFliped.nii.gz']);
 delete([my_path_NIFTI 'dataDownFliped.nii.gz']);
 
-close all;
 end
 
 function my_save_NIFTI_fakePixsize(data,data_path_pv,nii_fn)
