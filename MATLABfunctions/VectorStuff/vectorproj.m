@@ -1,0 +1,1 @@
+function rproj = vectorproj(r,rx,ry,rz)rproj = [scalarprod(r,rx) scalarprod(r,ry) scalarprod(r,rz)];

@@ -1,0 +1,1 @@
+function H = heaviside(x)%H = heaviside(x) , H is the heaviside step function%if x < 0%	H = 0;%else%	H = 1;nn = length(x);for n = 1:nn	if x(n) < 0		H(n) = 0;	else		H(n) = 1;	endendH = H';

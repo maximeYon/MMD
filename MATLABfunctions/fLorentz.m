@@ -1,0 +1,1 @@
+function I = fLorentz(nu,ampl,T2,offset,phase)I = ampl*T2./(1+(nu-offset).^2*T2^2).*(1 - i*(nu-offset)*T2)*exp(i*phase);

@@ -1,0 +1,1 @@
+function s = scalarprod(A,B)s = sum(A.*B,2);
