@@ -1,0 +1,1 @@
+function alpha = vectorangle(A,B)a = vectorlength(A);b = vectorlength(B);s = scalarprod(A,B);alpha = acos(s./(a.*b));

@@ -1,0 +1,1 @@
+function r = vectorbackproj(rproj,rx,ry,rz)x = rproj(1)*rx(1) + rproj(2)*ry(1) + rproj(3)*rz(1);y = rproj(1)*rx(2) + rproj(2)*ry(2) + rproj(3)*rz(2);z = rproj(1)*rx(3) + rproj(2)*ry(3) + rproj(3)*rz(3);r = [x y z];

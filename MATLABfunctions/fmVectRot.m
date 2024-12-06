@@ -1,0 +1,1 @@
+function mVect = fmVectRot(RotMat,mVect0)mVect = mVect0;mVect.x = RotMat.xx.*mVect0.x + RotMat.xy.*mVect0.y + RotMat.xz.*mVect0.z;mVect.y = RotMat.yx.*mVect0.x + RotMat.yy.*mVect0.y + RotMat.yz.*mVect0.z;mVect.z = RotMat.zx.*mVect0.x + RotMat.zy.*mVect0.y + RotMat.zz.*mVect0.z;

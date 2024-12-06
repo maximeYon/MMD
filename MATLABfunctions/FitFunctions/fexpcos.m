@@ -1,0 +1,1 @@
+function Y = fexpcos(Pin,Xin,Pnorm,Xnorm,Ynorm);Pin = Pin.*Pnorm;Xin = Xin*Xnorm;Y0 = Pin(1);R = Pin(2);nu = Pin(3);Y = Y0.*exp( - R.*Xin).*cos(2*pi*nu*Xin);Y = Y/Ynorm;

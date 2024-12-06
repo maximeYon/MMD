@@ -1,0 +1,1 @@
+function S = fAcq(mx,my,Pnu0nu1,nu0,nuRF,t,phi,T2)S0 = Pnu0nu1.*(mx+i*my)*exp(-i*phi);[dummy,nu0] = ndgrid(t,nu0);[dummy,T2] = ndgrid(t,T2);[t,S0] = ndgrid(t,S0);S = sum(S0.*exp(i*2*pi*(nu0-nuRF).*t - t./T2),2);
