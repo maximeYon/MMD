@@ -1,1 +1,0 @@
-Functions to generate/retrieve set of vectors

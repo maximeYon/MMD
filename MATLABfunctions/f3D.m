@@ -1,1 +1,0 @@
-function Y = f3D(Pin,Xin,Pnorm,Xnorm,Ynorm)k = Xin*Xnorm;Pin = Pin.*Pnorm;I0 = Pin(1);Dmean = Pin(2);A = Pin(3);Dperp = 3*Dmean/(2+A);Dpar = A*Dperp;Ek = exp(-k*Dperp).*sqrt(pi/4./k/(Dpar-Dperp)).*erf(abs(sqrt(k*(Dpar-Dperp))));Ik = Ek*I0;Y = Ik/Ynorm;

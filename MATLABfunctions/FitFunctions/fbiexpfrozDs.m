@@ -1,1 +1,0 @@
-function Y = fbiexp(Pin,Xin,Ds,Pnorm,Xnorm,Ynorm);Pin = Pin.*Pnorm;Xin = Xin*Xnorm;Y0 = Pin(1);Df = Pin(2);ff = Pin(3);Y = Y0.*(ff.*exp( - Df.*Xin) + (1-ff).*exp( - Ds.*Xin));Y = Y/Ynorm;

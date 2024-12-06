@@ -1,1 +1,0 @@
-function [Rxx,Rxy,Rxz,Ryx,Ryy,Ryz,Rzx,Rzy,Rzz] = fprec(nu0,nuRF,t)if length(t) > 1    [t,nu0] = ndgrid(t,nu0);endRotAngle = 2*pi*(nu0-nuRF).*t;Rxx = cos(RotAngle);Ryy = Rxx;Rzz = ones(size(nu0));Rxy = -sin(RotAngle);Ryx = -Rxy;Rxz = 0*Rzz;Rzx = Rxz;Ryz = Rxz;Rzy = Rxz;

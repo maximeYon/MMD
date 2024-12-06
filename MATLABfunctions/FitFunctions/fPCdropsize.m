@@ -1,1 +1,0 @@
-function Y = fPCdropsize(Pin,Xin,Pnorm,Xnorm,Ynorm,alphaR,D,delta,DELTA);Pin = Pin.*Pnorm;G2 = Xin'*Xnorm;Y0 = Pin(1);R = Pin(2);sigma = Pin(3);gamma = 26.75e7;alpha2 = 1/5*(gamma^2*G2*delta^2);Y = Y0*exp(-alpha2*R^2./(1+sigma^2*alpha2) - 1/2*log(1+sigma^2*alpha2));Y = Y'/Ynorm;

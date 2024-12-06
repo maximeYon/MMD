@@ -1,1 +1,0 @@
-function Y = fCumulant(Pin,Xin,Pnorm,Xnorm,Ynorm);Pin = Pin.*Pnorm;Xin = Xin*Xnorm;I0 = Pin(1);Dmean = Pin(2);mu1 = Pin(3);mu2 = Pin(4);Y = I0.*exp( - Xin*Dmean + Xin.^2*mu1/2 - Xin.^3*mu2/6);Y = Y/Ynorm;

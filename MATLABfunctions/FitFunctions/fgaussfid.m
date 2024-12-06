@@ -1,1 +1,0 @@
-function Y = fgaussfid(Pin,Xin,Pnorm,Xnorm,Ynorm)Pin = Pin.*Pnorm;Xin = Xin*Xnorm;Y0 = Pin(1);M2 = Pin(2);Y = Y0.*exp( - M2/2 .* Xin.^2);Y = Y/Ynorm;

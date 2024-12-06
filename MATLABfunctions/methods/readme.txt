@@ -1,1 +1,0 @@
-Collection of models for multidimensional diffusion MRI

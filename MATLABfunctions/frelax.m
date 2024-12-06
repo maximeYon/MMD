@@ -1,1 +1,0 @@
-function [mx,my,mz] = frelax(mx0,my0,mz0,meq,t,T1,T2)mx = mx0.*exp(-t./T2);my = my0.*exp(-t./T2);mz = meq + (mz0 - meq).*exp(-t./T1);

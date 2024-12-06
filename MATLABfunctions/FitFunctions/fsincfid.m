@@ -1,1 +1,0 @@
-function Y = fsincfid(Pin,Xin,Pnorm,Xnorm,Ynorm)Pin = Pin.*Pnorm;Xin = Xin*Xnorm;Y0 = Pin(1);a = Pin(2);b = Pin(3);Y = Y0.*exp(-a^2*Xin.^2/2).*sin(b*Xin)./(b*Xin);Y = Y/Ynorm;

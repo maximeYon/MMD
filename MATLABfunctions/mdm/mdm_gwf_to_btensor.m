@@ -1,1 +1,0 @@
-function [bt, q] = mdm_gwf_to_btensor(gwf, dt, g_max)% function bt = mdm_gwf_to_btensor(gwf, dt, g_max)%% assume max(abs(gwf)) = 1if (nargin < 2), dt = 1; endif (nargin < 3), g_max = 1; endq = cumsum(gwf, 2) * dt * g_max;bt = msf_const_gamma^2 * (q * q') * dt;if (nargin < 3)    bt = bt / trace(bt);end

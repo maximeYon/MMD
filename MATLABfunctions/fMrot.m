@@ -1,1 +1,0 @@
-function [mx,my,mz] = fMrot(Rxx,Rxy,Rxz,Ryx,Ryy,Ryz,Rzx,Rzy,Rzz,mx0,my0,mz0)mx = Rxx.*mx0 + Rxy.*my0 + Rxz.*mz0;my = Ryx.*mx0 + Ryy.*my0 + Ryz.*mz0;mz = Rzx.*mx0 + Rzy.*my0 + Rzz.*mz0;

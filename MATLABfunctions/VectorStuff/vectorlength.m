@@ -1,1 +1,0 @@
-function s = vectorlength(A)s = sqrt(scalarprod(A,A));

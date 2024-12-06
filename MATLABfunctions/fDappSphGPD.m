@@ -1,1 +1,0 @@
-function Dapp = fDappSphGPD(delta,Delta,D0,R,alphaR) alpha = alphaR/R;alpha2D0 = alpha.^2*D0;A = 2 + exp(-alpha2D0*(Delta-delta)) - 2*exp(-alpha2D0*delta) - 2*exp(-alpha2D0*Delta) + exp(-alpha2D0*(Delta+delta));Dapp = 2/delta^2/(Delta-delta/3)*sum((2*delta./alpha2D0 - A./alpha2D0.^2)./(alpha.^4*R^2 - 2*alpha.^2));

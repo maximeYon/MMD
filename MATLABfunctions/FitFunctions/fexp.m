@@ -1,1 +1,0 @@
-function Y = fexp(Pin,Xin,Pnorm,Xnorm,Ynorm);if nargin == 2    Pnorm = ones(size(Pin));    Xnorm = 1;    Ynorm = 1;endPin = Pin.*Pnorm;Xin = Xin*Xnorm;Y0 = Pin(1);D = Pin(2);Y = Y0.*exp( - D.*Xin);Y = Y/Ynorm;

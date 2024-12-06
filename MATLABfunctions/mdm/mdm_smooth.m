@@ -1,1 +1,0 @@
-function s = mdm_smooth(varargin) % function s = mdm_smooth(s, filter_sigma, o_path, opt)warning('legacy code');s = mdm_s_smooth(varargin{:});

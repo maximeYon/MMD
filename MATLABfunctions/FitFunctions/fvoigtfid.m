@@ -1,1 +1,0 @@
-function Y = fvoigtfid(Pin,Xin,Pnorm,Xnorm,Ynorm)Pin = Pin.*Pnorm;Xin = Xin*Xnorm;Y0 = Pin(1);wL = Pin(2);wG = Pin(3);Y = Y0.*exp(-pi*wL.*Xin - (pi*wG*Xin/2/sqrt(log(2))).^2);Y = Y/Ynorm;
