@@ -9,10 +9,10 @@ path_only = split(data_path,filesep);
 filename = path_only(end,1);filename = filename{1};
 path_only = join(path_only(1:end-1,1),filesep,1); path_only = path_only{1};
 
-if ~strcmp(filename,'dataUp.nii.gz')
+if strcmp(filename,'dataUp.nii.gz')
     sigma = niftiread([path_only filesep 'sigmaUp.nii.gz']);
 end
-if ~strcmp(filename,'dataDown.nii.gz')
+if strcmp(filename,'dataDown.nii.gz')
     sigma = niftiread([path_only filesep 'sigmaDown.nii.gz']);
 end
 
