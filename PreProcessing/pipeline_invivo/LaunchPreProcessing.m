@@ -30,22 +30,22 @@ for ind = 1:size(path_list,1)
     %% split data into  blip up /down and denoise
     data_path_python = split(data_path,'\'); data_path_python = join(data_path_python,'/',1); data_path_python = data_path_python{1};
      my_function_python_denoisingtotpup(data_path_python);
-%         my_function_python_NOdenoisingtotpup(data_path_python);
+% %         my_function_python_NOdenoisingtotpup(data_path_python);
     pause(1)
     
      %% Rician bias correction
     my_function_Rician_Corr([data_path filesep 'denoised' filesep 'dataUp.nii.gz'],DoubleSampling,ncoilsSoS)
     my_function_Rician_Corr([data_path filesep 'denoised' filesep 'dataDown.nii.gz'],DoubleSampling,ncoilsSoS)
     
-    %% deGibbs denoised data
+    % %% deGibbs denoised data
     opt = mdm_mrtrix_opt;
     [status1, result1] = my_mdm_mrtrix_degibbs([data_path filesep 'denoised' filesep 'dataUp.nii.gz'], [data_path filesep 'dataUp.nii.gz'], opt);
     [status2, result2] = my_mdm_mrtrix_degibbs([data_path filesep 'denoised' filesep 'dataDown.nii.gz'], [data_path filesep 'dataDown.nii.gz'], opt);
     copyfile([data_path filesep 'denoised' filesep 'sigmaUp.nii.gz'],[data_path filesep 'sigmaUp.nii.gz'],'f')
     copyfile([data_path filesep 'denoised' filesep 'sigmaDown.nii.gz'],[data_path filesep 'sigmaDown.nii.gz'],'f')
-    pause(1)
-       
-    %% Drift correction
+    % pause(1)
+    % 
+    % %% Drift correction
     my_function_MOCO_NIFTI_topup(data_path,'auto'); % secon argument is mode : if auto, no question MOCO is performed if shift > 0.8 pix
     pause(1)
 
