@@ -1,23 +1,21 @@
+function my_function_MOCO_NIFTI_topup(pathData,mode)
 %% Open topUp dataset for MOCO
-clearvars; close all; clc;
 
-%% parameter: slice reference number
-Nslice = 4; % slice reference number
-
-%% Denoised NIFTI: Import reconstructed images
-pathData = 'C:\Users\User\Mon_Drive\Matlab\ProcessingPV360\data\ON-81-mbti-pilot-3d\16'; % up to expno without filesep
-
-if isfile([pathData '\pdata_mdd\nii_xps\dataUp.nii.gz'])
-    pathDataUp = [pathData '\pdata_mdd\nii_xps\dataUp.nii.gz'];
-    pathDataDown = [pathData '\pdata_mdd\nii_xps\dataDown.nii.gz'];
+%% Denoised NIFTI: Import reconstructed imagesmode
+if isfile([pathData filesep 'dataUp.nii.gz'])
+    pathDataUp = [pathData filesep 'dataUp.nii.gz'];
+    pathDataDown = [pathData filesep 'dataDown.nii.gz'];
     in_denoise = 0;
 else
-    pathDataUp = [pathData '\pdata_mdd\nii_xps\denoised\dataUp.nii.gz'];
-    pathDataDown = [pathData '\pdata_mdd\nii_xps\denoised\dataDown.nii.gz'];
+    pathDataUp = [pathData filesep 'denoised' filesep 'dataUp.nii.gz'];
+    pathDataDown = [pathData filesep 'denoised' filesep 'dataDown.nii.gz'];
     in_denoise = 1;
 end
 img_up = squeeze(niftiread(pathDataUp));
 img_down = squeeze(niftiread(pathDataDown));
+
+%% parameter: slice reference number
+Nslice = round(size(img_up,3)/2); % slice reference number
 
 %% Get reference image by averaging the first 5 images
 ref_img_up = sum(img_up(:,:,:,1:5),4);
@@ -96,6 +94,10 @@ plot(Mean_displacement,'k')
 legend('diplacement Up filtered', '','diplacement Down filtered','','Mean displacement filtered','Location','best')
 drawnow
 
+diff_disp = abs(displacementUp_filtered-displacementDown_filtered);
+
+save([pathData filesep 'MotionCurves.mat'],'displacementUp','displacementUp_filtered','displacementDown','displacementDown_filtered','indOutUp','indOutDown');
+
 % EpiEffBandwidth=ReadPV360Param([pathData filesep], 'PVM_EpiEffBandwidth') ;
 % EffSWh=ReadPV360Param([pathData filesep], 'PVM_EffSWh') ;
 % Matrix=ReadPV360Param([pathData filesep], 'PVM_Matrix') ;
@@ -107,10 +109,20 @@ drawnow
 % ylabel('drift in Hz');
 
 %% Ask user for correction or not
+if strcmp(mode,'auto')
+   if max(max(abs(Mean_displacement))) > 0.7 && max(max(abs(diff_disp)))< max(max(abs(Mean_displacement)))/4
+       answer = 'Yes';
+       saveas(gcf,[pathData filesep 'Motion_curves_' answer 'MOCO.jpeg'])
+   else
+       answer = 'No';
+       saveas(gcf,[pathData filesep 'Motion_curves_' answer 'MOCO.jpeg'])
+   end
+else
 answer = questdlg('Do you want to apply Motion correction?', ...
     'Aply Motion Correction', ...
     'Yes','No','Yes');
 % Handle response
+end
 switch answer
     case 'Yes'
         disp([answer 'Applying MOCO'])
@@ -123,55 +135,73 @@ switch answer
             my_T(3,1:2) = Mean_displacement(ind_img,:);
             tform = affine2d(my_T);
             for ind_slice = 1:size(img_up,3)
-                img_up_corr(:,:,ind_slice,ind_img) = imwarp(img_up(:,:,ind_slice,ind_img),tform,"OutputView",imref2d(img_size));
-                img_down_corr(:,:,ind_slice,ind_img) = imwarp(img_down(:,:,ind_slice,ind_img),tform,"OutputView",imref2d(img_size));
+%                 img_up_corr(:,:,ind_slice,ind_img) = imwarp(img_up(:,:,ind_slice,ind_img),tform,"OutputView",imref2d(img_size),"interp","linear");
+%                 img_down_corr(:,:,ind_slice,ind_img) = imwarp(img_down(:,:,ind_slice,ind_img),tform,"OutputView",imref2d(img_size),"interp","linear");                
+                img_up_corr(:,:,ind_slice,ind_img) = abs(fineshift(img_up(:,:,ind_slice,ind_img),-tform.T(3,[2 1])));
+                img_down_corr(:,:,ind_slice,ind_img) = abs(fineshift(img_down(:,:,ind_slice,ind_img),-tform.T(3,[2 1])));
             end
         end
+%         
+%         %% Display
+%         figure(11)
+%         clims = [0 max(max((sum(img_up(:,:,3,:),4))))];
+%         subplot(3,3,1)
+% %         imagesc(flip(img_up(:,:,3,129)',1))
+%         imagesc(flip(sum(img_up(:,:,3,:),4)',1),clims)
+%         axis image
+%         
+%         subplot(3,3,4)
+% %         imagesc(flip(img_up_corr(:,:,3,129)',1))
+%         imagesc(flip(sum(img_up_corr(:,:,3,:),4)',1),clims)
+%         axis image
+%         subplot(3,3,5)
+% %         imagesc(flip(img_up_corr2(:,:,3,129)',1))
+%         imagesc(flip(sum(img_up_corr2(:,:,3,:),4)',1),clims)
+%         axis image
+%         subplot(3,3,6)
+% %         imagesc(flip(img_up_corr(:,:,3,129)',1)-flip(img_up_corr2(:,:,3,129)',1))
+%         imagesc(flip(sum(img_up_corr(:,:,3,:),4)',1)-flip(sum(img_up_corr2(:,:,3,:),4)',1))
+%         colorbar
+%         colormap gray
+%         axis image
+%         
+%         subplot(3,3,7)
+% %         imagesc(flip(img_up(:,:,3,129)',1)-flip(img_up_corr(:,:,3,129)',1))
+%         imagesc(flip(sum(img_up(:,:,3,:),4)',1)-flip(sum(img_up_corr(:,:,3,:),4)',1))
+%         colorbar
+%         colormap gray
+%         axis image
+%         subplot(3,3,8)
+% %         imagesc(flip(img_up(:,:,3,129)',1)-flip(img_up_corr2(:,:,3,129)',1))
+%         imagesc(flip(sum(img_up(:,:,3,:),4)',1)-flip(sum(img_up_corr2(:,:,3,:),4)',1))
+%         colorbar
+%         colormap gray
+%         axis image
+%         linkaxes
         
-        %% Display
-%         figure(5)
-%         ind_displ =390;
-%         subplot(1,2,1)
-%         imshowpair(ref_img_up(:,:,Nslice)',squeeze(img_up(:,:,Nslice,ind_displ))',"Scaling","joint")
-%         title('Without registration')
-%         subplot(1,2,2)
-%         imshowpair(ref_img_up(:,:,Nslice)',squeeze(img_up_corr(:,:,Nslice,ind_displ))',"Scaling","joint")
-%         title('With registration')
+        
+        %         figure(5)
+        %         ind_displ =390;
+        %         subplot(1,2,1)
+        %         imshowpair(ref_img_up(:,:,Nslice)',squeeze(img_up(:,:,Nslice,ind_displ))',"Scaling","joint")
+        %         title('Without registration')
+        %         subplot(1,2,2)
+        %         imshowpair(ref_img_up(:,:,Nslice)',squeeze(img_up_corr(:,:,Nslice,ind_displ))',"Scaling","joint")
+        %         title('With registration')
         
         %% Save corrected NIFTI files Up and Down
-        my_save_NIFTI(img_up_corr,pathData,[pathData '\pdata_mdd\nii_xps\dataUp.nii.gz']);
-        my_save_NIFTI(img_down_corr,pathData,[pathData '\pdata_mdd\nii_xps\dataDown.nii.gz']);
-        save([pathData '\pdata_mdd\nii_xps\MOCO_UpDown_displacement.mat'],'Mean_displacement');
+        data_path_pv = split(pathData,filesep);
+        data_path_pv = join(data_path_pv(1:end-2,1),filesep,1); data_path_pv = data_path_pv{1};
+        my_save_NIFTI(img_up_corr,data_path_pv,[pathData filesep 'dataUp.nii.gz']);
+        my_save_NIFTI(img_down_corr,data_path_pv,[pathData filesep 'dataDown.nii.gz']);
+        save([pathData filesep 'MOCO_UpDown_displacement.mat'],'Mean_displacement');
         disp('dataUp and dataDown saved');
         
-        %% Save corrected NIFTI files Orig
-        pathDataOrig = [pathData '\pdata_mdd\nii_xps\orig\data.nii.gz'];
-        img_orig = squeeze(niftiread(pathDataOrig));
-        
-        img_orig_Up = img_orig(:,:,:,1:2:end);
-        img_orig_Down = img_orig(:,:,:,2:2:end);
-        
-        for ind_img = 1:size(img_orig_Up,4)
-            my_T = [1 0 0; 0 1 0;0 0 1];
-            my_T(3,1:2) = Mean_displacement(ind_img,:);
-            tform = affine2d(my_T);
-            for ind_slice = 1:size(img_orig_Up,3)
-                img_orig_Up(:,:,ind_slice,ind_img) = imwarp(img_orig_Up(:,:,ind_slice,ind_img),tform,"OutputView",imref2d(img_size));
-                img_orig_Down(:,:,ind_slice,ind_img) = imwarp(img_orig_Down(:,:,ind_slice,ind_img),tform,"OutputView",imref2d(img_size));
-            end
-        end
-        
-        img_orig(:,:,:,1:2:end) =img_orig_Up;
-        img_orig(:,:,:,1:2:end) =img_orig_Down;
-        
-        my_save_NIFTI(img_orig,pathData,[pathData '\pdata_mdd\nii_xps\orig\data.nii.gz']);
-        save([pathData '\pdata_mdd\nii_xps\orig\MOCO_data_displacement.mat'],'Mean_displacement');
-        disp('orig\data saved');
     case 'No'
         disp([answer 'Bye'])
 end
 
-
+end
 
 %% function save NIFTI
 function my_save_NIFTI(data,data_path_pv,nii_fn)
@@ -188,6 +218,8 @@ if numel(PVM_SpatResol) == 2
     h.pixdim(2:4) = [PVM_SpatResol PVM_SliceThick];
 end
 h.xyzt_units = 'SI';
+h.dim_info = [1 2 3];
+h.sform_code = 0;
 mdm_nii_write(data, nii_fn, h, 0);
 end
 
