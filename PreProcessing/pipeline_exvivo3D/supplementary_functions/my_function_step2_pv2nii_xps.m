@@ -4,7 +4,7 @@ function [] = my_function_step2_pv2nii_xps(data_path)
 % Image recon parameters
 rps.denoising       = 0; %denoising
 rps.maxomega        = 300*2*pi;
-rps.nomega          = 50;
+rps.nomega          = 30;
 
 %-------------------------------------------------
 % Create Out Path
@@ -60,8 +60,17 @@ if contains(PV_version,'pv-360')==1
     if strcmp(Method_name,'<user:my_dor_r12_rare>')==1 || strcmp(Method_name,'<user:my_dor_r12_rare_vfa>')==1 || strcmp(Method_name,'<user:my_dor_r12_rare_cs>')==1 || strcmp(Method_name,'<user:my_dor_r12_rare_full>')==1 || strcmp(Method_name,'<user:my_dor12_rare_final>')==1 
         mdm_bruker_my_DOR_R12_RARE_PV360_acqus2xps(data_path, xps_temp_fn, rps);
     end
-    if strcmp(Method_name,'<user:my_dor_r12_epi>')==1
+    if strcmp(Method_name,'<user:my_dor_r12_epi>' )==1 || strcmp(Method_name,'<user:my_dor_r12_epi_cs>')==1
         mdm_bruker_my_DOR_R12_EPI_PV360_acqus2xps(data_path, xps_temp_fn, rps);
+    end
+    if strcmp(Method_name,'<user:my_dor_r12_epi_shift>')==1 
+        mdm_bruker_my_DOR_R12_EPI_Shift_PV360_acqus2xps(data_path, xps_temp_fn, rps);
+    end
+    if strcmp(Method_name,'<user:my_dor_r12_epi_comp>')==1
+        mdm_bruker_my_DOR_R12_EPI_comp_PV360_acqus2xps(data_path, xps_temp_fn, rps);
+    end
+    if strcmp(Method_name,'<user:my_dor_r12_epi_now>')==1
+        mdm_bruker_my_DOR_R12_EPI_NOW_PV360_acqus2xps(data_path, xps_temp_fn, rps);
     end
     if strcmp(Method_name,'<user:my_dor_r12_msme>')==1
         mdm_bruker_my_DOR_R12_MSME_PV360_acqus2xps(data_path, xps_temp_fn, rps);

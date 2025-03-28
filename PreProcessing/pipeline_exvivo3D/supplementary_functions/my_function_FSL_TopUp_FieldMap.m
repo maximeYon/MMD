@@ -95,8 +95,8 @@ end
 
 
 %% Alternative, copy to clipboard
-% reduced_cmd = cmd{1}(13:end-1);
-% clipboard('copy',reduced_cmd)
+reduced_cmd = cmd{1}(13:end-1);
+clipboard('copy',reduced_cmd)
 end
 
 function[my_cnf] =create_cnf()
