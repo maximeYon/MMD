@@ -1,4 +1,4 @@
-function [status, result] = my_function_FSL_TopUp_Apply(BlipUpImg, BlipDownImg, myFieldMap, nii_fn_out)
+function [status, result] = my_function_FSL_TopUp_Apply_SinglePhase(BlipUpImg, myFieldMap, nii_fn_out)
 % https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/topup/TopupUsersGuide
 % 
 % This function requires that FSL is installed on your computer. 
@@ -7,13 +7,10 @@ function [status, result] = my_function_FSL_TopUp_Apply(BlipUpImg, BlipDownImg, 
 
 if ispc == 1 % Suppose a WSL installation
     cmd = 'bash -c -i "applytopup --imain=';
-    cmd = [cmd '/mnt/' strrep(strrep(lower(BlipUpImg),'\','/'),':','') ',']; % input
-    cmd = [cmd '/mnt/' strrep(strrep(lower(BlipDownImg),'\','/'),':','') '']; % input
+    cmd = [cmd '/mnt/' strrep(strrep(lower(BlipUpImg),'\','/'),':','') '']; % input
 else
 cmd = 'applytopup --imain=';
 cmd = [cmd BlipUpImg]; % input
-cmd = [cmd ','];
-cmd = [cmd BlipDownImg]; % input
 end
 
 %% add FSL parameter txt file, use the file created during FieldMap
@@ -21,10 +18,7 @@ data_path_pv = split(BlipUpImg,filesep);
 data_path_pv = join(data_path_pv(1:end-3),filesep,1);
 data_path_pv = data_path_pv{1};
 EpiModuleTime=ReadPV360Param([data_path_pv filesep], 'PVM_EpiModuleTime')*1e-3 ;
-PVM_NRepetitions=2;
-FSL_table_pos = repmat([0 1 0 EpiModuleTime],PVM_NRepetitions/2,1);
-FSL_table_neg = repmat([0 -1 0 EpiModuleTime],PVM_NRepetitions/2,1);
-FSL_table = cat(1,FSL_table_pos,FSL_table_neg);
+FSL_table = repmat([0 1 0 EpiModuleTime],1,1);
 
 % Write FSL param to file
 fileID = fopen([data_path_pv filesep 'paramFSL.txt'],'w');
@@ -37,7 +31,7 @@ else
 cmd = [cmd  ' --datain=' data_path_pv filesep 'paramFSL.txt'];
 end
 %% add --inindex=1,2
-cmd = [cmd ' --inindex=1,2'];
+cmd = [cmd ' --inindex=1 --method=jac --interp=spline'];
 
 %% add --topup=my_field
 if ispc == 1 % Suppose a WSL installation

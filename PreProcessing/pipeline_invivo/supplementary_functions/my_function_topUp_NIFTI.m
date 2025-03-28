@@ -174,6 +174,9 @@ else
 end
 toc
 
+[~, result] = my_function_FSL_TopUp_Apply_SinglePhase([my_path_NIFTI 'dataUpFliped.nii.gz'],[my_path_NIFTI 'fsl'], [my_path_NIFTI 'ImgUpCorrTopUp_jac.nii.gz']);
+
+
 %% Open Corrected nifti data
 data_corr = niftiread([my_path_NIFTI 'ImgCorrTopUp.nii.gz']);
 if ~strcmp(SpatDim,'<3d>')

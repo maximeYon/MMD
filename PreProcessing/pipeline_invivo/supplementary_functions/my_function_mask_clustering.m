@@ -13,11 +13,11 @@ data = reshape(data,size(data,1)*size(data,2)*size(data,3),size(data,4));
 data = data./mean(data);
 
 %% perfom clustering
-Ncluster = 7; % 12 for 3D
+Ncluster = 5; % 12 for 3D
 
 
-opts = statset('Display','final','MaxIter',200);
-GMModel = fitgmdist(data,Ncluster,'regularization',0.01,'Replicates',1,'Options',opts);
+opts = statset('Display','final','MaxIter',30);
+GMModel = fitgmdist(data,Ncluster,'regularization',0.1,'Replicates',1,'Options',opts);
 kmap = cluster(GMModel,data);
 
 %% reshape kmap
