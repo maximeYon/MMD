@@ -3,8 +3,8 @@ function [] = my_function_step2_pv2nii_xps(data_path)
 
 % Image recon parameters
 rps.denoising       = 0; %denoising
-rps.maxomega        = 300*2*pi;
-rps.nomega          = 150;
+rps.maxomega        = 500*2*pi;
+rps.nomega          = 50;
 
 %-------------------------------------------------
 % Create Out Path
