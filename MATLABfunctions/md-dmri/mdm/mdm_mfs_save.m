@@ -14,5 +14,13 @@ mfs.s = s;
 
 % Save data
 msf_mkdir(fileparts(mfs_fn));
-save(mfs_fn, 'mfs');
+
+s = whos('mfs');
+sizeGB = s.bytes / (1024^3);
+if sizeGB >= 2
+    save(mfs_fn, 'mfs','-v7.3');
+else
+    save(mfs_fn, 'mfs');
+end
+
 

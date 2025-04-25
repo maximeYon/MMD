@@ -14,8 +14,10 @@ out_path = 'C:\Users\User\Mon_Drive\Matlab\MATLABfunctions\md-dmri\acq\bruker\Pa
 % out_path = '/opt/PV-360.1.1/prog/curdir/maxime/ParaVision/exp/lists/gp';
 % dorratios = 0;
 dorratios = [0 1 2 3]; %  3 4 5
-epsilon_up = .04; epsilon_down = 4*epsilon_up; % epsilon_up = .03 lead to too high slew rate
-list_plateau = [0.02 0.0 0 0] ; % important for shape generation
+% epsilon_up = .04; epsilon_down = 4*epsilon_up; % epsilon_up = .03 lead to too high slew rate
+% list_plateau = [0.02 0.0 0 0] ; % important for shape generation
+epsilon_up = .05; epsilon_down = 2*epsilon_up; % epsilon_up = .03 lead to too high slew rate
+list_plateau = [0.048 0.015 0 0] ; % important for shape generation
 optimization = 0;
 
 %% optimization or not loop
@@ -34,7 +36,7 @@ end
 
 function [Effifactor_vect]= my_compute_shape(dorratios,epsilon_up,epsilon_down,list_plateau,out_path,optimization,ind_plt)
 % Parameters for calculating b-values
-gmax = 100/100*3; % Max gradient [3 T/m]
+gmax = 0.662816154122275; % Max gradient T/m
 tau = 10e-3; % Waveform duration [10 ms]
 np = 1000; % Number of time intervals in waveform [1000]
 % np = floor(tau/(8.1*10^-6)/2)*2; % Number of time intervals in waveform [1000] *************** mod Max

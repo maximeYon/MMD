@@ -31,6 +31,10 @@ Pulses=ReadPV360Param(data_path_pv, 'P') ; % in useconde
 EpiD4=ReadPV360Param(data_path_pv, 'PVM_EpiD4'); % PVM_EpiDephaseTime
 EpiD5=ReadPV360Param(data_path_pv, 'PVM_EpiD5'); % PVM_EpiSwitchTime
 EpiD11=ReadPV360Param(data_path_pv, 'PVM_EpiD11'); % PVM_EpiPlateau
+EpiD0=ReadPV360Param(data_path_pv, 'PVM_EpiD0');
+EpiD1=ReadPV360Param(data_path_pv, 'PVM_EpiD1');
+EpiD2=ReadPV360Param(data_path_pv, 'PVM_EpiD2');
+EpiD3=ReadPV360Param(data_path_pv, 'PVM_EpiD3');
 % EpiNEchoes=ReadPV360Param(data_path_pv, 'PVM_EpiNEchoes') ;
 % Gradients
 list_shape = [1 3 18 14 9 11 8 2 4 13 12 7 10 5 6];
@@ -48,10 +52,12 @@ g3 = gradAmpl(3+1);
 p0 = Pulses(0+1)*1e-6;
 p1 = Pulses(1+1)*1e-6;
 %delays
+d0 = Delays(0+1);
 d1 = Delays(1+1);
 d2 = Delays(2+1);
 d3 = Delays(3+1);
 d4 = Delays(4+1);
+d5 = Delays(5+1);
 d7 = Delays(7+1);
 d8 = Delays(8+1);
 d9 = Delays(9+1);
@@ -76,7 +82,7 @@ if Nslices >1
                 AddTRTime = sum(AddTRList(1:Nslices)).*1000; % in second --> *1000
                 SeqDur = SliceTime  * (Nslices-1); % nslice -1 due to saturation
                 SeqDur = SeqDur + sum(EffectiveTEList(1:Nslices-1));
-                CaclSliceTRtime(n_exp) = AddTRTime + SeqDur; 
+                CaclSliceTRtime(n_exp) = AddTRTime + SeqDur;
             end
         else
             for ind_sl = 1:Nslices
@@ -185,8 +191,9 @@ Ndt_EpiD11 = round(EpiD11/dt);
 % NEpiEchoCenter = round(EpiNEchoes/100*EpiEchoPosition);
 DoubleSampling=ReadPV360Param(data_path_pv, 'PVM_EpiCombine') ;
 NEpiEchoCenter=ReadPV360Param(data_path_pv, 'PVM_EncCentralStep1');
+EpiNEchoes=ReadPV360Param(data_path_pv, 'PVM_EpiNEchoes') ;
 if strcmp(DoubleSampling,'yes')==1
-   NEpiEchoCenter = (NEpiEchoCenter.*2)-1; 
+    NEpiEchoCenter = (NEpiEchoCenter.*2)-1;
 end
 
 %% Interpolate EpiShapes
@@ -198,7 +205,7 @@ for indshape = 1:size(list_shape,2)
     DNameTmp =['Ndt_EpiD' num2str(list_delays(indshape))];
     EpiShape.(SNameTmp)= interp1(0:(eval(DNameTmp)-1)/(size(EpiShape.(SNameTmp),2)-1):(eval(DNameTmp)-1),EpiShape.(SNameTmp),0:(eval(DNameTmp)-1),'linear');%
     EpiShape.(SNameTmp)= EpiShape.(SNameTmp)'.*100;
-%     EpiShape.(SNameTmp)= EpiShape.(SNameTmp)'.*0;
+    %     EpiShape.(SNameTmp)= EpiShape.(SNameTmp)'.*0;
 end
 
 %% Check aquisition time
@@ -295,11 +302,11 @@ for ind_image = 1:td1
         G.b = ShapeStru.(['DWGS' num2str(nShape) 'P']);
         G.c = ShapeStru.(['DWGS' num2str(nShape) 'S']);
         
-         % Interp shape
+        % Interp shape
         G.a = interp1(linspace(0,1,Size_shape)',ShapeStru.(['DWGS' num2str(nShape) 'R']),linspace(0,1,Ndt_DwD4(ind_image))','makima');
         G.b = interp1(linspace(0,1,Size_shape)',ShapeStru.(['DWGS' num2str(nShape) 'P']),linspace(0,1,Ndt_DwD4(ind_image))','makima');
         G.c = interp1(linspace(0,1,Size_shape)',ShapeStru.(['DWGS' num2str(nShape) 'S']),linspace(0,1,Ndt_DwD4(ind_image))','makima');
-
+        
         % Combine shape with coef xa,xb,... zc
         GshapeX = G.a.*G.xa(ind_image) + G.b.*G.xb(ind_image) + G.c.*G.xc(ind_image);
         GshapeY = G.a.*G.ya(ind_image) + G.b.*G.yb(ind_image) + G.c.*G.yc(ind_image);
@@ -324,28 +331,28 @@ for ind_image = 1:td1
     G.y(1:Ndt_preref(ind_image)) = -G.y(1:Ndt_preref(ind_image));
     G.z(1:Ndt_preref(ind_image)) = -G.z(1:Ndt_preref(ind_image));
     
-%         %% Check cumsum
-%         CumSumX = cumsum(G.x); CumSumY = cumsum(G.y); CumSumZ = cumsum(G.z);
-%         figure(2)
-%         clf
-%         subplot(2,1,1)
-%         hold on
-%         plot(CumSumX,'r')
-%         plot(CumSumY,'b')
-%         plot(CumSumZ,'k')
-%         subplot(2,1,2)
-%         hold on
-%         plot(G.x,'r')
-%         plot(G.y,'b')
-%         plot(G.z,'k')
-%         legend('X','Y','Z')
-
-%% invert X and Y
+    %         %% Check cumsum
+    %         CumSumX = cumsum(G.x); CumSumY = cumsum(G.y); CumSumZ = cumsum(G.z);
+    %         figure(2)
+    %         clf
+    %         subplot(2,1,1)
+    %         hold on
+    %         plot(CumSumX,'r')
+    %         plot(CumSumY,'b')
+    %         plot(CumSumZ,'k')
+    %         subplot(2,1,2)
+    %         hold on
+    %         plot(G.x,'r')
+    %         plot(G.y,'b')
+    %         plot(G.z,'k')
+    %         legend('X','Y','Z')
+    
+    %% invert X and Y
     x_tmp = G.x;
     G.x = G.y;
     G.y = -G.z;
     G.z = x_tmp;
-%% end of invertion    
+    %% end of invertion
     
     % Dephasing vector F.x in SI
     F.x = gamma*cumsum(G.x*dt,1);
@@ -374,10 +381,10 @@ for ind_image = 1:td1
     xps.gwf_y(ind_image,1:size(G.y,1)) = G.y';
     xps.gwf_z(ind_image,1:size(G.z,1)) = G.z';
     
-%     drawnow
-%     pause(1)
-%     cla(axh_grad)
-%     cla(axh_deph)
+    %     drawnow
+    %     pause(1)
+    %     cla(axh_grad)
+    %     cla(axh_deph)
 end
 
 xps_temp = xps;
@@ -405,6 +412,82 @@ xps.momega = xps_temp.momega;
 
 % xps.te = EffectiveTEList;
 xps.te = NdtTE';
+
+%% Check Repetition time of multislice acquisition based on the ppg
+Nslices=ReadPV360Param(data_path_pv, 'PVM_SPackArrNSlices') ;
+AddTRList = (ReadPV360Param(data_path_pv, 'AdditionalTRSec'));
+
+SatModDuration = (ReadPV360Param(data_path_pv, 'SatModDuration'))*1e-3;
+
+FatSup = (ReadPV360Param(data_path_pv, 'PVM_FatSupOnOff'));
+FatSupModDuration = (ReadPV360Param(data_path_pv, 'PVM_FatSupModuleTime'))*1e-3;
+
+FovSat = (ReadPV360Param(data_path_pv, 'PVM_FovSatOnOff'));
+FovSatModDuration = (ReadPV360Param(data_path_pv, 'PVM_FovSatModuleTime'))*1e-3;
+
+if Nslices >1
+    Epi20u = 20*1e-6;
+    Epi10u = 10*1e-6;
+        SliceTime = (ReadPV360Param(data_path_pv, 'SliceTime'));
+        SliceTime = repmat(SliceTime,size(AdditionalTESec,2),1);
+%     SliceTime = p0*(1-ExcPulse1_Rpfac) + d3 + d1 + d4 + d7 + ...
+%         AdditionalTESec + DwD1 + DwD4 + DwD1 + ...
+%         d11 + d9 +d4 + p1/2 +...
+%         p1/2 + d9 + d4 + ...
+%         DwD1 + DwD4 + DwD1 + AdditionalTESec +  ...
+%         d11 + d2 + ...
+%         Epi20u + Epi10u + EpiD4 + EpiD5 + EpiD11 + ...
+%         (EpiD5 + EpiD11 + EpiD5 + EpiD11).*(EpiNEchoes/2)+...
+%         EpiD5 + EpiD4 + EpiD1 + EpiD2 + EpiD3 + EpiD0;
+    
+    SliceTime = repmat(SliceTime,Nslices,1);
+    SliceTime = SliceTime(:);
+    d1u = 1*1e-6;
+    d10u = 10*1e-6;
+    TRaddedtime = SatModDuration + d0 + d1u + d10u  + ... % + AddTRList is outside
+        d5 + d4 +d8 + p0*(ExcPulse1_Rpfac);
+    if strcmp(FatSup,'on')==1
+        TRaddedtime = TRaddedtime + FatSupModDuration;
+    end
+    if strcmp(FovSat,'on')==1
+        TRaddedtime = TRaddedtime + FovSatModDuration;
+    end
+    
+    
+    %     EffectiveTEList = (ReadPV360Param(data_path_pv, 'EffectiveTEList'));
+    %     EffectiveTEList = permute(repmat(EffectiveTEList,1,Nslices),[2 1]); EffectiveTEList = EffectiveTEList(:);
+    
+    for ind_rep = 1:size(AdditionalTESec,2)
+        if ind_rep == 1
+            for ind_sl = 1:Nslices
+                n_exp = (ind_rep-1)*Nslices+ind_sl;
+                AddTRTime = sum(AddTRList(1:Nslices)).*1000; % in second --> *1000
+                SeqDur = (TRaddedtime-SatModDuration) + ((SliceTime(1,1) + TRaddedtime) * (Nslices-1)); % nslice -1 due to saturation
+                SeqDur = SeqDur.*1000; % in second --> *1000
+                CaclSliceTRtime2(n_exp) = AddTRTime + SeqDur;
+            end
+        else
+            for ind_sl = 1:Nslices
+                n_exp = (ind_rep-1)*Nslices+ind_sl;
+                AddTRTime = sum(AddTRList(n_exp-(Nslices-1):n_exp)).*1000;
+                SeqDur = sum((TRaddedtime-SatModDuration) + SliceTime(n_exp-(Nslices-1):n_exp-1) + (TRaddedtime * (Nslices-1))); % nslice -1 due to saturation
+                SeqDur = SeqDur.*1000; % in second --> *1000
+                CaclSliceTRtime2(n_exp) = AddTRTime + SeqDur;
+            end
+        end
+    end
+    EffecectiveTRcalc = mean(reshape(CaclSliceTRtime,Nslices,size(CaclSliceTRtime,2)/Nslices),1)./1000; % Check if constant between slices
+end
+
+figure(100)
+hold on
+plot(CaclSliceTRtime2,'b')
+plot(CaclSliceTRtime,'r')
+
+% figure(101)
+% hold on
+% plot(EffectiveTRList,'b')
+% plot(EffecectiveTRcalc,'r')
 
 % xps.tr = EffectiveTRList;
 xps.tr = EffecectiveTRcalc';

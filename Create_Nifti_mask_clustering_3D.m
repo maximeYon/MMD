@@ -1,6 +1,8 @@
 %% my manual edit mask
 clearvars; close all; clc;
-Mask_path = 'C:\Users\User\Documents\dataRennes\20240424_105148_pig_brain2\38\pdata_mdd\nii_xps\data.nii.gz';
+% Mask_path = 'C:\Users\User\Documents\dataRennes\20240424_105148_pig_brain2\38\pdata_mdd\nii_xps\data.nii.gz';
+% Mask_path = 'C:\Users\User\Mon_Drive\data_PV360\test_CS\59\pdata_mdd\nii_xps\dataDen.nii.gz';
+Mask_path = 'C:\Users\User\Mon_Drive\Matlab\ProcessingPV360\data\invivo_methodo_complex_reco\6\pdata_mdd\nii_xps\data.nii.gz';
 
 addpath(genpath('Nifti')); % require NIFTI toolbox
 % https://fr.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image
@@ -16,9 +18,9 @@ data = reshape(data,size(data,1)*size(data,2)*size(data,3),size(data,4));
 data = data./mean(data);
 
 %% perfom clustering
-Ncluster = 8; % 12 for 3D
+Ncluster = 6; % 12 for 3D
 
-opts = statset('Display','final','MaxIter',5);
+opts = statset('Display','final','MaxIter',8);
 GMModel = fitgmdist(data,Ncluster,'regularization',0.1,'Replicates',1,'Options',opts);
 kmap = cluster(GMModel,data);
 
@@ -65,8 +67,8 @@ for indind= 1:numel(indices)
 end
 
 %% close the mask
-NewMask = imopen(NewMask,strel("sphere",2));
-NewMask = imclose(NewMask,strel("sphere",5));
+NewMask = imopen(NewMask,strel("sphere",3));
+NewMask = imclose(NewMask,strel("sphere",4));
 
 %% Select a single 3D object only
 CC = bwconncomp(logical(NewMask),26);
@@ -78,7 +80,7 @@ end
 NewMask = zeros(size(NewMask));
 NewMask(logical(BW)) =1;
 
-NewMask = imclose(NewMask,strel("disk",2));
+NewMask = imclose(NewMask,strel("disk",10));
 
 %% display mask
 figure(3)
@@ -100,19 +102,20 @@ info2 = niftiinfo([Save_path filesep 'my_mask.nii.gz']);
 info2.Transform.T = info.Transform.T;
 niftiwrite(NewMask,[Save_path filesep 'my_mask'],info2,'Compressed',1)
 
-%% Save mask single slice
-Nslice = 30;
-NewMaskSlice = zeros(size(NewMask));
-NewMaskSlice(:,:,Nslice)= NewMask(:,:,Nslice);
-niftiwrite(NewMaskSlice,[Save_path filesep 'my_maskSlice' num2str(Nslice)],info2,'Compressed',1)
+% % % %% Save mask single slice
+% Nslice = 10;
+% NewMaskSlice = zeros(size(NewMask));
+% NewMaskSlice(:,:,Nslice)= NewMask(:,:,Nslice);
+% niftiwrite(NewMaskSlice,[Save_path filesep 'my_maskSlice' num2str(Nslice)],info2,'Compressed',1)
 
-%%
-NewMask = zeros(size(NewMask));
+% %%
+% NewMask = zeros(size(NewMask));
 % NewMask(28,71,4) = 1;
+% NewMask(57:61,83:86,4) = 1;
+% NewMask(55:58,27:30,4) = 1;
+% NewMask(34,72:74,4) = 1;
+
 % NewMask(27,69:70,4) = 1;
 % NewMask(36,28,4) = 1;
-% NewMask(55:56,26:27,4) = 1;
-% NewMask(57:61,82:85,4) = 1;
-% NewMask(32,69:71,4) = 1;
 
 

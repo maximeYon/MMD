@@ -16,7 +16,6 @@ import denoise as mpden
 # my_home_path = "C:/Users/Administrateur/Mon_Drive/Matlab/ProcessingPV360/data/"
 my_home_path = "C:/Users/User/Mon_Drive/Matlab/ProcessingPV360/data/"
 my_data_path = str(sys.argv[1]);
-# my_data_path = "ON-81-mbti-pilot-3d/17"
 
 nii = ni.load(my_home_path + my_data_path + "/dataUpDown.nii.gz")
 dwi = np.array(nii.dataobj)

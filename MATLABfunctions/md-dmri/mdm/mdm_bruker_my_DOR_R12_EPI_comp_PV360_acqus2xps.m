@@ -341,20 +341,20 @@ for ind_image = 1:td1
     G.z(1:Ndt_preref(ind_image)) = -G.z(1:Ndt_preref(ind_image));
     
     %% Check cumsum
-%         CumSumX = cumsum(G.x); CumSumY = cumsum(G.y); CumSumZ = cumsum(G.z);
-%         figure(2)
-%         clf
-%         subplot(2,1,1)
-%         hold on
-%         plot(CumSumX,'r')
-%         plot(CumSumY,'b')
-%         plot(CumSumZ,'k')
-%         subplot(2,1,2)
-%         hold on
-%         plot(G.x,'r')
-%         plot(G.y,'b')
-%         plot(G.z,'k')
-%         legend('X','Y','Z')
+        % CumSumX = cumsum(G.x); CumSumY = cumsum(G.y); CumSumZ = cumsum(G.z);
+        % figure(2)
+        % clf
+        % subplot(2,1,1)
+        % hold on
+        % plot(CumSumX,'r')
+        % plot(CumSumY,'b')
+        % plot(CumSumZ,'k')
+        % subplot(2,1,2)
+        % hold on
+        % plot(G.x,'r')
+        % plot(G.y,'b')
+        % plot(G.z,'k')
+        % legend('X','Y','Z')
     
     % Dephasing vector F.x in SI
     F.x = gamma*cumsum(G.x*dt,1);

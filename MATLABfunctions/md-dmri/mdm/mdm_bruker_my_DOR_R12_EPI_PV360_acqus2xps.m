@@ -92,6 +92,10 @@ for nShape = 1:DwNShapes
 end
 Size_shape = size(ShapeStru.DWGS0R,2);
 
+ShapeStru.(['DWGS1R']) = zeros(1000,1);
+ShapeStru.(['DWGS1P']) = zeros(1000,1);
+ShapeStru.(['DWGS1S']) = zeros(1000,1);
+
 %% Read gradient values
 % G.xa etc maps gradient modulations (a,b,c) to channels (x,y,z)
 % Normalized from -1 to +1

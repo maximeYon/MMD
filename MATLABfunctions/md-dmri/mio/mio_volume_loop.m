@@ -93,7 +93,8 @@ else
         S   = getLocalPart( codistributed(S) );
         out = mio_voxel_loop(f_fun, I, n_param, f_sup, S);
     end
-    out = horzcat(out{:});
+
+   out = horzcat(out{:});
     
 end
 

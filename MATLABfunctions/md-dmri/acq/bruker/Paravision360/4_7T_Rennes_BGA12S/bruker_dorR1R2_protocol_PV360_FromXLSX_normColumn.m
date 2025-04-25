@@ -4,7 +4,7 @@
 % http://dx.doi.org/10.1039/c5cp07251d
 
 clearvars;close all;
-xlsx_name = 'DOR_protocol_invivo_1-2shapes_389_shortT1'; % 'List_testBvalue'
+xlsx_name = 'DOR_protocol_test'; % 'List_testBvalue'
 % addpath(genpath('/home/maxime/Matlab/MATLABfunctions'));
 
 % Define path for output running and repulsion folders
@@ -24,7 +24,8 @@ multislice = 0; % if multisclice =1, sorting is different to have a short TR as 
 PVM_GradCalConst = 28218.7; % Rennes 4.7 T BGA 12S
 gamma1H = 26.75e7;
 param.Gmax= PVM_GradCalConst*2*pi/gamma1H*1e3;
-param.EffiFactor =[0.0123113312115505,0.00360553646759647,0.00135234506482497,0.000702017885394340]; % 1000 points
+param.EffiFactor =[0.0121920689258144,0.00381226452399231,0.00153075390424238,0.000794584321272162]; % 1000 points
+
 
 % tau = 4;
 % bval = (2*param.EffiFactor*(1.*param.Gmax)^2*(tau*10^-3)^3*gamma1H^2)*10^-9;
@@ -100,7 +101,7 @@ else
         ind_minTE = find(Par_Array(ind_lowB,8)==min(Par_Array(ind_lowB,8)));
         first_ind = ind_minTE(1,1);
         ind = ind(ind~=first_ind);
-        ind = [first_ind; ind];
+        ind = cat(2,first_ind, ind);
     end
     Par_Array = Par_Array(ind,:);
 end

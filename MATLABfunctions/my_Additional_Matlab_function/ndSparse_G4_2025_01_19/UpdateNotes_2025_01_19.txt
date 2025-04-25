@@ -1,0 +1,1 @@
+Fixed bug related to change in ind2sub() behavior in R2024b

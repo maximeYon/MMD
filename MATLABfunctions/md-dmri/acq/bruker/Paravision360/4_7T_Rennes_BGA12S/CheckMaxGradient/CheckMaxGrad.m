@@ -5,7 +5,7 @@ PVM_RiseTime = 0.152; % ms
 
 %Load list
 % path_list = '/opt/PV-360.1.1/prog/curdir/maxime/ParaVision/exp/lists/DTD/DOR_R1R2_1404';
-path_list = 'C:\Users\User\Mon_Drive\Matlab\MATLABfunctions\md-dmri\acq\bruker\Paravision360\4_7T_Rennes_BGA12S\DOR_list\DOR_R1R2_389_2';
+path_list = 'C:\Users\User\Mon_Drive\Matlab\MATLABfunctions\md-dmri\acq\bruker\Paravision360\4_7T_Rennes_BGA12S\DOR_list\DOR_R1R2_421_2';
 LowLevelDTDr1r2list = importfileDTDlist(path_list, [3 inf]);
 LowLevelDTDr1r2list = table2array(LowLevelDTDr1r2list(1:end-1,:));
 shapes_durations = LowLevelDTDr1r2list(:,3);

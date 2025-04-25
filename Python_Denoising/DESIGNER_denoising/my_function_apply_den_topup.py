@@ -36,6 +36,12 @@ nioutup.header.set_data_dtype(np.float32)
 nioutdown = ni.Nifti1Image(Signaldown, nii.affine, nii.header)
 nioutdown.header.set_data_dtype(np.float32)
 
+Sigmanioutup = ni.Nifti1Image(Sigmaup, nii.affine, nii.header)
+Sigmanioutup.header.set_data_dtype(np.float32)
+
+Sigmanioutdown = ni.Nifti1Image(Sigmadown, nii.affine, nii.header)
+Sigmanioutdown.header.set_data_dtype(np.float32)
+
 if not os.path.exists(my_data_path + "/denoised"):
        os.makedirs(my_data_path + "/denoised")
 
@@ -44,5 +50,13 @@ nii.header["dim"][0] = 3
 nii.header["dim"][4] = 1
 
 ni.save(nioutdown,  my_data_path + "/denoised/dataDown.nii.gz")
+nii.header["dim"][0] = 3
+nii.header["dim"][4] = 1
+
+ni.save(Sigmanioutup,  my_data_path + "/denoised/sigmaUp.nii.gz")
+nii.header["dim"][0] = 3
+nii.header["dim"][4] = 1
+
+ni.save(Sigmanioutdown,  my_data_path + "/denoised/sigmaDown.nii.gz")
 nii.header["dim"][0] = 3
 nii.header["dim"][4] = 1

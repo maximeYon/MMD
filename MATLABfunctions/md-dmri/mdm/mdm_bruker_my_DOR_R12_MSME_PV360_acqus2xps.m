@@ -161,11 +161,11 @@ xps.gwf_y = zeros(td1,max(Ndt_tot));
 xps.gwf_z = zeros(td1,max(Ndt_tot));
 
 %% Check echo time calculations
-% NdtTE = Ndt_tot*dt;
+NdtTE = Ndt_tot*dt;
 % figure()
 % hold on
 % plot(NdtTE,'b')
-% plot(EffectiveTEList,'r')
+% plot(EffectiveTEList(:,1),'r')
 
 unit2si = 1/100*PVM_GradCalConst*2*pi/gamma*1e3;
 %% Asociate delays with gradients
@@ -244,14 +244,20 @@ for ind_image = 1:td1
     G.z(1:Ndt_preref(ind_image)) = -G.z(1:Ndt_preref(ind_image));
     
     %     %% Check cumsum
-    %     CumSumX = cumsum(G.x); CumSumY = cumsum(G.y); CumSumZ = cumsum(G.z);
-    %     figure(2)
-    %     clf
-    %     hold on
-    %     plot(CumSumX,'r')
-    %     plot(CumSumY,'b')
-    %     plot(CumSumZ,'k')
-    %     legend('X','Y','Z')
+        CumSumX = cumsum(G.x); CumSumY = cumsum(G.y); CumSumZ = cumsum(G.z);
+        figure(2)
+        clf
+        subplot(2,1,1)
+        hold on
+        plot(CumSumX,'r')
+        plot(CumSumY,'b')
+        plot(CumSumZ,'k')
+        subplot(2,1,2)
+        hold on
+        plot(G.x,'r')
+        plot(G.y,'b')
+        plot(G.z,'k')
+        legend('X','Y','Z')
     
     % Dephasing vector F.x in SI
     F.x = gamma*cumsum(G.x*dt,1);
@@ -259,8 +265,8 @@ for ind_image = 1:td1
     F.z = gamma*cumsum(G.z*dt,1);
     F.r = sqrt(F.x.^2 + F.y.^2 + F.z.^2); % Magnitude
     
-    plot(axh_grad,dt*(1:Ndt_tot(1,ind_image))',G.x,'r-',dt*(1:Ndt_tot(1,ind_image))',G.y,'g-',dt*(1:Ndt_tot(1,ind_image))',G.z,'b-')
-    plot(axh_deph,dt*(1:Ndt_tot(1,ind_image))',F.x/2/pi/1e6,'r-',dt*(1:Ndt_tot(1,ind_image))',F.y/2/pi/1e6,'g-',dt*(1:Ndt_tot(1,ind_image))',F.z/2/pi/1e6,'b-')
+%     plot(axh_grad,dt*(1:Ndt_tot(1,ind_image))',G.x,'r-',dt*(1:Ndt_tot(1,ind_image))',G.y,'g-',dt*(1:Ndt_tot(1,ind_image))',G.z,'b-')
+%     plot(axh_deph,dt*(1:Ndt_tot(1,ind_image))',F.x/2/pi/1e6,'r-',dt*(1:Ndt_tot(1,ind_image))',F.y/2/pi/1e6,'g-',dt*(1:Ndt_tot(1,ind_image))',F.z/2/pi/1e6,'b-')
     
     % Diffusion weighting matrix b
     bt.xx = sum(F.x.*F.x*dt,1)';
